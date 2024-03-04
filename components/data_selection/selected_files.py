@@ -1,0 +1,115 @@
+import base64
+import io
+from functools import partial
+from typing import List, Dict
+
+import dash
+import dash_mantine_components as dmc
+import pandas as pd
+from dash_iconify import DashIconify
+from dash import html, Output, Input, State
+
+from components import ids
+from components.data_selection import viz_edit_modal
+
+def render(app):
+    layout = html.Div([
+                    dmc.Text('Local Files:'),], id=ids.DATA_SELECTED)
+
+    app.callback(
+        Output(ids.DATA_SELECTED, 'children'),
+        Output(ids.DB_SELECTED, 'children'),
+        Output('profile-select', 'data'),
+        Input(ids.DATA_UPLOAD, 'contents'),
+        Input(ids.DB_LOAD_BUTTON, 'n_clicks'),
+        State(ids.DATA_UPLOAD, 'filename'),
+        State('db-checkboxes', 'value'),
+        prevent_initial_call=True,
+    )(partial(update_chips, app=app))
+    return layout
+
+def check_content(content, found_profiles) -> Dict[str, List[str]]:
+    if content is None:
+        return {}
+
+    # decode the content string
+    content_type, content_string = content.split(',')
+    decoded = base64.b64decode(content_string)
+
+    df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+
+    visualizations = {}
+    for profile_name, profile in found_profiles.items():
+        for viz_name, viz_dict in profile.viz_options.items():
+            if viz_name not in visualizations:
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    if visualizations.get(profile.name) is None:
+                        visualizations[profile.name] = []
+                    visualizations[profile.name].append(viz_name)
+    return visualizations
+
+
+def update_chips(_contents, n_clicks, filenames, selected_runs, app):
+    print('Calling update_chips', _contents, n_clicks, filenames, selected_runs, app)
+    from main import data_handler
+
+    ctx = dash.callback_context
+    db_views = []
+    if ctx.triggered_id == ids.DB_LOAD_BUTTON:
+        if n_clicks:
+            for run in selected_runs:
+                model, scenario, author = run.split('-')
+                data_handler.select_run(model, scenario, author)
+                db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
+                                             radius='xl', size='xs', compact=True,
+                                             variant='light',
+                                             leftIcon=DashIconify(icon='carbon:edit', width=10),
+                                             style={'margin': '2px'}))
+                db_views.append(viz_edit_modal.render(app, run))
+
+            db_layout = html.Div(
+                [
+                    dmc.Text('Database:'),
+                    *db_views
+                ]
+            )
+
+            return dash.no_update, db_layout, list(data_handler.data.keys())
+
+
+
+
+    print('Calling update_data', filenames)
+    selected_data = {}
+    if filenames is not None:
+        views = []
+        for i, filename in enumerate(filenames):
+            file, extension = filename.split('.')
+
+            if extension == 'csv':
+                if file in selected_data.keys():
+                    counter = 1
+                    while f'{file}-{counter}' in selected_data.keys():
+                        counter += 1
+                    file = f'{file}-{counter}'
+                # IDs are dictionaries now, to handle them use the MATCH and ALL special keywords
+                views.append(dmc.Button(file, id={'type': 'open-modal', 'index': f'selected-{file}'},
+                                        radius='xl', size='xs', compact=True,
+                                        variant='light',
+                                        leftIcon=DashIconify(icon='carbon:edit', width=10),
+                                        style={'margin': '2px'}))
+
+                data_handler.check_content(file, _contents[i])
+
+                views.append(viz_edit_modal.render(app, file))
+                selected_data[file] = f'chip-{file}'
+        layout = html.Div(
+            [
+                dmc.Text('Local Files:'),
+                *views
+            ]
+        )
+        return layout, dash.no_update, list(data_handler.data.keys())
+
+

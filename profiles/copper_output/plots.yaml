@@ -1,0 +1,56 @@
+Emissions:
+  By Year:
+    title: Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  By Region:
+    title: Emissions by Region
+    x_label: Region
+    y_label: Emissions (MtCO2eq)
+Capacity:
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+Net Capacity:
+  By Year:
+    title: Net Capacity by Year
+    x_label: Year
+    y_label: Net Capacity (GW)
+  By Region:
+    title: Net Capacity by Region
+    x_label: Region
+    y_label: Net Capacity (GW)
+Net New Capacity:
+  By Year:
+    title: Net New Capacity by Year
+    x_label: Year
+    y_label: Net New Capacity (GW)
+  By Region:
+    title: Net New Capacity by Region
+    x_label: Region
+    y_label: Net New Capacity (GW)
+Qualifying Capacity:
+  By Year:
+    title: Qualifying Capacity by Year
+    x_label: Year
+    y_label: Qualifying Capacity (GW)
+  By Region:
+    title: Qualifying Capacity by Region
+    x_label: Region
+    y_label: Qualifying Capacity (GW)
+Transmission Capacity:
+  Line:
+    title: Transmission Capacity by Year
+    x_label:
+    y_label:
+Transmission Flow:
+  Line:
+    title: Transmission Flow by Year
+    x_label:
+    y_label:
+
