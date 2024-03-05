@@ -2,10 +2,11 @@ import dash
 import dash_lumino_components as dlc
 from dash import html
 
-from utils.data_handler import DataHandler
+from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling
 from components import ids, header, plot_canvas, sidebar
 from components.data_selection import data_modal
-from callbacks import modal_handling, tab_handling, burger_handling
+from utils.data_handler import DataHandler
+
 external_stylesheets = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
     'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
@@ -20,8 +21,8 @@ print('Profiles Found:', data_handler.profiles)
 modal_handling.link(app)
 tab_handling.link(app)
 burger_handling.link(app)
-
-
+sidebar_handling.link(app)
+data_viewer_handling.link(app)
 
 app.layout = html.Div([
     header.render(app),
@@ -29,13 +30,24 @@ app.layout = html.Div([
         dlc.BoxPanel([
             plot_canvas.render(app),
         ], id='test', addToDom=True),
-        sidebar.render(app),
+        sidebar.render(),
         data_modal.render(app),
         # component to represent data change (hidden)
         html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
 
     ], id=ids.CONTENT)
 ])
+
+
+@app.callback(
+    dash.Output('card-0', 'children'),
+    dash.Input({'type': 'hide-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
+    prevent_initial_call=True,
+)
+def hide_card(n_clicks):
+    print('hiding card')
+    if n_clicks:
+        return html.Div(html.H1('Hidden'))
 
 
 if __name__ == '__main__':

@@ -11,13 +11,18 @@ from components.plot_window import drawer, tabs, viz_container
 
 
 def render():
-    from main import app
     card_id = f'card-{len(ids.card_ids)}'
     ids.card_ids += [card_id]
+    link(card_id)
 
     layout = dlc.Widget(
         [
-            *tabs.render(card_id)
+            html.Div(dmc.Button(
+                'Hide',
+                id={'type': 'hide-button', 'index': card_id},
+            )),
+            *tabs.render(card_id),
+
         ],
         id=card_id,
         title='',
@@ -25,14 +30,16 @@ def render():
         icon='fa fa-chart-line'
     )
 
-    @app.callback(
-        Output(card_id, 'title'),
-        Input(card_id, 'deleted')
-    )
-    def remove_card(closed):
-        print('removing card')
-        if closed:
-            ids.card_ids.remove(card_id)
-
-
     return layout
+
+
+def link(id):
+    from main import app
+    @app.callback(
+        Output(id, 'children'),
+        Input({'type': 'hide-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
+    )
+    def hide_card(n_clicks):
+        print('hiding card')
+        if n_clicks:
+            return html.Div(html.H1('Hidden'))

@@ -107,30 +107,30 @@ def link(app):
 
         return _children
 
-    @app.callback(
-        Output({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        Output({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
-        Input({'type': 'viz-tabs', 'index': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
-        State({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        State({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
-        prevent_initial_call=True,
-    )
-    def update_drawer(_values, _children, _plots):
-        from main import data_handler
-        ctx = dash.callback_context
-        if not ctx.triggered:
-            print("No trigger, drawer")
-            return dash.no_update
-
-        print('Updating drawer')
-        triggered_id = ctx.triggered_id
-        triggered_value = ctx.triggered[0]['value']
-        for i, out in enumerate(ctx.outputs_list[0]):
-            if out['id']['index'] == triggered_id['index']:
-                profile = triggered_id['profile']
-                viz = triggered_value
-                window_id = triggered_id['index']
-                widgets, plot = data_handler.get_viz(profile, viz, window_id)
-                _children[i] = widgets
-                _plots[i] = plot
-        return _children, _plots
+    # @app.callback(
+    #     Output({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
+    #     Output({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
+    #     Input({'type': 'viz-tabs', 'index': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
+    #     State({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
+    #     State({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
+    #     prevent_initial_call=True,
+    # )
+    # def update_drawer(_values, _children, _plots):
+    #     from main import data_handler
+    #     ctx = dash.callback_context
+    #     if not ctx.triggered:
+    #         print("No trigger, drawer")
+    #         return dash.no_update
+    #
+    #     print('Updating drawer')
+    #     triggered_id = ctx.triggered_id
+    #     triggered_value = ctx.triggered[0]['value']
+    #     for i, out in enumerate(ctx.outputs_list[0]):
+    #         if out['id']['index'] == triggered_id['index']:
+    #             profile = triggered_id['profile']
+    #             viz = triggered_value
+    #             window_id = triggered_id['index']
+    #             widgets, plot = data_handler.get_viz(profile, viz, window_id)
+    #             _children[i] = widgets
+    #             _plots[i] = plot
+    #     return _children, _plots
