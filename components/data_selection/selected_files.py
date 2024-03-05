@@ -13,12 +13,17 @@ from components import ids
 from components.data_selection import viz_edit_modal
 
 def render(app):
-    layout = html.Div([
-                    dmc.Text('Local Files:'),], id=ids.DATA_SELECTED)
+    layout = dmc.AccordionItem([
+                    dmc.AccordionControl('Local Files:'),
+        dmc.AccordionPanel('Upload Local Results file', id=ids.DATA_SELECTED)
+    ],
+    value='local',
+    style={'width': '100%'})
 
     app.callback(
         Output(ids.DATA_SELECTED, 'children'),
         Output(ids.DB_SELECTED, 'children'),
+        Output(ids.DATA_SELECTED_VIEW, 'value'),
         Output('profile-select', 'data'),
         Input(ids.DATA_UPLOAD, 'contents'),
         Input(ids.DB_LOAD_BUTTON, 'n_clicks'),
@@ -75,7 +80,7 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                 ]
             )
 
-            return dash.no_update, db_layout, list(data_handler.data.keys())
+            return dash.no_update, db_layout, list(data_handler.data.keys()), 'db'
 
 
 
@@ -93,23 +98,23 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                     while f'{file}-{counter}' in selected_data.keys():
                         counter += 1
                     file = f'{file}-{counter}'
+
+                data_handler.check_content(file, _contents[i])
+                profiles = list(data_handler.data[file]['visualizations'].keys())
+                colors = []
+                for p in profiles:
+                    colors.append(data_handler.profiles[p].color)
                 # IDs are dictionaries now, to handle them use the MATCH and ALL special keywords
                 views.append(dmc.Button(file, id={'type': 'open-modal', 'index': f'selected-{file}'},
                                         radius='xl', size='xs', compact=True,
                                         variant='light',
+                                        color=colors[0] if len(colors) == 1 else 'gray',
                                         leftIcon=DashIconify(icon='carbon:edit', width=10),
                                         style={'margin': '2px'}))
 
-                data_handler.check_content(file, _contents[i])
 
                 views.append(viz_edit_modal.render(app, file))
                 selected_data[file] = f'chip-{file}'
-        layout = html.Div(
-            [
-                dmc.Text('Local Files:'),
-                *views
-            ]
-        )
-        return layout, dash.no_update, list(data_handler.data.keys())
+        return views, dash.no_update, list(data_handler.data.keys()), 'local'
 
 

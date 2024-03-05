@@ -39,16 +39,5 @@ app.layout = html.Div([
 ])
 
 
-@app.callback(
-    dash.Output('card-0', 'children'),
-    dash.Input({'type': 'hide-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
-    prevent_initial_call=True,
-)
-def hide_card(n_clicks):
-    print('hiding card')
-    if n_clicks:
-        return html.Div(html.H1('Hidden'))
-
-
 if __name__ == '__main__':
     app.run(debug=True)

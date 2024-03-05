@@ -13,7 +13,11 @@ from components.data_selection import viz_edit_modal
 
 def render():
     from main import app
-    layout = html.Div([
-                    dmc.Text('Database:'),], id=ids.DB_SELECTED)
+    layout = dmc.AccordionItem([
+                    dmc.AccordionControl('Database:'),
+        dmc.AccordionPanel('Load Results from Database', id=ids.DB_SELECTED)
+    ],
+        value = 'db',
+    style={'width': '100%'})
     return layout
 

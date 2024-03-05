@@ -41,6 +41,7 @@ from profiles.copper_output.visualization_scripts import (
 class CopperOutput(BaseProfile):
     name = 'COPPER Output'
     db_name = 'copper'
+    color = 'yellow 8'
     description = (
         'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')

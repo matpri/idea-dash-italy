@@ -18,16 +18,15 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, seas
         df_scen = subset(df, year, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
-        num_years = df_scen.time.nunique()
-        scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
             data = data.sort_values(by=['region', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
 
             x = []
-            x.append(data["time"].values)
-            x.append(data['region'].values)
+            x.append(data["region"].values)
+            x.append(data['scenario'].values)
+            scen_patterns = [utils.pattern_from_key(scen) for scen in data['scenario'].values]
 
             if aggregate:
                 color = utils.get_group_colors(tech)
@@ -36,7 +35,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, seas
 
             fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'],
                         marker_pattern_shape=scen_patterns, marker_color=color,
-                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>Emissions: %{y:.2f} MtCO2<br>Total: %{customdata:.2f} MtCO2<br><extra></extra>')
+                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>Emissions: %{y:.2f} MtCO2<br>Total: %{customdata:.2f} MtCO2<br><extra></extra>')
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:

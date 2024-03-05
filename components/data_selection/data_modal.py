@@ -1,6 +1,6 @@
 import dash
 import dash_mantine_components as dmc
-from dash import Output, Input, html, State
+from dash import Output, Input, html
 
 from components import ids
 from components.data_selection import database_connection, local_files, selected_files, selected_db
@@ -25,15 +25,22 @@ def render(app):
                 ]),
                 html.Div([local_files.render(app), database_connection.render(app)], id=ids.DATA_LOADING_CONTENT,
                          style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center'}),
-                html.Div([selected_files.render(app),
-                          selected_db.render()],
-                         id=ids.DATA_SELECTED_VIEW,
-                         style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center'}),
+                dmc.Divider(),
+                html.Div(
+                    dmc.AccordionMultiple([
+                        selected_files.render(app),
+                        selected_db.render()],
+                        style={'width': '100%', 'alignItems': 'center'},
+                        id=ids.DATA_SELECTED_VIEW,
+                        value='local',
+                    ),
+                    style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center'}),
             ]),
             dmc.Space(h=20),
             dmc.Group([
                 dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'data'}),
-                dmc.Button('Cancel', color='red', variant='outline', id={'type': 'modal-close-button', 'index': 'data'},),
+                dmc.Button('Cancel', color='red', variant='outline',
+                           id={'type': 'modal-close-button', 'index': 'data'}, ),
             ], position='right'),
         ],
     )

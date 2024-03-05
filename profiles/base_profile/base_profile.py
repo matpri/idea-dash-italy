@@ -9,6 +9,7 @@ class BaseProfile:
     viz_options = {}
     data = {}
     plot_order = []
+    color = 'gray'
     settings = html.Div(
         [
             dmc.Text('Implement Settings for your profile'),
