@@ -291,40 +291,48 @@ def get_group(key):
 
 
 def tech_edit(tech):
+    glass_style = {
+        'background': 'rgba(255, 255, 255, 0.4)',
+        'backdropFilter': 'blur(20px)',
+        'borderRadius': '25px',
+        'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+        'padding': '2rem',
+        'marginTop': '1rem',
+        'marginBottom': '1rem',
+    }
     layout = html.Div([
-        dmc.Text(
-            f'{tech} Settings'
-        ),
-        dmc.Grid(
-            columns=2,
-            children=[
-                dmc.Col([
-                    dmc.TextInput(
-                        label='Unaggregated Name',
-                        value=names[tech],
-                        id={'type': 'copper-tech-name', 'index': tech}
-                    ),
-                    daq.ColorPicker(
-                        value={'hex': colors[tech]},
-                        id={'type': 'copper-tech-color', 'index': tech}
-                    )]
+        html.Div(children=[
+            html.Div([
+                dmc.TextInput(
+                    label='Unaggregated',
+                    value=names[tech],
+                    id={'type': 'copper-tech-name', 'index': tech}
                 ),
-                dmc.Col([
-                    dmc.TextInput(
-                        label='Group Name',
-                        value=groups[tech],
-                        id={'type': 'copper-tech-group', 'index': tech}
-                    ),
-                    daq.ColorPicker(
-                        value={'hex': group_colors[groups[tech]]},
-                        id={'type': 'copper-tech-group-color', 'index': tech}
-                    )]
-                )
-            ]
-        ),
-        dmc.Button('Update', id={'type': 'copper-tech-update', 'index': tech},
-                   disabled=True)
-    ])
+                daq.ColorPicker(
+                    value={'hex': colors[tech]},
+                    id={'type': 'copper-tech-color', 'index': tech}
+                )],
+                style=glass_style
+            ),
+            html.Div([
+                dmc.TextInput(
+                    label='Aggregated',
+                    value=groups[tech],
+                    id={'type': 'copper-tech-group', 'index': tech}
+                ),
+                daq.ColorPicker(
+                    value={'hex': group_colors[groups[tech]]},
+                    id={'type': 'copper-tech-group-color', 'index': tech}
+                )],
+                style=glass_style
+            )
+        ], style={'display': 'flex', 'justifyContent': 'space-around'}),
+        html.Div(
+            dmc.Button('Update', id={'type': 'copper-tech-update', 'index': tech}, disabled=True,
+                       style={'display': 'flex', 'justifyContent': 'center', 'width': '80%'}),
+            style={'display': 'flex', 'justifyContent': 'center'}
+        )
+    ], style={'margin': '2rem'})
 
     return layout
 
@@ -335,6 +343,16 @@ plot_settings = {}
 def plot_edit(plot):
     plots = plot_settings[plot]
     types = list(plots.keys())
+
+    glass_style = {
+        'background': 'rgba(255, 255, 255, 0.4)',
+        'backdropFilter': 'blur(20px)',
+        'borderRadius': '25px',
+        'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+        'padding': '2rem',
+        'marginBottom': '2rem',
+    }
+
     views = []
     for i, plot_type in enumerate(types):
         views.append(html.Div([
@@ -357,14 +375,20 @@ def plot_edit(plot):
                 id={'type': 'copper-plot-x-axis', 'index': plot, 'subtype': plot_type}
             ),
             dmc.Divider(),
-        ])
+        ],
+            style=glass_style
         )
-
+        )
 
     layout = html.Div([
         *views,
-        dmc.Button('Update', id={'type': 'copper-plot-update', 'index': plot, 'subtype': '-'.join(types)},
-                   disabled=True)
+        html.Div(
+            dmc.Button('Update', id={'type': 'copper-plot-update', 'index': plot, 'subtype': '-'.join(types)},
+                       disabled=True,
+                       style={'display': 'flex', 'justifyContent': 'center', 'width': '80%'}),
+            style={'display': 'flex', 'justifyContent': 'center'}
+        )
+
     ])
 
     return layout

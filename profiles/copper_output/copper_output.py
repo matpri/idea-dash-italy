@@ -187,10 +187,20 @@ class CopperOutput(BaseProfile):
     def render_technology_settings(self):
         techs = list(utils.groups.keys())
         layout = html.Div([
-            dmc.Select(
-                id='copper-technology-select',
-                data=[{'label': tech, 'value': tech} for tech in techs],
-                value=techs[0]
+            html.Div(
+                dmc.Select(
+                    id='copper-technology-select',
+                    data=[{'label': tech, 'value': tech} for tech in techs],
+                    value=techs[0],
+                ),
+                style={
+                    'background': 'rgba(255, 255, 255, 0.4)',
+                    'backdropFilter': 'blur(20px)',
+                    'borderRadius': '10px',
+                    'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+                    'padding': '1rem',
+                    'marginTop': '1rem',
+                }
             ),
             html.Div(utils.tech_edit(techs[0]),
                      id='copper-technology-settings-output'),
@@ -201,10 +211,20 @@ class CopperOutput(BaseProfile):
     def render_plot_settings(self):
         plots = list(utils.plot_settings.keys())
         layout = html.Div([
-            dmc.Select(
-                id='copper-plot-select',
-                data=[{'label': plot, 'value': plot} for plot in plots],
-                value=plots[0]
+            html.Div(
+                dmc.Select(
+                    id='copper-plot-select',
+                    data=[{'label': plot, 'value': plot} for plot in plots],
+                    value=plots[0]
+                ),
+                style={
+                    'background': 'rgba(255, 255, 255, 0.4)',
+                    'backdropFilter': 'blur(20px)',
+                    'borderRadius': '10px',
+                    'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+                    'padding': '1rem',
+                    'marginTop': '1rem',
+                }
             ),
             html.Div(utils.plot_edit(plots[0]),
                      id='copper-plot-settings-output'),

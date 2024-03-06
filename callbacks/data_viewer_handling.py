@@ -26,34 +26,67 @@ def link(app):
 
 def update_chips(file):
     from main import data_handler
-    chip_groups = []
+    chip_groups = {}
     for profile, viz_options in data_handler.data[file]['visualizations'].items():
         chips = []
         for viz in viz_options:
             chips.append(dmc.Chip(
                 viz,
                 value=viz,
-                id={'type': 'data-chip', 'file': file, 'profile': profile, 'viz': viz},
+                id={'type': 'upload-chip', 'file': file, 'profile': profile, 'viz': viz},
                 size='sm',
             ))
-        chip_groups.append(dmc.ChipGroup(
+        chip_groups[profile] = dmc.ChipGroup(
             children=chips,
-            id={'type': 'data-chip-group', 'file': file, 'profile': profile},
+            id={'type': 'upload-chip-group', 'file': file, 'profile': profile},
             value=data_handler.data[file]['selected'][profile],
             multiple=True,
-            style={'padding': '4px'}
-        ))
+            style={'paddingBottom': '4px'}
+        )
 
     layout = html.Div(
         [
             dmc.TextInput(
-                id={'type': 'scenario-name', 'file': file},
+                id={'type': 'upload-scenario-name', 'file': file},
                 label='Scenario Name',
                 value=data_handler.data[file]['scenario'],
                 placeholder='Enter Scenario Name',
+                description='Enter a name for the scenario',
                 style={'marginBottom': '10px'}
             ),
-            *chip_groups,
+            dmc.Divider(),
+            html.Div(
+                dmc.Tabs(
+                    [
+                        dmc.TabsList(
+                            [dmc.Tab(profile,
+                                     id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                     value=profile)
+                             for profile in chip_groups.keys()
+                             ]
+                        ),
+                        *[
+                            dmc.TabsPanel(
+                                children=
+                                chip_groups[profile],
+                                id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                value=profile,
+                                style={
+                                    'background': 'rgba(47,146,231,0.2)',
+                                    # 'border-radius': '10px',
+                                    'backdrop-filter': 'blur(5px)',
+                                    'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
+                                    'border': '1px solid rgba(47,146,231, 0.3)',
+                                    '-webkit-backdrop-filter': 'blur(5px)',
+                                    'padding': '10px 4px 4px 4px'}
+                            )
+                            for profile in chip_groups.keys()
+                        ]
+                    ],
+                    value=list(chip_groups.keys())[0]
+                ),
+            ),
+            dmc.Divider(),
         ],
     )
 

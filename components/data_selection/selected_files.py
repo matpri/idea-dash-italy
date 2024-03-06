@@ -80,7 +80,7 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                 ]
             )
 
-            return dash.no_update, db_layout, list(data_handler.data.keys()), 'db'
+            return dash.no_update, db_layout, 'db',  list(data_handler.data.keys())
 
 
 
@@ -115,6 +115,6 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
 
                 views.append(viz_edit_modal.render(app, file))
                 selected_data[file] = f'chip-{file}'
-        return views, dash.no_update, list(data_handler.data.keys()), 'local'
+        return views, dash.no_update, 'local', list(data_handler.data.keys())
 
 
