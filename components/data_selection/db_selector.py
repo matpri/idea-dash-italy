@@ -44,15 +44,6 @@ def render():
                     dmc.Checkbox(
                         label=row['label'],
                         value=row['value'],
-                        style={
-                            'margin': '10px',
-                            'background': 'rgba(47,146,231,0.2)',
-                            'border-radius': '10px',
-                            'backdrop-filter': 'blur(5px)',
-                            'box-shadow': '0 4 30px 0 rgba(128, 128, 128, 0.2)',
-                            'border': '1px solid rgba(47,146,231, 0.3)',
-                            '-webkit-backdrop-filter': 'blur(5px)',
-                        }
                     )
                     for row in data
                 ]
@@ -60,7 +51,7 @@ def render():
         ],
         id='db-selector',
         style={
-            "maxHeight": "300px",
+            "height": "310px",
             "width": "100%",
             'display': 'block',
             'background-color': '#F8F8F8',

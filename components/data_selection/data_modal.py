@@ -15,16 +15,31 @@ def render(app):
         closeOnClickOutside=True,
         children=[
             dmc.Stack([
-                dmc.Center([
-                    dmc.ButtonGroup([
-                        dmc.Button('Local File', id=ids.LOCAL_FILE_BUTTON, variant='gradient',
-                                   gradient={'from': 'indigo', 'to': 'cyan'}, fullWidth=True),
-                        dmc.Button('Database', id=ids.DATABASE_BUTTON, variant='outline', color='indigo',
-                                   fullWidth=True),
-                    ], style={'width': '80%', 'display': 'flex', 'justifyContent': 'space-between'}),
-                ]),
-                html.Div([local_files.render(app), database_connection.render(app)], id=ids.DATA_LOADING_CONTENT,
-                         style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center', 'width': '100%'}),
+                html.Div([
+                    dmc.Center([
+                        dmc.ButtonGroup([
+                            dmc.Button('Local File', id=ids.LOCAL_FILE_BUTTON, variant='gradient',
+                                       gradient={'from': 'indigo', 'to': 'cyan'}, fullWidth=True),
+                            dmc.Button('Database', id=ids.DATABASE_BUTTON, variant='outline', color='indigo',
+                                       fullWidth=True),
+                        ], style={'width': '80%', 'display': 'flex', 'justifyContent': 'space-between'}),
+                    ]),
+
+                    html.Div([local_files.render(app), database_connection.render(app)], id=ids.DATA_LOADING_CONTENT,
+                             style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center', 'width': '100%'}),
+                ],
+                    style={'width': '100%', 'display': 'flex', 'justifyContent': 'center',
+                           # content in one column
+                           'flexFlow': 'column',
+                           'background': 'rgba(255, 255, 255, 0.4)',
+                           'backdropFilter': 'blur(20px)',
+                           'borderRadius': '10px',
+                           'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+                           'padding': '1rem',
+                           'marginTop': '1rem',
+                           }
+
+                ),
                 dmc.Divider(),
                 html.Div(
                     dmc.AccordionMultiple([
@@ -34,8 +49,18 @@ def render(app):
                         id=ids.DATA_SELECTED_VIEW,
                         value='local',
                     ),
-                    style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center'}),
-            ]),
+                    style={'width': '100%', 'display': 'flex', 'justifyContent': 'center',
+                           # content in one column
+                           'flexFlow': 'column',
+                           'background': 'rgba(255, 255, 255, 0.4)',
+                           'backdropFilter': 'blur(20px)',
+                           'borderRadius': '10px',
+                           'boxShadow': '10px 10px 15px rgba(0, 0, 0, 0.1)',
+                           'padding': '1rem',
+                           'marginTop': '1rem',
+                           }),
+            ],
+            ),
             dmc.Space(h=20),
             dmc.Group([
                 dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'data'}),
@@ -62,6 +87,6 @@ def toggle_button(local, db):
     ctx = dash.callback_context
     triggered_input = ctx.triggered[0]['prop_id'].split('.')[0]
     if triggered_input == ids.LOCAL_FILE_BUTTON:
-        return "gradient", "outline", {"width": "60%", 'display': 'block'}, {"width": "60%", 'display': 'none'}
+        return "gradient", "outline", {"width": "60%", 'display': 'block'}, {"width": "80%", 'display': 'none'}
     else:
-        return "outline", "gradient", {"width": "60%", 'display': 'none'}, {"width": "60%", 'display': 'block'}
+        return "outline", "gradient", {"width": "60%", 'display': 'none'}, {"width": "80%", 'display': 'block'}

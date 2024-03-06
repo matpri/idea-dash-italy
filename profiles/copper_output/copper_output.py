@@ -194,6 +194,8 @@ class CopperOutput(BaseProfile):
                     value=techs[0],
                 ),
                 style={
+                    'position': 'relative',
+                    'zIndex': 999,
                     'background': 'rgba(255, 255, 255, 0.4)',
                     'backdropFilter': 'blur(20px)',
                     'borderRadius': '10px',
@@ -218,6 +220,8 @@ class CopperOutput(BaseProfile):
                     value=plots[0]
                 ),
                 style={
+                    'position': 'relative',
+                    'zIndex': 999,
                     'background': 'rgba(255, 255, 255, 0.4)',
                     'backdropFilter': 'blur(20px)',
                     'borderRadius': '10px',

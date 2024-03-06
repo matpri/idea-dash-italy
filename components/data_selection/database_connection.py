@@ -54,12 +54,13 @@ def render(app):
                     value='ALL'
                 ),
             ],
-                style={'display': 'flex', 'flexFlow': 'row', 'justifyContent': 'space-between'}),
+                style={'display': 'flex', 'flexFlow': 'row', 'justifyContent': 'space-between',
+                       'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}),
 
             db_selector.render(),
             dmc.Button('Load', id=ids.DB_LOAD_BUTTON, variant='gradient',
                        gradient={'from': 'indigo', 'to': 'cyan'}, fullWidth=True,
-                       style={'width': '60%',
+                       style={'width': '80%',
                               # center the button
                               'display': 'block',
                               'marginLeft': 'auto',
@@ -154,22 +155,17 @@ def connect_to_database(n_clicks, api_key, children):
                 dmc.Checkbox(
                     label=row['label'],
                     value=row['value'],
-                    style={
-                        'background': 'rgba(47,146,231,0.2)',
-                        'border-radius': '10px',
-                        'backdrop-filter': 'blur(5px)',
-                        'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
-                        'border': '1px solid rgba(47,146,231, 0.3)',
-                        '-webkit-backdrop-filter': 'blur(5px)', }
                 )
                 for row in checkbox_data
             ]
 
             print(runs)
             data_handler.api_key = api_key
-            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes, {"maxHeight": "300px",
-               "overflowY": "scroll", "width": "100%",
-               'display': 'block'}, model_select, scenario_select, author_select
+            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes,  {
+            "maxHeight": "280px",
+            "overflowY": "scroll",
+            "width": "100%",
+        }, model_select, scenario_select, author_select
         except Exception as e:
             print(e)
             return children + [dmc.Alert(
