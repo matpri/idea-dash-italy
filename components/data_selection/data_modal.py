@@ -24,7 +24,7 @@ def render(app):
                     ], style={'width': '80%', 'display': 'flex', 'justifyContent': 'space-between'}),
                 ]),
                 html.Div([local_files.render(app), database_connection.render(app)], id=ids.DATA_LOADING_CONTENT,
-                         style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center'}),
+                         style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center', 'width': '100%'}),
                 dmc.Divider(),
                 html.Div(
                     dmc.AccordionMultiple([

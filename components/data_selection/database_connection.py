@@ -34,7 +34,6 @@ def render(app):
                               }),
         ], id=ids.DATABASE_INPUT, style={'width': '100%', 'display': 'block'}),
         html.Div([
-            dmc.Text('Successfully connected to database.'),
             html.Div([
                 dmc.Select(
                     id=ids.MODEL_SELECT,
