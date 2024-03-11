@@ -32,6 +32,8 @@ CONTACT_MENU = 'menu-contact'
 PLOT_CANVAS = 'canvas-plot'
 
 DATA_CHANGE = 'data-change'
+SETTINGS_CHANGE = 'settings-change'
+AFTER_CHANGE = 'after-change'
 DATA = 'data'
 
 card_ids = []

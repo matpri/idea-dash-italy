@@ -13,7 +13,7 @@ def render(app):
         zIndex=10000,
         size='75%',
         closeOnClickOutside=True,
-        children=[
+        children=dmc.LoadingOverlay([
             dmc.Stack([
                 html.Div([
                     dmc.Center([
@@ -66,8 +66,8 @@ def render(app):
                 dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'data'}),
                 dmc.Button('Cancel', color='red', variant='outline',
                            id={'type': 'modal-close-button', 'index': 'data'}, ),
-            ], position='right'),
-        ],
+            ], position='right'),]
+        ),
     )
 
     app.callback(

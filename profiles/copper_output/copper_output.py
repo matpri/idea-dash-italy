@@ -14,6 +14,10 @@ from profiles.copper_output.callbacks import (emissions as emissions_callbacks,
                                               generation_supply as generation_supply_callbacks,
                                               transmission_capacity as transmission_capacity_callbacks,
                                               transmission_flow as transmission_flow_callbacks,
+                                            cost_total as cost_total_callbacks,
+                                            cost_fom as cost_fom_callbacks,
+                                            cost_vom as cost_vom_callbacks,
+                                            cost_gencap as cost_gencap_callbacks,                                          
                                               settings as settings_callbacks
                                               )
 from profiles.copper_output.processing_scripts import (
@@ -25,6 +29,10 @@ from profiles.copper_output.processing_scripts import (
     generation_supply as generation_supply_processing,
     transmission_capacity_plotly as transmission_capacity_processing,
     transmission_flow_plotly as transmission_flow_processing,
+cost_total as cost_total_processing,
+cost_fom as cost_fom_processing,
+cost_vom as cost_vom_processing,
+cost_gencap as cost_gencap_processing,
 )
 from profiles.copper_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -35,6 +43,10 @@ from profiles.copper_output.visualization_scripts import (
     generation_supply as generation_supply_viz,
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
+cost_total as cost_total_viz,
+cost_fom as cost_fom_viz,
+cost_vom as cost_vom_viz,
+cost_gencap as cost_gencap_viz,
 )
 
 
@@ -54,7 +66,11 @@ class CopperOutput(BaseProfile):
         'Qualifying Capacity',
         'Supply',
         'Transmission Capacity',
-        'Transmission Flow'
+        'Transmission Flow',
+        'Total Cost',
+        'Capacity Cost',
+        'FOM Cost',
+        'VOM Cost',
     ]
     viz_options = {
         'Emissions':
@@ -128,8 +144,43 @@ class CopperOutput(BaseProfile):
                 'db_process': transmission_flow_processing.process,
                 'viz': transmission_flow_viz.plot,
                 'callback': transmission_flow_callbacks.link
+            },
+        'Total Cost':
+            {
+                'check': cost_total_processing.check,
+                'db_check': cost_total_processing.check,
+                'process': cost_total_processing.process,
+                'db_process': cost_total_processing.process,
+                'viz': cost_total_viz.plot,
+                'callback': cost_total_callbacks.link
+            },
+        'Capacity Cost':
+            {
+                'check': cost_gencap_processing.check,
+                'db_check': cost_gencap_processing.check,
+                'process': cost_gencap_processing.process,
+                'db_process': cost_gencap_processing.process,
+                'viz': cost_gencap_viz.plot,
+                'callback': cost_gencap_callbacks.link
+            },
+        'FOM Cost':
+            {
+                'check': cost_fom_processing.check,
+                'db_check': cost_fom_processing.check,
+                'process': cost_fom_processing.process,
+                'db_process': cost_fom_processing.process,
+                'viz': cost_fom_viz.plot,
+                'callback': cost_fom_callbacks.link
+            },
+        'VOM Cost':
+            {
+                'check': cost_vom_processing.check,
+                'db_check': cost_vom_processing.check,
+                'process': cost_vom_processing.process,
+                'db_process': cost_vom_processing.process,
+                'viz': cost_vom_viz.plot,
+                'callback': cost_vom_callbacks.link
             }
-
     }
 
     def __init__(self):

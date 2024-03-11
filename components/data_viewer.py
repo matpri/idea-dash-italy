@@ -16,7 +16,7 @@ def render():
         opened=False,
         size='60%',
         id='uploaded-data-modal',
-        children=[
+        children=dmc.LoadingOverlay([
             html.Div(
                 id='view-data-div',
                 children=[],
@@ -28,10 +28,10 @@ def render():
                     dmc.Button('Cancel', id='cancel-data', variant='outline'),
                 ],
                 style={'display': 'flex', 'justifyContent': 'space-between',
-                         'padding': '10px 0px 0px 0px'}
-            )
+                       'padding': '10px 0px 0px 0px'}
+            )]
+        )
 
-        ],
     )
 
     return layout

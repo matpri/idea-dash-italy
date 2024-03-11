@@ -1,8 +1,9 @@
 import dash
 from dash import Output, Input, State
+import dash_mantine_components as dmc
 
 from components import ids
-from components.plot_window import window
+from components.plot_window import window, tabs
 
 
 def link(app):
@@ -11,9 +12,11 @@ def link(app):
         Output('window-clear', 'is_open'),
         Input('add-card', 'n_clicks'),
         Input('delete-card', 'n_clicks'),
-
         Input('trash-button', 'n_clicks'),
         Input('cancel-delete-card', 'n_clicks'),
+        Input(ids.DATA_CHANGE, 'n_clicks'),
+        Input(ids.SETTINGS_CHANGE, 'n_clicks'),
+        Input(ids.AFTER_CHANGE, 'n_clicks'),
         State(ids.PLOT_CANVAS, 'children'),
         State('window-clear', 'is_open'),
         prevent_initial_call=True,
@@ -26,9 +29,26 @@ def link(app):
         prevent_initial_call=True,
     )(show_settings_modal)
 
+    app.callback(
+        Output(ids.SETTINGS_CHANGE, 'n_clicks'),
+        Input('settings-modal', 'opened'),
+        State(ids.SETTINGS_CHANGE, 'n_clicks'),
+        prevent_initial_call=True,
+    )(update_windows)
 
 
-def edit_cards(add_clicks, delete_click, trash_click, cancel_click, widgets, is_open):
+def update_windows(is_open, n_clicks):
+    if is_open is None:
+        return dash.no_update
+    if not is_open:
+        if n_clicks is None:
+            return 1
+        return n_clicks + 1
+    return dash.no_update
+
+
+def edit_cards(add_clicks, delete_click, trash_click, cancel_click, d_change, s_change, a_change,
+               widgets, is_open):
     ctx = dash.callback_context
     if not ctx.triggered:
         return widgets
@@ -38,13 +58,19 @@ def edit_cards(add_clicks, delete_click, trash_click, cancel_click, widgets, is_
     if trigger == 'add-card':
         widgets.append(window.render())
         return widgets, is_open
-    elif trigger == 'delete-card':
+    if trigger == 'delete-card':
         ids.card_ids = []
         return [], False
-    elif trigger == 'trash-button':
+    if trigger == 'trash-button':
         return widgets, True
-    elif trigger == 'cancel-delete-card':
+    if trigger == 'cancel-delete-card':
         return widgets, False
+    if trigger in [ids.DATA_CHANGE, ids.SETTINGS_CHANGE, ids.AFTER_CHANGE]:
+        ids.card_ids = []
+        updated_widgets = []
+        for widget in widgets:
+            updated_widgets.append(window.render())
+        return updated_widgets, is_open
 
 
 def show_settings_modal(n_clicks, is_open):

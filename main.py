@@ -34,6 +34,8 @@ app.layout = html.Div([
         data_modal.render(app),
         # component to represent data change (hidden)
         html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+        html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+        html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
 
     ], id=ids.CONTENT)
 ])

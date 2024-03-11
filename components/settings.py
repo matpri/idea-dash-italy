@@ -33,8 +33,7 @@ def render():
                         dmc.TabsList(children=tabs),
                         *tab_contents,
                     ],
-                )
+                ),
             ]
-
         )
     )
