@@ -14,11 +14,12 @@ from profiles.copper_output.callbacks import (emissions as emissions_callbacks,
                                               generation_supply as generation_supply_callbacks,
                                               transmission_capacity as transmission_capacity_callbacks,
                                               transmission_flow as transmission_flow_callbacks,
-                                            cost_total as cost_total_callbacks,
-                                            cost_fom as cost_fom_callbacks,
-                                            cost_vom as cost_vom_callbacks,
-                                            cost_gencap as cost_gencap_callbacks,                                          
-                                              settings as settings_callbacks
+                                              cost_total as cost_total_callbacks,
+                                              cost_fom as cost_fom_callbacks,
+                                              cost_vom as cost_vom_callbacks,
+                                              cost_gencap as cost_gencap_callbacks,
+                                              settings as settings_callbacks,
+                                              dispatch as dispatch_callbacks
                                               )
 from profiles.copper_output.processing_scripts import (
     emissions as emissions_processing,
@@ -29,10 +30,11 @@ from profiles.copper_output.processing_scripts import (
     generation_supply as generation_supply_processing,
     transmission_capacity_plotly as transmission_capacity_processing,
     transmission_flow_plotly as transmission_flow_processing,
-cost_total as cost_total_processing,
-cost_fom as cost_fom_processing,
-cost_vom as cost_vom_processing,
-cost_gencap as cost_gencap_processing,
+    cost_total as cost_total_processing,
+    cost_fom as cost_fom_processing,
+    cost_vom as cost_vom_processing,
+    cost_gencap as cost_gencap_processing,
+    dispatch as dispatch_processing
 )
 from profiles.copper_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -43,10 +45,11 @@ from profiles.copper_output.visualization_scripts import (
     generation_supply as generation_supply_viz,
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
-cost_total as cost_total_viz,
-cost_fom as cost_fom_viz,
-cost_vom as cost_vom_viz,
-cost_gencap as cost_gencap_viz,
+    cost_total as cost_total_viz,
+    cost_fom as cost_fom_viz,
+    cost_vom as cost_vom_viz,
+    cost_gencap as cost_gencap_viz,
+    dispatch as dispatch_viz
 )
 
 
@@ -71,6 +74,7 @@ class CopperOutput(BaseProfile):
         'Capacity Cost',
         'FOM Cost',
         'VOM Cost',
+        'Dispatch'
     ]
     viz_options = {
         'Emissions':
@@ -180,7 +184,16 @@ class CopperOutput(BaseProfile):
                 'db_process': cost_vom_processing.process,
                 'viz': cost_vom_viz.plot,
                 'callback': cost_vom_callbacks.link
-            }
+            },
+        'Dispatch':
+            {
+                'check': dispatch_processing.check,
+                'db_check': dispatch_processing.check,
+                'process': dispatch_processing.process,
+                'db_process': dispatch_processing.process,
+                'viz': dispatch_viz.plot,
+                'callback': dispatch_callbacks.link
+            },
     }
 
     def __init__(self):

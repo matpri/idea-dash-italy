@@ -89,6 +89,16 @@ VOM Cost:
         title: Variable O&M Cost by Region
         x_label: Region
         y_label: Variable O&M Cost (Million $)
+Dispatch:
+  Dispatched Electricity:
+    title: Dispatched Electricity by Year
+    x_label: Year
+    y_label: Dispatched Electricity (TWh)
+  Exported Electricity:
+    title: Exported Electricity by Year
+    x_label: Year
+    y_label: Exported Electricity (TWh)
+
 
 
 

@@ -29,7 +29,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value=regions[0],
+        value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'copper-cost-gencap-region-select',
             'index': window_id

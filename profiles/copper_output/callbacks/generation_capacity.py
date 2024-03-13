@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State, ALL
+from dash import Output, Input, State, ALL, dcc
 
 from profiles.copper_output.visualization_scripts.generation_capacity import render_plot
 
@@ -17,6 +17,10 @@ def link(app):
             'type': 'copper-capacity-year-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'copper-capacity-download',
+            'index': ALL
+        }, 'data'),
         Input({
             'type': 'copper-capacity-plot-select',
             'index': ALL
@@ -37,6 +41,10 @@ def link(app):
             'type': 'copper-capacity-year-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'copper-capacity-download-button',
+            'index': ALL
+        }, 'n_clicks'),
         State({
             'type': 'copper-capacity-region-select',
             'index': ALL
@@ -48,13 +56,28 @@ def link(app):
         State({
             'type': 'copper-capacity-canvas',
             'index': ALL}, 'figure'),
+        State({
+            'type': 'copper-capacity-download',
+            'index': ALL
+        }, 'data'),
         prevent_initial_call=True
     )
-    def update_capacity(_p_type, _aggregates, _scenarios, _regions, _years, _r_style, _y_style, _canvas):
+    def update_capacity(_p_type, _aggregates, _scenarios, _regions, _years, _download,_r_style, _y_style, _canvas, _data):
         print('updating capacity plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+
+        if 'copper-capacity-download-button' in trigger_id['type']:
+            idx = 0
+            for i, id in enumerate(ctx.inputs_list[0]):
+                if ((id['id']['index'] == trigger_id['index']) and
+                        (id['id']['type'] == 'copper-capacity-download-button')):
+                    idx = i
+                    break
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv, "capacity.csv")
+            return _canvas, _r_style, _y_style, _data
+
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
@@ -90,4 +113,4 @@ def link(app):
                                            x_axis_label='Region',
                                            y_axis_label='GW')
 
-        return _canvas, _r_style, _y_style
+        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data]

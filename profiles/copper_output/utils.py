@@ -241,7 +241,6 @@ def csv2sio(df):
 
     return func
 
-
 colors = {}
 
 

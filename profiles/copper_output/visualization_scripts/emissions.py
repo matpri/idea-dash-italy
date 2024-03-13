@@ -29,7 +29,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value=regions[0],
+        value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'copper-emissions-region-select',
             'index': window_id
@@ -75,7 +75,12 @@ def plot(df, window_id):
             }
         ),
         by_year_widgets,
-        by_region_widgets
+        by_region_widgets,
+        dmc.Button('Download Data', id={'type': 'copper-emissions-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'copper-emissions-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
