@@ -22,16 +22,16 @@ def render(app):
                             variant='subtle',
                             id={'type': 'open-modal', 'index': 'data'}
                         ),
-                        dmc.Button(
-                            'Help',
-                            variant='subtle',
-                            id=ids.HELP_MENU
-                        ),
-                        dmc.Button(
-                            'Contact',
-                            variant='subtle',
-                            id=ids.CONTACT_MENU
-                        ),
+                        # dmc.Button(
+                        #     'Help',
+                        #     variant='subtle',
+                        #     id=ids.HELP_MENU
+                        # ),
+                        # dmc.Button(
+                        #     'Contact',
+                        #     variant='subtle',
+                        #     id=ids.CONTACT_MENU
+                        # ),
                     ], spacing=1)
                 ], height=HEIGHT, id=ids.HEADER
             ),
