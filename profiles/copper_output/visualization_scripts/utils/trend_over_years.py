@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -15,28 +15,21 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
     )
 
     try:
-        df_scen = subset(df, region, scenarios, aggregate, season)
-        scenarios.sort()
+        df_scen = subset(df, region, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
-        num_years = df_scen.time.nunique()
-        scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
-            data = data.sort_values(by=['time', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
+            data = data.sort_values(by=['time'])
 
-            x = []
-            x.append(data["time"].values)
-            x.append(data['scenario'].values)
             if aggregate:
                 color = utils.get_group_colors(tech)
             else:
                 color = utils.get_color(tech)
 
-            fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'], marker_color=color,
-                        marker_pattern_shape=scen_patterns,
-                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
-        fig.update_layout(barmode='relative')
+            fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
             print("No data available, since the results are all zero.")
@@ -60,7 +53,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
     return fig
 
 
-def subset(df, region, scenarios, aggregate, season=None):
+def subset(df, region, scenario, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
 
@@ -80,7 +73,7 @@ def subset(df, region, scenarios, aggregate, season=None):
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
-    df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
+    df_scen = df_scen[df_scen['scenario'] == scenario]
 
     df_scen = df_scen[df_scen['region'] == region]
 

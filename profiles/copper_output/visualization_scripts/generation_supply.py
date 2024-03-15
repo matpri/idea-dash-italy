@@ -1,15 +1,26 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
-from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions
+from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, title, x_axis_label, y_axis_label):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario):
+    from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
+    name = plot_settings['Supply']['name']
+    unit = plot_settings['Supply']['unit']
     if type == 'By Year':
-        return bar_over_years.plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label)
+        plot_info = plot_settings['Supply']['By Year']
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    elif type == 'Trend Over Years':
+        plot_info = plot_settings['Supply']['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    elif type == 'Pie Chart':
+        plot_info = plot_settings['Supply']['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
-        return bar_over_regions.plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label)
+        plot_info = plot_settings['Supply']['By Region']
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
 
 def plot(df, window_id):
@@ -28,7 +39,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'copper-supply-region-select',
+            'type': 'copper-generation_supply-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -40,7 +51,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'copper-supply-year-select',
+            'type': 'copper-generation_supply-year-select',
             'index': window_id
         },
 
@@ -50,38 +61,51 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'copper-supply-plot-select',
+                'type': 'copper-generation_supply-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'copper-supply-aggregate-switch',
+                       'type': 'copper-generation_supply-aggregate-switch',
                        'index': window_id}),
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'copper-supply-scenario-multi-select',
+                'type': 'copper-generation_supply-scenario-multi-select',
                 'index': window_id,
-            }
+            },
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=scenarios[0],
+            id={
+                'type': 'copper-generation_supply-scenario-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
         ),
         by_year_widgets,
-        by_region_widgets
+        by_region_widgets,
+        dmc.Button('Download Data', id={'type': 'copper-generation_supply-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'copper-generation_supply-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],
-                           title='Supply by Year',
-                           x_axis_label='Year',
-                           y_axis_label='MtCO2'),
+        figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],scenarios[0]),
         id={
-            'type': 'copper-supply-canvas',
+            'type': 'copper-generation_supply-canvas',
             'index': window_id},
         style={
             'width': '100%',

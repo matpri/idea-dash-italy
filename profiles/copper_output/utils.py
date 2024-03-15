@@ -24,6 +24,7 @@ def custom_sort_key(value):
     try:
         return custom_order.index(value)
     except ValueError:
+        custom_order.append(value)
         return len(custom_order)  # For items not in custom_order, place them at the end
 
 
@@ -342,6 +343,11 @@ plot_settings = {}
 def plot_edit(plot):
     plots = plot_settings[plot]
     types = list(plots.keys())
+    # remove name and unit from types if they exist
+    if 'name' in types:
+        types.remove('name')
+    if 'unit' in types:
+        types.remove('unit')
 
     glass_style = {
         'background': 'rgba(255, 255, 255, 0.4)',

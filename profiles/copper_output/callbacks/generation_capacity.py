@@ -21,6 +21,14 @@ def link(app):
             'type': 'copper-capacity-download',
             'index': ALL
         }, 'data'),
+        Output({
+            'type': 'copper-capacity-scenario-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper-capacity-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
         Input({
             'type': 'copper-capacity-plot-select',
             'index': ALL
@@ -31,6 +39,10 @@ def link(app):
         }, 'checked'),
         Input({
             'type': 'copper-capacity-scenario-multi-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-capacity-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
@@ -60,9 +72,17 @@ def link(app):
             'type': 'copper-capacity-download',
             'index': ALL
         }, 'data'),
+        State({
+            'type': 'copper-capacity-scenario-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-capacity-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
         prevent_initial_call=True
     )
-    def update_capacity(_p_type, _aggregates, _scenarios, _regions, _years, _download,_r_style, _y_style, _canvas, _data):
+    def update_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style):
         print('updating capacity plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -76,7 +96,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv, "capacity.csv")
-            return _canvas, _r_style, _y_style, _data
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -88,29 +108,51 @@ def link(app):
         print('idx:', idx, 'plot type:', _p_type[idx])
 
         if _p_type[idx] == 'By Year':
+            _m_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Year', data_handler.processed_data['COPPER Output']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx],
-                                           title='Capacity by Year',
-                                           x_axis_label='Year',
-                                           y_axis_label='GW')
+                                           _years[idx], scenario=_scenario[idx])
+
+        elif _p_type[idx] == 'Trend Over Years':
+            _m_style[idx] = {'display': 'none'}
+            _r_style[idx] = {'display': 'block'}
+            _y_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            if _aggregates[idx] is not None:
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['COPPER Output']['Capacity'],
+                                           _aggregates[idx],
+                                           _scenarios[idx],
+                                           _regions[idx],
+                                           _years[idx], scenario=_scenario[idx])
+
+        elif _p_type[idx] == 'Pie Chart':
+            _m_style[idx] = {'display': 'none'}
+            _r_style[idx] = {'display': 'block'}
+            _y_style[idx] = {'display': 'block'}
+            _s_style[idx] = {'display': 'block'}
+            if _aggregates[idx] is not None:
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['COPPER Output']['Capacity'],
+                                           _aggregates[idx],
+                                           _scenarios[idx],
+                                           _regions[idx],
+                                           _years[idx], scenario=_scenario[idx])
 
         else:
+            _m_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Region', data_handler.processed_data['COPPER Output']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx],
-                                           title='Capacity by Region',
-                                           x_axis_label='Region',
-                                           y_axis_label='GW')
+                                           _years[idx], scenario=_scenario[idx])
 
-        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data]
+        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style

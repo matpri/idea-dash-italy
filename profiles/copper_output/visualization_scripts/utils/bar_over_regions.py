@@ -5,7 +5,7 @@ from profiles.copper_output import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, season=None):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -35,7 +35,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, seas
 
             fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'],
                         marker_pattern_shape=scen_patterns, marker_color=color,
-                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>Emissions: %{y:.2f} MtCO2<br>Total: %{customdata:.2f} MtCO2<br><extra></extra>')
+                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
