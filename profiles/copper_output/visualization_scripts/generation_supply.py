@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
-from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from profiles.copper_output.visualization_scripts.utils.dispatch_plot import bar_over_years, bar_over_regions, trend_over_years
 
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario):
@@ -15,9 +15,6 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario):
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Supply']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
-    elif type == 'Pie Chart':
-        plot_info = plot_settings['Supply']['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
         plot_info = plot_settings['Supply']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
@@ -61,7 +58,7 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years']],
             value='By Year',
             id={
                 'type': 'copper-generation_supply-plot-select',
@@ -103,7 +100,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],scenarios[0]),
+        figure=render_plot('By Year', df, True, [scenarios[0]],  'CAN' if 'CAN' in regions else regions[0], years[0],scenarios[0]),
         id={
             'type': 'copper-generation_supply-canvas',
             'index': window_id},

@@ -131,18 +131,6 @@ def link(app):
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx])
 
-        elif _p_type[idx] == 'Pie Chart':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _s_style[idx] = {'display': 'block'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['COPPER Output']['Supply'],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
-
         else:
             _m_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}

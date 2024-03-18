@@ -1,3 +1,4 @@
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from dash import dcc
@@ -28,7 +29,10 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
                 color = utils.get_color(tech)
 
             fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                            customdata=np.stack([data['total'], data['exports'], data['imports']]).T,
+                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f }' + f'{unit}<br>' +
+                                          'Exports: %{customdata[1]:.2f} ' + f'{unit}' + '<br>Imports: '
+                                                                               '%{customdata[2]:.2f} ' + f'{unit}' + '<br>' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
@@ -53,6 +57,17 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     return fig
 
 
+def aggregate_imports(df):
+    imports = df[df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] > 0)]
+    exports = df[df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] < 0)]
+
+    imports['variable'] = 'Imports'
+    exports['variable'] = 'Exports'
+
+    df = df[~df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])]
+    return pd.concat([df, imports, exports])
+
+
 def subset(df, region, scenario, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
@@ -67,7 +82,7 @@ def subset(df, region, scenario, aggregate, season=None):
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = aggregate_imports(df_scen)
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
@@ -77,10 +92,32 @@ def subset(df, region, scenario, aggregate, season=None):
 
     df_scen = df_scen[df_scen['region'] == region]
 
+    if region == 'CAN':
+        df_scen = df_scen[~df_scen['variable'].isin(['Imports', 'Exports', 'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])]
+
+
     # create new column for total in can_emissions df
     df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
 
+    if aggregate:
+        df_scen.loc[df_scen['variable'] == 'Exports', 'exports'] = df_scen['value']
+        df_scen.loc[df_scen['variable'] == 'Imports', 'imports'] = df_scen['value']
+    else:
+        df_scen.loc[df_scen['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])
+                    & df_scen['value'] > 0, 'imports'] = df_scen[
+            'value']
+        df_scen.loc[df_scen['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & df_scen['value'] < 0, 'exports'] = df_scen[
+            'value']
+
+    df_scen['imports'].fillna(value=0, inplace=True)
+    df_scen['exports'].fillna(value=0, inplace=True)
+
     df_scen = df_scen[df_scen['value'] != 0]
+    df_scen = df_scen.fillna(0)
+
+    def get_sum(row, col_name):
+        return df_scen.loc[
+            (df_scen['time'] == row['time']) & (df_scen['scenario'] == row['scenario']), col_name].sum()
 
 
     df_scen = df_scen.fillna(0)
@@ -98,5 +135,12 @@ def subset(df, region, scenario, aggregate, season=None):
                     )
     year_pad_df = pd.DataFrame(year_pad)
     df_scen = pd.concat([df_scen, year_pad_df])
+
+
+    df_scen['imports'] = df_scen.apply(lambda row: get_sum(row, 'imports'), axis=1)
+    df_scen['exports'] = df_scen.apply(lambda row: get_sum(row, 'exports'), axis=1)
+
+    # subtract imports and exports from total
+    df_scen['total'] = df_scen['total'] - df_scen['imports'] - df_scen['exports']
     df_scen = df_scen.sort_values(by=['time', 'variable'], key=lambda x: x.map(utils.custom_sort_key))
     return df_scen
