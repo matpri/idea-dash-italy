@@ -105,8 +105,11 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],scenarios[0]),
         id={
-            'type': 'copper-new-capacity-canvas',
-            'index': window_id},
+            'type': 'figure',
+            'index': window_id,
+            'profile': 'copper_output',
+            'viz': 'newcap'
+        },
         style={
             'width': '100%',
             'height': '100%'

@@ -6,9 +6,10 @@ from profiles.copper_output.visualization_scripts.net_new_capacity import render
 
 def link(app):
     @app.callback(
-        Output({
-            'type': 'copper-net-new-capacity-canvas',
-            'index': ALL}, 'figure'),
+        Output({'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'netnewcap'}, 'figure'),
         Output({
             'type': 'copper-net-new-capacity-region-select',
             'index': ALL
@@ -66,8 +67,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-net-new-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'netnewcap'
+        }, 'figure'),
         State({
             'type': 'copper-net-new-capacity-download',
             'index': ALL

@@ -102,8 +102,12 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, [scenarios[0]],  'CAN' if 'CAN' in regions else regions[0], years[0],scenarios[0]),
         id={
-            'type': 'copper-generation_supply-canvas',
-            'index': window_id},
+
+            'type': 'figure',
+            'index': window_id,
+            'profile': 'copper_output',
+            'viz': 'supply'
+        },
         style={
             'width': '100%',
             'height': '100%'

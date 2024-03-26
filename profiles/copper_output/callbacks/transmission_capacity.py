@@ -7,11 +7,11 @@ from profiles.copper_output.visualization_scripts.transmission_capacity import r
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-transmissioncapacity-canvas',
-            'index': ALL}, 'figure'),
-
-
-
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'transmission_capacity'
+        }, 'figure'),
         Input({
             'type': 'copper-transmissioncapacity-scenario-multi-select',
             'index': ALL
@@ -27,8 +27,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-transmissioncapacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'transmission_capacity'
+        }, 'figure'),
         prevent_initial_call=True
     )
     def update_transmissioncapacity(_scenarios, _years, _seasons, _canvas):

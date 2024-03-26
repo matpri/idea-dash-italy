@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.cost_total import render_plot
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-cost_total-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_total'
+        }, 'figure'),
         Output({
             'type': 'copper-cost_total-region-select',
             'index': ALL
@@ -66,8 +69,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-cost_total-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_total'
+        }, 'figure'),
         State({
             'type': 'copper-cost_total-download',
             'index': ALL

@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.dispatch import render_plot, d
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-dispatch-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'dispatch'
+        }, 'figure'),
         Output({
             'type': 'copper-dispatch-region-select',
             'index': ALL
@@ -90,8 +93,11 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'copper-dispatch-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'dispatch'
+        }, 'figure'),
         State({
             'type': 'copper-dispatch-download',
             'index': ALL

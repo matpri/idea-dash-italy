@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.cost_vom import render_plot
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-cost_vom-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_vom'
+        }, 'figure'),
         Output({
             'type': 'copper-cost_vom-region-select',
             'index': ALL
@@ -66,8 +69,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-cost_vom-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_vom'
+        }, 'figure'),
         State({
             'type': 'copper-cost_vom-download',
             'index': ALL

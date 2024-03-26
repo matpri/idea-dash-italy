@@ -2,7 +2,8 @@ import dash
 import dash_lumino_components as dlc
 from dash import html
 
-from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling
+from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
+    plot_handling
 from components import ids, header, plot_canvas, sidebar
 from components.data_selection import data_modal
 from utils.data_handler import DataHandler
@@ -23,6 +24,7 @@ tab_handling.link(app)
 burger_handling.link(app)
 sidebar_handling.link(app)
 data_viewer_handling.link(app)
+plot_handling.link(app)
 
 app.layout = html.Div([
     header.render(app),
@@ -39,7 +41,6 @@ app.layout = html.Div([
 
     ], id=ids.CONTENT)
 ])
-
 
 if __name__ == '__main__':
     app.run()

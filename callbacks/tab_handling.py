@@ -109,10 +109,10 @@ def link(app):
 
     @app.callback(
         Output({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        Output({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
+        Output({'type': 'hidden_plot', 'index': dash.dependencies.ALL}, 'children'),
         Input({'type': 'viz-tabs', 'index': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
         State({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        State({'type': 'plot', 'index': dash.dependencies.ALL}, 'children'),
+        State({'type': 'hidden_plot', 'index': dash.dependencies.ALL}, 'children'),
         prevent_initial_call=True,
     )
     def update_drawer(_values, _children, _plots):

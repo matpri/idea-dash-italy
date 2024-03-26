@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.transmission_capacity import r
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-transmissionflow-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'transmission_flow'
+        }, 'figure'),
 
 
 
@@ -27,8 +30,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-transmissionflow-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'transmission_flow'
+        }, 'figure'),
         prevent_initial_call=True
     )
     def update_transmissionflow(_scenarios, _years, _seasons, _canvas):

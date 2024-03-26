@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.new_capacity import render_plo
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-new-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'newcap'
+        }, 'figure'),
         Output({
             'type': 'copper-new-capacity-region-select',
             'index': ALL
@@ -66,8 +69,10 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-new-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'newcap'}, 'figure'),
         State({
             'type': 'copper-new-capacity-download',
             'index': ALL

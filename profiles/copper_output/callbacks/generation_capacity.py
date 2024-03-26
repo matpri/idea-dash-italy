@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.generation_capacity import ren
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'gencap'
+        }, 'figure'),
         Output({
             'type': 'copper-capacity-region-select',
             'index': ALL
@@ -66,8 +69,10 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'gencap'}, 'figure'),
         State({
             'type': 'copper-capacity-download',
             'index': ALL
@@ -82,7 +87,8 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style):
+    def update_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download, _r_style, _y_style,
+                        _canvas, _data, _s_style, _m_style):
         print('updating capacity plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -95,7 +101,8 @@ def link(app):
                         (id['id']['type'] == 'copper-capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv, "capacity.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv,
+                                             "capacity.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0

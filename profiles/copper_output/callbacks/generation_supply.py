@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.generation_supply import rende
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-generation_supply-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'supply'
+        }, 'figure'),
         Output({
             'type': 'copper-generation_supply-region-select',
             'index': ALL
@@ -65,9 +68,10 @@ def link(app):
             'type': 'copper-generation_supply-year-select',
             'index': ALL
         }, 'style'),
-        State({
-            'type': 'copper-generation_supply-canvas',
-            'index': ALL}, 'figure'),
+        State({'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'supply'}, 'figure'),
         State({
             'type': 'copper-generation_supply-download',
             'index': ALL
@@ -82,7 +86,8 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_generation_supply(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style):
+    def update_generation_supply(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download, _r_style,
+                                 _y_style, _canvas, _data, _s_style, _m_style):
         print('updating generation_supply plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -95,7 +100,8 @@ def link(app):
                         (id['id']['type'] == 'copper-generation_supply-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Emissions'].to_csv, "generation_supply.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Emissions'].to_csv,
+                                             "generation_supply.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0

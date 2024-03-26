@@ -286,8 +286,11 @@ def plot(df, window_id):
                            title='Transmission Flow by Year',
                            ),
         id={
-            'type': 'copper-transmissionflow-canvas',
-            'index': window_id},
+            'type': 'figure',
+            'index': window_id,
+            'profile': 'copper_output',
+            'viz': 'transmission_flow'
+        },
         style={
             'width': '100%',
             'height': '100%'

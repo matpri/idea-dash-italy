@@ -12,7 +12,8 @@ def render(card_id, viz_func):
     layout = html.Div([
         dmc.Burger(
             id={'type': 'burger', 'index': card_id},
-            opened=False
+            opened=False,
+            size='sm'
         ),
         dbc.Popover(
             target={'type': 'burger', 'index': card_id},

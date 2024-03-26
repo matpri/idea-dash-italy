@@ -116,8 +116,11 @@ def plot(df, window_id):
         figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],scenarios[0],
                            season='winter'),
         id={
-            'type': 'copper-qualifying-capacity-canvas',
-            'index': window_id},
+            'type': 'figure',
+            'index': window_id,
+            'profile': 'copper_output',
+            'viz': 'qualcap'
+        },
         style={
             'width': '100%',
             'height': '100%'

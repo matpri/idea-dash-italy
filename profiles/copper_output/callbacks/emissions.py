@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.emissions import render_plot
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-emissions-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'emissions'
+        }, 'figure'),
         Output({
             'type': 'copper-emissions-region-select',
             'index': ALL
@@ -66,8 +69,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-emissions-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'emissions'
+        }, 'figure'),
         State({
             'type': 'copper-emissions-download',
             'index': ALL

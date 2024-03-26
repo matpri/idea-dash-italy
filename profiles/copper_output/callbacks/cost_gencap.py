@@ -7,8 +7,11 @@ from profiles.copper_output.visualization_scripts.cost_gencap import render_plot
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-cost_gencap-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_gencap'
+        }, 'figure'),
         Output({
             'type': 'copper-cost_gencap-region-select',
             'index': ALL
@@ -66,8 +69,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-cost_gencap-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'cost_gencap'
+        }, 'figure'),
         State({
             'type': 'copper-cost_gencap-download',
             'index': ALL

@@ -7,8 +7,10 @@ from profiles.copper_output.visualization_scripts.qualifying_capacity import ren
 def link(app):
     @app.callback(
         Output({
-            'type': 'copper-qualifying-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'qualcap'}, 'figure'),
         Output({
             'type': 'copper-qualifying-capacity-region-select',
             'index': ALL
@@ -70,8 +72,11 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-qualifying-capacity-canvas',
-            'index': ALL}, 'figure'),
+            'type': 'figure',
+            'index': ALL,
+            'profile': 'copper_output',
+            'viz': 'qualcap'
+        }, 'figure'),
         State({
             'type': 'copper-qualifying-capacity-download',
             'index': ALL
