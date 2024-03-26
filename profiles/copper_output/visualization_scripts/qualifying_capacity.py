@@ -4,23 +4,23 @@ from dash import html, dcc
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, season):
     from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Qualifying Capacity']['name']
     unit = plot_settings['Qualifying Capacity']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Qualifying Capacity']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Qualifying Capacity']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Qualifying Capacity']['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], season=season)
     else:
         plot_info = plot_settings['Qualifying Capacity']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season)
 
 
 def plot(df, window_id):
