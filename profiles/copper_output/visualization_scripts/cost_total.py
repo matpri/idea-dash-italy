@@ -37,7 +37,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value='CAN' if 'CAN' in regions else regions[0],
+        value= 'CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'copper-cost_total-region-select',
             'index': window_id
@@ -103,7 +103,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]],  regions[0], years[0],scenarios[0]),
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0], years[0],scenarios[0]),
         id={
             'type': 'figure',
             'index': window_id,

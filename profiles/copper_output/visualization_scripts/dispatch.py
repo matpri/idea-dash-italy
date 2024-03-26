@@ -277,7 +277,7 @@ def plot(df, window_id):
         dmc.Select(
             label='Region',
             data=[{'label': region, 'value': region} for region in regions],
-            value='CAN' if 'CAN' in regions else regions[0],
+            value= 'CAN' if 'CAN' in regions else regions[0],
             id={
                 'type': 'copper-dispatch-region-select',
                 'index': window_id
@@ -309,7 +309,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Dispatched Electricity', df, True, scenarios[0], regions[0], years[0], days[0]),
+        figure=render_plot('Dispatched Electricity', df, True, scenarios[0], 'CAN' if 'CAN' in regions else regions[0], years[0], days[0]),
         id={
             'type': 'figure',
             'index': window_id,
