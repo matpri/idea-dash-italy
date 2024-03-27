@@ -1,10 +1,31 @@
-.lm-Widget.lm-TabBar {
-    height: 10px !important;
-}
+/*.lm-Widget.lm-TabBar {*/
+/*    height: 15px !important;*/
+/*    min-height: 15px;*/
+/*    max-height: 20px;*/
+/*    line-height: 20px;*/
+/*}*/
 
-.lm-TabBar-tab{
-    height: 10px !important;
-}
+/*.lm-TabBar-tab{*/
+/*    height: 5px !important;*/
+/*}*/
+
+/*lm-TabBar-tab {*/
+/*    padding: 0 10px;*/
+/*    background: #e5e5e5;*/
+/*    border: 1px solid silver;*/
+/*    border-bottom: none;*/
+/*    flex: 0 1 155px;*/
+/*    min-height: 10px;*/
+/*    max-height: 15px;*/
+/*    min-width: 35px;*/
+/*    margin-left: -1px;*/
+/*    line-height: 25px;*/
+/*    box-shadow: 0 1px 4px 0 rgba(0,0,0,.3);*/
+/*    border-top-left-radius: 5px;*/
+/*    border-top-right-radius: 5px;*/
+/*    height: 5px !important;*/
+/*}*/
+
 
 #sidebar,
 #sidebar .my-button {
