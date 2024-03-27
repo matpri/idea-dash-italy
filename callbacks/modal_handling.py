@@ -34,10 +34,8 @@ def link(app):
 
         # set flag based on button type
         open_flag = triggered_input['type'] == 'open-modal'
-        print(open_flag, 'open flags')
         if triggered_input['type'] in ['modal-close-button', 'modal-submit-button']:
             print(f"{'Submitting data' if triggered_input['type'] == 'modal-submit-button' else 'Closing data modal'}")
-
 
         # special case for 'data' index
         if triggered_input['index'] == 'data':

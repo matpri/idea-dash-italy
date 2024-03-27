@@ -9,7 +9,7 @@ from components.data_selection import database_connection, local_files, selected
 def render(app):
     layout = dmc.Modal(
         title='Load Data',
-        id={'type': 'modal', 'index': 'load_data'},
+        id={'type': 'modal', 'index': 'data'},
         zIndex=10000,
         size='75%',
         closeOnClickOutside=True,
@@ -63,9 +63,9 @@ def render(app):
             ),
             dmc.Space(h=20),
             dmc.Group([
-                dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'load_data'}),
+                dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'data'}),
                 dmc.Button('Cancel', color='red', variant='outline',
-                           id={'type': 'modal-close-button', 'index': 'load_data'}, ),
+                           id={'type': 'modal-close-button', 'index': 'data'}, ),
             ], position='right'),]
         ),
     )
