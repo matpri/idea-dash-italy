@@ -235,7 +235,7 @@ class CopperOutput(BaseProfile):
                 dmc.Tabs([
                     dmc.TabsList([
                         dmc.Tab('Technology Settings', id='copper-technologies', value='tech'),
-                        dmc.Tab('Plot Settings', id='plot-settings', value='plot'),
+                        dmc.Tab('Plot Settings', id='copper-plot-settings-tab', value='plot'),
                     ]
                     ),
                     dmc.TabsPanel(id='copper-technologies-settings', value='tech',

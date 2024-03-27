@@ -1,0 +1,47 @@
+Price OPF:
+  name: Price OPF
+  unit: CAD
+  Total:
+    title: Total Price OPF
+    x_label: Year
+    y_label: Price OPF
+  By Technology:
+    title: Price OPF by Technology
+    x_label: Year
+    y_label: Price OPF
+UC Results:
+  name: UC Results
+  unit: MW
+  Total:
+    title: Total UC Results
+    x_label: Year
+    y_label: MW
+  By Technology:
+    title: UC Results by Technology
+    x_label: Year
+    y_label: MW
+OPF Results:
+  name: OPF Results
+  unit: MW
+  Total:
+    title: Total OPF Results
+    x_label: Year
+    y_label: MW
+  By Technology:
+    title: OPF Results by Technology
+    x_label: Year
+    y_label: MW
+OPF Costs:
+  name: OPF Costs
+  unit: CAD
+  Total:
+    title: Total OPF Costs
+    x_label: Year
+    y_label: CAD
+
+
+
+
+
+
+

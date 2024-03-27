@@ -107,6 +107,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
         return not is_open, dash.no_update
 
     if triggered_input == 'submit-data':
+        print('submitting data')
         from main import data_handler
         for i, ls in enumerate(ctx.states_list[1]):
             chip = ls['id']
@@ -116,9 +117,9 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
             data_handler.data[file]['scenario'] = scenario_names[i]
         data_handler.process_data()
 
-        return not is_open, 1 if n_click is None else n_click + 1
+        return False, 1 if n_click is None else n_click + 1
 
     if triggered_input == 'cancel-data':
-        return not is_open, dash.no_update
+        return False, dash.no_update
 
     return is_open, dash.no_update
