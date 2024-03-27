@@ -4,7 +4,6 @@ from dash import html, dcc
 
 import plotly.graph_objects as go
 import plotly.express as px
-import panel as pn
 import numpy as np
 import geojson
 

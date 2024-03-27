@@ -56,7 +56,7 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
 
 
 def update_chips(_contents, n_clicks, filenames, selected_runs, app):
-    print('Calling update_chips', _contents, n_clicks, filenames, selected_runs, app)
+
     from main import data_handler
 
     ctx = dash.callback_context
@@ -82,10 +82,6 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
 
             return dash.no_update, db_layout, 'db',  list(data_handler.data.keys())
 
-
-
-
-    print('Calling update_data', filenames)
     selected_data = {}
     if filenames is not None:
         views = []
