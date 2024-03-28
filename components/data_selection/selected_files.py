@@ -6,25 +6,27 @@ from typing import List, Dict
 import dash
 import dash_mantine_components as dmc
 import pandas as pd
-from dash_iconify import DashIconify
 from dash import html, Output, Input, State
+from dash_iconify import DashIconify
 
 from components import ids
 from components.data_selection import viz_edit_modal
 
+
 def render(app):
     layout = dmc.AccordionItem([
-                    dmc.AccordionControl('Local Files:'),
+        dmc.AccordionControl('Local Files:'),
         dmc.AccordionPanel('Upload Local Results file', id=ids.DATA_SELECTED)
     ],
-    value='local',
-    style={'width': '100%'})
+        value='local',
+        style={'width': '100%'})
 
     app.callback(
         Output(ids.DATA_SELECTED, 'children'),
         Output(ids.DB_SELECTED, 'children'),
         Output(ids.DATA_SELECTED_VIEW, 'value'),
         Output('profile-select', 'data'),
+        Output('data-loading-notification', 'children'),
         Input(ids.DATA_UPLOAD, 'contents'),
         Input(ids.DB_LOAD_BUTTON, 'n_clicks'),
         State(ids.DATA_UPLOAD, 'filename'),
@@ -32,6 +34,7 @@ def render(app):
         prevent_initial_call=True,
     )(partial(update_chips, app=app))
     return layout
+
 
 def check_content(content, found_profiles) -> Dict[str, List[str]]:
     if content is None:
@@ -56,7 +59,6 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
 
 
 def update_chips(_contents, n_clicks, filenames, selected_runs, app):
-
     from main import data_handler
 
     ctx = dash.callback_context
@@ -67,10 +69,10 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                 model, scenario, author = run.split('-')
                 data_handler.select_run(model, scenario, author)
                 db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
-                                             radius='xl', size='xs', compact=True,
-                                             variant='light',
-                                             leftIcon=DashIconify(icon='carbon:edit', width=10),
-                                             style={'margin': '2px'}))
+                                           radius='xl', size='xs', compact=True,
+                                           variant='light',
+                                           leftIcon=DashIconify(icon='carbon:edit', width=10),
+                                           style={'margin': '2px'}))
                 db_views.append(viz_edit_modal.render(app, run))
 
             db_layout = html.Div(
@@ -80,7 +82,7 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                 ]
             )
 
-            return dash.no_update, db_layout, 'db',  list(data_handler.data.keys())
+            return dash.no_update, db_layout, 'db', list(data_handler.data.keys()), dash.no_update
 
     selected_data = {}
     if filenames is not None:
@@ -107,10 +109,12 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                                         color=colors[0] if len(colors) == 1 else 'gray',
                                         leftIcon=DashIconify(icon='carbon:edit', width=10),
                                         style={'margin': '2px'}))
-
-
                 views.append(viz_edit_modal.render(app, file))
                 selected_data[file] = f'chip-{file}'
-        return views, dash.no_update, 'local', list(data_handler.data.keys())
-
-
+            else:
+                print(f'Only CSV files are supported, {extension} is not supported')
+                return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dmc.Alert(
+                    'Only CSV files are supported', color='red', title='Error',
+                    withCloseButton=True
+                )
+        return views, dash.no_update, 'local', list(data_handler.data.keys()), dash.no_update

@@ -41,6 +41,7 @@ def render(app):
 
                 ),
                 dmc.Divider(),
+                html.Div(id='data-loading-notification'),
                 html.Div(
                     dmc.AccordionMultiple([
                         selected_files.render(app),
