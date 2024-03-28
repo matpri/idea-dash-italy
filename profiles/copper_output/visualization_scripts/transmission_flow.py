@@ -213,19 +213,23 @@ def transmission_plot(df, scenario, year, title):
                     )
                     )
 
-
-    fig_overlay = px.choropleth(df, geojson=arrow, locations='line', featureidkey="properties.name",
-                                    color='value',  # use 'norm_value' here instead of 'line'
-                                    scope='north america',
-                                    range_color=[min_value, max_value],
-                                    # set colorscale GnBu
-                                    color_continuous_scale='GnBu',
-                                    )
-
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
         str) + '<br>' + 'Flow: ' + df['value'].astype(str) + ' GWh'
-    for i, area in enumerate(fig_overlay.data):
-        area.hovertemplate = df['text'].iloc[i]
+
+    fig_overlay = go.Figure(
+        data=go.Choropleth(
+            locations=df['line'],
+            z=df['value'],
+            geojson=arrow,
+            featureidkey="properties.name",
+            colorscale='GnBu',
+            zmin=min_value,
+            zmax=max_value,
+            text=df['text'],
+
+        )
+    )
+
     fig_overlay.update_traces(coloraxis="coloraxis2")
     fig_overlay.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
