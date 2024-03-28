@@ -38,8 +38,9 @@ class DataHandler:
                 table_dfs.append(df)
             df = pd.concat(table_dfs)
         else:
-            base_url = f'http://206.12.95.102/results?key={self.api_key}&scenario='
+            base_url = f'http://206.12.95.102/results?key={self.api_key}&scenario=&model={profile}'
             url = base_url + scenario
+            print(url)
             response = urllib.urlopen(url)
             data = json.loads(response.read())
             df = pd.DataFrame(data)

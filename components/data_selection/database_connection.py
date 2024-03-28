@@ -120,9 +120,9 @@ def connect_to_database(n_clicks, api_key, children):
             data_handler.runs = runs
 
             checkbox_data = []
-            model_select = [model for model in runs['model'].unique()]
-            scenario_select = [scenario for scenario in runs['scenario'].unique()]
-            author_select = [author for author in runs['author'].unique()]
+            model_select = ['ALL'] + [model for model in runs['model'].unique()]
+            scenario_select = ['ALL'] + [scenario for scenario in runs['scenario'].unique()]
+            author_select = ['ALL'] + [author for author in runs['author'].unique()]
             for i, row in data_handler.runs.iterrows():
                 checkbox_data.append(
                     {
@@ -174,8 +174,8 @@ def connect_to_database(n_clicks, api_key, children):
                 color='red',
                 withCloseButton=True,
                 style={'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}
-            )]
-    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
+            )], dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
 def get_runs(model, scenario, author):
@@ -215,7 +215,7 @@ def get_runs(model, scenario, author):
                     ],
                     position='apart'
                 ),
-                "value": f'{row.model}_{row.scenario}_{row.author}'
+                "value": f'{row.model}-{row.scenario}-{row.author}'
             }
         )
 
