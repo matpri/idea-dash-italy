@@ -50,12 +50,11 @@ def year_subset(Line_Flow, Year, Scenario):
     Line_Flow['from_lat'] = pd.to_numeric(Line_Flow['from_lat'])
     Line_Flow['to_lon'] = pd.to_numeric(Line_Flow['to_lon'])
     Line_Flow['to_lat'] = pd.to_numeric(Line_Flow['to_lat'])
-
-    Line_Flow = Line_Flow[Line_Flow['period'] == Year]
     Line_Flow = Line_Flow[Line_Flow['scenario'] == Scenario]
+    Line_Flow = Line_Flow[Line_Flow['period'] == Year]
 
     # Line_Flow = aggregate_lines(Line_Flow)
-    Line_Flow = Line_Flow[Line_Flow['value'] != 0]
+    Line_Flow = Line_Flow[Line_Flow['total'] != 0]
     return Line_Flow
 
 
@@ -145,98 +144,103 @@ def to_color_plotly(min_value):
     return func
 
 def transmission_plot(df, scenario, year, title):
-    # normalize the values where max value is 1
-    max_value = df['value'].max()
-    df['norm_value'] = df['value'] / max_value
-    df['norm_value'] = df['norm_value'].fillna(0)
+    df['line'] = df['short_region'] + ' -> ' + df['short_variable']
 
-    colorfunc = to_color_plotly(df['norm_value'].min())
-
-    min_value = df['value'].min()
-    max_value = df['value'].max()
+    min_value = df['total'].min()
+    max_value = df['total'].max()
     df = year_subset(df, year, scenario)
 
+    # round value, total, cumsum to 2 decimal places
+    df['value'] = df['value'].round(2)
+    df['total'] = df['total'].round(2)
+    df['cumsum'] = df['cumsum'].round(2)
 
+    if df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            title_text=title,
+            template="simple_white",
+        )
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, since the results are all zero.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
+        fig.layout.autosize = True
+        return fig
 
-    with open('profiles/copper_output/canada.geojson') as f:
+    with open('./profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
+    with open('./profiles/copper_output/visualization_scripts/utils/arrows.geojson') as f:
+        arrow = geojson.load(f)
 
-    regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
-               'Nova Scotia', 'Prince Edward Island',
-               'Newfoundland and Labrador', 'Yukon', 'Northwest Territories', 'Nunavut']
-    colors = ['#a098ce', '#94cecc', '#c2be99', '#b8a891', '#afd6b8', '#bdafac', '#c89195', '#d2beaa', '#d7aabe',
-              '#99c1c7', '#cdb9bd', '#aba8c1', '#d3cfae']
+    regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
 
-    id = np.arange(0, len(regions))
+    fig_base = px.choropleth(
+        geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
+        color_discrete_map={'British Columbia': 'lightgrey', 'Alberta': 'lightgrey', 'Saskatchewan': 'lightgrey',
+                            'Manitoba': 'lightgrey', 'Ontario': 'lightgrey', 'Quebec': 'lightgrey',
+                            'New Brunswick': 'lightgrey',
+                            'Nova Scotia': 'lightgrey', 'Prince Edward Island': 'lightgrey',
+                            'Newfoundland and Labrador': 'lightgrey',
+                            'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
+        scope='north america',
+    )
+    for area in fig_base.data:
+        area.showlegend = False  # turn off legend
+        df_region = df[df['region'] == area.name]
+        df_region = df_region[df_region['total'] != 0]
+        template = f'{area.name}<extra></extra>'
+        # for index, row in df_region.iterrows():
+        #     template += f'{row["short_region"]} -> {row["short_variable"]}: {row["total"]} GWh <br>'
+        # template += '<extra></extra>'
+        area.update(hovertemplate=template)
+    fig_base.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
-    region_colors = pd.DataFrame({'Region': regions, 'Color': colors, 'id': id})
-
-
-
-    fig = px.choropleth(region_colors, geojson=canada, locations='Region', featureidkey="properties.name",
-                        color='Region',
-                        color_discrete_map=dict(zip(regions, colors)),
-                        scope='north america',
-                        locationmode='geojson-id',
-                        hover_name='Region',
-                        title=title,
-                        template="simple_white",
-                        height=500,
-                        )
-
-
-
-    for trace in fig.data:
-        trace.update(legendgroup=trace.name)
-
-        df_region = df[df['region'] == trace.name]
-        df_region = df_region[df_region['value'] != 0]
-        template = f'{trace.name} <br><br> Lines: <br>'
-        for index, row in df_region.iterrows():
-            template += f'{row["short_region"]} -> {row["short_variable"]}: {row["value"]} GW <br>'
-        template += '<extra></extra>'
-        trace.update(hovertemplate=template)
-
-        # for every entry in df_region add an arrow to the map figure
-        add_arrow(fig, df_region, colorfunc, group=trace.name,
-                  year=year, scenario=scenario)
-
-    # Create a scatter plot trace to generate the colorbar
-    colorbar_trace = go.Scatter(
-        x=[None],
-        y=[None],
-
-        mode="markers",
-        marker=dict(
-            cmin=min_value,
-            cmax=max_value,
-            color=[min_value, max_value] if min_value != max_value else [min_value],
-            colorscale='Plasma',
-            colorbar=dict(
-                          title="Transmission Flow (GW)",
-                          titleside="top", x=0,tickmode="array",tickvals=[min_value, max_value] if min_value != max_value else [min_value],ticktext=[min_value, max_value] if min_value != max_value else [min_value],
-
-                            len=0.5,
-                          ),
-        ),
-        showlegend=False,
-        # hide y_axis from the
+    fig = go.Figure(
+        data=fig_base.data,
+        layout=go.Layout(
+        )
     )
 
-    # add the dummy trace to the figure
-    fig.add_trace(colorbar_trace)
+    fig_overlay = px.choropleth(df, geojson=arrow, locations='line', featureidkey="properties.name",
+                                color='total',  # use 'norm_value' here instead of 'line'
+                                scope='north america',
+                                range_color=[min_value, max_value],
+                                # set colorscale GnBu
+                                color_continuous_scale='GnBu',
+                                )
 
+    df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
+        str) + '<br>' + 'Existing Capacity: ' + df['cumsum'].astype(str) + ' GW <br>' + \
+                 'New Capacity: ' + df['value'].astype(str) + ' GW <br>' + 'Total Capacity: ' + df['total'].astype(
+        str) + " GW"
+    for i, area in enumerate(fig_overlay.data):
+        area.hovertemplate = df['text'].iloc[i]
 
-    fig.update_geos(showcountries=False, showcoastlines=False,
-                    showland=False, fitbounds="locations",
+    fig_overlay.update_traces(coloraxis="coloraxis2")
+    fig_overlay.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+    fig.add_traces(fig_overlay.data)
+
+    fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.9),
+                                      # set colorscale
+                                      colorscale='GnBu', colorbar_title='Transmission Capacity (GW)'))
+    fig.update_geos(showcountries=False, showcoastlines=False, showland=False, fitbounds="locations", showlakes=False,
+                    showrivers=False,
                     subunitcolor='white')
 
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0},
-                      xaxis_visible=False,
-                      yaxis_visible=False,
-                      )
-    fig.update_xaxes(showticklabels=False, zeroline=False, showgrid=False)
-    fig.update_yaxes(showticklabels=False, zeroline=False, showgrid=False)
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    fig.update_geos(projection_type="orthographic")
+    # remove box around plot
+    fig.update_layout(showlegend=False)
+    fig.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.layout.autosize = True
     return fig
 
@@ -251,11 +255,9 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-
     scenarios = df['scenario'].unique().tolist()
     # years where region is not CAN
     years = df['period'].unique().tolist()
-    # make all years int
     years.sort()
 
 

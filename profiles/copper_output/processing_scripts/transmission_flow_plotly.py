@@ -158,7 +158,7 @@ def process(selected):
 
         trs['period'] = trs['time'].dt.year
         trs['period'] = trs['period'].astype(int)
-        trs['value'] = trs['value'] / 1000000
+        trs['value'] = trs['value'] / 1000
         trs['value'] = trs['value'] * 365 / len(unique_dates)
         # drop time
         trs = trs.drop(columns=['time'])
@@ -171,16 +171,12 @@ def process(selected):
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
-
-    total_data = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./arrow_coords.csv')
-    # change period to int
-    total_data['period'] = total_data['period'].astype(int)
-    total_data['short_region'] = total_data['region'].map(utils.province_short)
-    total_data['short_variable'] = total_data['variable'].map(utils.province_short)
-    total_data = pd.merge(total_data, prov_cord, how='inner', left_on=['region', 'variable'],
-                          right_on=['region', 'variable'])
-    total_data['from_lat'] = total_data['from_lat'].astype(float)
-    total_data['from_lon'] = total_data['from_lon'].astype(float)
-
-    return total_data
+    full_t = pd.concat(transmissions)
+    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+    full_t['short_region'] = full_t['region'].map(utils.province_short)
+    full_t['short_variable'] = full_t['variable'].map(utils.province_short)
+    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
+                      right_on=['region', 'variable'])
+    full_t['from_lat'] = full_t['from_lat'].astype(float)
+    full_t['from_lon'] = full_t['from_lon'].astype(float)
+    return full_t
