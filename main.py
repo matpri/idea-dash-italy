@@ -30,7 +30,7 @@ app.layout = html.Div([
     header.render(app),
     html.Div([
         dlc.BoxPanel([
-            plot_canvas.render(app),
+            plot_canvas.render(),
         ], id='test', addToDom=True),
         sidebar.render(),
         data_modal.render(app),
@@ -39,7 +39,8 @@ app.layout = html.Div([
         html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
         html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
 
-    ], id=ids.CONTENT)
+    ], id=ids.CONTENT,
+    )
 ])
 
 if __name__ == '__main__':

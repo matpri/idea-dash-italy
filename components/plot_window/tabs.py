@@ -72,7 +72,7 @@ def render(card_id):
     )
 
     widgets, plot = data_handler.get_viz(list(profiles.keys())[0], plots[0], card_id)
-    _w, _f, _hp = viz_container.render(card_id, list(profiles.keys())[0], plots[0], widgets, plot)
+    _b, _w, _f, _hp = viz_container.render(card_id, list(profiles.keys())[0], plots[0], widgets, plot)
     layout = [
         dbc.Collapse(
             [
@@ -87,7 +87,7 @@ def render(card_id):
             is_open=True,
         ),
         html.Div([
-            _w,
+            _b,
             html.Div(
                 [
                     dmc.ActionIcon(
@@ -123,9 +123,18 @@ def render(card_id):
                    # all in one row,
                    'justify-content': 'space-between', }
         ),
-        _f,
+        # flexgroup _w and _f
+        html.Div(
+            [
+                _w,
+                _f
+            ],
+            style={'display': 'flex',
+                   'justify-content': 'space-between',
+                   'height': '90%',
+                   'width': '100%'}
+        ),
         _hp
-
     ]
 
     return layout
