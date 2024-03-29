@@ -26,7 +26,10 @@ def render():
                             dmc.Col(dmc.Button('Plots', color='blue', variant='light', id='help-plots', radius="sm",
                                                style={"height": '30px'}, size="lg"), span='content'),
                             dmc.Col(
-                                dmc.Button('Settings', color='blue', variant='light', id='help-settings', radius="sm",
+                                dmc.Button('Model Settings', color='blue', variant='light', id='help-settings', radius="sm",
+                                           style={"height": '30px'}, size="lg"), span='content'),
+                            dmc.Col(
+                                dmc.Button('Scenario Settings', color='blue', variant='light', id='help-scenario', radius="sm",
                                            style={"height": '30px'}, size="lg"), span='content'),
                         ], className="button-group",
                         gutter='xs',
