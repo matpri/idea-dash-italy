@@ -1,11 +1,13 @@
 from dash import html
 import dash_mantine_components as dmc
+
+
 # template class for a base profile with parameters: name, visualizations and unimplented function preprocess
 
 class BaseProfile:
     name = 'Base Profile'
     db_name = 'base'
-    description='A Base profile without any visualizations to define model dashboards'
+    description = 'A Base profile without any visualizations to define model dashboards'
     viz_options = {}
     data = {}
     plot_order = []
@@ -16,3 +18,6 @@ class BaseProfile:
         ]
     )
 
+    def link(self, app):
+        for viz in self.viz_options:
+            self.viz_options[viz]['callback'](app)

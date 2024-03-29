@@ -205,8 +205,7 @@ class CopperOutput(BaseProfile):
 
     def link(self, app):
         settings_callbacks.link(app)
-        for viz in self.viz_options:
-            self.viz_options[viz]['callback'](app)
+        super().link(app)
 
     def render_settings(self):
         layout = html.Div(
