@@ -1,42 +1,46 @@
 import dash_mantine_components as dmc
-from dash import html
-
+from dash import html, dcc
 
 def render():
-    print('rendering start')
     layout = html.Div([
-        dmc.Text('Load Data', size='xl', weight=500),
-        dmc.Text('To load data, click the "Load Data" button in the header.', size='md', weight=300),
-        dmc.Image(src='/assets/help/load_data.png', alt='Load Data', width='100%'),
-        dmc.Text('Either Load Data from your local machine or from the IDEA database.', size='md', weight=300),
+        html.H1('Load Data'),
+        html.P('To load data, click the "Load Data" button in the header. Either Load Data from your local machine or from the IDEA database.'),
 
-        dmc.Text('Local Files', size='xl', weight=500),
-        dmc.Text('To load data from your local machine, click the "Local File" button.', size='md', weight=300),
-        dmc.Text(
-            'Either click on the field or drag your files onto the upload area. At the moment IDEA supports COPPER results in PYAM format using our pyam conversion script.',
-            size='md', weight=300),
-        dmc.Image(src='/assets/help/load_data.png', alt='Load Data', width='100%'),
+        html.Div([
+            html.Center(html.Img(src='/assets/help/data_modal.gif', style={'width':'100%'})),
+            html.H3('Opening Data Loading Window', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
+        ]),
 
-        dmc.Text('Database', size='xl', weight=500),
-        dmc.Text('To load data from the IDEA database, click the "Database" button.', size='md', weight=300),
-        dmc.Text(
-            'Enter you API key and click "Connect". IDEA is connecting to our results Database, which might take some time to load.',
-            size='md', weight=300),
-        dmc.Text('Once the data is loaded you can select the runs you want to use and click "Load"', size='md', weight=300),
-        dmc.Text('You can also filter the runs by the model, scenario or author.', size='md', weight=300),
 
-        dmc.Image(src='/assets/help/load_data.png', alt='Load Data', width='100%'),
+        html.H1('Local Files'),
+        html.P('To load data from your local machine, click the "Local File" button. You can either click on the field or drag your files onto the upload area. At the moment IDEA supports COPPER results in PYAM format using our pyam conversion script.'),
 
-        dmc.Text(
-            'Once the data is loaded you can edit the plots that should be generated and change the scenario name.',
-            size='md', weight=300),
+        html.Div([
+            html.Center(html.Img(src='/assets/help/data_local.gif', style={'width':'100%'})),
+            html.H3('Loading Local Data', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
+        ]),
 
-        dmc.Image(src='/assets/help/load_data.png', alt='Load Data', width='100%'),
-        dmc.Text(
-            'Click the "Submit" button to finalize your selection which will process the data and load them into the system.',
-            size='md', weight=300),
 
-        dmc.Image(src='/assets/help/load_data.png', alt='Load Data', width='100%'),
-    ],
-    )
+        html.H1('Database'),
+        html.P('To Load data from the IDEA database, click the "Database" button. Enter your API key and click "Connect". IDEA is connecting to our results Database, which might take some time to load. Once the data is loaded, you can select the runs you want to use and click "Load". You can also filter the runs by the model, scenario or author.'),
+
+        html.Div([
+            html.Center(html.Img(src='/assets/help/data_db.gif', style={'width':'100%'})),
+            html.H3('Loading Data from Database', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
+        ]),
+
+
+        html.P('Once the data is loaded, you can edit the plots that should be generated and change the scenario name. Click the "Submit" button to finalize your selection. This will process the data and load them into the system.'),
+
+        html.Div([
+            html.Center(html.Img(src='/assets/help/data_edit.gif', style={'width':'100%'})),
+            html.H3('Editing Data', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
+        ]),
+
+        html.Div([
+            html.Center(html.Img(src='/assets/help/data_submit.gif', style={'width':'100%'})),
+            html.H3('Submitting Data', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
+        ]),
+    ])
+
     return layout

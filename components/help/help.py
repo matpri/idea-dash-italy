@@ -25,6 +25,8 @@ def render():
                                                style={"height": '30px'}, size="lg"), span='content'),
                             dmc.Col(dmc.Button('Plots', color='blue', variant='light', id='help-plots', radius="sm",
                                                style={"height": '30px'}, size="lg"), span='content'),
+                            dmc.Col(dmc.Button('Windows', color='blue', variant='light', id='help-windows', radius="sm",
+                                               style={"height": '30px'}, size="lg"), span='content'),
                             dmc.Col(
                                 dmc.Button('Model Settings', color='blue', variant='light', id='help-settings', radius="sm",
                                            style={"height": '30px'}, size="lg"), span='content'),
