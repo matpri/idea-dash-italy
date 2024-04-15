@@ -19,7 +19,7 @@ def check(df):
     print("Checking for dispatch, *out and transmission in variable column")
     try:
         classes = df["variable"].apply(lambda x: x.split("|")[0])
-        if (classes == 'supply').any() and (classes == 'transmission').any() and classes.str.endswith("out").any():
+        if (classes == 'Generation').any() and (classes == 'Flow').any():
             return True
         return False
     except Exception as e:
@@ -38,12 +38,13 @@ def aggregate_db(db, scenario):
     Returns:
         pd.DataFrame: Aggregated and formatted DataFrame.
     """
-    db.drop(columns=['model', "unit"], inplace=True)
+    # safely remove model and unit column if they exist
+    db = db.drop(columns=['model', 'unit'], errors='ignore')
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'supply']
+    supply_df = db[classes == 'Generation']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: x.split("|")[1])
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
@@ -60,7 +61,7 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'transmission']
+    transmission_df = db[classes == 'Flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: x.split("|")[1])
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
@@ -109,25 +110,25 @@ def aggregate_db(db, scenario):
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
-    out_df = db[classes.str.endswith("out")]
-    out_df["variable"] = out_df["variable"].apply(lambda x: x.split("|")[1])
-    # time to datetime object
-    out_df['time'] = pd.to_datetime(out_df['time'])
+    # out_df = db[classes.str.endswith("out")]
+    # out_df["variable"] = out_df["variable"].apply(lambda x: x.split("|")[1])
+    # # time to datetime object
+    # out_df['time'] = pd.to_datetime(out_df['time'])
+    #
+    # unique_dates = out_df['time'].dt.date.unique()
+    # out_df['period'] = out_df['time'].dt.year
+    # # make period an int
+    # out_df['period'] = out_df['period'].astype(int)
+    #
+    # out_df.drop(columns=['time'], inplace=True)
+    # out_df['region'] = out_df['region'].map(utils.province_short).fillna(out_df['region'])
+    # # aggregate the dim_name based on the tech_agg_COPPER dictionary
+    # # change value from MWh to TWh
+    # out_df['value'] = out_df['value'] / 1000000
+    # # expand value to an entire year by multiplying by 365/12
+    # out_df['value'] = out_df['value'] * 365 / len(unique_dates)
 
-    unique_dates = out_df['time'].dt.date.unique()
-    out_df['period'] = out_df['time'].dt.year
-    # make period an int
-    out_df['period'] = out_df['period'].astype(int)
-
-    out_df.drop(columns=['time'], inplace=True)
-    out_df['region'] = out_df['region'].map(utils.province_short).fillna(out_df['region'])
-    # aggregate the dim_name based on the tech_agg_COPPER dictionary
-    # change value from MWh to TWh
-    out_df['value'] = out_df['value'] / 1000000
-    # expand value to an entire year by multiplying by 365/12
-    out_df['value'] = out_df['value'] * 365 / len(unique_dates)
-
-    df = pd.concat([supply_df, transmission_df, out_df])
+    df = pd.concat([supply_df, transmission_df]) #, out_df])
     # df = df[df.value != 0]
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 

@@ -17,8 +17,8 @@ def check(df):
     """
     print("Checking for cost in variable column")
     try:
-        if df.variable.str.startswith("cost|").any():
-            return df[df.variable.str.startswith("cost|")]['value'].sum() != 0
+        if df.variable.str.startswith("Capital Costs|").any():
+            return df[df.variable.str.startswith("Capital Costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -53,7 +53,7 @@ def calc_canadian(df):
     canadian_total["region"] = "CAN"
     return canadian_total
 
-def calculate_generation_capacity(df):
+def calculate_generation_capacity(gen_cap_df):
     """
     Calculates the generation capacity data from the DataFrame.
 
@@ -65,9 +65,9 @@ def calculate_generation_capacity(df):
 
     """
     # Extract generation capacity data from df
-    gen_cap_df = df[df['variable'].isin(utils.gen_cap_names)].copy()
+    # gen_cap_df = df[df['variable'].isin(utils.gen_cap_names)].copy()
     # Rename entries based on gen_cap_names_dict
-    gen_cap_df['variable'] = gen_cap_df['variable'].map(utils.cost_tech).fillna(gen_cap_df['variable'])
+    # gen_cap_df['variable'] = gen_cap_df['variable'].map(utils.cost_tech).fillna(gen_cap_df['variable'])
     gen_cap_df = gen_cap_df.groupby(["variable", "region", "time", "scenario"], as_index=False).sum(numeric_only=True)
 
     # Compute Canadian total over all regions
@@ -95,7 +95,7 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("cost|")]
+        df = df[df.variable.str.startswith("Capital Costs|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         formatted_df = format_df(df)
         formatted_df = calculate_generation_capacity(formatted_df)

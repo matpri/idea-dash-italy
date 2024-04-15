@@ -16,7 +16,7 @@ def check(df):
     """
     print("Checking for emissions in variable column")
     try:
-        if df.variable.str.startswith("Results_summary_carbon_AP_Tech|").any():
+        if df.variable.str.startswith("Emissions|").any():
             return True
         return False
     except Exception as e:
@@ -60,7 +60,7 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
-        df = df[df.variable.str.startswith("Results_summary_carbon_AP_Tech|")]
+        df = df[df.variable.str.startswith("Emissions|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         formatted_df = format_df(df)
         # formatted_df = aggregate_technologies(formatted_df)

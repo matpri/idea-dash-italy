@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if df.variable.str.startswith("transmission|").any():
+        if df.variable.str.startswith("Flow|").any():
             return True
         return False
     except Exception as e:
@@ -150,7 +150,7 @@ def process(selected):
     transmissions = []
     for scenario_name, df in selected.items():
         trs = df.copy()
-        trs = trs[trs.variable.str.startswith("transmission|")]
+        trs = trs[trs.variable.str.startswith("Flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
         trs['time'] = pd.to_datetime(trs['time'])
         trs['day'] = trs['time'].dt.date

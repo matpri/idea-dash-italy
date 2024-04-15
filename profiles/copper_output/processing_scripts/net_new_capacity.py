@@ -16,8 +16,8 @@ def check(df):
     """
     print("Checking for net new cap in variable column")
     try:
-        if df.variable.str.startswith("Results_summary_ABA_generation_mix|").any() or df.variable.str.startswith(
-                "Results_summary_Canada_generation_mix|").any():
+
+        if df.variable.str.startswith("Total Capacity").any():
             return True
         return False
     except Exception as e:
@@ -114,11 +114,10 @@ def process(dbs: dict):
     net_new_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        prov_df = df[df.variable.str.startswith("Results_summary_ABA_generation_mix|")]
-        canada_df = df[df.variable.str.startswith("Results_summary_Canada_generation_mix|")]
+        prov_df = df[df.variable.str.startswith("Total Capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
-        canada_df['value'] = canada_df['value'].astype(float)
-
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df['region'] = 'CAN'
         prov_df['variable'] = prov_df['variable'].apply(lambda x: x.split("|")[1])
         canada_df['variable'] = canada_df['variable'].apply(lambda x: x.split("|")[1])
         gen_cap = process_gencap(prov_df, canada_df, scenario_name)

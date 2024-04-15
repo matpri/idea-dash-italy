@@ -16,8 +16,8 @@ def check(df):
     """
     print("Checking for cost in variable column")
     try:
-        if df.variable.str.startswith("cost|").any():
-            return df[df.variable.str.startswith("cost|")]['value'].sum() != 0
+        if df.variable.str.startswith("Fixed O&M Costs|").any():
+            return df[df.variable.str.startswith("Fixed O&M Costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -49,11 +49,10 @@ def aggregate_technologies(df):
         DataFrame: Aggregated data.
     """
     df = df.copy()
-    df["variable"] = df["variable"].map(utils.tech_agg).fillna(df["variable"])
     df = df.groupby(["variable", "region", "time"]).sum(numeric_only=True).reset_index()
     return df.sort_values(["region", "time", "variable"])
 
-def calculate_fom(df):
+def calculate_fom(fom_df):
     """
     Calculates the fixed operating and maintenance (FOM) cost data from the DataFrame.
 
@@ -64,7 +63,7 @@ def calculate_fom(df):
         DataFrame: Calculated FOM cost data.
 
     """
-    fom_df = df[df['variable'].isin(utils.fom_names)].copy()
+    # fom_df = df[df['variable'].isin(utils.fom_names)].copy()
 
     fom_df['variable'] = fom_df['variable'].map(utils.cost_tech).fillna(fom_df['variable'])
     fom_df.sort_values(by=["region", "time", 'variable'])
@@ -93,7 +92,7 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("cost|")]
+        df = df[df.variable.str.startswith("Fixed O&M Costs|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)

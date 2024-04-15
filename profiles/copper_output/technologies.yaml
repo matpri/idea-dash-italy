@@ -203,6 +203,11 @@ Fixed_OM.nuclear_SMR:
   group: Nuclear
   group_color: '#ff7f00'
   name: Fixed_OM.nuclear_SMR
+transmission:
+  color: '#000000'
+  group: Transmission
+  group_color: '#fb5ebf'
+  name: transmission
 Hydro Capital Cost:
   color: '#000000'
   group: Hydro

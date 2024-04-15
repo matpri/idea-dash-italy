@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for capacity_transmission in variable column")
     try:
-        if df.variable.str.startswith("capacity_transmission|").any():
+        if df.variable.str.startswith("Total Transmission|").any():
             return True
         return False
     except Exception as e:
@@ -173,7 +173,7 @@ def process(selected):
     transmissions = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("capacity_transmission|")]
+        df = df[df.variable.str.startswith("Total Transmission|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])
