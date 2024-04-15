@@ -33,17 +33,23 @@ class DataHandler:
                 response = urllib.urlopen(url)
                 data = json.loads(response.read())
                 df = pd.DataFrame(data)
+                # infer data type for each column in df
+                df = df.infer_objects()
                 # prepend table| to variable entries
                 df['variable'] = table + '|' + df['variable']
                 table_dfs.append(df)
             df = pd.concat(table_dfs)
+            df.value = pd.to_numeric(df.value, errors='coerce')
         else:
-            base_url = f'http://206.12.95.102/results?key={self.api_key}&scenario=&model={profile}'
-            url = base_url + scenario
+            url = f'http://206.12.95.102/results?key={self.api_key}&scenario={scenario}&model={profile}'
             print(url)
             response = urllib.urlopen(url)
             data = json.loads(response.read())
             df = pd.DataFrame(data)
+            # infer data type for each column in df
+            df = df.infer_objects()
+            df.value = pd.to_numeric(df.value, errors='coerce')
+
 
         filename = f'{profile}-{scenario}-{author}'
 

@@ -67,4 +67,11 @@ def link(app):
                     output[i] = True
             return output, dash.no_update
 
+        if triggered_input['index'] == 'help':
+            print('help')
+            for i, out in enumerate(ctx.outputs_list[0]):
+                if out['id']['index'] == triggered_input['index']:
+                    output[i] = open_flag
+            return output, dash.no_update
+
         return dash.no_update

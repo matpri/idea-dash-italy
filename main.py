@@ -3,9 +3,10 @@ import dash_lumino_components as dlc
 from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
-    plot_handling
+    plot_handling, help_handling
 from components import ids, header, plot_canvas, sidebar
 from components.data_selection import data_modal
+from components.help import help
 from utils.data_handler import DataHandler
 
 external_stylesheets = [
@@ -25,6 +26,7 @@ burger_handling.link(app)
 sidebar_handling.link(app)
 data_viewer_handling.link(app)
 plot_handling.link(app)
+help_handling.link(app)
 
 app.layout = html.Div([
     header.render(app),
@@ -34,6 +36,8 @@ app.layout = html.Div([
         ], id='test', addToDom=True),
         sidebar.render(),
         data_modal.render(app),
+        help.render(),
+
         # component to represent data change (hidden)
         html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
         html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
