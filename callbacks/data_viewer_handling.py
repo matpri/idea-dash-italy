@@ -13,14 +13,14 @@ def link(app):
     )(update_chips)
 
     app.callback(
-        Output('uploaded-data-modal', 'opened'),
+        Output('data-viewer-data-modal', 'opened'),
         Output(ids.AFTER_CHANGE, 'n_clicks'),
         Input('data-viewer', 'n_clicks'),
         Input('submit-data', 'n_clicks'),
         Input('cancel-data', 'n_clicks'),
-        State('uploaded-data-modal', 'opened'),
-        State({'type': 'data-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
-        State({'type': 'scenario-name', 'file': ALL, }, 'value'),
+        State('data-viewer-data-modal', 'opened'),
+        State({'type': 'data-viewer-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
+        State({'type': 'data-viewer-scenario-name', 'file': ALL}, 'value'),
         prevent_initial_call=True,
     )(view_modal)
 
@@ -34,12 +34,12 @@ def update_chips(file):
             chips.append(dmc.Chip(
                 viz,
                 value=viz,
-                id={'type': 'upload-chip', 'file': file, 'profile': profile, 'viz': viz},
+                id={'type': 'data-viewer-chip', 'file': file, 'profile': profile, 'viz': viz},
                 size='sm',
             ))
         chip_groups[profile] = dmc.ChipGroup(
             children=chips,
-            id={'type': 'upload-chip-group', 'file': file, 'profile': profile},
+            id={'type': 'data-viewer-chip-group', 'file': file, 'profile': profile},
             value=data_handler.data[file]['selected'][profile],
             multiple=True,
             style={'paddingBottom': '4px'}
@@ -49,7 +49,7 @@ def update_chips(file):
         html.Div(
             [
                 dmc.TextInput(
-                    id={'type': 'upload-scenario-name', 'file': file},
+                    id={'type': 'data-viewer-scenario-name', 'file': file},
                     label='Scenario Name',
                     value=data_handler.data[file]['scenario'],
                     placeholder='Enter Scenario Name',
@@ -62,7 +62,7 @@ def update_chips(file):
                         [
                             dmc.TabsList(
                                 [dmc.Tab(profile,
-                                         id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                         id={'type': 'data-viewer-tab', 'file': file, 'profile': profile},
                                          value=profile)
                                  for profile in chip_groups.keys()
                                  ]
@@ -71,7 +71,7 @@ def update_chips(file):
                                 dmc.TabsPanel(
                                     children=
                                     chip_groups[profile],
-                                    id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                    id={'type': 'data-viewer-tabpanel', 'file': file, 'profile': profile},
                                     value=profile,
                                     style={
                                         'background': 'rgba(47,146,231,0.2)',
