@@ -93,8 +93,8 @@ def plot_dispatch(df, scenario, region, year, day, aggregate, title='Dispatched 
 
     # try:
     df = df[df['variable'] != 'Exports']
-    df = df[~df['variable'].str.startswith('storagein|')]
-    df['variable'] = df['variable'].str.replace('storageout|', '')
+    df = df[~df['variable'].str.startswith('Storage In|')]
+    df['variable'] = df['variable'].str.replace('Storage Out|', '')
     can_emissions = region_subset(df, scenario, region, year, day, aggregate)
     techs = can_emissions.variable.unique().tolist()
     if aggregate:
@@ -176,8 +176,8 @@ def plot_exports(df, scenario, region, year, day, aggregate, title='Exported Ele
 
     # try:
     exports = df[df['variable'] == 'Exports']
-    outs = df[df['variable'].str.startswith('storagein|')]
-    outs['variable'] = outs['variable'].str.replace('storagein|', '')
+    outs = df[df['variable'].str.startswith('Storage In|')]
+    outs['variable'] = outs['variable'].str.replace('Storage In|', '')
     df = pd.concat([exports, outs])
     can_emissions = region_subset(df, scenario, region, year, day, aggregate)
     techs = can_emissions.variable.unique().tolist()

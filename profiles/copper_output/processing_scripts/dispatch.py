@@ -19,8 +19,8 @@ def check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if df.variable.str.startswith("Generation|").any() and df.variable.str.startswith(
-                "Flow|").any():
+        if df.variable.str.startswith("Generation|").any() or df.variable.str.startswith(
+                "Flow|").any() or df.variable.str.startswith("Storage Out|").any() or df.variable.str.startswith("Storage In|").any():
             return True
         return False
     except Exception as e:
@@ -44,10 +44,10 @@ def aggregate_db(db, scenario):
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Generation']
-    supply_df["variable"] = supply_df["variable"].apply(lambda x: x.split("|")[1])
+    supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     transmission_df = db[classes == 'Flow']
-    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: x.split("|")[1])
+    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
     # aggregate df values by region, variable, time, hour
     transmission_df = transmission_df.groupby(["region", "variable", "time"]).sum().reset_index()
@@ -67,19 +67,12 @@ def aggregate_db(db, scenario):
     exports = pd.DataFrame(exports, columns=["region", "time", "value", "variable"])
     imports = pd.DataFrame(imports, columns=["region", "time", "value", "variable"])
 
-    # drop all the 0 values
-    # transmission_df = transmission_df[transmission_df.value != 0]
 
-    # storageout_df = db[classes.str.startswith("storageout")]
-    #
-    #
-    #
-    # out_df = db[classes.str.endswith("out") & ~classes.str.startswith("storageout")]
-    # out_df["variable"] = out_df["variable"].apply(lambda x: x.split("|")[1])
-    #
-    # storagein_df = db[classes.str.startswith("storagein")]
+    storageout_df = db[classes.str.startswith("Storage Out")]
 
-    agg_df = pd.concat([supply_df, imports, exports]) #, out_df, storagein_df, storageout_df])
+    storagein_df = db[classes.str.startswith("Storage In")]
+
+    agg_df = pd.concat([supply_df, imports, exports, storagein_df, storageout_df])
 
     agg_df.fillna(0, inplace=True)
     # # map names if in dict utils.tech_agg_COPPER else leave as is
