@@ -45,7 +45,7 @@ def aggregate_db(db, scenario):
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Generation']
-    supply_df["variable"] = supply_df["variable"].apply(lambda x: x.split("|")[1])
+    supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
     unique_dates = supply_df['time'].dt.date.unique()
@@ -62,7 +62,7 @@ def aggregate_db(db, scenario):
     supply_df.drop(columns=['time'], inplace=True)
 
     transmission_df = db[classes == 'Flow']
-    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: x.split("|")[1])
+    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
