@@ -197,7 +197,7 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("costs|")]
+        df = df[df.variable.str.contains("Costs|")]
         formatted_df = format_df(df)
         gen_cap = calculate_generation_capacity(formatted_df)
         fom = calculate_fom(formatted_df)

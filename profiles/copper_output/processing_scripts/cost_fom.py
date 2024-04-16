@@ -93,7 +93,7 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Fixed O&M Costs|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)
         df['scenario'] = scenario_name

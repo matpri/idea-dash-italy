@@ -96,7 +96,7 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Capital Costs|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         formatted_df = calculate_generation_capacity(formatted_df)
         formatted_df['scenario'] = scenario_name
