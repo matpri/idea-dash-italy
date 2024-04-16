@@ -61,7 +61,7 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Emissions|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         # formatted_df = aggregate_technologies(formatted_df)
         canadian_total = calc_canadian(formatted_df)

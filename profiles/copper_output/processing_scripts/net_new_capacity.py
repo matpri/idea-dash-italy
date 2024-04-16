@@ -118,8 +118,8 @@ def process(dbs: dict):
         prov_df['value'] = prov_df['value'].astype(float)
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
-        prov_df['variable'] = prov_df['variable'].apply(lambda x: x.split("|")[1])
-        canada_df['variable'] = canada_df['variable'].apply(lambda x: x.split("|")[1])
+        prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         gen_cap = process_gencap(prov_df, canada_df, scenario_name)
 
         net_new_cap = process_net_new_cap(gen_cap)
