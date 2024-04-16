@@ -88,7 +88,7 @@ class DataHandler:
                         data_collection[profile] = {}
                     if data_collection[profile].get(viz) is None:
                         data_collection[profile][viz] = {}
-                    data_collection[profile][viz][data['scenario']] = data['content']
+                    data_collection[profile][viz][data['scenario']] = data['content'].copy()
 
         for profile, viz_options in data_collection.items():
             for viz, data in viz_options.items():
@@ -154,16 +154,16 @@ class DataHandler:
         selected = {}
         for profile_name, profile in self.profiles.items():
             for viz_name, viz_dict in profile.viz_options.items():
-                if viz_name not in visualizations:
-                    check_func = viz_dict.get('check')
-                    if check_func(df):
-                        if visualizations.get(profile.name) is None:
-                            visualizations[profile.name] = []
-                        visualizations[profile.name].append(viz_name)
+                # if viz_name not in visualizations:
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    if visualizations.get(profile.name) is None:
+                        visualizations[profile.name] = []
+                    visualizations[profile.name].append(viz_name)
 
-                        if selected.get(profile.name) is None:
-                            selected[profile.name] = []
-                        selected[profile.name].append(viz_name)
+                    if selected.get(profile.name) is None:
+                        selected[profile.name] = []
+                    selected[profile.name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected

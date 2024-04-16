@@ -15,8 +15,9 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if df.variable.str.startswith("Flow|").any():
-            return True
+        if df.model.str.contains("copper").any():
+            if df.variable.str.startswith("Flow|").any():
+                return True
         return False
     except Exception as e:
         print("transmission check", e)

@@ -14,8 +14,9 @@ def check(df):
     """
     print("Checking for net new cap in variable column")
     try:
-        if df.variable.str.startswith("New Capacity|").any():
-            return True
+        if df.model.str.contains("copper").any():
+            if df.variable.str.startswith("New Capacity|").any():
+                return True
         return False
     except Exception as e:
         print("net new cap  check", e)

@@ -18,9 +18,10 @@ def check(df):
     """
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        classes = df["variable"].apply(lambda x: x.split("|")[0])
-        if (classes == 'Generation').any() or (classes == 'Flow').any() or (classes == 'Storage Out').any():
-            return True
+        if df.model.str.contains("copper").any():
+            classes = df["variable"].apply(lambda x: x.split("|")[0])
+            if (classes == 'Generation').any() or (classes == 'Flow').any() or (classes == 'Storage Out').any():
+                return True
         return False
     except Exception as e:
         print("dispatch check", e)

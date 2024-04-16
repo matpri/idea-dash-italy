@@ -48,8 +48,14 @@ def link(app):
                 for i, ls in enumerate(ctx.states_list[1]):
                     chip = ls['id']
                     file = chip['file']
+                    scenarios = ctx.states_list[3]
+                    scenario = None
+                    for s in scenarios:
+                        if s['id']['file'] == file:
+                            scenario = s['value']
+                            break
                     data_handler.data[file]['selected'][chip['profile']] = selected_chips[i]
-                    data_handler.data[file]['scenario'] = scenario_names[i] if scenario_names[i] is not None else file
+                    data_handler.data[file]['scenario'] = scenario if scenario is not None else file
                 print(data_handler)
                 data_handler.process_data()
                 if n_clicks is None:
