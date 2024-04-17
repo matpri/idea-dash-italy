@@ -84,7 +84,8 @@ class CopperOutput(BaseProfile):
                 'process': emissions_processing.process,
                 'db_process': emissions_processing.process,
                 'viz': emissions_viz.plot,
-                'callback': emissions_callbacks.link
+                'callback': emissions_callbacks.link,
+                'description': 'Emissions that are produced by the generation mix in the model.'
             },
         'Capacity':
             {
@@ -93,7 +94,8 @@ class CopperOutput(BaseProfile):
                 'process': generation_capacity_processing.process,
                 'db_process': generation_capacity_processing.process,
                 'viz': generation_capacity_viz.plot,
-                'callback': generation_capacity_callbacks.link
+                'callback': generation_capacity_callbacks.link,
+                'description': 'Capacity of each technology in the model.'
             },
         'Net New Capacity':
             {
@@ -102,7 +104,8 @@ class CopperOutput(BaseProfile):
                 'process': net_new_capacity_processing.process,
                 'db_process': net_new_capacity_processing.process,
                 'viz': net_new_capacity_viz.plot,
-                'callback': net_new_capacity_callbacks.link
+                'callback': net_new_capacity_callbacks.link,
+                'description': 'Net new capacity of each technology in the model.'
             },
         'New Capacity':
             {
@@ -111,7 +114,8 @@ class CopperOutput(BaseProfile):
                 'process': new_capacity_processing.process,
                 'db_process': new_capacity_processing.process,
                 'viz': new_capacity_viz.plot,
-                'callback': new_capacity_callbacks.link
+                'callback': new_capacity_callbacks.link,
+                'description': 'New capacity that is built of each technology in the model (does not include retired technologies).'
             },
         'Qualifying Capacity':
             {
@@ -120,7 +124,8 @@ class CopperOutput(BaseProfile):
                 'process': qualifying_capacity_processing.process,
                 'db_process': qualifying_capacity_processing.process,
                 'viz': qualifying_capacity_viz.plot,
-                'callback': qualifying_capacity_callbacks.link
+                'callback': qualifying_capacity_callbacks.link,
+                'description': 'Capacity that qualifies for the capacity market.'
             },
         'Supply':
             {
@@ -129,7 +134,8 @@ class CopperOutput(BaseProfile):
                 'process': generation_supply_processing.process,
                 'db_process': generation_supply_processing.process,
                 'viz': generation_supply_viz.plot,
-                'callback': generation_supply_callbacks.link
+                'callback': generation_supply_callbacks.link,
+                'description': 'Generation supply of each technology in the model.'
             },
         'Transmission Capacity':
             {
@@ -138,7 +144,8 @@ class CopperOutput(BaseProfile):
                 'process': transmission_capacity_processing.process,
                 'db_process': transmission_capacity_processing.process,
                 'viz': transmission_capacity_viz.plot,
-                'callback': transmission_capacity_callbacks.link
+                'callback': transmission_capacity_callbacks.link,
+                'description': 'Transmission capacity between regions in the model.'
             },
         'Transmission Flow':
             {
@@ -147,7 +154,8 @@ class CopperOutput(BaseProfile):
                 'process': transmission_flow_processing.process,
                 'db_process': transmission_flow_processing.process,
                 'viz': transmission_flow_viz.plot,
-                'callback': transmission_flow_callbacks.link
+                'callback': transmission_flow_callbacks.link,
+                'description': 'Transmission flow between regions in the model.'
             },
         'Total Cost':
             {
@@ -156,7 +164,9 @@ class CopperOutput(BaseProfile):
                 'process': cost_total_processing.process,
                 'db_process': cost_total_processing.process,
                 'viz': cost_total_viz.plot,
-                'callback': cost_total_callbacks.link
+                'callback': cost_total_callbacks.link,
+                'description': 'Total costs of energy production and transmission in the model.'
+
             },
         'Capacity Cost':
             {
@@ -165,7 +175,8 @@ class CopperOutput(BaseProfile):
                 'process': cost_gencap_processing.process,
                 'db_process': cost_gencap_processing.process,
                 'viz': cost_gencap_viz.plot,
-                'callback': cost_gencap_callbacks.link
+                'callback': cost_gencap_callbacks.link,
+                'description': 'Capital costs of energy production and transmission in the model.'
             },
         'FOM Cost':
             {
@@ -174,7 +185,8 @@ class CopperOutput(BaseProfile):
                 'process': cost_fom_processing.process,
                 'db_process': cost_fom_processing.process,
                 'viz': cost_fom_viz.plot,
-                'callback': cost_fom_callbacks.link
+                'callback': cost_fom_callbacks.link,
+                'description': 'Fixed operating and maintenance costs of energy production and transmission in the model.'
             },
         'VOM Cost':
             {
@@ -183,7 +195,9 @@ class CopperOutput(BaseProfile):
                 'process': cost_vom_processing.process,
                 'db_process': cost_vom_processing.process,
                 'viz': cost_vom_viz.plot,
-                'callback': cost_vom_callbacks.link
+                'callback': cost_vom_callbacks.link,
+                'description': 'Variable operating and maintenance costs of energy production and transmission in the model.'
+
             },
         'Dispatch':
             {
@@ -192,7 +206,8 @@ class CopperOutput(BaseProfile):
                 'process': dispatch_processing.process,
                 'db_process': dispatch_processing.process,
                 'viz': dispatch_viz.plot,
-                'callback': dispatch_callbacks.link
+                'callback': dispatch_callbacks.link,
+                'description': 'Dispatch of each technology in the model.'
             },
     }
 

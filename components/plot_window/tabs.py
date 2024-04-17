@@ -54,7 +54,15 @@ def render(card_id):
     for viz_type in plots:
         viz_tab_list.append(
             dmc.Tab(
-                viz_type,
+                dmc.Tooltip(
+                    multiline=True,
+                    # width=220,
+                    withArrow=True,
+                    transition="fade",
+                    transitionDuration=200,
+                    label=data_handler.profiles[list(profiles.keys())[0]].viz_options[viz_type].get('description', ''),
+                    children=[viz_type]
+                ),
                 id={'type': 'viz-tab', 'index': card_id, 'profile': list(profiles.keys())[0],
                     'viz': viz_type},
                 value=viz_type,
