@@ -7,17 +7,20 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.copper_input import utils
 from profiles.copper_input.callbacks import (
-                                              generation_capacity as generation_capacity_callbacks,
-transmission as transmission_callbacks,
-                                              settings as settings_callbacks,
-                                              )
+    generation_capacity as generation_capacity_callbacks,
+    transmission as transmission_callbacks,
+demand as demand_callbacks,
+    settings as settings_callbacks,
+)
 from profiles.copper_input.processing_scripts import (
     generation_capacity as generation_capacity_processing,
-transmission as transmission_processing,
+    transmission as transmission_processing,
+demand as demand_processing,
 )
 from profiles.copper_input.visualization_scripts import (
     generation_capacity as generation_capacity_viz,
-transmission as transmission_viz,
+    transmission as transmission_viz,
+demand as demand_viz,
 )
 
 
@@ -31,6 +34,7 @@ class CopperOutput(BaseProfile):
     plot_order = [
         'Capacity',
         'Transmission',
+        'Demand'
     ]
     viz_options = {
 
@@ -54,6 +58,16 @@ class CopperOutput(BaseProfile):
                 'callback': transmission_callbacks.link,
                 'description': 'Transmission capacity and distance.'
             },
+        'Demand':
+            {
+                'check': demand_processing.check,
+                'db_check': demand_processing.check,
+                'process': demand_processing.process,
+                'db_process': demand_processing.process,
+                'viz': demand_viz.plot,
+                'callback': demand_callbacks.link,
+                'description': 'Electricity demand in each region.'
+            }
 
     }
 

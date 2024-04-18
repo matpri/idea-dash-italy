@@ -52,6 +52,14 @@ Transmission:
     title: Expansion Limits
     x_label: Year
     y_label: Expansion Limits (GW)
+Demand:
+    name: Demand
+    unit: GW
+    By Year:
+        title: Demand by Year
+        x_label: Year
+        y_label: Demand (GW)
+
 
 
 
