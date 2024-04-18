@@ -12,6 +12,7 @@ from profiles.copper_input.callbacks import (
     demand as demand_callbacks,
     generation_type_data as generation_type_data_callbacks,
     annual_growth as annual_growth_callbacks,
+    tech_evolution as tech_evolution_callbacks,
     settings as settings_callbacks,
 )
 from profiles.copper_input.processing_scripts import (
@@ -20,6 +21,7 @@ from profiles.copper_input.processing_scripts import (
     generation_type_data as generation_type_data_processing,
     annual_growth as annual_growth_processing,
     demand as demand_processing,
+    tech_evolution as tech_evolution_processing,
 )
 from profiles.copper_input.visualization_scripts import (
     generation_capacity as generation_capacity_viz,
@@ -27,6 +29,7 @@ from profiles.copper_input.visualization_scripts import (
     generation_type_data as generation_type_data_viz,
     annual_growth as annual_growth_viz,
     demand as demand_viz,
+    tech_evolution as tech_evolution_viz,
 )
 
 
@@ -42,7 +45,8 @@ class CopperOutput(BaseProfile):
         'Transmission',
         'Demand',
         'Annual Growth',
-        'Generation Type Data'
+        'Generation Type Data',
+        'Tech Evolution'
     ]
     viz_options = {
 
@@ -95,6 +99,16 @@ class CopperOutput(BaseProfile):
                 'viz': generation_type_data_viz.plot,
                 'callback': generation_type_data_callbacks.link,
                 'description': 'Definitions of input variables by technology.'
+            },
+        'Tech Evolution':
+            {
+                'check': tech_evolution_processing.check,
+                'db_check': tech_evolution_processing.check,
+                'process': tech_evolution_processing.process,
+                'db_process': tech_evolution_processing.process,
+                'viz': tech_evolution_viz.plot,
+                'callback': tech_evolution_callbacks.link,
+                'description': 'Projected evolution of technology capacities/ price.'
             }
 
     }

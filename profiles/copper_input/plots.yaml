@@ -77,6 +77,17 @@ Annual Growth:
         title: Annual Growth by Region
         x_label: Region
         y_label: Annual Growth (%)
+Tech Evolution:
+    name: Tech Evolution
+    unit:
+    By Year:
+        title: Tech Evolution by Year
+        x_label: Year
+        y_label: Tech Evolution
+    By Tech:
+        title: Tech Evolution by Region
+        x_label: Region
+        y_label: Tech Evolution
 
 
 
