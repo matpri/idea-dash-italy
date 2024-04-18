@@ -66,6 +66,17 @@ Type Data:
     title: Type Data by Technology
     x_label: Technology
     y_label: Type Data
+Annual Growth:
+    name: Annual Growth
+    unit: \%
+    By Year:
+        title: Annual Growth by Year
+        x_label: Year
+        y_label: Annual Growth (%)
+    By Region:
+        title: Annual Growth by Region
+        x_label: Region
+        y_label: Annual Growth (%)
 
 
 
