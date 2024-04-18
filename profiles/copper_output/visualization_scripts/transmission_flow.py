@@ -184,7 +184,17 @@ def transmission_plot(df, scenario, year, title):
     with open('./profiles/copper_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
+    line_colors = {}
+    for i, row in df.iterrows():
+        line_colors[f'{row.short_region} -> {row.short_variable}'] = colorfunc(row['norm_value'])
+
+    # create data frame with columns line and color
+    line_colors_df = pd.DataFrame(list(line_colors.items()), columns=['line', 'color'])
+
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
+    # ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
+    #        'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',
+    #        'Nunavut']
 
     fig_base = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,

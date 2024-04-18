@@ -176,9 +176,10 @@ def transmission_plot(df, scenario, year, title):
         fig.layout.autosize = True
         return fig
 
-    with open('./profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
+
+    with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('./profiles/copper_output/visualization_scripts/utils/arrows.geojson') as f:
+    with open('profiles/copper_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
@@ -198,9 +199,6 @@ def transmission_plot(df, scenario, year, title):
         df_region = df[df['region'] == area.name]
         df_region = df_region[df_region['total'] != 0]
         template = f'{area.name}<extra></extra>'
-        # for index, row in df_region.iterrows():
-        #     template += f'{row["short_region"]} -> {row["short_variable"]}: {row["total"]} GWh <br>'
-        # template += '<extra></extra>'
         area.update(hovertemplate=template)
     fig_base.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
@@ -209,7 +207,6 @@ def transmission_plot(df, scenario, year, title):
         layout=go.Layout(
         )
     )
-
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
         str) + '<br>' + 'Existing Capacity: ' + df['cumsum'].astype(str) + ' GW <br>' + \
                  'New Capacity: ' + df['value'].astype(str) + ' GW <br>' + 'Total Capacity: ' + df['total'].astype(
@@ -228,7 +225,6 @@ def transmission_plot(df, scenario, year, title):
 
         )
     )
-
     fig_overlay.update_traces(coloraxis="coloraxis2")
     fig_overlay.update_layout(margin=dict(l=0, r=0, t=0, b=0))
     fig.add_traces(fig_overlay.data)

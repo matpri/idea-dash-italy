@@ -101,7 +101,7 @@ def link(app):
                         (id['id']['type'] == 'energy_model-capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['energy_model Output']['Capacity'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Energy Models']['Capacity'].to_csv,
                                              "capacity.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
@@ -120,7 +120,7 @@ def link(app):
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['energy_model Output']['Capacity'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['Energy Models']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -132,7 +132,7 @@ def link(app):
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['energy_model Output']['Capacity'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Energy Models']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -144,7 +144,7 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['energy_model Output']['Capacity'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Energy Models']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -156,7 +156,7 @@ def link(app):
             _r_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['energy_model Output']['Capacity'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['Energy Models']['Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
