@@ -9,18 +9,21 @@ from profiles.copper_input import utils
 from profiles.copper_input.callbacks import (
     generation_capacity as generation_capacity_callbacks,
     transmission as transmission_callbacks,
-demand as demand_callbacks,
+    demand as demand_callbacks,
+    generation_type_data as generation_type_data_callbacks,
     settings as settings_callbacks,
 )
 from profiles.copper_input.processing_scripts import (
     generation_capacity as generation_capacity_processing,
     transmission as transmission_processing,
-demand as demand_processing,
+    generation_type_data as generation_type_data_processing,
+    demand as demand_processing,
 )
 from profiles.copper_input.visualization_scripts import (
     generation_capacity as generation_capacity_viz,
     transmission as transmission_viz,
-demand as demand_viz,
+    generation_type_data as generation_type_data_viz,
+    demand as demand_viz,
 )
 
 
@@ -34,7 +37,8 @@ class CopperOutput(BaseProfile):
     plot_order = [
         'Capacity',
         'Transmission',
-        'Demand'
+        'Demand',
+        'Generation Type Data'
     ]
     viz_options = {
 
@@ -67,6 +71,16 @@ class CopperOutput(BaseProfile):
                 'viz': demand_viz.plot,
                 'callback': demand_callbacks.link,
                 'description': 'Electricity demand in each region.'
+            },
+        'Generation Type Data':
+            {
+                'check': generation_type_data_processing.check,
+                'db_check': generation_type_data_processing.check,
+                'process': generation_type_data_processing.process,
+                'db_process': generation_type_data_processing.process,
+                'viz': generation_type_data_viz.plot,
+                'callback': generation_type_data_callbacks.link,
+                'description': 'Definitions of input variables by technology.'
             }
 
     }
