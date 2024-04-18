@@ -8,6 +8,8 @@ import numpy as np
 import geojson
 
 from profiles.copper_output import utils
+from profiles.copper_output.visualization_scripts.utils import bar_over_regions
+
 
 def aggregate_lines(df):
     sum_values = df.groupby(['line', 'start', 'end'])["value"].sum().reset_index()
@@ -262,8 +264,20 @@ def transmission_plot(df, scenario, year, title):
     fig.layout.autosize = True
     return fig
 
-def render_plot(df, scenarios, year, title):
-    return transmission_plot(df, scenarios, year, title)
+def render_plot(type, df, scenarios, year):
+    from profiles.copper_output.utils import plot_settings
+    name = plot_settings['Transmission Flow']['name']
+    unit = plot_settings['Transmission Flow']['unit']
+    if type == 'Map Plot':
+        plot_info = plot_settings['Transmission Flow']['Map Plot']
+        return transmission_plot(df, scenarios, year, plot_info['title'])
+    if type == 'Bar Plot':
+        plot_info = plot_settings['Transmission Flow']['Bar Plot']
+        df = df.copy()
+        df['region'] = df['short_region'] + '<br>-><br>' + df['short_variable']
+        df['variable'] = 'Flow'
+        df = df.rename(columns={'period': 'time'})
+        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
 
 def plot(df, window_id):
@@ -280,16 +294,35 @@ def plot(df, window_id):
     # make all years int
     years.sort()
 
-
     widget_layout = html.Div([
+        dmc.Select(
+            label='Plot Options',
+            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
+            value='Map Plot',
+            id={
+                'type': 'copper-transmissionflow-plot-select',
+                'index': window_id
+            },
+        ),
         dmc.Select(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
+                'type': 'copper-transmissionflow-scenario-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+        dmc.MultiSelect(
+            label='Scenarios',
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=[scenarios[0]],
+            id={
                 'type': 'copper-transmissionflow-scenario-multi-select',
                 'index': window_id,
-            }
+            },
+            style={'display': 'none'}
         ),
         dmc.Select(
             label='Year',
@@ -303,9 +336,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot( df, scenarios[0], years[0],
-                           title='Transmission Flow by Year',
-                           ),
+        figure=render_plot('Map Plot', df, scenarios[0], years[0]),
         id={
             'type': 'figure',
             'index': window_id,

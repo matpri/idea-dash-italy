@@ -7,6 +7,7 @@ import plotly.express as px
 import numpy as np
 import geojson
 
+from profiles.copper_output.visualization_scripts.utils import bar_over_regions
 from profiles.copper_output import utils
 
 def aggregate_lines(df):
@@ -222,7 +223,6 @@ def transmission_plot(df, scenario, year, title):
             zmin=min_value,
             zmax=max_value,
             text=df['text'],
-
         )
     )
     fig_overlay.update_traces(coloraxis="coloraxis2")
@@ -244,8 +244,21 @@ def transmission_plot(df, scenario, year, title):
     fig.layout.autosize = True
     return fig
 
-def render_plot(df, scenarios, year, title):
-    return transmission_plot(df, scenarios, year, title)
+def render_plot(type, df, scenarios, year):
+    from profiles.copper_output.utils import plot_settings
+    name = plot_settings['Transmission Capacity']['name']
+    unit = plot_settings['Transmission Capacity']['unit']
+    if type == 'Map Plot':
+        plot_info = plot_settings['Transmission Capacity']['Map Plot']
+        return transmission_plot(df, scenarios, year, plot_info['title'])
+    if type == 'Bar Plot':
+        plot_info = plot_settings['Transmission Capacity']['Bar Plot']
+        df = df.copy()
+        df['region'] = df['short_region'] + '<br>-><br>' + df['short_variable']
+        df['variable'] = 'Capacity'
+        df = df.rename(columns={'period': 'time'})
+        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+
 
 
 def plot(df, window_id):
@@ -263,13 +276,33 @@ def plot(df, window_id):
 
     widget_layout = html.Div([
         dmc.Select(
+            label='Plot Options',
+            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
+            value='Map Plot',
+            id={
+                'type': 'copper-transmissioncapacity-plot-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
+                'type': 'copper-transmissioncapacity-scenario-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+        dmc.MultiSelect(
+            label='Scenarios',
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=[scenarios[0]],
+            id={
                 'type': 'copper-transmissioncapacity-scenario-multi-select',
                 'index': window_id,
-            }
+            },
+            style={'display': 'none'}
         ),
         dmc.Select(
             label='Year',
@@ -283,9 +316,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot( df, scenarios[0], years[0],
-                           title='Transmission Capacity by Year',
-                           ),
+        figure=render_plot('Map Plot', df, scenarios[0], years[0]),
         id={
             'type': 'figure',
             'index': window_id,

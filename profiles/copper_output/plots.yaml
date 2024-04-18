@@ -114,15 +114,27 @@ Supply:
         x_label: Region
         y_label: Supply (TWh)
 Transmission Capacity:
-  Line:
-    title: Transmission Capacity by Year
+  name: Transmission Capacity
+  unit: Capacity (GW)
+  Map Plot:
+    title: Transmission Capacity by Line
     x_label:
     y_label:
+  Bar Plot:
+    title: Transmission Capacity by Line
+    x_label: Line
+    y_label: Capacity (GW)
 Transmission Flow:
-  Line:
-    title: Transmission Flow by Year
+  name: Transmission Flow
+  unit: Flow (GW)
+  Map Plot:
+    title: Transmission Flow by Line
     x_label:
     y_label:
+  Bar Plot:
+    title: Transmission Flow by Line
+    x_label: Line
+    y_label: Flow (GW)
 Total Cost:
   name: Cost
   unit: Billion $
