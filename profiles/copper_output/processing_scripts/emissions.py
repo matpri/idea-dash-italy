@@ -16,7 +16,7 @@ def check(df):
     """
     print("Checking for emissions in variable column")
     try:
-        if df.model.str.contains("copper").any():
+        if (df.model == 'copper').any():
             if df.variable.str.startswith("Emissions|").any():
                 return True
         return False

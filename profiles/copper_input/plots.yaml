@@ -1,0 +1,60 @@
+
+Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+New Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Trend Over Years:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Pie Chart:
+    title: New Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: New Capacity by Region
+    x_label: Region
+    y_label: New Capacity (GW)
+Transmission:
+  name: Transmission
+  unit:
+  Capacity:
+    title: Capacity
+    x_label: Year
+    y_label: Transmission (GW)
+  Distance:
+    title: Distance
+    x_label: Year
+    y_label: Distance (km)
+  Expansion_limits:
+    title: Expansion Limits
+    x_label: Year
+    y_label: Expansion Limits (GW)
+
+
+
+
+
+

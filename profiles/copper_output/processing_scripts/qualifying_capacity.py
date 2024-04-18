@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for gen cap in variable column")
     try:
-        if df.model.str.contains("copper").any():
+        if (df.model == 'copper').any():
             if df.variable.str.startswith("Qualifying_capacity_summer|").any() or df.variable.str.startswith("Qualifying_capacity_winter|").any():
                 return True
         return False

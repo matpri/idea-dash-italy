@@ -17,7 +17,7 @@ def check(df):
     """
     print("Checking for cost in variable column")
     try:
-        if df.model.str.contains("copper").any():
+        if (df.model == 'copper').any():
             if df.variable.str.startswith("Capital Costs|").any():
                 return df[df.variable.str.startswith("Capital Costs|")]['value'].sum() != 0
         return False

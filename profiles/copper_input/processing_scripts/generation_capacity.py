@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from openpyxl import load_workbook
 
-from profiles.copper_output import utils
+from profiles.copper_input import utils
 def check(df):
     """
     Check if emissions in the 'variable' column contain strings like 'Results_summary_ABA_generation_mix|' or 'Results_summary_Canada_generation_mix|'.
@@ -15,8 +15,8 @@ def check(df):
     """
     print("Checking for gen cap in variable column")
     try:
-        if (df.model == 'copper').any():
-            if df.variable.str.startswith("Total Capacity").any():
+        if (df.model == 'copper_input').any():
+            if df.variable.str.startswith("Capacity").any():
                 return True
         return False
     except Exception as e:
@@ -59,7 +59,7 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        prov_df = df[df.variable.str.startswith("Total Capacity|")]
+        prov_df = df[df.variable.str.startswith("Capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'

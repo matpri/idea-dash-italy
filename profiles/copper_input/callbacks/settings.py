@@ -5,14 +5,14 @@ from dash import html
 import yaml
 from dash import Output, Input, State, ALL
 
-from profiles.energy_model import utils
+from profiles.copper_input import utils
 
 
 def link(app):
     @app.callback(
-    Output('energy_model-settings-upload-yaml-output', 'children'),
-    Input('energy_model-settings-upload-yaml', 'contents'),
-    State('energy_model-settings-upload-yaml', 'filename'),
+    Output('copper_input-settings-upload-yaml-output', 'children'),
+    Input('copper_input-settings-upload-yaml', 'contents'),
+    State('copper_input-settings-upload-yaml', 'filename'),
     )
     def update_settings(content, filename):
         print('Updating Settings', content, filename)
@@ -30,36 +30,36 @@ def link(app):
         settings = yaml.load(decoded, Loader=yaml.FullLoader)
 
         from main import data_handler
-        data_handler.profiles['Energy Models'].settings = settings
+        data_handler.profiles['COPPER Input'].settings = settings
         return html.Div([
             html.Div('Settings Updated'),
             html.Div(f'Using {filename}'),
         ])
 
     @app.callback(
-        Output('energy_model-technology-settings-output', 'children'),
-        Input('energy_model-technology-select', 'value')
+        Output('copper_input-technology-settings-output', 'children'),
+        Input('copper_input-technology-select', 'value')
     )
     def update_tech_settings(tech):
         print('updating tech settings', tech)
         return utils.tech_edit(tech)
 
     @app.callback(
-        Output('energy_model-plot-settings-output', 'children'),
-        Input('energy_models-plot-settings-panel', 'value')
+        Output('copper_input-plot-settings-output', 'children'),
+        Input('copper_input-plot-select', 'value')
     )
     def update_tech_settings(plot):
         print('updating tech settings', plot)
         return utils.plot_edit(plot)
 
     @app.callback(
-        Output({'type': 'energy_model-tech-update', 'index': ALL}, 'disabled'),
-        Input({'type': 'energy_model-tech-update', 'index': ALL}, 'n_clicks'),
-        Input({'type': 'energy_model-tech-name', 'index': ALL}, 'value'),
-        Input({'type': 'energy_model-tech-group', 'index': ALL}, 'value'),
-        Input({'type': 'energy_model-tech-color', 'index': ALL}, 'value'),
-        Input({'type': 'energy_model-tech-group-color', 'index': ALL}, 'value'),
-        State({'type': 'energy_model-tech-update', 'index': ALL}, 'disabled'),
+        Output({'type': 'copper_input-tech-update', 'index': ALL}, 'disabled'),
+        Input({'type': 'copper_input-tech-update', 'index': ALL}, 'n_clicks'),
+        Input({'type': 'copper_input-tech-name', 'index': ALL}, 'value'),
+        Input({'type': 'copper_input-tech-group', 'index': ALL}, 'value'),
+        Input({'type': 'copper_input-tech-color', 'index': ALL}, 'value'),
+        Input({'type': 'copper_input-tech-group-color', 'index': ALL}, 'value'),
+        State({'type': 'copper_input-tech-update', 'index': ALL}, 'disabled'),
         prevent_initial_call=True
     )
     def tech_update(n_clicks, names, groups, colors, group_colors, disabled):
@@ -78,7 +78,7 @@ def link(app):
                 idx = i
                 break
 
-        if trigger_id['type'] == 'energy_model-tech-update':
+        if trigger_id['type'] == 'copper_input-tech-update':
             disabled[idx] = True
             tech = trigger_id['index']
             utils.colors[tech] = colors[idx]['hex']
@@ -92,12 +92,12 @@ def link(app):
         return disabled
 
     @app.callback(
-        Output({'type': 'energy_model-plot-update', 'index': ALL, 'subtype':ALL}, 'disabled'),
-        Input({'type': 'energy_model-plot-update', 'index': ALL, 'subtype':ALL}, 'n_clicks'),
-        Input({'type': 'energy_model-plot-title', 'index': ALL, 'subtype':ALL}, 'value'),
-        Input({'type': 'energy_model-plot-x-axis', 'index': ALL, 'subtype':ALL}, 'value'),
-        Input({'type': 'energy_model-plot-y-axis', 'index': ALL, 'subtype':ALL}, 'value'),
-        State({'type': 'energy_model-plot-update', 'index': ALL, 'subtype':ALL}, 'disabled'),
+        Output({'type': 'copper_input-plot-update', 'index': ALL, 'subtype':ALL}, 'disabled'),
+        Input({'type': 'copper_input-plot-update', 'index': ALL, 'subtype':ALL}, 'n_clicks'),
+        Input({'type': 'copper_input-plot-title', 'index': ALL, 'subtype':ALL}, 'value'),
+        Input({'type': 'copper_input-plot-x-axis', 'index': ALL, 'subtype':ALL}, 'value'),
+        Input({'type': 'copper_input-plot-y-axis', 'index': ALL, 'subtype':ALL}, 'value'),
+        State({'type': 'copper_input-plot-update', 'index': ALL, 'subtype':ALL}, 'disabled'),
         prevent_initial_call=True
     )
     def plot_update(n_clicks, titles, x_axis, y_axis, disabled):
@@ -113,7 +113,7 @@ def link(app):
         idx = 0
         for i, out in enumerate(ctx.outputs_list):
             if out['id']['index'] == trigger_id['index']:
-                if trigger_id['type'] == 'energy_model-plot-update':
+                if trigger_id['type'] == 'copper_input-plot-update':
                     disabled[idx] = True
                     plot = trigger_id['index']
                     sub_plots = trigger_id['subtype'].split('-')

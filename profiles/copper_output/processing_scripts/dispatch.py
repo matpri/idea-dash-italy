@@ -19,7 +19,7 @@ def check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if df.model.str.contains("copper").any():
+        if (df.model == 'copper').any():
             if df.variable.str.startswith("Generation|").any() or df.variable.str.startswith(
                     "Flow|").any() or df.variable.str.startswith("Storage Out|").any() or df.variable.str.startswith("Storage In|").any():
                 return True

@@ -18,7 +18,7 @@ def check(df):
     """
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if df.model.str.contains("copper").any():
+        if (df.model == 'copper').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
             if (classes == 'Generation').any() or (classes == 'Flow').any() or (classes == 'Storage Out').any():
                 return True
