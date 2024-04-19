@@ -27,6 +27,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'copper_input-transmission-year-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper_input-transmission-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -42,8 +46,8 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_transmission(_p_type, _scenarios, _download,
-                        _canvas, _data):
+    def update_transmission(_p_type, _scenarios, _years, _download,
+                            _canvas, _data):
         print('updating transmission plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -70,5 +74,5 @@ def link(app):
         print('idx:', idx, 'plot type:', _p_type[idx])
 
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER Input']['Transmission'],
-                                   _scenarios[idx])
+                                   _years[idx], _scenarios[idx])
         return _canvas, [dash.no_update for _ in _data]

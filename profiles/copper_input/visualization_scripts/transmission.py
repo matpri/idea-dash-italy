@@ -4,12 +4,11 @@ from dash import html, dcc
 from profiles.copper_input.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, scenarios):
+def render_plot(type, df, year, scenarios):
     from profiles.copper_input.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Transmission']['name']
     unit = plot_settings['Transmission']['unit']
-    year = df.time.unique().tolist()[0]
     if type == 'Capacity':
         plot_info = plot_settings['Transmission']['Capacity']
         df = df[df.variable == 'Capacity'].copy()
@@ -32,6 +31,7 @@ def plot(df, window_id):
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
     scenarios = df['scenario'].unique().tolist()
+    years = df['time'].unique().tolist()
 
     widget_layout = html.Div([
         dmc.Select(
@@ -53,6 +53,15 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
+        dmc.Select(
+            label='Year',
+            data=[{'label': year, 'value': year} for year in years],
+            value=years[0],
+            id={
+                'type': 'copper_input-transmission-year-select',
+                'index': window_id
+            },
+        ),
         dmc.Button('Download Data', id={'type': 'copper_input-transmission-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -61,7 +70,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Capacity', df, [scenarios[0]]),
+        figure=render_plot('Capacity', df, years[0],[scenarios[0]]),
         id={
             'type': 'figure',
             'index': window_id,
