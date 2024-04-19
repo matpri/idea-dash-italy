@@ -1,7 +1,7 @@
 import dash
-from dash import Output, Input, State, ALL, dcc
+from dash import Output, Input, State, ALL
 
-from profiles.copper_input.visualization_scripts.demand import render_plot, date_mapper
+from profiles.copper_input.visualization_scripts.demand import render_plot
 
 
 def link(app):
@@ -12,8 +12,28 @@ def link(app):
             'profile': 'copper_input',
             'viz': 'demand'
         }, 'figure'),
+        Output({
+            'type': 'copper_input-demand-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper_input-demand-scenario-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper_input-demand-region-select',
+            'index': ALL
+        }, 'style'),
+        Input({
+            'type': 'copper_input-demand-plot-select',
+            'index': ALL
+        }, 'value'),
         Input({
             'type': 'copper_input-demand-scenario-multi-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper_input-demand-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
@@ -26,10 +46,23 @@ def link(app):
             'profile': 'copper_input',
             'viz': 'demand'
         }, 'figure'),
+        State({
+            'type': 'copper_input-demand-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper_input-demand-scenario-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper_input-demand-region-select',
+            'index': ALL
+        }, 'style'),
         prevent_initial_call=True
 
     )
-    def demand_callback(scenario_multi_select, region_select, figure):
+    def demand_callback(plot_type, scenario_multi_select, _scenario, region_select, figure,
+                        scenario_multi_select_style, scenario_select_style, region_select_style):
         from main import data_handler
         ctx = dash.callback_context
         print('updating demand plot', ctx.triggered)
@@ -44,11 +77,20 @@ def link(app):
                 break
 
         df_scen = df.copy()
-        df_scen = df_scen[df_scen['scenario'].isin(scenario_multi_select[idx])]
-        df_scen = df_scen[df_scen['region']==region_select[idx]]
-        # sort days by month and day
+        if plot_type[idx] == 'By Scenario':
+            df_scen = df_scen[df_scen['scenario'].isin(scenario_multi_select[idx])]
+            df_scen = df_scen[df_scen['region'] == region_select[idx]]
+            # sort days by month and day
 
-        figure[idx] = render_plot(df_scen)
+            figure[idx] = render_plot(df_scen, 'By Scenario')
+            scenario_multi_select_style[idx] = {'display': 'block'}
+            scenario_select_style[idx] = {'display': 'none'}
+            region_select_style[idx] = {'display': 'block'}
+        else:
+            df_scen = df_scen[df_scen['scenario'] == _scenario[idx]]
+            figure[idx] = render_plot(df_scen, 'By Region')
+            scenario_multi_select_style[idx] = {'display': 'none'}
+            scenario_select_style[idx] = {'display': 'block'}
+            region_select_style[idx] = {'display': 'none'}
 
-        
-        return figure
+        return figure, scenario_multi_select_style, scenario_select_style, region_select_style

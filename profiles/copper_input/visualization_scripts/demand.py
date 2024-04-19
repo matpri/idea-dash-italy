@@ -9,14 +9,18 @@ date_mapper = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6:
                'October': '10', 'November': '11', 'December': '12'}
 
 
-def render_plot(df):
+def render_plot(df, type):
     from profiles.copper_input.utils import plot_settings
-    plot_info = plot_settings['Demand']['By Year']
-    return plot_demand(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+    if type == 'By Scenario':
+        plot_info = plot_settings['Demand']['By Scenario']
+        return plot_demand(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], type='By Scenario')
+    else:
+        plot_info = plot_settings['Demand']['By Region']
+        return plot_demand(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], type='By Region')
 
 
 def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
-                y_axis_label='Dispatched Electricity (TWh)'):
+                y_axis_label='Dispatched Electricity (TWh)', type='By Scenario'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -24,21 +28,38 @@ def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
         yaxis_title=y_axis_label,
         template='simple_white',
     )
-    region = df['region'].iloc[0]
-    scenarios = df['scenario'].unique().tolist()
-    # try:
-    for scenario in scenarios:
-        df_scen = df[df['scenario'] == scenario]
-        fig.add_trace(
-            go.Scatter(
-                x=df_scen['time'],
-                y=df_scen['value'],
-                mode='lines',
-                showlegend=True,
-                name=scenario,
-                hovertemplate=f'Scenario: {scenario} <br> Region: {region}<br>' + 'Time: %{x}<br>Demand: %{y:.2f} TWh<br>'
+
+    if type == 'By Scenario':
+        region = df['region'].iloc[0]
+        scenarios = df['scenario'].unique().tolist()
+        # try:
+        for scenario in scenarios:
+            df_scen = df[df['scenario'] == scenario]
+            fig.add_trace(
+                go.Scatter(
+                    x=df_scen['time'],
+                    y=df_scen['value'],
+                    mode='lines',
+                    showlegend=True,
+                    name=scenario,
+                    hovertemplate=f'Scenario: {scenario} <br> Region: {region}<br>' + 'Time: %{x}<br>Demand: %{y:.2f} TWh<br>'
+                )
             )
-        )
+    else:
+        scenario = df['scenario'].iloc[0]
+        regions = df['region'].unique().tolist()
+        for region in regions:
+            df_region = df[df['region'] == region]
+            fig.add_trace(
+                go.Scatter(
+                    x=df_region['time'],
+                    y=df_region['value'],
+                    mode='lines',
+                    showlegend=True,
+                    name=region,
+                    hovertemplate=f'Scenario: {scenario} <br> Region: {region}<br>' + 'Time: %{x}<br>Demand: %{y:.2f} TWh<br>'
+                )
+            )
 
     fig.update_yaxes(showgrid=True)
     if df.empty:
@@ -82,6 +103,15 @@ def plot(df, window_id):
     regions = df['region'].unique().tolist()
 
     widget_layout = html.Div([
+        dmc.Select(
+            label='Plot Options',
+            data=[{'label': plot, 'value': plot} for plot in ['By Scenario', 'By Region']],
+            value='By Scenario',
+            id={
+                'type': 'copper_input-demand-plot-select',
+                'index': window_id
+            },
+        ),
 
         dmc.MultiSelect(
             label='Scenarios',
@@ -91,6 +121,7 @@ def plot(df, window_id):
                 'type': 'copper_input-demand-scenario-multi-select',
                 'index': window_id
             },
+            style={'display': 'block'}
         ),
         dmc.Select(
             label='Region',
@@ -100,6 +131,17 @@ def plot(df, window_id):
                 'type': 'copper_input-demand-region-select',
                 'index': window_id
             },
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=scenarios[0],
+            id={
+                'type': 'copper_input-demand-scenario-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
         ),
     ])
     df_scen = df.copy()
@@ -107,7 +149,7 @@ def plot(df, window_id):
     df_scen = df_scen[df_scen['region'] == regions[0]]
 
     plot_layout = dcc.Graph(
-        figure=render_plot(df_scen),
+        figure=render_plot(df_scen, 'By Scenario'),
         id={
             'type': 'figure',
             'index': window_id,

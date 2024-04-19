@@ -55,8 +55,12 @@ Transmission:
 Demand:
     name: Demand
     unit: GW
-    By Year:
-        title: Demand by Year
+    By Scenario:
+        title: Demand by Scenario
+        x_label: Year
+        y_label: Demand (GW)
+    By Region:
+        title: Demand by Region
         x_label: Year
         y_label: Demand (GW)
 Type Data:
