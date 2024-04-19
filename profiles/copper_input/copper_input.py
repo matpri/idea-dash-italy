@@ -10,6 +10,7 @@ from profiles.copper_input.callbacks import (
     generation_capacity as generation_capacity_callbacks,
     transmission as transmission_callbacks,
     demand as demand_callbacks,
+    us_demand as us_demand_callbacks,
     generation_type_data as generation_type_data_callbacks,
     annual_growth as annual_growth_callbacks,
     tech_evolution as tech_evolution_callbacks,
@@ -21,6 +22,7 @@ from profiles.copper_input.processing_scripts import (
     generation_type_data as generation_type_data_processing,
     annual_growth as annual_growth_processing,
     demand as demand_processing,
+    us_demand as us_demand_processing,
     tech_evolution as tech_evolution_processing,
 )
 from profiles.copper_input.visualization_scripts import (
@@ -29,6 +31,7 @@ from profiles.copper_input.visualization_scripts import (
     generation_type_data as generation_type_data_viz,
     annual_growth as annual_growth_viz,
     demand as demand_viz,
+    us_demand as us_demand_viz,
     tech_evolution as tech_evolution_viz,
 )
 
@@ -44,6 +47,7 @@ class CopperOutput(BaseProfile):
         'Capacity',
         'Transmission',
         'Demand',
+        'US Demand',
         'Annual Growth',
         'Generation Type Data',
         'Tech Evolution'
@@ -79,6 +83,16 @@ class CopperOutput(BaseProfile):
                 'viz': demand_viz.plot,
                 'callback': demand_callbacks.link,
                 'description': 'Electricity demand in each region.'
+            },
+        'US Demand':
+            {
+                'check': us_demand_processing.check,
+                'db_check': us_demand_processing.check,
+                'process': us_demand_processing.process,
+                'db_process': us_demand_processing.process,
+                'viz': us_demand_viz.plot,
+                'callback': us_demand_callbacks.link,
+                'description': 'Electricity demand in each region with US.'
             },
         'Annual Growth':
             {

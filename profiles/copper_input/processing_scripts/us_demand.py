@@ -17,7 +17,7 @@ def check(df):
     print("Checking for emissions in variable column")
     try:
         if (df.model == 'copper_input').any():
-            if df.variable.str.startswith("Demand").any():
+            if df.variable.str.startswith("US Demand").any():
                 return True
         return False
     except Exception as e:
@@ -61,7 +61,8 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
-        df = df[df.variable.str.startswith("Demand")]
+        df = df[df.variable.str.startswith("US Demand")]
+        df['region'] = df['region'].str.split('.').str[0]
         df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
         df['scenario'] = scenario_name
         dfs.append(df)

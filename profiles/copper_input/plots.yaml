@@ -63,6 +63,17 @@ Demand:
         title: Demand by Region
         x_label: Year
         y_label: Demand (GW)
+US Demand:
+  name: US Demand
+  unit: GW
+  By Scenario:
+    title: US Demand by Scenario
+    x_label: Year
+    y_label: US Demand (GW)
+  By Region:
+    title: US Demand by Region
+    x_label: Year
+    y_label: US Demand (GW)
 Type Data:
   name: Type Data
   unit:
