@@ -1,5 +1,6 @@
 import os
 import pandas as pd
+import geopandas as gpd
 from openpyxl import load_workbook
 
 from profiles.copper_input import utils
@@ -16,7 +17,7 @@ def check(df):
     print("Checking for gen cap in variable column")
     try:
         if (df.model == 'copper_input').any():
-            if df.variable.str.startswith("Capacity").any():
+            if df.variable.str.startswith("Capacity").any() or df.variable.str.startswith("Merra|").any():
                 return True
         return False
     except Exception as e:
@@ -59,15 +60,36 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        prov_df = df[df.variable.str.startswith("Capacity|")]
-        prov_df['value'] = prov_df['value'].astype(float)
-        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
-        canada_df['region'] = 'CAN'
-        prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        gen_cap = process_gencap(prov_df, canada_df, scenario_name)
+        dfs = []
+        if df.variable.str.startswith("Capacity|").any():
+            gen_df = db.copy()
+            prov_df = df[df.variable.str.startswith("Capacity|")]
+            prov_df['value'] = prov_df['value'].astype(float)
+            canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+            canada_df['region'] = 'CAN'
+            prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+            canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+            gen_cap = process_gencap(prov_df, canada_df, scenario_name)
+            dfs.append(gen_cap)
+        if df.variable.str.startswith("Merra|").any():
+            merra_df = db.copy()
+            prov_df = merra_df[df.variable.str.startswith("Merra|")]
+            prov_df['variable'] = prov_df['variable'].str.split('|').str[1]
+            prov_df['value'] = prov_df['value'].astype(float)
 
-        gen_caps.append(gen_cap)
+            merra_cells = gpd.read_file('profiles/copper_input/visualization_scripts/utils/merra2_cells.geojson')
+
+            prov_df = prov_df.merge(merra_cells, left_on='region', right_on='grid_cell', how='left')
+
+            prov_df = prov_df[['time', 'balancing_area', 'value', 'variable']]
+            prov_df = prov_df.rename(
+                columns={'time': 'time', 'balancing_area': 'region', 'value': 'value', 'variable': 'variable'})
+            prov_df[['region', 'aba']] = prov_df['region'].str.split('.', expand=True)
+            prov_df['region'] = prov_df['region'].map(utils.province_short) + '.' + prov_df['aba']
+            prov_df = prov_df.drop(columns='aba')
+            dfs.append(prov_df)
+
+        gen_caps.append(pd.concat(dfs))
 
     full_net_new_cap = pd.concat(gen_caps)
     full_net_new_cap['time'] = full_net_new_cap['time'].astype(int)
