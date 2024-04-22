@@ -32,6 +32,20 @@ def link(app):
             'type': 'copper-emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        Output(
+            {
+                'type': 'copper-emissions-pattern-switch',
+                'index': ALL
+            },
+            'style'
+        ),
+        Output(
+            {
+                'type': 'copper-emissions-text-switch',
+                'index': ALL
+            },
+            'style'
+        ),
         Input({
             'type': 'copper-emissions-plot-select',
             'index': ALL
@@ -56,6 +70,20 @@ def link(app):
             'type': 'copper-emissions-year-select',
             'index': ALL
         }, 'value'),
+        Input(
+            {
+                'type': 'copper-emissions-pattern-switch',
+                'index': ALL
+            },
+            'checked'
+        ),
+        Input(
+            {
+                'type': 'copper-emissions-text-switch',
+                'index': ALL
+            },
+            'checked'
+        ),
         Input({
             'type': 'copper-emissions-download-button',
             'index': ALL
@@ -86,9 +114,24 @@ def link(app):
             'type': 'copper-emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        State(
+            {
+                'type': 'copper-emissions-pattern-switch',
+                'index': ALL
+            },
+            'style'
+        ),
+        State(
+            {
+                'type': 'copper-emissions-text-switch',
+                'index': ALL
+            },
+            'style'
+        ),
         prevent_initial_call=True
     )
-    def update_emissions(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style):
+    def update_emissions(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _pattern, _text,
+                         _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style):
         print('updating emissions plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -118,12 +161,16 @@ def link(app):
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
+            _pattern_style[idx] = {'display': 'block'}
+            _text_style[idx] = {'display': 'block'}
+
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Year', data_handler.processed_data['COPPER Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx],
+                                           pattern_active=_pattern[idx], text_active=_text[idx])
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
@@ -154,11 +201,14 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
+            _pattern_style[idx] = {'display': 'block'}
+            _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Region', data_handler.processed_data['COPPER Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx],
+                                           pattern_active=_pattern[idx], text_active=_text[idx])
 
-        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style
+        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _pattern_style, _text_style

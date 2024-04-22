@@ -35,7 +35,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
 
             fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'],
                         marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
-                        textposition='auto' if text_active else None, text=tech,
+                        textposition='auto' if text_active else None, text=tech if text_active else None,
                         hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
