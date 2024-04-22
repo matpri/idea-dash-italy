@@ -18,6 +18,22 @@ def render(card_id, viz_func):
                   html.Div(viz_func,
                            # style=drawer_style,
                            id={'type': 'drawer-content', 'index': card_id},
+                           # add scroll bar
+                           style={
+                                  'height': 'calc(100% - 1rem)',
+                                  'padding': '1rem',
+                                  'marginTop': '1rem',
+                                  'borderRadius': '10px',
+                                  'background': 'rgba(255,255,255,0.4)',
+                                  'backdropFilter': 'blur(20px)',
+                                  'zIndex': 999,
+                                  'position': 'relative',
+                                  'boxShadow': '0 0 10px 0 rgba(0,0,0,0.1)',
+                                  'border': '1px solid rgba(0,0,0,0.1)',
+                                  'borderRadius': '10px',
+                                  'padding': '1rem',
+                                  'marginTop': '1rem',
+                                  }
                            )]
         ,
         is_open=True,
@@ -26,11 +42,5 @@ def render(card_id, viz_func):
         style={
             'width': '20%',
             'height': '100%',
-            'zIndex': 999,
-            'background': 'linear-gradient(to right, rgba(255,255,255,0.4) 96%, rgba(0,0,0,0.1) 100%',
-            'backdropFilter': 'blur(20px)',
-            # 'borderRadius': '10px',
-            'padding': '1rem',
-            'marginTop': '1rem',
         }
     )

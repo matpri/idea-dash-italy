@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=False, text_active=True):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -34,7 +34,8 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
                 color = utils.get_color(tech)
 
             fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'], marker_color=color,
-                        marker_pattern_shape=scen_patterns,
+                        marker_pattern_shape=scen_patterns if pattern_active else None,
+                        textposition='auto' if text_active else None, text=tech,
                         hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
