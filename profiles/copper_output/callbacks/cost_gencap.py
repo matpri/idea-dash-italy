@@ -177,6 +177,8 @@ def link(app):
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
+            _pattern_style[idx] = {'display': 'none'}
+            _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['COPPER Output']['Capacity Cost'],
                                            _aggregates[idx],
@@ -189,6 +191,8 @@ def link(app):
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'block'}
+            _pattern_style[idx] = {'display': 'none'}
+            _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['COPPER Output']['Capacity Cost'],
                                            _aggregates[idx],
