@@ -4,7 +4,7 @@ from dash import html, dcc
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=True):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Capacity Cost']['name']
@@ -60,7 +60,7 @@ def plot(df, window_id):
 
     pattern_toggle = dmc.Switch(
         label='Pattern',
-        checked=False,
+        checked=True,
         id={
             'type': 'copper-gencap_cost-pattern-switch',
             'index': window_id,
@@ -70,7 +70,7 @@ def plot(df, window_id):
 
     text_toggle = dmc.Switch(
         label='Text',
-        checked=True,
+        checked=False,
         id={
             'type': 'copper-gencap_cost-text-switch',
             'index': window_id,

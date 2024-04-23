@@ -4,7 +4,7 @@ from dash import html, dcc
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=True):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Emissions']['name']
@@ -70,7 +70,7 @@ def plot(df, window_id):
 
     text_toggle = dmc.Switch(
         label='Text',
-        checked=True,
+        checked=False,
         id={
             'type': 'copper-emissions-text-switch',
             'index': window_id,

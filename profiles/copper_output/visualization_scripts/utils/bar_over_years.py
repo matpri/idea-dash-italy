@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=True):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,

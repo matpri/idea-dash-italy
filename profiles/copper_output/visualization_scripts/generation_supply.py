@@ -8,7 +8,7 @@ regions_list = [
     'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL', 'YT', 'NT', 'NU',
 ]
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=True):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Supply']['name']
@@ -70,7 +70,7 @@ def plot(df, window_id):
 
     pattern_toggle = dmc.Switch(
         label='Pattern',
-        checked=False,
+        checked=True,
         id={
             'type': 'copper-supply-pattern-switch',
             'index': window_id,
@@ -80,7 +80,7 @@ def plot(df, window_id):
 
     text_toggle = dmc.Switch(
         label='Text',
-        checked=True,
+        checked=False,
         id={
             'type': 'copper-supply-text-switch',
             'index': window_id,
