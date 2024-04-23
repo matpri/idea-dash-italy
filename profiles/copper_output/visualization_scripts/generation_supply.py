@@ -1,8 +1,12 @@
 import dash_mantine_components as dmc
+import pandas as pd
 from dash import html, dcc
 
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
+regions_list = [
+    'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL', 'YT', 'NT', 'NU',
+]
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=True):
     from profiles.copper_output.utils import plot_settings
@@ -11,11 +15,17 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
     unit = plot_settings['Supply']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Supply']['By Year']
+        if region == 'CAN':
+            df = df[~df['variable'].isin(regions_list)]
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Supply']['Trend Over Years']
+        if region == 'CAN':
+            df = df[~df['variable'].isin(regions_list)]
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Pie Chart':
+        if region == 'CAN':
+            df = df[~df['variable'].isin(regions_list)]
         plot_info = plot_settings['Supply']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:

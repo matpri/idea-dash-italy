@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.copper_output.visualization_scripts.generation_capacity import render_plot
+from profiles.copper_output.visualization_scripts.generation_supply import render_plot
 
 
 def link(app):
