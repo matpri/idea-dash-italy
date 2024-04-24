@@ -1058,3 +1058,18 @@ Electricity|Storage|Pumped Hydro:
     group: Storage
     group_color: '#6a3d9a'
     name: Electricity|Storage|Pumped Hydro
+wind_ons_recon:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: wind_ons_recon
+wind_ofs_recon:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: wind_ofs_recon
+solar_recon:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: solar_recon
