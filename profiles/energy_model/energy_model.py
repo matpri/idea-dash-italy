@@ -8,22 +8,48 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model.processing_scripts import (
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
-
+    net_new_capacity as net_new_capacity_processing,
+    new_capacity as new_capacity_processing,
+    qualifying_capacity as qualifying_capacity_processing,
+    generation_supply as generation_supply_processing,
+    cost_vom as cost_vom_processing,
+    cost_fom as cost_fom_processing,
+    cost_gencap as cost_gencap_processing,
+    cost_total as cost_total_processing,
 )
+
 from profiles.energy_model.visualization_scripts import (
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
-
+    net_new_capacity as net_new_capacity_viz,
+    new_capacity as new_capacity_viz,
+    qualifying_capacity as qualifying_capacity_viz,
+    generation_supply as generation_supply_viz,
+    cost_vom as cost_vom_viz,
+    cost_fom as cost_fom_viz,
+    cost_gencap as cost_gencap_viz,
+    cost_total as cost_total_viz,
 )
+
 from profiles.energy_model import utils
-from profiles.energy_model.callbacks import (emissions as emissions_callbacks,
-                                             generation_capacity as generation_capacity_callbacks,
-                                             settings as settings_callbacks
+from profiles.energy_model.callbacks import (
+    emissions as emissions_callbacks,
+    generation_capacity as generation_capacity_callbacks,
+    net_new_capacity as net_new_capacity_callbacks,
+    new_capacity as new_capacity_callbacks,
+    qualifying_capacity as qualifying_capacity_callbacks,
+    generation_supply as generation_supply_callbacks,
+    cost_vom as cost_vom_callbacks,
+    cost_fom as cost_fom_callbacks,
+    cost_gencap as cost_gencap_callbacks,
+    cost_total as cost_total_callbacks,
+    settings as settings_callbacks
+
                                              )
 
 
 class energy_modelsOutput(BaseProfile):
-    name = 'Energy Models'
+    name = 'Power System Models'
     db_name = 'energy_models'
     color = 'yellow 8'
     description = (
@@ -64,6 +90,79 @@ class energy_modelsOutput(BaseProfile):
                 'viz': generation_capacity_viz.plot,
                 'callback': generation_capacity_callbacks.link
             },
+        'Net New Capacity':
+            {
+                'check': net_new_capacity_processing.check,
+                'db_check': net_new_capacity_processing.check,
+                'process': net_new_capacity_processing.process,
+                'db_process': net_new_capacity_processing.process,
+                'viz': net_new_capacity_viz.plot,
+                'callback': net_new_capacity_callbacks.link
+            },
+        'New Capacity':
+            {
+                'check': new_capacity_processing.check,
+                'db_check': new_capacity_processing.check,
+                'process': new_capacity_processing.process,
+                'db_process': new_capacity_processing.process,
+                'viz': new_capacity_viz.plot,
+                'callback': new_capacity_callbacks.link
+            },
+        'Qualifying Capacity':
+            {
+                'check': qualifying_capacity_processing.check,
+                'db_check': qualifying_capacity_processing.check,
+                'process': qualifying_capacity_processing.process,
+                'db_process': qualifying_capacity_processing.process,
+                'viz': qualifying_capacity_viz.plot,
+                'callback': qualifying_capacity_callbacks.link
+            },
+        'Supply':
+            {
+                'check': generation_supply_processing.check,
+                'db_check': generation_supply_processing.check,
+                'process': generation_supply_processing.process,
+                'db_process': generation_supply_processing.process,
+                'viz': generation_supply_viz.plot,
+                'callback': generation_supply_callbacks.link
+            },
+        'Total Cost':
+            {
+                'check': cost_total_processing.check,
+                'db_check': cost_total_processing.check,
+                'process': cost_total_processing.process,
+                'db_process': cost_total_processing.process,
+                'viz': cost_total_viz.plot,
+                'callback': cost_total_callbacks.link
+            },
+        'Capacity Cost':
+            {
+                'check': cost_gencap_processing.check,
+                'db_check': cost_gencap_processing.check,
+                'process': cost_gencap_processing.process,
+                'db_process': cost_gencap_processing.process,
+                'viz': cost_gencap_viz.plot,
+                'callback': cost_gencap_callbacks.link
+            },
+        'FOM Cost':
+            {
+                'check': cost_fom_processing.check,
+                'db_check': cost_fom_processing.check,
+                'process': cost_fom_processing.process,
+                'db_process': cost_fom_processing.process,
+                'viz': cost_fom_viz.plot,
+                'callback': cost_fom_callbacks.link
+            },
+        'VOM Cost':
+            {
+                'check': cost_vom_processing.check,
+                'db_check': cost_vom_processing.check,
+                'process': cost_vom_processing.process,
+                'db_process': cost_vom_processing.process,
+                'viz': cost_vom_viz.plot,
+                'callback': cost_vom_callbacks.link
+            },
+
 
     }
 

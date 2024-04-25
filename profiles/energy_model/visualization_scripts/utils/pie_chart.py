@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import dcc
 
-from profiles.copper_output import utils
+from profiles.energy_model import utils
 
 
 def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, season=None):

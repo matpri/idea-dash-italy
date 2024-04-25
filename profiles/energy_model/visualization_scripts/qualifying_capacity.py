@@ -4,23 +4,23 @@ from dash import html, dcc
 from profiles.energy_model.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, season, pattern_active=True, text_active=False):
     from profiles.energy_model.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['Emissions']['name']
-    unit = plot_settings['Emissions']['unit']
+    name = plot_settings['Qualifying Capacity']['name']
+    unit = plot_settings['Qualifying Capacity']['unit']
     if type == 'By Year':
-        plot_info = plot_settings['Emissions']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        plot_info = plot_settings['Qualifying Capacity']['By Year']
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season,  pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
-        plot_info = plot_settings['Emissions']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        plot_info = plot_settings['Qualifying Capacity']['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season)
     elif type == 'Pie Chart':
-        plot_info = plot_settings['Emissions']['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+        plot_info = plot_settings['Qualifying Capacity']['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], season=season)
     else:
-        plot_info = plot_settings['Emissions']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        plot_info = plot_settings['Qualifying Capacity']['By Region']
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, season=season,  pattern_active=pattern_active, text_active=text_active)
 
 
 def plot(df, window_id):
@@ -39,7 +39,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value= 'CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'energy_model-emissions-region-select',
+            'type': 'energy_model-qualifying-capacity-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -51,7 +51,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'energy_model-emissions-year-select',
+            'type': 'energy_model-qualifying-capacity-year-select',
             'index': window_id
         },
 
@@ -62,7 +62,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'energy_model-emissions-pattern-switch',
+            'type': 'energy_model-qualifying-capacity-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -72,7 +72,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'energy_model-emissions-text-switch',
+            'type': 'energy_model-qualifying-capacity-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -84,14 +84,14 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'energy_model-emissions-plot-select',
+                'type': 'energy_model-qualifying-capacity-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'energy_model-emissions-aggregate-switch',
+                       'type': 'energy_model-qualifying-capacity-aggregate-switch',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
@@ -100,7 +100,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'energy_model-emissions-scenario-multi-select',
+                'type': 'energy_model-qualifying-capacity-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -110,28 +110,38 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'energy_model-emissions-scenario-select',
+                'type': 'energy_model-qualifying-capacity-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
+        dmc.Select(label='Season',
+                   data=[{'label': 'Winter', 'value': 'winter'},
+                         {'label': 'Summer', 'value': 'summer'},
+                         ],
+                   value='winter',
+                   id={
+                       'type': 'energy_model-qualifying-capacity-season-select',
+                       'index': window_id
+                   }
+                   ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'energy_model-emissions-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'energy_model-qualifying-capacity-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'energy_model-emissions-download', 'index': window_id}),
+        dcc.Download(id={'type': 'energy_model-qualifying-capacity-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0]),
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0], years[0],scenarios[0],
+                           season='winter'),
         id={
             'type': 'figure',
             'index': window_id,
             'profile': 'energy_model',
-            'viz': 'emissions'
+            'viz': 'qualcap'
         },
         style={
             'width': '100%',

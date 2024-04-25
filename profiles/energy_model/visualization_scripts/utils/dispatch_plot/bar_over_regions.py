@@ -2,7 +2,7 @@ import numpy as np
 import plotly.graph_objects as go
 import pandas as pd
 
-from profiles.copper_output import utils
+from profiles.energy_model import utils
 from dash import dcc
 
 
