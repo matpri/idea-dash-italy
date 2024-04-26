@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.emissions import render_plot
+from profiles.pypsa_output.visualization_scripts.emissions import render_plot
 
 
 def link(app):
@@ -9,121 +9,121 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'emissions'
         }, 'figure'),
         Output({
-            'type': 'pithos-emissions-region-select',
+            'type': 'pypsa-emissions-region-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-emissions-year-select',
+            'type': 'pypsa-emissions-year-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-emissions-download',
+            'type': 'pypsa-emissions-download',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-emissions-scenario-select',
+            'type': 'pypsa-emissions-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-emissions-scenario-multi-select',
+            'type': 'pypsa-emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Output(
             {
-                'type': 'pithos-emissions-pattern-switch',
+                'type': 'pypsa-emissions-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         Output(
             {
-                'type': 'pithos-emissions-text-switch',
+                'type': 'pypsa-emissions-text-switch',
                 'index': ALL
             },
             'style'
         ),
         Input({
-            'type': 'pithos-emissions-plot-select',
+            'type': 'pypsa-emissions-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-emissions-aggregate-switch',
+            'type': 'pypsa-emissions-aggregate-switch',
             'index': ALL
         }, 'checked'),
         Input({
-            'type': 'pithos-emissions-scenario-multi-select',
+            'type': 'pypsa-emissions-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-emissions-scenario-select',
+            'type': 'pypsa-emissions-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-emissions-region-select',
+            'type': 'pypsa-emissions-region-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-emissions-year-select',
+            'type': 'pypsa-emissions-year-select',
             'index': ALL
         }, 'value'),
         Input(
             {
-                'type': 'pithos-emissions-pattern-switch',
+                'type': 'pypsa-emissions-pattern-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input(
             {
-                'type': 'pithos-emissions-text-switch',
+                'type': 'pypsa-emissions-text-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input({
-            'type': 'pithos-emissions-download-button',
+            'type': 'pypsa-emissions-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'pithos-emissions-region-select',
+            'type': 'pypsa-emissions-region-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-emissions-year-select',
+            'type': 'pypsa-emissions-year-select',
             'index': ALL
         }, 'style'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'emissions'
         }, 'figure'),
         State({
-            'type': 'pithos-emissions-download',
+            'type': 'pypsa-emissions-download',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-emissions-scenario-select',
+            'type': 'pypsa-emissions-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-emissions-scenario-multi-select',
+            'type': 'pypsa-emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
         State(
             {
-                'type': 'pithos-emissions-pattern-switch',
+                'type': 'pypsa-emissions-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         State(
             {
-                'type': 'pithos-emissions-text-switch',
+                'type': 'pypsa-emissions-text-switch',
                 'index': ALL
             },
             'style'
@@ -137,20 +137,20 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-emissions-download-button' in trigger_id['type']:
+        if 'pypsa-emissions-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-emissions-download-button')):
+                        (id['id']['type'] == 'pypsa-emissions-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['Emissions'].to_csv, "emissions.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Emissions'].to_csv, "emissions.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-emissions-plot-select')):
+                    (id['id']['type'] == 'pypsa-emissions-plot-select')):
                 idx = i
                 break
 
@@ -165,7 +165,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['ESMIA-PITHOS Output']['Emissions'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NRCan-PyPsa Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -179,7 +179,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['ESMIA-PITHOS Output']['Emissions'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NRCan-PyPsa Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -192,7 +192,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['ESMIA-PITHOS Output']['Emissions'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NRCan-PyPsa Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -206,7 +206,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['ESMIA-PITHOS Output']['Emissions'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NRCan-PyPsa Output']['Emissions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],

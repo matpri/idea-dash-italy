@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from profiles.copper_output import utils
+from profiles.natem_output import utils
 
 def check(df):
     """
@@ -173,7 +173,10 @@ def process(selected):
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+    prov_cord = pd.read_csv('./profiles/natem_output/visualization_scripts/utils/arrow_coords.csv')
+    full_t['region'] = full_t['region'].map(utils.province_long)
+    full_t['variable'] = full_t['variable'].map(utils.province_long)
+
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
     full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],

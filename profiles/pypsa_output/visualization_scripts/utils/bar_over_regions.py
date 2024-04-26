@@ -1,7 +1,7 @@
 import plotly.graph_objects as go
 import pandas as pd
 
-from profiles.pithos_output import utils
+from profiles.pypsa_output import utils
 from dash import dcc
 
 

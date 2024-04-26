@@ -3,7 +3,7 @@ import os
 
 from openpyxl.reader.excel import load_workbook
 
-from profiles.copper_output import utils
+from profiles.pithos_output import utils
 def check(df):
     """
     Check if 'cost' is present in the 'variable' column.

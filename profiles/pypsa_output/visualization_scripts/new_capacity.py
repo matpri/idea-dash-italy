@@ -1,11 +1,11 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
-from profiles.pithos_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from profiles.pypsa_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
-    from profiles.pithos_output.utils import plot_settings
+    from profiles.pypsa_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['New Capacity']['name']
     unit = plot_settings['New Capacity']['unit']
@@ -39,7 +39,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value= 'CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'pithos-new_capacity-region-select',
+            'type': 'pypsa-new_capacity-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -51,7 +51,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'pithos-new_capacity-year-select',
+            'type': 'pypsa-new_capacity-year-select',
             'index': window_id
         },
 
@@ -62,7 +62,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'pithos-new_capacity-pattern-switch',
+            'type': 'pypsa-new_capacity-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -72,7 +72,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'pithos-new_capacity-text-switch',
+            'type': 'pypsa-new_capacity-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -84,14 +84,14 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'pithos-new_capacity-plot-select',
+                'type': 'pypsa-new_capacity-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'pithos-new_capacity-aggregate-switch',
+                       'type': 'pypsa-new_capacity-aggregate-switch',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
@@ -100,7 +100,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'pithos-new_capacity-scenario-multi-select',
+                'type': 'pypsa-new_capacity-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -110,18 +110,18 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'pithos-new_capacity-scenario-select',
+                'type': 'pypsa-new_capacity-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'pithos-new_capacity-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'pypsa-new_capacity-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'pithos-new_capacity-download', 'index': window_id}),
+        dcc.Download(id={'type': 'pypsa-new_capacity-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -130,7 +130,7 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'new_capacity'
         },
         style={

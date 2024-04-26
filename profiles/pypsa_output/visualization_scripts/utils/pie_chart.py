@@ -2,7 +2,7 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import dcc
 
-from profiles.pithos_output import utils
+from profiles.pypsa_output import utils
 
 
 def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, season=None):

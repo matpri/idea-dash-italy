@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.overview import render_plot
+from profiles.pypsa_output.visualization_scripts.overview import render_plot
 
 
 def link(app):
@@ -9,31 +9,31 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'overview'
         }, 'figure'),
 
         Output({
-            'type': 'pithos-overview-download',
+            'type': 'pypsa-overview-download',
             'index': ALL
         }, 'data'),
         Input({
-            'type': 'pithos-overview-plot-select',
+            'type': 'pypsa-overview-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-overview-download-button',
+            'type': 'pypsa-overview-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'overview'
         }, 'figure'),
 
         State({
-            'type': 'pithos-overview-download',
+            'type': 'pypsa-overview-download',
             'index': ALL
         }, 'data'),
 
@@ -45,26 +45,26 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-overview-download-button' in trigger_id['type']:
+        if 'pypsa-overview-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-overview-download-button')):
+                        (id['id']['type'] == 'pypsa-overview-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['Overview'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Overview'].to_csv,
                                              "overview.csv")
             return _canvas, _data,
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-overview-plot-select')):
+                    (id['id']['type'] == 'pypsa-overview-plot-select')):
                 idx = i
                 break
 
         print('idx:', idx, 'plot type:', _p_type[idx])
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['ESMIA-PITHOS Output']['Overview'])
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['NRCan-PyPsa Output']['Overview'])
 
         return _canvas, [dash.no_update for _ in _data]

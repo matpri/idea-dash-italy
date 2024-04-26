@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from openpyxl.reader.excel import load_workbook
 
-from profiles.copper_output import utils
+from profiles.pypsa_output import utils
 
 def check(df):
     """

@@ -5,6 +5,22 @@ import dash_daq as daq
 import dash_mantine_components as dmc
 from dash import html
 
+province_long = {
+    'BC': 'British Columbia',
+    'AB': 'Alberta',
+    'SK': 'Saskatchewan',
+    'MB': 'Manitoba',
+    'ON': 'Ontario',
+    'QC': 'Quebec',
+    'NB': 'New Brunswick',
+    'NS': 'Nova Scotia',
+    'PE': 'Prince Edward Island',
+    'NL': 'Newfoundland and Labrador',
+    'YT': 'Yukon',
+    'NT': 'Northwest Territories',
+    'NU': 'Nunavut'
+}
+
 plotly_pattern_list = ['', '/', 'x', '-', '|', '+', '.', '\\']
 pattern_dict = {}
 
@@ -306,11 +322,11 @@ def tech_edit(tech):
                 dmc.TextInput(
                     label='Unaggregated',
                     value=names[tech],
-                    id={'type': 'pithos-tech-name', 'index': tech}
+                    id={'type': 'pypsa-tech-name', 'index': tech}
                 ),
                 daq.ColorPicker(
                     value={'hex': colors[tech]},
-                    id={'type': 'pithos-tech-color', 'index': tech}
+                    id={'type': 'pypsa-tech-color', 'index': tech}
                 )],
                 style=glass_style
             ),
@@ -318,17 +334,17 @@ def tech_edit(tech):
                 dmc.TextInput(
                     label='Aggregated',
                     value=groups[tech],
-                    id={'type': 'pithos-tech-group', 'index': tech}
+                    id={'type': 'pypsa-tech-group', 'index': tech}
                 ),
                 daq.ColorPicker(
                     value={'hex': group_colors[groups[tech]]},
-                    id={'type': 'pithos-tech-group-color', 'index': tech}
+                    id={'type': 'pypsa-tech-group-color', 'index': tech}
                 )],
                 style=glass_style
             )
         ], style={'display': 'flex', 'justifyContent': 'space-around'}),
         html.Div(
-            dmc.Button('Update', id={'type': 'pithos-tech-update', 'index': tech}, disabled=True,
+            dmc.Button('Update', id={'type': 'pypsa-tech-update', 'index': tech}, disabled=True,
                        style={'display': 'flex', 'justifyContent': 'center', 'width': '80%'}),
             style={'display': 'flex', 'justifyContent': 'center'}
         )
@@ -367,17 +383,17 @@ def plot_edit(plot):
             dmc.TextInput(
                 label='Title',
                 value=plots[plot_type]['title'],
-                id={'type': 'pithos-plot-title', 'index': plot, 'subtype': plot_type}
+                id={'type': 'pypsa-plot-title', 'index': plot, 'subtype': plot_type}
             ),
             dmc.TextInput(
                 label='Y Axis Label',
                 value=plots[plot_type]['y_label'],
-                id={'type': 'pithos-plot-y-axis', 'index': plot, 'subtype': plot_type}
+                id={'type': 'pypsa-plot-y-axis', 'index': plot, 'subtype': plot_type}
             ),
             dmc.TextInput(
                 label='X Axis Label',
                 value=plots[plot_type]['x_label'],
-                id={'type': 'pithos-plot-x-axis', 'index': plot, 'subtype': plot_type}
+                id={'type': 'pypsa-plot-x-axis', 'index': plot, 'subtype': plot_type}
             ),
             dmc.Divider(),
         ],
@@ -388,7 +404,7 @@ def plot_edit(plot):
     layout = html.Div([
         *views,
         html.Div(
-            dmc.Button('Update', id={'type': 'pithos-plot-update', 'index': plot, 'subtype': '-'.join(types)},
+            dmc.Button('Update', id={'type': 'pypsa-plot-update', 'index': plot, 'subtype': '-'.join(types)},
                        disabled=True,
                        style={'display': 'flex', 'justifyContent': 'center', 'width': '80%'}),
             style={'display': 'flex', 'justifyContent': 'center'}

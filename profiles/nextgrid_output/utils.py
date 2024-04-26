@@ -5,6 +5,22 @@ import dash_daq as daq
 import dash_mantine_components as dmc
 from dash import html
 
+province_long = {
+    'BC': 'British Columbia',
+    'AB': 'Alberta',
+    'SK': 'Saskatchewan',
+    'MB': 'Manitoba',
+    'ON': 'Ontario',
+    'QC': 'Quebec',
+    'NB': 'New Brunswick',
+    'NS': 'Nova Scotia',
+    'PE': 'Prince Edward Island',
+    'NL': 'Newfoundland and Labrador',
+    'YT': 'Yukon',
+    'NT': 'Northwest Territories',
+    'NU': 'Nunavut'
+}
+
 plotly_pattern_list = ['', '/', 'x', '-', '|', '+', '.', '\\']
 pattern_dict = {}
 

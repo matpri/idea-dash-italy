@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.generation_capacity import render_plot
+from profiles.pypsa_output.visualization_scripts.generation_capacity import render_plot
 
 
 def link(app):
@@ -9,121 +9,121 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'new_capacity'
         }, 'figure'),
         Output({
-            'type': 'pithos-new_capacity-region-select',
+            'type': 'pypsa-new_capacity-region-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-new_capacity-year-select',
+            'type': 'pypsa-new_capacity-year-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-new_capacity-download',
+            'type': 'pypsa-new_capacity-download',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-new_capacity-scenario-select',
+            'type': 'pypsa-new_capacity-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-new_capacity-scenario-multi-select',
+            'type': 'pypsa-new_capacity-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Output(
             {
-                'type': 'pithos-new_capacity-pattern-switch',
+                'type': 'pypsa-new_capacity-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         Output(
             {
-                'type': 'pithos-new_capacity-text-switch',
+                'type': 'pypsa-new_capacity-text-switch',
                 'index': ALL
             },
             'style'
         ),
         Input({
-            'type': 'pithos-new_capacity-plot-select',
+            'type': 'pypsa-new_capacity-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-new_capacity-aggregate-switch',
+            'type': 'pypsa-new_capacity-aggregate-switch',
             'index': ALL
         }, 'checked'),
         Input({
-            'type': 'pithos-new_capacity-scenario-multi-select',
+            'type': 'pypsa-new_capacity-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-new_capacity-scenario-select',
+            'type': 'pypsa-new_capacity-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-new_capacity-region-select',
+            'type': 'pypsa-new_capacity-region-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-new_capacity-year-select',
+            'type': 'pypsa-new_capacity-year-select',
             'index': ALL
         }, 'value'),
         Input(
             {
-                'type': 'pithos-new_capacity-pattern-switch',
+                'type': 'pypsa-new_capacity-pattern-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input(
             {
-                'type': 'pithos-new_capacity-text-switch',
+                'type': 'pypsa-new_capacity-text-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input({
-            'type': 'pithos-new_capacity-download-button',
+            'type': 'pypsa-new_capacity-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'pithos-new_capacity-region-select',
+            'type': 'pypsa-new_capacity-region-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-new_capacity-year-select',
+            'type': 'pypsa-new_capacity-year-select',
             'index': ALL
         }, 'style'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'new_capacity'
         }, 'figure'),
         State({
-            'type': 'pithos-new_capacity-download',
+            'type': 'pypsa-new_capacity-download',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-new_capacity-scenario-select',
+            'type': 'pypsa-new_capacity-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-new_capacity-scenario-multi-select',
+            'type': 'pypsa-new_capacity-scenario-multi-select',
             'index': ALL
         }, 'style'),
         State(
             {
-                'type': 'pithos-new_capacity-pattern-switch',
+                'type': 'pypsa-new_capacity-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         State(
             {
-                'type': 'pithos-new_capacity-text-switch',
+                'type': 'pypsa-new_capacity-text-switch',
                 'index': ALL
             },
             'style'
@@ -137,20 +137,20 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-new_capacity-download-button' in trigger_id['type']:
+        if 'pypsa-new_capacity-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-new_capacity-download-button')):
+                        (id['id']['type'] == 'pypsa-new_capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['New Capacity'].to_csv, "new_capacity.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['New Capacity'].to_csv, "new_capacity.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-new_capacity-plot-select')):
+                    (id['id']['type'] == 'pypsa-new_capacity-plot-select')):
                 idx = i
                 break
 
@@ -165,7 +165,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['ESMIA-PITHOS Output']['New Capacity'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NRCan-PyPsa Output']['New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -179,7 +179,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['ESMIA-PITHOS Output']['New Capacity'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NRCan-PyPsa Output']['New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -192,7 +192,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['ESMIA-PITHOS Output']['New Capacity'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NRCan-PyPsa Output']['New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -206,7 +206,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['ESMIA-PITHOS Output']['New Capacity'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NRCan-PyPsa Output']['New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],

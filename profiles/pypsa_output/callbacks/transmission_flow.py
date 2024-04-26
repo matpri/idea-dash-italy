@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL
 
-from profiles.pithos_output.visualization_scripts.transmission_flow import render_plot
+from profiles.pypsa_output.visualization_scripts.transmission_flow import render_plot
 
 
 def link(app):
@@ -9,46 +9,46 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'transmission_flow'
         }, 'figure'),
         Output({
-            'type': 'pithos-transmissionflow-scenario-select',
+            'type': 'pypsa-transmissionflow-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-transmissionflow-scenario-multi-select',
+            'type': 'pypsa-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Input({
-            'type': 'pithos-transmissionflow-plot-select',
+            'type': 'pypsa-transmissionflow-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-transmissionflow-scenario-multi-select',
+            'type': 'pypsa-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'value'),
 
         Input({
-            'type': 'pithos-transmissionflow-scenario-select',
+            'type': 'pypsa-transmissionflow-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-transmissionflow-year-select',
+            'type': 'pypsa-transmissionflow-year-select',
             'index': ALL
         }, 'value'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'transmission_flow'
         }, 'figure'),
         State({
-            'type': 'pithos-transmissionflow-scenario-select',
+            'type': 'pypsa-transmissionflow-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-transmissionflow-scenario-multi-select',
+            'type': 'pypsa-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
         prevent_initial_call=True
@@ -68,7 +68,7 @@ def link(app):
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Map Plot',
-                                       data_handler.processed_data['ESMIA-PITHOS Output']['Transmission Flow'],
+                                       data_handler.processed_data['NRCan-PyPsa Output']['Transmission Flow'],
                                        _scenario[idx],
                                        _years[idx]
                                        )
@@ -76,7 +76,7 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Bar Plot',
-                                       data_handler.processed_data['ESMIA-PITHOS Output']['Transmission Flow'],
+                                       data_handler.processed_data['NRCan-PyPsa Output']['Transmission Flow'],
                                        _scenarios[idx],
                                        _years[idx]
                                        )

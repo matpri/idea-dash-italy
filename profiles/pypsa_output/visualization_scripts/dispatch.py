@@ -3,8 +3,8 @@ import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
 
-from profiles.pithos_output import utils
-from profiles.pithos_output.utils import custom_sort_key
+from profiles.pypsa_output import utils
+from profiles.pypsa_output.utils import custom_sort_key
 
 date_mapper = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August',
                9: 'September',
@@ -14,7 +14,7 @@ date_mapper = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6:
 
 
 def render_plot(type, df, aggregate, scenarios, region, year, day):
-    from profiles.pithos_output.utils import plot_settings
+    from profiles.pypsa_output.utils import plot_settings
     if type == 'Dispatched Electricity':
         plot_info = plot_settings['Dispatch']['Dispatched Electricity']
         return plot_dispatch(df, scenarios, region, year, day, aggregate, plot_info['title'], plot_info['x_label'],
@@ -256,21 +256,21 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['Dispatched Electricity', 'Exported Electricity']],
             value='Dispatched Electricity',
             id={
-                'type': 'pithos-dispatch-plot-select',
+                'type': 'pypsa-dispatch-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'pithos-dispatch-aggregate-switch',
+                       'type': 'pypsa-dispatch-aggregate-switch',
                        'index': window_id}),
         dmc.Select(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'pithos-dispatch-scenario-multi-select',
+                'type': 'pypsa-dispatch-scenario-multi-select',
                 'index': window_id,
             }
         ),
@@ -279,7 +279,7 @@ def plot(df, window_id):
             data=[{'label': region, 'value': region} for region in regions],
             value= 'CAN' if 'CAN' in regions else regions[0],
             id={
-                'type': 'pithos-dispatch-region-select',
+                'type': 'pypsa-dispatch-region-select',
                 'index': window_id
             },
         ),
@@ -288,7 +288,7 @@ def plot(df, window_id):
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
             id={
-                'type': 'pithos-dispatch-year-select',
+                'type': 'pypsa-dispatch-year-select',
                 'index': window_id
             },
         ),
@@ -297,15 +297,15 @@ def plot(df, window_id):
             data=[{'label': day, 'value': day} for day in days],
             value=days[0],
             id={
-                'type': 'pithos-dispatch-day-select',
+                'type': 'pypsa-dispatch-day-select',
                 'index': window_id
             },
         ),
-        dmc.Button('Download Data', id={'type': 'pithos-dispatch-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'pypsa-dispatch-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'pithos-dispatch-download', 'index': window_id}),
+        dcc.Download(id={'type': 'pypsa-dispatch-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -313,7 +313,7 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'dispatch'
         },
         style={

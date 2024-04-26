@@ -56,7 +56,7 @@ from profiles.natem_output.visualization_scripts import (
 )
 
 
-class PyPsaOutput(BaseProfile):
+class NATEMOutput(BaseProfile):
     name = 'ESMIA-NATEM Output'
     db_name = 'natem'
     color = 'yellow 8'

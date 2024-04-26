@@ -2,7 +2,7 @@ import os
 import pandas as pd
 from openpyxl import load_workbook
 
-from profiles.copper_output import utils
+from profiles.pypsa_output import utils
 def check(df):
     """
     Check if emissions in the 'variable' column contain strings like 'Results_summary_ABA_generation_mix|' or 'Results_summary_Canada_generation_mix|'.

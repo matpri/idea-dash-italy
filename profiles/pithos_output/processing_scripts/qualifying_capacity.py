@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from profiles.copper_output import utils
+from profiles.pithos_output import utils
 
 def check(df):
     """

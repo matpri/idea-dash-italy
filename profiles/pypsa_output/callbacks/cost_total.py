@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.cost_total import render_plot
+from profiles.pypsa_output.visualization_scripts.cost_total import render_plot
 
 
 def link(app):
@@ -9,121 +9,121 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'total_cost'
         }, 'figure'),
         Output({
-            'type': 'pithos-total_cost-region-select',
+            'type': 'pypsa-total_cost-region-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-total_cost-year-select',
+            'type': 'pypsa-total_cost-year-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-total_cost-download',
+            'type': 'pypsa-total_cost-download',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-total_cost-scenario-select',
+            'type': 'pypsa-total_cost-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-total_cost-scenario-multi-select',
+            'type': 'pypsa-total_cost-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Output(
             {
-                'type': 'pithos-total_cost-pattern-switch',
+                'type': 'pypsa-total_cost-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         Output(
             {
-                'type': 'pithos-total_cost-text-switch',
+                'type': 'pypsa-total_cost-text-switch',
                 'index': ALL
             },
             'style'
         ),
         Input({
-            'type': 'pithos-total_cost-plot-select',
+            'type': 'pypsa-total_cost-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-total_cost-aggregate-switch',
+            'type': 'pypsa-total_cost-aggregate-switch',
             'index': ALL
         }, 'checked'),
         Input({
-            'type': 'pithos-total_cost-scenario-multi-select',
+            'type': 'pypsa-total_cost-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-total_cost-scenario-select',
+            'type': 'pypsa-total_cost-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-total_cost-region-select',
+            'type': 'pypsa-total_cost-region-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-total_cost-year-select',
+            'type': 'pypsa-total_cost-year-select',
             'index': ALL
         }, 'value'),
         Input(
             {
-                'type': 'pithos-total_cost-pattern-switch',
+                'type': 'pypsa-total_cost-pattern-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input(
             {
-                'type': 'pithos-total_cost-text-switch',
+                'type': 'pypsa-total_cost-text-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input({
-            'type': 'pithos-total_cost-download-button',
+            'type': 'pypsa-total_cost-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'pithos-total_cost-region-select',
+            'type': 'pypsa-total_cost-region-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-total_cost-year-select',
+            'type': 'pypsa-total_cost-year-select',
             'index': ALL
         }, 'style'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'total_cost'
         }, 'figure'),
         State({
-            'type': 'pithos-total_cost-download',
+            'type': 'pypsa-total_cost-download',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-total_cost-scenario-select',
+            'type': 'pypsa-total_cost-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-total_cost-scenario-multi-select',
+            'type': 'pypsa-total_cost-scenario-multi-select',
             'index': ALL
         }, 'style'),
         State(
             {
-                'type': 'pithos-total_cost-pattern-switch',
+                'type': 'pypsa-total_cost-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         State(
             {
-                'type': 'pithos-total_cost-text-switch',
+                'type': 'pypsa-total_cost-text-switch',
                 'index': ALL
             },
             'style'
@@ -137,20 +137,20 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-total_cost-download-button' in trigger_id['type']:
+        if 'pypsa-total_cost-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-total_cost-download-button')):
+                        (id['id']['type'] == 'pypsa-total_cost-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['Total Cost'].to_csv, "total_cost.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Total Cost'].to_csv, "total_cost.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-total_cost-plot-select')):
+                    (id['id']['type'] == 'pypsa-total_cost-plot-select')):
                 idx = i
                 break
 
@@ -165,7 +165,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['ESMIA-PITHOS Output']['Total Cost'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NRCan-PyPsa Output']['Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -179,7 +179,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['ESMIA-PITHOS Output']['Total Cost'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NRCan-PyPsa Output']['Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -192,7 +192,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['ESMIA-PITHOS Output']['Total Cost'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NRCan-PyPsa Output']['Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -206,7 +206,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['ESMIA-PITHOS Output']['Total Cost'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NRCan-PyPsa Output']['Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],

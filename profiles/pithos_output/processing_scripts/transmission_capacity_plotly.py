@@ -1,7 +1,7 @@
 import os
 import pandas as pd
 
-from profiles.copper_output import utils
+from profiles.pithos_output import utils
 
 def check(df):
     """
@@ -233,7 +233,10 @@ def process(selected):
                     prev_df['cumsum'] = prev_df['total']
                     prev_df['value'] = 0
                     full_t = pd.concat([full_t, prev_df], ignore_index=True)
-    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+
+    full_t['region'] = full_t['region'].map(utils.province_long)
+    full_t['variable'] = full_t['variable'].map(utils.province_long)
+    prov_cord = pd.read_csv('./profiles/pithos_output/visualization_scripts/utils/arrow_coords.csv')
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
     full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],

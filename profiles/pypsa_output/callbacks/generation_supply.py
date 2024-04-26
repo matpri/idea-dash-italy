@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.generation_supply import render_plot
+from profiles.pypsa_output.visualization_scripts.generation_supply import render_plot
 
 
 def link(app):
@@ -9,121 +9,121 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'supply'
         }, 'figure'),
         Output({
-            'type': 'pithos-supply-region-select',
+            'type': 'pypsa-supply-region-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-supply-year-select',
+            'type': 'pypsa-supply-year-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-supply-download',
+            'type': 'pypsa-supply-download',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-supply-scenario-select',
+            'type': 'pypsa-supply-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'pithos-supply-scenario-multi-select',
+            'type': 'pypsa-supply-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Output(
             {
-                'type': 'pithos-supply-pattern-switch',
+                'type': 'pypsa-supply-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         Output(
             {
-                'type': 'pithos-supply-text-switch',
+                'type': 'pypsa-supply-text-switch',
                 'index': ALL
             },
             'style'
         ),
         Input({
-            'type': 'pithos-supply-plot-select',
+            'type': 'pypsa-supply-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-supply-aggregate-switch',
+            'type': 'pypsa-supply-aggregate-switch',
             'index': ALL
         }, 'checked'),
         Input({
-            'type': 'pithos-supply-scenario-multi-select',
+            'type': 'pypsa-supply-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-supply-scenario-select',
+            'type': 'pypsa-supply-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-supply-region-select',
+            'type': 'pypsa-supply-region-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-supply-year-select',
+            'type': 'pypsa-supply-year-select',
             'index': ALL
         }, 'value'),
         Input(
             {
-                'type': 'pithos-supply-pattern-switch',
+                'type': 'pypsa-supply-pattern-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input(
             {
-                'type': 'pithos-supply-text-switch',
+                'type': 'pypsa-supply-text-switch',
                 'index': ALL
             },
             'checked'
         ),
         Input({
-            'type': 'pithos-supply-download-button',
+            'type': 'pypsa-supply-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'pithos-supply-region-select',
+            'type': 'pypsa-supply-region-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-supply-year-select',
+            'type': 'pypsa-supply-year-select',
             'index': ALL
         }, 'style'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'supply'
         }, 'figure'),
         State({
-            'type': 'pithos-supply-download',
+            'type': 'pypsa-supply-download',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-supply-scenario-select',
+            'type': 'pypsa-supply-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'pithos-supply-scenario-multi-select',
+            'type': 'pypsa-supply-scenario-multi-select',
             'index': ALL
         }, 'style'),
         State(
             {
-                'type': 'pithos-supply-pattern-switch',
+                'type': 'pypsa-supply-pattern-switch',
                 'index': ALL
             },
             'style'
         ),
         State(
             {
-                'type': 'pithos-supply-text-switch',
+                'type': 'pypsa-supply-text-switch',
                 'index': ALL
             },
             'style'
@@ -137,20 +137,20 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-supply-download-button' in trigger_id['type']:
+        if 'pypsa-supply-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-supply-download-button')):
+                        (id['id']['type'] == 'pypsa-supply-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['Supply'].to_csv, "supply.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Supply'].to_csv, "supply.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-supply-plot-select')):
+                    (id['id']['type'] == 'pypsa-supply-plot-select')):
                 idx = i
                 break
 
@@ -165,7 +165,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['ESMIA-PITHOS Output']['Supply'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NRCan-PyPsa Output']['Supply'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -179,7 +179,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['ESMIA-PITHOS Output']['Supply'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NRCan-PyPsa Output']['Supply'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -192,7 +192,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['ESMIA-PITHOS Output']['Supply'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NRCan-PyPsa Output']['Supply'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -206,7 +206,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['ESMIA-PITHOS Output']['Supply'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NRCan-PyPsa Output']['Supply'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],

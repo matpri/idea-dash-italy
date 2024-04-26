@@ -4,7 +4,7 @@ from dash import html, dcc
 
 
 def render_plot(type, df):
-    from profiles.pithos_output.utils import plot_settings
+    from profiles.pypsa_output.utils import plot_settings
     print('rendering plot', type)
     df = df[df.variable == type].copy()
 
@@ -71,15 +71,15 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in classes],
             value=classes[0],
             id={
-                'type': 'pithos-overview-plot-select',
+                'type': 'pypsa-overview-plot-select',
                 'index': window_id
             },
         ),
-        dmc.Button('Download Data', id={'type': 'pithos-overview-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'pypsa-overview-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'pithos-overview-download', 'index': window_id}),
+        dcc.Download(id={'type': 'pypsa-overview-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -87,7 +87,7 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'overview'
         },
         style={

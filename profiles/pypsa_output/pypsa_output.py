@@ -5,8 +5,8 @@ import yaml
 from dash import html, dcc
 
 from profiles.base_profile.base_profile import BaseProfile
-from profiles.pithos_output import utils
-from profiles.pithos_output.callbacks import (emissions as emissions_callbacks,
+from profiles.pypsa_output import utils
+from profiles.pypsa_output.callbacks import (emissions as emissions_callbacks,
                                               generation_capacity as generation_capacity_callbacks,
                                               net_new_capacity as net_new_capacity_callbacks,
                                               new_capacity as new_capacity_callbacks,
@@ -22,7 +22,7 @@ from profiles.pithos_output.callbacks import (emissions as emissions_callbacks,
                                               dispatch as dispatch_callbacks,
 overview as overview_callbacks
                                               )
-from profiles.pithos_output.processing_scripts import (
+from profiles.pypsa_output.processing_scripts import (
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
     net_new_capacity as net_new_capacity_processing,
@@ -38,7 +38,7 @@ from profiles.pithos_output.processing_scripts import (
     dispatch as dispatch_processing,
     overview as overview_processing
 )
-from profiles.pithos_output.visualization_scripts import (
+from profiles.pypsa_output.visualization_scripts import (
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
     net_new_capacity as net_new_capacity_viz,
@@ -56,9 +56,9 @@ from profiles.pithos_output.visualization_scripts import (
 )
 
 
-class PITHOSOutput(BaseProfile):
-    name = 'ESMIA-PITHOS Output'
-    db_name = 'pithos'
+class PypsaOutput(BaseProfile):
+    name = 'NRCan-PyPsa Output'
+    db_name = 'pypsa'
     color = 'yellow 8'
     description = (
         'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
@@ -227,8 +227,8 @@ class PITHOSOutput(BaseProfile):
 
     def __init__(self):
         super().__init__()
-        self.technologies = yaml.load(open('./profiles/pithos_output/technologies.yaml', 'r'), Loader=yaml.FullLoader)
-        self.plots = yaml.load(open('./profiles/pithos_output/plots.yaml', 'r'), Loader=yaml.FullLoader)
+        self.technologies = yaml.load(open('./profiles/pypsa_output/technologies.yaml', 'r'), Loader=yaml.FullLoader)
+        self.plots = yaml.load(open('./profiles/pypsa_output/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
         self.settings = self.render_settings()
 
@@ -241,7 +241,7 @@ class PITHOSOutput(BaseProfile):
             [
                 # upload for yaml
                 dcc.Upload(
-                    id='pithos-settings-upload-yaml',
+                    id='pypsa-settings-upload-yaml',
                     children=html.Div([
                         'Drag and Drop or ',
                         html.A('Select YAML File')
@@ -259,16 +259,16 @@ class PITHOSOutput(BaseProfile):
                     multiple=False
                 ),
 
-                html.Div(id='pithos-settings-upload-yaml-output'),
+                html.Div(id='pypsa-settings-upload-yaml-output'),
                 dmc.Tabs([
                     dmc.TabsList([
-                        dmc.Tab('Technology Settings', id='pithos-technologies', value='tech'),
-                        dmc.Tab('Plot Settings', id='pithos-plot-settings', value='plot'),
+                        dmc.Tab('Technology Settings', id='pypsa-technologies', value='tech'),
+                        dmc.Tab('Plot Settings', id='pypsa-plot-settings', value='plot'),
                     ]
                     ),
-                    dmc.TabsPanel(id='pithos-technologies-settings', value='tech',
+                    dmc.TabsPanel(id='pypsa-technologies-settings', value='tech',
                                   children=self.render_technology_settings()),
-                    dmc.TabsPanel(id='pithos-plot-settings-panel', value='plot',
+                    dmc.TabsPanel(id='pypsa-plot-settings-panel', value='plot',
                                   children=self.render_plot_settings()),
                 ], value='tech')
             ]
@@ -281,7 +281,7 @@ class PITHOSOutput(BaseProfile):
         layout = html.Div([
             html.Div(
                 dmc.Select(
-                    id='pithos-technology-select',
+                    id='pypsa-technology-select',
                     data=[{'label': tech, 'value': tech} for tech in techs],
                     value=techs[0],
                 ),
@@ -297,7 +297,7 @@ class PITHOSOutput(BaseProfile):
                 }
             ),
             html.Div(utils.tech_edit(techs[0]),
-                     id='pithos-technology-settings-output'),
+                     id='pypsa-technology-settings-output'),
         ])
 
         return layout
@@ -307,7 +307,7 @@ class PITHOSOutput(BaseProfile):
         layout = html.Div([
             html.Div(
                 dmc.Select(
-                    id='pithos-plot-select',
+                    id='pypsa-plot-select',
                     data=[{'label': plot, 'value': plot} for plot in plots],
                     value=plots[0]
                 ),
@@ -323,7 +323,7 @@ class PITHOSOutput(BaseProfile):
                 }
             ),
             html.Div(utils.plot_edit(plots[0]),
-                     id='pithos-plot-settings-output'),
+                     id='pypsa-plot-settings-output'),
         ])
 
         return layout

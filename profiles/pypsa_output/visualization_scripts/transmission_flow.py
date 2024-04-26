@@ -7,8 +7,8 @@ import plotly.express as px
 import numpy as np
 import geojson
 
-from profiles.pithos_output import utils
-from profiles.pithos_output.visualization_scripts.utils import bar_over_regions
+from profiles.pypsa_output import utils
+from profiles.pypsa_output.visualization_scripts.utils import bar_over_regions
 
 
 def aggregate_lines(df):
@@ -181,9 +181,9 @@ def transmission_plot(df, scenario, year, title):
         fig.layout.autosize = True
         return fig
 
-    with open('./profiles/pithos_output/visualization_scripts/utils/canada.geojson') as f:
+    with open('./profiles/pypsa_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('./profiles/pithos_output/visualization_scripts/utils/arrows.geojson') as f:
+    with open('./profiles/pypsa_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
     line_colors = {}
@@ -265,7 +265,7 @@ def transmission_plot(df, scenario, year, title):
     return fig
 
 def render_plot(type, df, scenarios, year):
-    from profiles.pithos_output.utils import plot_settings
+    from profiles.pypsa_output.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
     if type == 'Map Plot':
@@ -300,7 +300,7 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
             value='Map Plot',
             id={
-                'type': 'pithos-transmissionflow-plot-select',
+                'type': 'pypsa-transmissionflow-plot-select',
                 'index': window_id
             },
         ),
@@ -309,7 +309,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'pithos-transmissionflow-scenario-select',
+                'type': 'pypsa-transmissionflow-scenario-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -319,7 +319,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'pithos-transmissionflow-scenario-multi-select',
+                'type': 'pypsa-transmissionflow-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -329,7 +329,7 @@ def plot(df, window_id):
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
             id={
-                'type': 'pithos-transmissionflow-year-select',
+                'type': 'pypsa-transmissionflow-year-select',
                 'index': window_id
             },
         )
@@ -340,7 +340,7 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'transmission_flow'
         },
         style={

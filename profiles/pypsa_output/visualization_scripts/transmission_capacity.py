@@ -7,8 +7,8 @@ import plotly.express as px
 import numpy as np
 import geojson
 
-from profiles.pithos_output.visualization_scripts.utils import bar_over_regions
-from profiles.pithos_output import utils
+from profiles.pypsa_output.visualization_scripts.utils import bar_over_regions
+from profiles.pypsa_output import utils
 
 def aggregate_lines(df):
     sum_values = df.groupby(['line', 'start', 'end'])["value"].sum().reset_index()
@@ -178,9 +178,9 @@ def transmission_plot(df, scenario, year, title):
         return fig
 
 
-    with open('profiles/pithos_output/visualization_scripts/utils/canada.geojson') as f:
+    with open('profiles/pypsa_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('profiles/pithos_output/visualization_scripts/utils/arrows.geojson') as f:
+    with open('profiles/pypsa_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
@@ -245,7 +245,7 @@ def transmission_plot(df, scenario, year, title):
     return fig
 
 def render_plot(type, df, scenarios, year):
-    from profiles.pithos_output.utils import plot_settings
+    from profiles.pypsa_output.utils import plot_settings
     name = plot_settings['Transmission Capacity']['name']
     unit = plot_settings['Transmission Capacity']['unit']
     if type == 'Map Plot':
@@ -280,7 +280,7 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
             value='Map Plot',
             id={
-                'type': 'pithos-transmissioncapacity-plot-select',
+                'type': 'pypsa-transmissioncapacity-plot-select',
                 'index': window_id
             },
         ),
@@ -289,7 +289,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'pithos-transmissioncapacity-scenario-select',
+                'type': 'pypsa-transmissioncapacity-scenario-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -299,7 +299,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'pithos-transmissioncapacity-scenario-multi-select',
+                'type': 'pypsa-transmissioncapacity-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -309,7 +309,7 @@ def plot(df, window_id):
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
             id={
-                'type': 'pithos-transmissioncapacity-year-select',
+                'type': 'pypsa-transmissioncapacity-year-select',
                 'index': window_id
             },
         )
@@ -320,7 +320,7 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'transmission_capacity'
         },
         style={

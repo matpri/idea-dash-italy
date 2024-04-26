@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.pithos_output.visualization_scripts.dispatch import render_plot, date_mapper
+from profiles.pypsa_output.visualization_scripts.dispatch import render_plot, date_mapper
 
 
 def link(app):
@@ -9,97 +9,97 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'dispatch'
         }, 'figure'),
         Output({
-            'type': 'pithos-dispatch-region-select',
+            'type': 'pypsa-dispatch-region-select',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-dispatch-region-select',
+            'type': 'pypsa-dispatch-region-select',
             'index': ALL
         }, 'value'),
         Output({
-            'type': 'pithos-dispatch-year-select',
+            'type': 'pypsa-dispatch-year-select',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-dispatch-year-select',
+            'type': 'pypsa-dispatch-year-select',
             'index': ALL
         }, 'value'),
         Output({
-            'type': 'pithos-dispatch-day-select',
+            'type': 'pypsa-dispatch-day-select',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'pithos-dispatch-day-select',
+            'type': 'pypsa-dispatch-day-select',
             'index': ALL
         }, 'value'),
         Output({
-            'type': 'pithos-dispatch-download',
+            'type': 'pypsa-dispatch-download',
             'index': ALL
         }, 'data'),
         Input({
-            'type': 'pithos-dispatch-plot-select',
+            'type': 'pypsa-dispatch-plot-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-dispatch-aggregate-switch',
+            'type': 'pypsa-dispatch-aggregate-switch',
             'index': ALL
         }, 'checked'),
         Input({
-            'type': 'pithos-dispatch-scenario-multi-select',
+            'type': 'pypsa-dispatch-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-dispatch-region-select',
+            'type': 'pypsa-dispatch-region-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-dispatch-year-select',
+            'type': 'pypsa-dispatch-year-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-dispatch-day-select',
+            'type': 'pypsa-dispatch-day-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'pithos-dispatch-download-button',
+            'type': 'pypsa-dispatch-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'pithos-dispatch-region-select',
+            'type': 'pypsa-dispatch-region-select',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-dispatch-region-select',
+            'type': 'pypsa-dispatch-region-select',
             'index': ALL
         }, 'value'),
         State({
-            'type': 'pithos-dispatch-year-select',
+            'type': 'pypsa-dispatch-year-select',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-dispatch-year-select',
+            'type': 'pypsa-dispatch-year-select',
             'index': ALL
         }, 'value'),
         State({
-            'type': 'pithos-dispatch-day-select',
+            'type': 'pypsa-dispatch-day-select',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'pithos-dispatch-day-select',
+            'type': 'pypsa-dispatch-day-select',
             'index': ALL
         }, 'value'),
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'pithos_output',
+            'profile': 'pypsa_output',
             'viz': 'dispatch'
         }, 'figure'),
         State({
-            'type': 'pithos-dispatch-download',
+            'type': 'pypsa-dispatch-download',
             'index': ALL
         }, 'data'),
         prevent_initial_call=True
@@ -113,23 +113,23 @@ def link(app):
         print('updating dispatch plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'pithos-dispatch-download-button' in trigger_id['type']:
+        if 'pypsa-dispatch-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-dispatch-download-button')):
+                        (id['id']['type'] == 'pypsa-dispatch-download-button')):
                     idx = i
                     break
-            download[idx] = dcc.send_data_frame(data_handler.processed_data['ESMIA-PITHOS Output']['Dispatch'].to_csv,
+            download[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'].to_csv,
                                                 "dispatch.csv")
             return figure, region_data, region_value, year_data, year_value, day_data, day_value, download
 
-        if 'pithos-dispatch-scenario-multi-select' in trigger_id['type']:
-            df = data_handler.processed_data['ESMIA-PITHOS Output']['Dispatch']
+        if 'pypsa-dispatch-scenario-multi-select' in trigger_id['type']:
+            df = data_handler.processed_data['NRCan-PyPsa Output']['Dispatch']
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'pithos-dispatch-scenario-multi-select')):
+                        (id['id']['type'] == 'pypsa-dispatch-scenario-multi-select')):
                     idx = i
                     break
 
@@ -152,7 +152,7 @@ def link(app):
             day_data[idx] = [{'label': i, 'value': i} for i in days]
             day_value[idx] = days[0]
 
-            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['ESMIA-PITHOS Output']['Dispatch'],
+            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'],
                            aggregate_switch[idx], scenario_multi_select[idx], region_select[idx], year_select[idx],
                            day_select[
                                idx])
@@ -160,10 +160,10 @@ def link(app):
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'pithos-dispatch-plot-select')):
+                    (id['id']['type'] == 'pypsa-dispatch-plot-select')):
                 idx = i
                 break
-        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['ESMIA-PITHOS Output']['Dispatch'],
+        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'],
                                   aggregate_switch[idx], scenario_multi_select[idx], region_select[idx],
                                   year_select[idx],
                                   day_select[
