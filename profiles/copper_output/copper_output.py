@@ -19,7 +19,8 @@ from profiles.copper_output.callbacks import (emissions as emissions_callbacks,
                                               cost_vom as cost_vom_callbacks,
                                               cost_gencap as cost_gencap_callbacks,
                                               settings as settings_callbacks,
-                                              dispatch as dispatch_callbacks
+                                              dispatch as dispatch_callbacks,
+overview as overview_callbacks
                                               )
 from profiles.copper_output.processing_scripts import (
     emissions as emissions_processing,
@@ -34,7 +35,8 @@ from profiles.copper_output.processing_scripts import (
     cost_fom as cost_fom_processing,
     cost_vom as cost_vom_processing,
     cost_gencap as cost_gencap_processing,
-    dispatch as dispatch_processing
+    dispatch as dispatch_processing,
+    overview as overview_processing
 )
 from profiles.copper_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -49,7 +51,8 @@ from profiles.copper_output.visualization_scripts import (
     cost_fom as cost_fom_viz,
     cost_vom as cost_vom_viz,
     cost_gencap as cost_gencap_viz,
-    dispatch as dispatch_viz
+    dispatch as dispatch_viz,
+    overview as overview_viz
 )
 
 
@@ -62,6 +65,7 @@ class CopperOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
+        'Overview',
         'Emissions',
         'Capacity',
         'Net New Capacity',
@@ -77,6 +81,16 @@ class CopperOutput(BaseProfile):
         'Dispatch'
     ]
     viz_options = {
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
         'Emissions':
             {
                 'check': emissions_processing.check,

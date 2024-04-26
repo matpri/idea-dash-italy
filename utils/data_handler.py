@@ -11,6 +11,39 @@ import profiles
 
 
 class DataHandler:
+    """
+    Class responsible for handling data and generating visualizations.
+
+    Attributes:
+        api_key (str): API key for accessing data.
+        profiles (dict): Dictionary of available profile models.
+        data (dict): Dictionary holding data for each file.
+        processed_data (dict): Dictionary holding processed data for each profile and visualization.
+        viz (dict): Dictionary holding selected visualizations for each file.
+        runs (pd.DataFrame): DataFrame holding information about runs.
+
+    Methods:
+        select_run(profile: str, scenario: str, author: str) -> None:
+            Selects a specific run based on profile, scenario, and author.
+
+        process_data() -> None:
+            Processes the collected data and generates processed data for visualizations.
+
+        get_viz(profile: str, viz: str, window_id: str) -> Any:
+            Retrieves a specific visualization for a given profile and viz option.
+
+        get_viz_options() -> dict:
+            Retrieves the available visualization options.
+
+        load_profiles() -> dict:
+            Loads the available profile models.
+
+        link(app: Any) -> None:
+            Links the profile models to the application.
+
+        check_content(filename: str, content: str) -> None:
+            Checks the content of a file and updates the data and visualizations accordingly.
+    """
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()

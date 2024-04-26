@@ -221,6 +221,29 @@ Dispatch:
     title: Exported Electricity by Year
     x_label: Year
     y_label: Exported Electricity (TWh)
+Overview:
+  name: Test
+  unit: unit
+  Capacity:
+    title: Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  New Capacity:
+    title: New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Net New Capacity:
+    title: Net New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Emissions:
+    title: Emissions
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Supply:
+    title: Supply
+    x_label: Year
+    y_label: Supply (TWh)
 
 
 
