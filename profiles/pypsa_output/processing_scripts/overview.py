@@ -1,6 +1,6 @@
 import pandas as pd
 
-from profiles.copper_output.processing_scripts import (generation_capacity, emissions, new_capacity, net_new_capacity,
+from profiles.pypsa_output.processing_scripts import (generation_capacity, emissions, new_capacity, net_new_capacity,
                                                        generation_supply,
                                                        cost_vom, cost_fom, cost_gencap, cost_total)
 
