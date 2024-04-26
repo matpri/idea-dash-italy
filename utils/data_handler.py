@@ -178,6 +178,9 @@ class DataHandler:
         except pd.errors.EmptyDataError:
             df = pd.DataFrame()
 
+        # make all headers lowercase
+        df.columns = df.columns.str.lower()
+
         if filename not in self.data:
             self.data[filename] = {}
 

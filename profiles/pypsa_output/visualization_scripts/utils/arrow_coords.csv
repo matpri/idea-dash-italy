@@ -1,0 +1,23 @@
+region,variable,from_lon,from_lat,to_lon,to_lat
+British Columbia,Alberta,-119.0,53.0,-116.0,53.0
+Alberta,British Columbia,-120.0,56.0,-122.0,56.0
+Alberta,Saskatchewan,-110.0,53.0,-107.0,53.0
+Saskatchewan,Alberta,-110.0,56.0,-111.0,56.0
+Saskatchewan,Manitoba,-101.5,53.0,-100.0,53.0
+Manitoba,Saskatchewan,-102.0,56.0,-104.0,56.0
+Manitoba,Ontario,-95.0,51.0,-93.0,51.0
+Ontario,Manitoba,-92.0,55.0,-94.0,56.6
+Ontario,Quebec,-77.0,46.0,-75.0,46.3
+Quebec,Ontario,-80.0,48.0,-81.0,47.8
+Quebec,Newfoundland and Labrador,-67.5,54.0,-63.0,54.0
+Quebec,New Brunswick,-68.0,48,-68.0,47.0
+Newfoundland and Labrador,Quebec,-64.0,56.0,-67.0,56.0
+Newfoundland and Labrador,Nova Scotia,-59.7,47.3,-61.9,46
+New Brunswick,Quebec,-66.7,48.1,-66.7,48.5
+New Brunswick,Nova Scotia,-66.5,44.8,-66.0,44.0
+New Brunswick,Prince Edward Island,-64.0,46.0,-63.0,46.0
+Nova Scotia,New Brunswick,-65.7, 45.4,-66,46.0
+Nova Scotia,Prince Edward Island,-62.7,45.7,-62.7,46.0
+Nova Scotia,Newfoundland and Labrador,-59.50,46.3,-58.5,47.0
+Prince Edward Island,Nova Scotia,-62.4,46.0,-62.4,45.0
+Prince Edward Island,New Brunswick,-64.3,46.6,-65.3,46.6
