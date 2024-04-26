@@ -252,6 +252,31 @@ Overview:
     title: Supply
     x_label: Year
     y_label: Supply (TWh)
+  Total Cost:
+    name: Cost
+    unit: Billion $
+    title: Total Cost
+    x_label: Year
+    y_label: Total Cost (Billion $)
+  Capacity Cost:
+    name: Cost
+    unit: Million $
+    title: Capacity Cost
+    x_label: Year
+    y_label: Capacity Cost (Million $)
+  FOM Cost:
+    name: Cost
+    unit: Million $
+    title: Fixed O&M Cost
+    x_label: Year
+    y_label: Fixed O&M Cost (Million $)
+  VOM Cost:
+      name: Cost
+      unit: Million $
+      title: Variable O&M Cost
+      x_label: Year
+      y_label: Variable O&M Cost (Million $)
+
 
 
 

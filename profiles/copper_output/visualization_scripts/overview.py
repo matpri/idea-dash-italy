@@ -11,17 +11,7 @@ def render_plot(type, df):
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
     unit = plot_info['unit']
-
-    if type == 'Capacity':
-        return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
-    elif type == 'New Capacity':
-        return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
-    elif type == 'Net New Capacity':
-        return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
-    elif type == 'Emissions':
-        return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
-    else:
-        return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
 
 def plot_overview(df, title, x_label, y_label, name, unit):

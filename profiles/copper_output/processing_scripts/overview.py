@@ -1,7 +1,8 @@
 import pandas as pd
 
 from profiles.copper_output.processing_scripts import (generation_capacity, emissions, new_capacity, net_new_capacity,
-                                                       generation_supply)
+                                                       generation_supply,
+                                                       cost_vom, cost_fom, cost_gencap, cost_total)
 
 
 def check(df):
@@ -25,6 +26,14 @@ def check(df):
         if emissions.check(df):
             return True
         if generation_supply.check(df):
+            return True
+        if cost_vom.check(df):
+            return True
+        if cost_fom.check(df):
+            return True
+        if cost_gencap.check(df):
+            return True
+        if cost_total.check(df):
             return True
         return False
     except Exception as e:
@@ -64,6 +73,22 @@ def process(data):
         if generation_supply.check(db):
             df = generation_supply.process({scenario_name: db})
             df['variable'] = 'Supply'
+            dfs.append(df)
+        if cost_vom.check(db):
+            df = cost_vom.process({scenario_name: db})
+            df['variable'] = 'VOM Cost'
+            dfs.append(df)
+        if cost_fom.check(db):
+            df = cost_fom.process({scenario_name: db})
+            df['variable'] = 'FOM Cost'
+            dfs.append(df)
+        if cost_gencap.check(db):
+            df = cost_gencap.process({scenario_name: db})
+            df['variable'] = 'Capacity Cost'
+            dfs.append(df)
+        if cost_total.check(db):
+            df = cost_total.process({scenario_name: db})
+            df['variable'] = 'Total Cost'
             dfs.append(df)
 
     full_df = pd.concat(dfs)
