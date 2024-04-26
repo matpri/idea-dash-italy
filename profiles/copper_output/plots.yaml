@@ -222,25 +222,33 @@ Dispatch:
     x_label: Year
     y_label: Exported Electricity (TWh)
 Overview:
-  name: Test
-  unit: unit
   Capacity:
+    name: Capacity
+    unit: GW
     title: Capacity
     x_label: Year
     y_label: Capacity (GW)
   New Capacity:
+    name: New Capacity
+    unit: GW
     title: New Capacity
     x_label: Year
     y_label: Capacity (GW)
   Net New Capacity:
+    name: Net New Capacity
+    unit: GW
     title: Net New Capacity
     x_label: Year
     y_label: Capacity (GW)
   Emissions:
+    name: Emissions
+    unit: MtCO2eq
     title: Emissions
     x_label: Year
     y_label: Emissions (MtCO2eq)
   Supply:
+    name: Supply
+    unit: TWh
     title: Supply
     x_label: Year
     y_label: Supply (TWh)

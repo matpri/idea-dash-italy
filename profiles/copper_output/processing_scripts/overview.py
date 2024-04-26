@@ -50,19 +50,19 @@ def process(data):
             df['variable'] = 'Capacity'
             dfs.append(df)
         if new_capacity.check(db):
-            df = generation_capacity.process({scenario_name: db})
+            df = new_capacity.process({scenario_name: db})
             df['variable'] = 'New Capacity'
             dfs.append(df)
         if net_new_capacity.check(db):
-            df = generation_capacity.process({scenario_name: db})
+            df = net_new_capacity.process({scenario_name: db})
             df['variable'] = 'Net New Capacity'
             dfs.append(df)
         if emissions.check(db):
-            df = generation_capacity.process({scenario_name: db})
+            df = emissions.process({scenario_name: db})
             df['variable'] = 'Emissions'
             dfs.append(df)
         if generation_supply.check(db):
-            df = generation_capacity.process({scenario_name: db})
+            df = generation_supply.process({scenario_name: db})
             df['variable'] = 'Supply'
             dfs.append(df)
 

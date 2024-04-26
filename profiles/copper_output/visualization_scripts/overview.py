@@ -6,26 +6,21 @@ from dash import html, dcc
 def render_plot(type, df):
     from profiles.copper_output.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['Overview']['name']
-    unit = plot_settings['Overview']['unit']
-
     df = df[df.variable == type].copy()
 
+    plot_info = plot_settings['Overview'][type]
+    name = plot_info['name']
+    unit = plot_info['unit']
 
     if type == 'Capacity':
-        plot_info = plot_settings['Overview']['Capacity']
         return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'New Capacity':
-        plot_info = plot_settings['Overview']['New Capacity']
         return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Net New Capacity':
-        plot_info = plot_settings['Overview']['Net New Capacity']
         return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Emissions':
-        plot_info = plot_settings['Overview']['Emissions']
         return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     else:
-        plot_info = plot_settings['Overview']['Supply']
         return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
 
