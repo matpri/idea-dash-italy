@@ -5,34 +5,9 @@ import yaml
 from dash import html, dcc
 
 from profiles.base_profile.base_profile import BaseProfile
-from profiles.energy_model.processing_scripts import (
-    emissions as emissions_processing,
-    generation_capacity as generation_capacity_processing,
-    net_new_capacity as net_new_capacity_processing,
-    new_capacity as new_capacity_processing,
-    qualifying_capacity as qualifying_capacity_processing,
-    generation_supply as generation_supply_processing,
-    cost_vom as cost_vom_processing,
-    cost_fom as cost_fom_processing,
-    cost_gencap as cost_gencap_processing,
-    cost_total as cost_total_processing,
-)
-
-from profiles.energy_model.visualization_scripts import (
-    emissions as emissions_viz,
-    generation_capacity as generation_capacity_viz,
-    net_new_capacity as net_new_capacity_viz,
-    new_capacity as new_capacity_viz,
-    qualifying_capacity as qualifying_capacity_viz,
-    generation_supply as generation_supply_viz,
-    cost_vom as cost_vom_viz,
-    cost_fom as cost_fom_viz,
-    cost_gencap as cost_gencap_viz,
-    cost_total as cost_total_viz,
-)
-
 from profiles.energy_model import utils
 from profiles.energy_model.callbacks import (
+    overview as overview_callbacks,
     emissions as emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
     net_new_capacity as net_new_capacity_callbacks,
@@ -45,7 +20,33 @@ from profiles.energy_model.callbacks import (
     cost_total as cost_total_callbacks,
     settings as settings_callbacks
 
-                                             )
+)
+from profiles.energy_model.processing_scripts import (
+    overview as overview_processing,
+    emissions as emissions_processing,
+    generation_capacity as generation_capacity_processing,
+    net_new_capacity as net_new_capacity_processing,
+    new_capacity as new_capacity_processing,
+    qualifying_capacity as qualifying_capacity_processing,
+    generation_supply as generation_supply_processing,
+    cost_vom as cost_vom_processing,
+    cost_fom as cost_fom_processing,
+    cost_gencap as cost_gencap_processing,
+    cost_total as cost_total_processing,
+)
+from profiles.energy_model.visualization_scripts import (
+    overview as overview_viz,
+    emissions as emissions_viz,
+    generation_capacity as generation_capacity_viz,
+    net_new_capacity as net_new_capacity_viz,
+    new_capacity as new_capacity_viz,
+    qualifying_capacity as qualifying_capacity_viz,
+    generation_supply as generation_supply_viz,
+    cost_vom as cost_vom_viz,
+    cost_fom as cost_fom_viz,
+    cost_gencap as cost_gencap_viz,
+    cost_total as cost_total_viz,
+)
 
 
 class energy_modelsOutput(BaseProfile):
@@ -57,6 +58,7 @@ class energy_modelsOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
+        'Overview',
         'Emissions',
         'Capacity',
         'Net New Capacity',
@@ -72,6 +74,15 @@ class energy_modelsOutput(BaseProfile):
         'Dispatch'
     ]
     viz_options = {
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link
+            },
         'Emissions':
             {
                 'check': emissions_processing.check,
@@ -162,7 +173,6 @@ class energy_modelsOutput(BaseProfile):
                 'viz': cost_vom_viz.plot,
                 'callback': cost_vom_callbacks.link
             },
-
 
     }
 
