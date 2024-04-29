@@ -116,12 +116,17 @@ class DataHandler:
         data_collection = {}
         for fname, data in self.data.items():
             for profile, viz_options in data['selected'].items():
+                scenario = data['scenario']
+                if profile == 'Power System Models':
+                    model = data['content']['model'].unique()[0]
+                    scenario = model + '|' + scenario
+
                 for viz in viz_options:
                     if data_collection.get(profile) is None:
                         data_collection[profile] = {}
                     if data_collection[profile].get(viz) is None:
                         data_collection[profile][viz] = {}
-                    data_collection[profile][viz][data['scenario']] = data['content'].copy()
+                    data_collection[profile][viz][scenario] = data['content'].copy()
 
         for profile, viz_options in data_collection.items():
             for viz, data in viz_options.items():
