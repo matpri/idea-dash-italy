@@ -132,8 +132,12 @@ class DataHandler:
             for viz, data in viz_options.items():
                 if self.processed_data.get(profile) is None:
                     self.processed_data[profile] = {}
-                self.processed_data[profile][viz] = self.profiles[profile].viz_options[viz]['process'](
-                    data_collection[profile][viz])
+                try:
+                    self.processed_data[profile][viz] = self.profiles[profile].viz_options[viz]['process'](
+                        data_collection[profile][viz])
+                except Exception as e:
+                    print(f"Error processing data for {profile} - {viz}: {e}")
+                    self.processed_data[profile][viz] = pd.DataFrame()
 
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
