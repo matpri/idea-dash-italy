@@ -1058,3 +1058,286 @@ Electricity|Storage|Pumped Hydro:
     group: Storage
     group_color: '#6a3d9a'
     name: Electricity|Storage|Pumped Hydro
+Electricity|Biogas:
+    color: '#000000'
+    group: Biogas
+    group_color: '#b2df8a'
+    name: Electricity|Biogas
+Electricity|Biomass:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass
+Electricity|Coal|IGCC:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|IGCC
+Electricity|Coal|Pulverized:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|Pulverized
+Electricity|Gas|CC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC
+Electricity|Gas|CG:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG
+Electricity|Gas|SC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC
+Electricity|Import:
+    color: '#000000'
+    group: Import
+    group_color: '#fb9a99'
+    name: Electricity|Import
+Electricity|Nuclear|Conventional:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|Conventional
+Electricity|Nuclear|SMR:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR
+Electricity|Oil|Diesel:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Diesel
+Electricity|Oil|Fuel Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil
+Electricity|Solar|PV:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV
+Electricity|Wind|2021:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|2021
+Electricity|Wind|New:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|New
+Electricity|Gas|Recip Engine|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/o CCS
+Electricity|Gas|Unspecified|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/ CCS
+Electricity|Gas|Unspecified|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/o CCS
+Electricity|Hydro|Baseload:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Baseload
+Electricity|Hydro|Reservoir:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Reservoir
+Electricity|Ocean|Wave:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Wave
+Electricity|Oil|Fuel Oil|Boiler:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|Boiler
+Electricity|Oil|Fuel Oil|CC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|CC
+Electricity|Oil|Fuel Oil|SC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|SC
+Electricity|Storage|Battery|Lead:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lead
+Electricity|Storage|Battery|Lithium|LFC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|LFC
+Electricity|Storage|Battery|Lithium|NMC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|NMC
+Electricity|Storage|Battery|VRF:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|VRF
+Electricity|Storage|Compressed Air:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Compressed Air
+Electricity|Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil
+Electricity|Solar|PVCentralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Centralized
+Electricity|Solar|PV|Decentralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Decentralized
+Electricity|Solar|CSP|Centralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Centralized
+Electricity|Solar|CSP|Decentralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Decentralized
+Electricity|Storage|Centralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Centralized
+Electricity|Storage|Decentralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Decentralized
+Electricity|Storage|Flywheel:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Flywheel
+Electricity|Wind||Onshore|Centralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Centralized
+Electricity|Wind|Onshore|Decentralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Decentralized
+Electricity|Wind|Offshore|Centralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Centralized
+Electricity|Wind|Offshore|Decentralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Decentralized
+Electricity|Ocean|Thermal:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Thermal
+Electricity|Ocean|Tidal:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Tidal
+Electricity|Hydrogen:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen
+Electricity|Biomass|Waste:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Waste
+Electricity|Biomass|Conventional:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Conventional
+Electricity|DR:
+    color: '#000000'
+    group: Demand response
+    group_color: '#fb9a99'
+    name: Electricity|DR
+Electricity|Hydro|Dam:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Dam
+Electricity|Nuclear|SMR|Gas Cooled:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Gas Cooled
+Electricity|Nuclear|SMR|Liquid Water:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Liquid Water
+Electricity|Nuclear|SMR|Metal Cooled:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Metal Cooled
+Electricity|Nuclear|SMR|Molten Salt:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Molten Salt
+Electricity|Gas|Conventional Fuel|Centralized|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Centralized|w/ CCS
+Electricity|Gas|Conventional Fuel|Centralized|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Centralized|w/o CCS
+Electricity|Gas|Conventional Fuel|Decentralized|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Decentralized|w/ CCS
+Electricity|Gas|Conventional Fuel|Decentralized|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Decentralized|w/o CCS
+
+
+

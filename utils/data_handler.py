@@ -73,6 +73,7 @@ class DataHandler:
                 table_dfs.append(df)
             df = pd.concat(table_dfs)
             df.value = pd.to_numeric(df.value, errors='coerce')
+            df['model'] = 'cef'
         else:
             url = f'http://206.12.95.102/results?key={self.api_key}&scenario={scenario}&model={profile}'
             print(url)
