@@ -73,6 +73,7 @@ def aggregate_db(db, scenario):
 
     # time to datetime object
     transmission_df['time'] = pd.to_datetime(transmission_df['time'])
+    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
@@ -119,6 +120,7 @@ def aggregate_db(db, scenario):
     out_df["variable"] = out_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     # time to datetime object
     out_df['time'] = pd.to_datetime(out_df['time'])
+    out_df['time'] = out_df['time'] - pd.Timedelta(hours=1)
     out_df['period'] = out_df['time'].dt.year
     # make period an int
     out_df['period'] = out_df['period'].astype(int)

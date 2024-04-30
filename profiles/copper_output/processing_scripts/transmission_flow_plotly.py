@@ -171,15 +171,13 @@ def process(selected):
         trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
-        trs["variable"] = trs.variable.apply(lambda x: x.split("to ")[1])
+        trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./profiles/natem_output/visualization_scripts/utils/arrow_coords.csv')
-    full_t['region'] = full_t['region'].map(utils.province_long)
-    full_t['variable'] = full_t['variable'].map(utils.province_long)
+    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
 
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)

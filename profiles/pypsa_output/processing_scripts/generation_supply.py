@@ -45,13 +45,12 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Generation']
+    supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
 
     # all times - 1 hour delta
-    supply_df['time'] = supply_df['time'] - pd.Timedelta(hours=1)
     supply_df['period'] = supply_df['time'].dt.year
     sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
     unique_dates = sub_supply['time'].dt.date.unique()
@@ -67,12 +66,13 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Flow']
+    transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
     transmission_df['time'] = pd.to_datetime(transmission_df['time'])
+    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
@@ -115,23 +115,8 @@ def aggregate_db(db, scenario):
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
-    out_df = db[classes == 'Storage Out']
-    out_df["variable"] = out_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-    # time to datetime object
-    out_df['time'] = pd.to_datetime(out_df['time'])
-    out_df['period'] = out_df['time'].dt.year
-    # make period an int
-    out_df['period'] = out_df['period'].astype(int)
 
-    out_df.drop(columns=['time'], inplace=True)
-    out_df['region'] = out_df['region'].map(utils.province_short).fillna(out_df['region'])
-    # aggregate the dim_name based on the tech_agg_COPPER dictionary
-    # change value from MWh to TWh
-    out_df['value'] = out_df['value'] / 1000000
-    # expand value to an entire year by multiplying by 365/12
-    out_df['value'] = out_df['value'] * 365 / len(unique_dates)
-
-    df = pd.concat([supply_df, transmission_df, out_df])
+    df = pd.concat([supply_df, transmission_df])
     # df = df[df.value != 0]
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 

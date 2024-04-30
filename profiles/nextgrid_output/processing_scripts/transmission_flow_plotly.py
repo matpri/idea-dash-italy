@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if (df.model == 'ECCC-NextGrid').any():
+        if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.startswith("Transmission flow|").any():
                 return True
         return False
@@ -158,7 +158,6 @@ def process(selected):
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
         trs['time'] = pd.to_datetime(trs['time'])
         # all times - 1 hour delta
-        trs['time'] = trs['time'] - pd.Timedelta(hours=1)
         trs['period'] = trs['time'].dt.year
         sub_transmission = trs[trs['period'] == trs['period'].min()]
         unique_dates = sub_transmission['time'].dt.date.unique()

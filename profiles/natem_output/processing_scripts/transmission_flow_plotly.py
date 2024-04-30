@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if (df.model == 'ESMIA-NATEM').any():
+        if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.startswith("Transmission flow|").any():
                 return True
         return False
@@ -95,6 +95,52 @@ def connection(row):
     else:
         return " <- ".join([row['variable'], row['region']])
 
+def preprocess(transmission, scenario="CER"):
+    """
+    Preprocess transmission data.
+
+    Parameters:
+        transmission (pd.DataFrame): Input DataFrame.
+        scenario (str): Scenario name.
+
+    Returns:
+        pd.DataFrame: Processed DataFrame.
+    """
+    transmission = transmission.drop(columns=['model', 'unit'])
+    prov_cord = pd.read_csv('./arrow_coords.csv')
+    transmission['time'] = pd.to_datetime(transmission['time'])
+
+    # all times - 1 hour delta
+    transmission['time'] = transmission['time'] - pd.Timedelta(hours=1)
+    transmission['period'] = transmission['time'].dt.year
+    sub_transmission = transmission[transmission['period'] == transmission['period'].min()]
+    unique_dates = sub_transmission['time'].dt.date.unique()
+    transmission = transmission.drop(columns=['time'])
+    transmission = transmission[transmission.value != 0]
+    transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
+    transmission["region"] = transmission.region.map(utils.province_short)
+    transmission["variable"] = transmission.variable.map(utils.province_short)
+    transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
+    transmission = transmission[transmission.region != transmission.variable]
+    transmission['connection'] = transmission.apply(lambda row: connection(row), axis=1)
+    transmission["period"] = transmission.period.astype(str)
+    transmission["scenario"] = scenario
+    transmission["value"] = transmission.value / 1000000
+    transmission["value"] = transmission["value"] * 365 / len(unique_dates)
+    # prov_cord has columns from_lon, from_lat, to_lon, to_lat and region, variable add the correct from_lon, from_lat, to_lon, to_lat to transmission based on region and variable
+    # Merge prov_cord into transmission
+    transmission = pd.merge(transmission, prov_cord, how='inner', left_on=['region', 'variable'],
+                            right_on=['region', 'variable'])
+
+    transmission['from_lat'] = transmission['from_lat'].astype(float)
+    transmission['from_lon'] = transmission['from_lon'].astype(float)
+    transmission['period'] = transmission['period'].astype(str)
+    transmission['start'] = transmission.apply(lambda row: split_connection(row)[0], axis=1)
+    transmission['end'] = transmission.apply(lambda row: split_connection(row)[1], axis=1)
+    transmission['line'] = transmission.apply(lambda row: " <-> ".join([row['start'], row['end']]), axis=1)
+    transmission['built'] = "new"
+    return transmission
+
 def process(selected):
     """
     Process transmission data and derive a DataFrame.
@@ -112,7 +158,6 @@ def process(selected):
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
         trs['time'] = pd.to_datetime(trs['time'])
         # all times - 1 hour delta
-        trs['time'] = trs['time'] - pd.Timedelta(hours=1)
         trs['period'] = trs['time'].dt.year
         sub_transmission = trs[trs['period'] == trs['period'].min()]
         unique_dates = sub_transmission['time'].dt.date.unique()
