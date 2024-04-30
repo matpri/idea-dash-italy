@@ -5,6 +5,7 @@ from profiles.nextgrid_output.processing_scripts import generation_capacity as n
 from profiles.natem_output.processing_scripts import generation_capacity as natem_generation_capacity
 from profiles.pithos_output.processing_scripts import generation_capacity as pithos_generation_capacity
 from profiles.pypsa_output.processing_scripts import generation_capacity as pypsa_generation_capacity
+from profiles.cef.processing_scripts import generation_capacity as cef_generation_capacity
 
 
 
@@ -18,7 +19,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    print("Checking for generation_capacity in variable column")
     try:
         if df.model.unique()[0] == "copper":
             return copper_generation_capacity.check(df)
@@ -30,6 +31,8 @@ def check(df):
             return pithos_generation_capacity.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_generation_capacity.check(df)
+        elif df.model.unique()[0] == "cef":
+            return cef_generation_capacity.check(df)
         else:
             return False
     except Exception as e:
@@ -54,6 +57,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_generation_capacity.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "cef":
+            df = cef_generation_capacity.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

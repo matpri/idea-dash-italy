@@ -49,7 +49,13 @@ def aggregate_db(db, scenario):
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
-    unique_dates = supply_df['time'].dt.date.unique()
+
+    # all times - 1 hour delta
+    supply_df['time'] = supply_df['time'] - pd.Timedelta(hours=1)
+    supply_df['period'] = supply_df['time'].dt.year
+    sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
+    unique_dates = sub_supply['time'].dt.date.unique()
+
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
     # aggregate the dim_name based on the tech_agg_COPPER dictionary
@@ -57,7 +63,6 @@ def aggregate_db(db, scenario):
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
     supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
-    supply_df['period'] = supply_df['time'].dt.year
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
@@ -68,7 +73,6 @@ def aggregate_db(db, scenario):
 
     # time to datetime object
     transmission_df['time'] = pd.to_datetime(transmission_df['time'])
-    unique_dates = transmission_df['time'].dt.date.unique()
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
@@ -115,8 +119,6 @@ def aggregate_db(db, scenario):
     out_df["variable"] = out_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     # time to datetime object
     out_df['time'] = pd.to_datetime(out_df['time'])
-
-    unique_dates = out_df['time'].dt.date.unique()
     out_df['period'] = out_df['time'].dt.year
     # make period an int
     out_df['period'] = out_df['period'].astype(int)

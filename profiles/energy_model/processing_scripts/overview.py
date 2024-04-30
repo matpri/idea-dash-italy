@@ -5,6 +5,7 @@ from profiles.nextgrid_output.processing_scripts import overview as nextgrid_ove
 from profiles.natem_output.processing_scripts import overview as natem_overview
 from profiles.pithos_output.processing_scripts import overview as pithos_overview
 from profiles.pypsa_output.processing_scripts import overview as pypsa_overview
+from profiles.cef.processing_scripts import overview as cef_overview
 
 
 
@@ -18,7 +19,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    print("Checking for overview in variable column")
     try:
         if df.model.unique()[0] == "copper":
             return copper_overview.check(df)
@@ -30,6 +31,8 @@ def check(df):
             return pithos_overview.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_overview.check(df)
+        elif df.model.unique()[0] == "cef":
+            return cef_overview.check(df)
         else:
             return False
     except Exception as e:
@@ -54,6 +57,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_overview.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "cef":
+            df = cef_overview.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

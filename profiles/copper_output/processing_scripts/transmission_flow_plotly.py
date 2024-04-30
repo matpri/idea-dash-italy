@@ -109,9 +109,12 @@ def preprocess(transmission, scenario="CER"):
     transmission = transmission.drop(columns=['model', 'unit'])
     prov_cord = pd.read_csv('./arrow_coords.csv')
     transmission['time'] = pd.to_datetime(transmission['time'])
-    unique_dates = transmission['time'].dt.date.unique()
+
+    # all times - 1 hour delta
+    transmission['time'] = transmission['time'] - pd.Timedelta(hours=1)
     transmission['period'] = transmission['time'].dt.year
-    transmission['period'] = transmission['period'].astype(int)
+    sub_transmission = transmission[transmission['period'] == transmission['period'].min()]
+    unique_dates = sub_transmission['time'].dt.date.unique()
     transmission = transmission.drop(columns=['time'])
     transmission = transmission[transmission.value != 0]
     transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
