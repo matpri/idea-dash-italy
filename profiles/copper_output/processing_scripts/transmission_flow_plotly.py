@@ -157,11 +157,12 @@ def process(selected):
         trs = trs[trs.variable.str.startswith("Flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
         trs['time'] = pd.to_datetime(trs['time'])
-        trs['day'] = trs['time'].dt.date
-        unique_dates = trs['day'].unique()
-
+        # all times - 1 hour delta
+        trs['time'] = trs['time'] - pd.Timedelta(hours=1)
         trs['period'] = trs['time'].dt.year
-        trs['period'] = trs['period'].astype(int)
+        sub_transmission = trs[trs['period'] == trs['period'].min()]
+        unique_dates = sub_transmission['time'].dt.date.unique()
+
         trs['value'] = trs['value'] / 1000
         trs['value'] = trs['value'] * 365 / len(unique_dates)
         # drop time
@@ -170,13 +171,16 @@ def process(selected):
         trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
-        trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])
+        trs["variable"] = trs.variable.apply(lambda x: x.split("to ")[1])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+    prov_cord = pd.read_csv('./profiles/natem_output/visualization_scripts/utils/arrow_coords.csv')
+    full_t['region'] = full_t['region'].map(utils.province_long)
+    full_t['variable'] = full_t['variable'].map(utils.province_long)
+
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
     full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
