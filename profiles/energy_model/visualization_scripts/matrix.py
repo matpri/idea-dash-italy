@@ -56,13 +56,14 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
         for i, scenario in enumerate(dfs):
             for j, other_scenario in enumerate(dfs):
                 if i == j:
-                    df = scenario[scenario['variable'].str.startswith(variable)]
+                    df = scenario
                     df = df.groupby(['time', 'variable']).sum(numeric_only=True).reset_index()
                     scen = scenario['scenario'].unique()[0]
                     subfig = go.Figure()
                     for tech in df['variable'].unique():
                         tech_df = df[df['variable'] == tech]
-                        subfig.add_bar(x=tech_df['time'], y=tech_df['value'], name=tech,
+                        color = utils.get_color(tech)
+                        subfig.add_bar(x=tech_df['time'], y=tech_df['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen}<br>Technology: {tech}<br>'
                                                      + 'Year: %{x}<br>Value: %{y:.2f}')
                     subfig.update_layout(barmode='relative')
@@ -70,9 +71,9 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     for trace in subfig.data:
                         fig.add_trace(trace, row=i + 1, col=j + 1)
                 else:
-                    df = scenario[scenario['variable'].str.startswith(variable)]
+                    df = scenario
                     df = df.groupby(['time']).sum(numeric_only=True).reset_index()
-                    other_df = other_scenario[other_scenario['variable'].str.startswith(variable)]
+                    other_df = other_scenario
                     other_df = other_df.groupby(['time', 'variable']).sum(numeric_only=True).reset_index()
                     diff = pd.merge(df, other_df, on=['time'], suffixes=('_base', '_test'))
                     diff['value'] = diff.value_test.fillna(0) - diff.value_base.fillna(0)
@@ -83,7 +84,8 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     subfig = go.Figure()
                     for tech in diff['variable'].unique():
                         tech_diff = diff[diff['variable'] == tech]
-                        subfig.add_bar(x=tech_diff['time'], y=tech_diff['value'], name=tech,
+                        color = utils.get_color(tech)
+                        subfig.add_bar(x=tech_diff['time'], y=tech_diff['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen} - {other_scen}<br>Technology: {tech}<br>'
                                                      + 'Year: %{x}<br>Difference: %{y:.2f}')
                     subfig.update_layout(barmode='relative')
@@ -93,7 +95,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     fig.update_layout(barmode='relative')
 
     except Exception as e:
-        print(title, 'plot:', e)
+        print('ERROR', title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
