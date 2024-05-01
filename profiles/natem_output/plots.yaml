@@ -263,7 +263,7 @@ Overview:
     unit: Billion $
     title: Capacity Cost
     x_label: Year
-    y_label: Billion Cost (Million $)
+    y_label: Capacity Cost (Billion $)
   FOM Cost:
     name: Cost
     unit: Million $
