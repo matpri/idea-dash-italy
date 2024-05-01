@@ -23,7 +23,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
-            data = data.sort_values(by=['time', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
+            data = data.sort_values(by=['time', 'scenario'])
 
             x = []
             x.append(data["time"].values)
