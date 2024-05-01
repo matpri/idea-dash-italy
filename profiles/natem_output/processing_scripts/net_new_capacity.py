@@ -18,7 +18,7 @@ def check(df):
     try:
         if (df.model == 'ESMIA-NATEM').any():
             if df.variable.str.startswith("Total generation capacity").any():
-                return True
+                return df[df.variable.str.startswith("Total generation capacity")].time.unique().size > 1
         return False
     except Exception as e:
         print("net new cap  check", e)
