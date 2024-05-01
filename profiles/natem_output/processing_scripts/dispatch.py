@@ -20,8 +20,8 @@ def check(df):
     print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'ESMIA-NATEM').any():
-            if df.variable.str.startswith("Generation|").any() or df.variable.str.startswith(
-                    "Flow|").any() or df.variable.str.startswith("Storage Out|").any() or df.variable.str.startswith("Storage In|").any():
+            if df.variable.str.startswith("Dispatch|").any() or df.variable.str.startswith(
+                    "Transmission flow|").any():
                 return True
         return False
     except Exception as e:
@@ -44,12 +44,12 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Generation']
+    supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
-    transmission_df = db[classes == 'Flow']
+    transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split("to ")[1])
     # aggregate df values by region, variable, time, hour
     transmission_df = transmission_df.groupby(["region", "variable", "time"]).sum().reset_index()
     # rename from and variable based on utils.province_short
