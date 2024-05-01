@@ -38,11 +38,13 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
+        df = db[db.variable.str.startswith("greenhouse_gas_emissions|")].copy()
         df.columns = df.columns.str.lower()
         df['variable'] = df["variable"].apply(lambda x: x.split("|")[1])
         df = df.rename(columns={'year': 'time'})
-        # remove all variables that contain Total
+        df['region'] = df.region.map(utils.province_short).fillna(df.region)
         df = df[df['variable'] == 'Electricity']
+        # rename canada to can
         df['region'] = 'CAN'
         dfs.append(df)
     full_df = pd.concat(dfs)

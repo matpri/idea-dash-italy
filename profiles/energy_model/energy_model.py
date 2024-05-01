@@ -8,6 +8,7 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
 from profiles.energy_model.callbacks import (
     overview as overview_callbacks,
+matrix as matrix_callbacks,
     emissions as emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
     net_new_capacity as net_new_capacity_callbacks,
@@ -23,6 +24,7 @@ from profiles.energy_model.callbacks import (
 )
 from profiles.energy_model.processing_scripts import (
     overview as overview_processing,
+matrix as matrix_processing,
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
     net_new_capacity as net_new_capacity_processing,
@@ -36,6 +38,7 @@ from profiles.energy_model.processing_scripts import (
 )
 from profiles.energy_model.visualization_scripts import (
     overview as overview_viz,
+matrix as matrix_viz,
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
     net_new_capacity as net_new_capacity_viz,
@@ -59,6 +62,7 @@ class energy_modelsOutput(BaseProfile):
 
     plot_order = [
         'Overview',
+        'Comparison Matrix',
         'Emissions',
         'Capacity',
         'Net New Capacity',
@@ -82,6 +86,15 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link
+            },
+        'Comparison Matrix':
+            {
+                'check': matrix_processing.check,
+                'db_check': matrix_processing.check,
+                'process': matrix_processing.process,
+                'db_process': matrix_processing.process,
+                'viz': matrix_viz.plot,
+                'callback': matrix_callbacks.link
             },
         'Emissions':
             {

@@ -156,15 +156,15 @@ Total Cost:
     y_label: Total Cost (Billion $)
 Capacity Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
     title: Capacity Cost by Year
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
   Trend Over Years:
     title: Capacity Cost by Year
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
   Pie Chart:
     title: Capacity Cost
     x_label:
@@ -172,7 +172,7 @@ Capacity Cost:
   By Region:
     title: Capacity Cost by Region
     x_label: Region
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
 FOM Cost:
   name: Cost
   unit: Million $
@@ -260,10 +260,10 @@ Overview:
     y_label: Total Cost (Billion $)
   Capacity Cost:
     name: Cost
-    unit: Million $
+    unit: Billion $
     title: Capacity Cost
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Billion Cost (Million $)
   FOM Cost:
     name: Cost
     unit: Million $

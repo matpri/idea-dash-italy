@@ -144,15 +144,15 @@ Total Cost:
     y_label: Total Cost (Billion $)
 Capacity Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
     title: Capacity Cost by Year
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
   Trend Over Years:
     title: Capacity Cost by Year
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
   Pie Chart:
     title: Capacity Cost
     x_label:
@@ -248,10 +248,65 @@ Overview:
     y_label: Total Cost (Billion $)
   Capacity Cost:
     name: Cost
-    unit: Million $
+    unit: Billion $
     title: Capacity Cost
     x_label: Year
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
+  FOM Cost:
+    name: Cost
+    unit: Million $
+    title: Fixed O&M Cost
+    x_label: Year
+    y_label: Fixed O&M Cost (Million $)
+  VOM Cost:
+      name: Cost
+      unit: Million $
+      title: Variable O&M Cost
+      x_label: Year
+      y_label: Variable O&M Cost (Million $)
+Matrix:
+  Capacity:
+    name: Capacity
+    unit: GW
+    title: Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  New Capacity:
+    name: New Capacity
+    unit: GW
+    title: New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Net New Capacity:
+    name: Net New Capacity
+    unit: GW
+    title: Net New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Emissions:
+    name: Emissions
+    unit: MtCO2eq
+    title: Emissions
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Supply:
+    name: Supply
+    unit: TWh
+    title: Supply
+    x_label: Year
+    y_label: Supply (TWh)
+  Total Cost:
+    name: Cost
+    unit: Billion $
+    title: Total Cost
+    x_label: Year
+    y_label: Total Cost (Billion $)
+  Capacity Cost:
+    name: Cost
+    unit: Billion $
+    title: Capacity Cost
+    x_label: Year
+    y_label: Capacity Cost (Billion $)
   FOM Cost:
     name: Cost
     unit: Million $
