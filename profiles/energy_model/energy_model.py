@@ -8,7 +8,7 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
 from profiles.energy_model.callbacks import (
     overview as overview_callbacks,
-matrix as matrix_callbacks,
+    matrix as matrix_callbacks,
     emissions as emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
     net_new_capacity as net_new_capacity_callbacks,
@@ -19,12 +19,14 @@ matrix as matrix_callbacks,
     cost_fom as cost_fom_callbacks,
     cost_gencap as cost_gencap_callbacks,
     cost_total as cost_total_callbacks,
+    transmission_capacity as transmission_capacity_callbacks,
+    transmission_flow as transmission_flow_callbacks,
     settings as settings_callbacks
 
 )
 from profiles.energy_model.processing_scripts import (
     overview as overview_processing,
-matrix as matrix_processing,
+    matrix as matrix_processing,
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
     net_new_capacity as net_new_capacity_processing,
@@ -35,10 +37,12 @@ matrix as matrix_processing,
     cost_fom as cost_fom_processing,
     cost_gencap as cost_gencap_processing,
     cost_total as cost_total_processing,
+    transmission_capacity as transmission_capacity_processing,
+    transmission_flow as transmission_flow_processing
 )
 from profiles.energy_model.visualization_scripts import (
     overview as overview_viz,
-matrix as matrix_viz,
+    matrix as matrix_viz,
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
     net_new_capacity as net_new_capacity_viz,
@@ -49,6 +53,8 @@ matrix as matrix_viz,
     cost_fom as cost_fom_viz,
     cost_gencap as cost_gencap_viz,
     cost_total as cost_total_viz,
+    transmission_capacity as transmission_capacity_viz,
+    transmission_flow as transmission_flow_viz
 )
 
 
@@ -186,6 +192,24 @@ class energy_modelsOutput(BaseProfile):
                 'viz': cost_vom_viz.plot,
                 'callback': cost_vom_callbacks.link
             },
+        'Transmission Capacity':
+            {
+                'check': transmission_capacity_processing.check,
+                'db_check': transmission_capacity_processing.check,
+                'process': transmission_capacity_processing.process,
+                'db_process': transmission_capacity_processing.process,
+                'viz': transmission_capacity_viz.plot,
+                'callback': transmission_capacity_callbacks.link
+            },
+        'Transmission Flow':
+            {
+                'check': transmission_flow_processing.check,
+                'db_check': transmission_flow_processing.check,
+                'process': transmission_flow_processing.process,
+                'db_process': transmission_flow_processing.process,
+                'viz': transmission_flow_viz.plot,
+                'callback': transmission_flow_callbacks.link
+            }
 
     }
 
