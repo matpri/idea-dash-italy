@@ -45,21 +45,27 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         if db.model.unique()[0] == "copper":
             df = copper_overview.process({scenario_name: db})
+            df.model = "COPPER"
             dfs.append(df)
         elif db.model.unique()[0] == "ECCC-NextGrid":
             df = nextgrid_overview.process({scenario_name: db})
+            df.model = "ECCC-NextGrid"
             dfs.append(df)
         elif db.model.unique()[0] == "ESMIA-NATEM":
             df = natem_overview.process({scenario_name: db})
+            df.model = "ESMIA-NATEM"
             dfs.append(df)
         elif db.model.unique()[0] == "ESMIA-PITHOS":
             df = pithos_overview.process({scenario_name: db})
+            df.model = "ESMIA-PITHOS"
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_overview.process({scenario_name: db})
+            df.model = "NRCan-PyPsa"
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_overview.process({scenario_name: db})
+            df.model = "cef"
             dfs.append(df)
         else:
             print("Model not implemented")

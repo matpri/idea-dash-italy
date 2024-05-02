@@ -2,8 +2,38 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
+patterns = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot']
+scenario_colors = {}
+scenario_patterns = {}
+model_colors = {}
+model_patterns = {}
 
-def render_plot(type, df):
+
+def get_scenario_color(scenario):
+    if scenario not in scenario_colors:
+        scenario_colors[scenario] = f"hsl({len(scenario_colors) * 360 / 12}, 50%, 50%)"
+    return scenario_colors[scenario]
+
+
+def get_model_color(model):
+    if model not in model_colors:
+        model_colors[model] = f"hsl({len(model_colors) * 360 / 12}, 50%, 50%)"
+    return model_colors[model]
+
+
+def get_scenario_pattern(scenario):
+    if scenario not in scenario_patterns:
+        scenario_patterns[scenario] = patterns[len(scenario_patterns) % len(patterns)]
+    return scenario_patterns[scenario]
+
+
+def get_model_pattern(model):
+    if model not in model_patterns:
+        model_patterns[model] = patterns[len(model_patterns) % len(patterns)]
+    return model_patterns[model]
+
+
+def render_plot(type, df, group_by_model, group_by_scenario):
     from profiles.energy_model.utils import plot_settings
     print('rendering plot', type)
     df = df[df.variable == type].copy()
@@ -11,10 +41,11 @@ def render_plot(type, df):
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
     unit = plot_info['unit']
-    return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    return plot_overview(df, group_by_model, group_by_scenario, plot_info['title'], plot_info['x_label'],
+                         plot_info['y_label'], name, unit)
 
 
-def plot_overview(df, title, x_label, y_label, name, unit):
+def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label, name, unit):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -24,14 +55,49 @@ def plot_overview(df, title, x_label, y_label, name, unit):
     )
     try:
 
-        scenarios = df.scenario.unique().tolist()
+        if group_by_model:
+            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            models = df.model.unique().tolist()
+            for model in models:
+                data = df[df.model == model]
+                for i, scenario in enumerate(data.scenario.unique().tolist()):
+                    data_scenario = data[data.scenario == scenario]
+                    data_scenario = data_scenario.sort_values(by=['time'])
+                    pattern = get_scenario_pattern(scenario)
+                    fig.add_scatter(x=data_scenario["time"], y=data_scenario["value"], name=f'{model} - {scenario}',
+                                    mode='lines+markers',
+                                    line=dict(color=get_model_color(model),
+                                              dash=pattern,
+                                              width=2),
+                                    fill=None if i == 0 else 'tonexty',
+                                    hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+        elif group_by_scenario:
+            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            scenarios = df.scenario.unique().tolist()
+            for scenario in scenarios:
+                data = df[df.scenario == scenario]
+                sub_fig = go.Figure()
+                for i, model in enumerate(data.model.unique().tolist()):
+                    data_model = data[data.model == model]
+                    data_model = data_model.sort_values(by=['time'])
+                    pattern = get_model_pattern(model)
+                    sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {scenario}',
+                                        mode='lines+markers',
+                                        line=dict(color=get_scenario_color(scenario),
+                                                  dash=pattern,
+                                                  width=2,
+                                                  ),
+                                        fill=None if i == 0 else 'tonexty',
+                                        hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                fig.add_traces(data=sub_fig.data)
+        else:
+            scenarios = df.scenario.unique().tolist()
+            for scenario in scenarios:
+                data = df[df.scenario == scenario]
+                data = data.sort_values(by=['time'])
 
-        for scenario in scenarios:
-            data = df[df.scenario == scenario]
-            data = data.sort_values(by=['time'])
-
-            fig.add_scatter(x=data["time"], y=data["value"], name=scenario, mode='lines+markers',
-                            hovertemplate=f'<b>{scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                fig.add_scatter(x=data["time"], y=data["value"], name=scenario, mode='lines+markers',
+                                hovertemplate=f'<b>{scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
         if df.empty:
@@ -75,6 +141,22 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
+        dmc.Switch(
+            label='Group by Model',
+            checked=False,
+            id={
+                'type': 'energy_model-overview-groupby_model-switch',
+                'index': window_id,
+            },
+        ),
+        dmc.Switch(
+            label='Group by Scenario',
+            checked=False,
+            id={
+                'type': 'energy_model-overview-groupby_scenario-switch',
+                'index': window_id,
+            },
+        ),
         dmc.Button('Download Data', id={'type': 'energy_model-overview-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -83,7 +165,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df),
+        figure=render_plot(classes[0], df, False, False),
         id={
             'type': 'figure',
             'index': window_id,

@@ -22,6 +22,14 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'energy_model-overview-groupby_model-switch',
+            'index': ALL
+        }, 'checked'),
+        Input({
+            'type': 'energy_model-overview-groupby_scenario-switch',
+            'index': ALL
+        }, 'checked'),
+        Input({
             'type': 'energy_model-overview-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -39,7 +47,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _download, _canvas, _data):
+    def update_overview(_p_type, _groupby_model, _groupby_scenario, _download, _canvas, _data):
         print('updating overview plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -65,6 +73,7 @@ def link(app):
 
         print('idx:', idx, 'plot type:', _p_type[idx])
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Power System Models']['Overview'])
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Power System Models']['Overview'],
+                                   _groupby_model[idx], _groupby_scenario[idx])
 
         return _canvas, [dash.no_update for _ in _data]
