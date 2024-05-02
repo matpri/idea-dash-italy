@@ -10,6 +10,15 @@ from dash import html, Output, Input
 import profiles
 
 
+model_mapping = {
+    'copper': ['COPPER Output', 'Power System Models'],
+    'cef': ['Canada Energy Futures', 'Power System Models'],
+    'ECCC-NextGrid': ['ECCC-NextGrid Output','Power System Models'],
+    'ESMIA-NATEM': ['ESMIA-NATEM Output','Power System Models'],
+    'ESMIA-PITHOS': ['ESMIA-PITHOS Output','Power System Models'],
+    'NRCAN-PyPsa': ['NRCAN-PyPsa Output','Power System Models'],
+}
+
 class DataHandler:
     """
     Class responsible for handling data and generating visualizations.
@@ -196,9 +205,14 @@ class DataHandler:
 
         self.data[filename]['content'] = df
 
+        model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+
+        profile_options = model_mapping.get(model, None)
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in profile_options} if profile_options else self.profiles
+
         visualizations = {}
         selected = {}
-        for profile_name, profile in self.profiles.items():
+        for profile_name, profile in profiles_to_check.items():
             for viz_name, viz_dict in profile.viz_options.items():
                 # if viz_name not in visualizations:
                 check_func = viz_dict.get('check')
