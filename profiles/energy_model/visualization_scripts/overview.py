@@ -8,17 +8,26 @@ scenario_patterns = {}
 model_colors = {}
 model_patterns = {}
 
+def color_to_rgba(color, alpha=0.2):
+    import colorsys
+    h, l, s = color[4:-1].split(', ')
+    h = float(h) / 360  # Convert degree to ratio
+    l = float(l[:-1]) / 100  # Remove '%' and convert percentage to ratio
+    s = float(s[:-1]) / 100  # Remove '%' and convert percentage to ratio
+    r, g, b = [x * 255.0 for x in colorsys.hls_to_rgb(h, l, s)]
+    return f"rgba({int(r)},{int(g)},{int(b)},{alpha})"
 
-def get_scenario_color(scenario):
+def get_scenario_color(scenario, alpha=0.9):
     if scenario not in scenario_colors:
         scenario_colors[scenario] = f"hsl({len(scenario_colors) * 360 / 12}, 50%, 50%)"
-    return scenario_colors[scenario]
+    color = scenario_colors[scenario]
+    return color_to_rgba(color, alpha)
 
-
-def get_model_color(model):
+def get_model_color(model, alpha=0.9):
     if model not in model_colors:
         model_colors[model] = f"hsl({len(model_colors) * 360 / 12}, 50%, 50%)"
-    return model_colors[model]
+    color = model_colors[model]
+    return color_to_rgba(color, alpha)
 
 
 def get_scenario_pattern(scenario):
@@ -70,6 +79,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                               dash=pattern,
                                               width=2),
                                     fill=None if i == 0 else 'tonexty',
+                                    fillcolor=get_model_color(model, 0.2),
                                     hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
         elif group_by_scenario:
             df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
@@ -88,6 +98,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                                   width=2,
                                                   ),
                                         fill=None if i == 0 else 'tonexty',
+                                        fillcolor=get_scenario_color(scenario, 0.2),
                                         hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
         else:
@@ -141,19 +152,16 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
-        dmc.Switch(
-            label='Group by Model',
-            checked=False,
+        dmc.Select(
+            label='Group By',
+            value=1,
+            data=[
+                {'label': 'No Grouping', 'value': 0},
+                {'label': 'Group by Model', 'value': 1},
+                {'label': 'Group by Scenario', 'value': 2},
+            ],
             id={
-                'type': 'energy_model-overview-groupby_model-switch',
-                'index': window_id,
-            },
-        ),
-        dmc.Switch(
-            label='Group by Scenario',
-            checked=False,
-            id={
-                'type': 'energy_model-overview-groupby_scenario-switch',
+                'type': 'energy_model-overview-groupby-toggle',
                 'index': window_id,
             },
         ),
@@ -165,7 +173,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, False, False),
+        figure=render_plot(classes[0], df, True, False),
         id={
             'type': 'figure',
             'index': window_id,
@@ -176,5 +184,7 @@ def plot(df, window_id):
             'width': '100%',
             'height': '100%'
         }
+
     )
+
     return widget_layout, plot_layout
