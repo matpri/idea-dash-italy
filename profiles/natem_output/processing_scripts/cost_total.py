@@ -208,5 +208,5 @@ def process(data):
         dfs.append(total_cost)
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
-    full_df['value'] = full_df['value'].div(1e9)
+    full_df['value'] = full_df['value'].div(1e6)
     return full_df
