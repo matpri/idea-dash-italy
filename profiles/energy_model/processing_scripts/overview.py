@@ -65,6 +65,7 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_overview.process({scenario_name: db})
+            df['scenario'] = 'CEF|' + df['scenario']
             df.model = "cef"
             dfs.append(df)
         else:

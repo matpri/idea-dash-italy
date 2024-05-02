@@ -60,6 +60,7 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_generation_supply.process({scenario_name: db})
+            df['scenario'] = 'CEF|' + df['scenario']
             dfs.append(df)
         else:
             print("Model not implemented")
