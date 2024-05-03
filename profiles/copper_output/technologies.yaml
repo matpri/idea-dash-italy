@@ -1073,3 +1073,28 @@ solar_recon:
     group: Solar
     group_color: '#ffff99'
     name: solar_recon
+hydro_daily_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_daily_renewal
+hydro_monthly_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_monthly_renewal
+ror_hydro_renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ror_hydro_renewal
+Electricity|Gas|CC|Backup|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|Backup|w/o CCS
+Electricity|Gas|CC|RNG|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|RNG|w/o CCS

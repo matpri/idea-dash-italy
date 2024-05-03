@@ -1073,3 +1073,110 @@ solar_recon:
     group: Solar
     group_color: '#ffff99'
     name: solar_recon
+
+Electricity|Biomass|Conventional:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Conventional
+Electricity|Biomass|Waste:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Waste
+Electricity|DR:
+    color: '#000000'
+    group: DR
+    group_color: '#fb9a99'
+    name: Electricity|DR
+Electricity|Hydro|Reservoir:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Reservoir
+Electricity|Hydro|Baseload:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Baseload
+Electricity|Gas|Recip Engine|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/o CCS
+Electricity|Gas|Recip Engine|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/ CCS
+Electricity|Gas|Unspecified|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/o CCS
+Electricity|Gas|Unspecified|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/ CCS
+Electricity|Nuclear|SMR:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR
+Electricity|Nuclear|Conventional:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|Conventional
+Electricity|Solar|PV:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV
+Electricity|Oil|Diesel:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Diesel
+Electricity|Oil|Fuel Oil|Boiler:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|Boiler
+Electricity|Oil|Fuel Oil|CC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|CC
+Electricity|Oil|Fuel Oil|SC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|SC
+Electricity|Storage|Battery|Lead:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lead
+Electricity|Storage|Battery|Lithium|LFC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|LFC
+Electricity|Storage|Battery|Lithium|NMC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|NMC
+Electricity|Storage|Battery|VRF:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|VRF
+Electricity|Storage|Compressed Air:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Compressed Air
+

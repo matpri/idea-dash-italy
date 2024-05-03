@@ -1073,3 +1073,79 @@ solar_recon:
     group: Solar
     group_color: '#ffff99'
     name: solar_recon
+Electricity|Biogas:
+    color: '#000000'
+    group: Biogas
+    group_color: '#b2df8a'
+    name: Electricity|Biogas
+Electricity|Biomass:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass
+Electricity|Coal|IGCC:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|IGCC
+Electricity|Coal|Pulverized:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|Pulverized
+Electricity|Gas|CC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC
+Electricity|Gas|CG:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG
+Electricity|Gas|SC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC
+Electricity|Import:
+    color: '#000000'
+    group: Import
+    group_color: '#fb9a99'
+    name: Electricity|Import
+Electricity|Nuclear|Conventional:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|Conventional
+Electricity|Nuclear|SMR:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR
+Electricity|Oil|Diesel:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Diesel
+Electricity|Oil|Fuel Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil
+Electricity|Solar|PV:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV
+Electricity|Wind|2021:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|2021
+Electricity|Wind|New:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|New
+

@@ -1073,3 +1073,41 @@ solar_recon:
     group: Solar
     group_color: '#ffff99'
     name: solar_recon
+
+Electricity|Gas|Unspecified|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/ CCS
+Electricity|Nuclear|SMR:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR
+Electricity|Nuclear|Conventional:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|Conventional
+
+Electricity|Biogas:
+    color: '#000000'
+    group: Biogas
+    group_color: '#b2df8a'
+    name: Electricity|Biogas
+Electricity|Biomass:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass
+Electricity|Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil
+Electricity|Solar|PV:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Centralized
+

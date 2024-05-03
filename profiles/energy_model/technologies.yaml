@@ -1208,11 +1208,6 @@ Electricity|Oil:
     group: Fossil fuel liquid
     group_color: '#ffaa33'
     name: Electricity|Oil
-Electricity|Solar|PVCentralized:
-    color: '#000000'
-    group: Solar
-    group_color: '#ffff99'
-    name: Electricity|Solar|PC|Centralized
 Electricity|Solar|PV|Decentralized:
     color: '#000000'
     group: Solar
@@ -1404,7 +1399,35 @@ Electricity|Wind|Onshore|Centralized:
     group_color: '#b2df8a'
     name: Electricity|Wind|Onshore|Centralized
 
+Electricity|Gas|Recip Engine|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/ CCS
 
 
-
-
+hydro_daily_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_daily_renewal
+hydro_monthly_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_monthly_renewal
+ror_hydro_renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ror_hydro_renewal
+Electricity|Gas|CC|Backup|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|Backup|w/o CCS
+Electricity|Gas|CC|RNG|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|RNG|w/o CCS
