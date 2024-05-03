@@ -62,7 +62,10 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     subfig = go.Figure()
                     for tech in df['variable'].unique():
                         tech_df = df[df['variable'] == tech]
-                        color = utils.get_color(tech)
+                        if aggregate:
+                            color = utils.get_group_colors(tech)
+                        else:
+                            color = utils.get_color(tech)
                         subfig.add_bar(x=tech_df['time'], y=tech_df['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen}<br>Technology: {tech}<br>'
                                                      + 'Year: %{x}<br>Value: %{y:.2f}')
@@ -84,7 +87,10 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     subfig = go.Figure()
                     for tech in diff['variable'].unique():
                         tech_diff = diff[diff['variable'] == tech]
-                        color = utils.get_color(tech)
+                        if aggregate:
+                            color = utils.get_group_colors(tech)
+                        else:
+                            color = utils.get_color(tech)
                         subfig.add_bar(x=tech_diff['time'], y=tech_diff['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen} - {other_scen}<br>Technology: {tech}<br>'
                                                      + 'Year: %{x}<br>Difference: %{y:.2f}')

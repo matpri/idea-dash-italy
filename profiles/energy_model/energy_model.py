@@ -21,6 +21,7 @@ from profiles.energy_model.callbacks import (
     cost_total as cost_total_callbacks,
     transmission_capacity as transmission_capacity_callbacks,
     transmission_flow as transmission_flow_callbacks,
+    comparison as comparison_callbacks,
     settings as settings_callbacks
 
 )
@@ -54,7 +55,8 @@ from profiles.energy_model.visualization_scripts import (
     cost_gencap as cost_gencap_viz,
     cost_total as cost_total_viz,
     transmission_capacity as transmission_capacity_viz,
-    transmission_flow as transmission_flow_viz
+    transmission_flow as transmission_flow_viz,
+    comparison as comparison_viz
 )
 
 
@@ -68,6 +70,7 @@ class energy_modelsOutput(BaseProfile):
 
     plot_order = [
         'Overview',
+        'Comparison',
         'Comparison Matrix',
         'Emissions',
         'Capacity',
@@ -92,6 +95,15 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link
+            },
+        'Comparison':
+            {
+                'check': matrix_processing.check,
+                'db_check': matrix_processing.check,
+                'process': matrix_processing.process,
+                'db_process': matrix_processing.process,
+                'viz': comparison_viz.plot,
+                'callback': comparison_callbacks.link
             },
         'Comparison Matrix':
             {
