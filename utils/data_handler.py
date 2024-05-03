@@ -14,7 +14,7 @@ model_mapping = {
     'copper': ['COPPER Output', 'Power System Models'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid Output','Power System Models'],
-    'ESMIA-NATEM': ['ESMIA-NATEM Output','Power System Models'],
+    'NATEM-POWER': ['NATEM-POWER Output','Power System Models'],
     'ESMIA-PITHOS': ['ESMIA-PITHOS Output','Power System Models'],
     'NRCAN-PyPsa': ['NRCAN-PyPsa Output','Power System Models'],
 }

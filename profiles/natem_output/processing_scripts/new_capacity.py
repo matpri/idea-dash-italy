@@ -14,7 +14,7 @@ def check(df):
     """
     print("Checking for net new cap in variable column")
     try:
-        if (df.model == 'ESMIA-NATEM').any():
+        if (df.model == 'NATEM-POWER').any():
             if df.variable.str.startswith("New generation capacity|").any():
                 return True
         return False

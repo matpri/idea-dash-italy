@@ -17,7 +17,11 @@ def check(df):
     try:
         if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.startswith("Transmission flow|").any():
-                return True
+                test_df = df.copy()
+                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("|")[1])
+                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("to ")[1])
+                test_df = test_df[test_df.region != test_df.variable]
+                return test_df.value.sum() != 0
         return False
     except Exception as e:
         print("transmission check", e)

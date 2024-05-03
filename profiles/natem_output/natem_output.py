@@ -57,7 +57,7 @@ from profiles.natem_output.visualization_scripts import (
 
 
 class NATEMOutput(BaseProfile):
-    name = 'ESMIA-NATEM Output'
+    name = 'NATEM-POWER Output'
     db_name = 'natem'
     color = 'yellow 8'
     description = (

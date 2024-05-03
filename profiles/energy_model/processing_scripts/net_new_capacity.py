@@ -24,7 +24,7 @@ def check(df):
             return copper_net_new_capacity.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_net_new_capacity.check(df)
-        elif df.model.unique()[0] == "ESMIA-NATEM":
+        elif df.model.unique()[0] == "NATEM-POWER":
             return natem_net_new_capacity.check(df)
         elif df.model.unique()[0] == "ESMIA-PITHOS":
             return pithos_net_new_capacity.check(df)
@@ -46,7 +46,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "ECCC-NextGrid":
             df = nextgrid_net_new_capacity.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "ESMIA-NATEM":
+        elif db.model.unique()[0] == "NATEM-POWER":
             df = natem_net_new_capacity.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "ESMIA-PITHOS":

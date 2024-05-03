@@ -25,7 +25,7 @@ def check(df):
             return copper_emissions.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_emissions.check(df)
-        elif df.model.unique()[0] == "ESMIA-NATEM":
+        elif df.model.unique()[0] == "NATEM-POWER":
             return natem_emissions.check(df)
         elif df.model.unique()[0] == "ESMIA-PITHOS":
             return pithos_emissions.check(df)
@@ -49,7 +49,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "ECCC-NextGrid":
             df = nextgrid_emissions.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "ESMIA-NATEM":
+        elif db.model.unique()[0] == "NATEM-POWER":
             df = natem_emissions.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "ESMIA-PITHOS":
