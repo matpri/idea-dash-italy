@@ -113,6 +113,8 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
             file = chip['file']
             profile = chip['profile']
             data_handler.data[file]['selected'][profile] = values[i]
+        for i, ls in enumerate(ctx.states_list[2]):
+            file = ls['id']['file']
             data_handler.data[file]['scenario'] = scenario_names[i]
         data_handler.process_data()
 
