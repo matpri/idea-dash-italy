@@ -136,10 +136,11 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
                 print(profile)
                 module = profile_modules[profile]
                 profile_module = __import__(module, fromlist=[profile])
-                og_pattern = profile_module.utils.pattern_from_key(og_scenario)
                 if profile == 'Power System Models':
                     model = data_handler.data[file]['content']['model'].unique()[0]
                     scenario = model + '|' + scenario
+                    og_scenario = model + '|' + og_scenario
+                og_pattern = profile_module.utils.pattern_from_key(og_scenario)
                 profile_module.utils.pattern_dict[scenario] = og_pattern
 
         data_handler.process_data()
