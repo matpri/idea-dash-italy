@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if (df.model == 'NRCan-PyPsa').any():
+        if (df.model == 'ESMIA-PITHOS').any():
             if df.variable.str.startswith("Transmission flow|").any():
                 return True
         return False

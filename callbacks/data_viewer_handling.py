@@ -2,8 +2,21 @@ import dash
 import dash_mantine_components as dmc
 from dash import html, Input, Output, State, ALL
 
+
 from components import ids
 
+profile_modules = {
+    'COPPER Output': 'profiles.copper_output',
+    'COPPER Input': 'profiles.copper_input',
+    'SILVER Output': 'profiles.silver_output',
+    'Canada Energy Futures': 'profiles.cef',
+    'ECCC-NextGrid Output': 'profiles.nextgrid_output',
+    'NATEM-POWER Output': 'profiles.natem_output',
+    'ESMIA-PITHOS Output': 'profiles.pithos_output',
+    'NRCAN-PyPsa Output': 'profiles.pypsa_output',
+    'Power System Models': 'profiles.energy_model',
+
+}
 
 def link(app):
     app.callback(
@@ -115,7 +128,20 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
             data_handler.data[file]['selected'][profile] = values[i]
         for i, ls in enumerate(ctx.states_list[2]):
             file = ls['id']['file']
+            og_scenario = data_handler.data[file]['scenario']
             data_handler.data[file]['scenario'] = scenario_names[i]
+            profiles = list(data_handler.data[file]['selected'].keys())
+            for profile in profiles:
+                scenario = scenario_names[i]
+                print(profile)
+                module = profile_modules[profile]
+                profile_module = __import__(module, fromlist=[profile])
+                og_pattern = profile_module.utils.pattern_from_key(og_scenario)
+                if profile == 'Power System Models':
+                    model = data_handler.data[file]['content']['model'].unique()[0]
+                    scenario = model + '|' + scenario
+                profile_module.utils.pattern_dict[scenario] = og_pattern
+
         data_handler.process_data()
 
         return not is_open, 1 if n_click is None else n_click + 1
