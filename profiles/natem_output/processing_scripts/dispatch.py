@@ -93,7 +93,7 @@ def aggregate_db(db, scenario):
 
     # time as datetime
     agg_df["time"] = pd.to_datetime(agg_df["time"])
-    agg_df["time"] = agg_df["time"] - pd.Timedelta(hours=1)
+    # agg_df["time"] = agg_df["time"] - pd.Timedelta(hours=1)
     # for leap years adjust each time entry that is after February
     agg_df.loc[agg_df["time"].dt.is_leap_year & (agg_df["time"].dt.month > 2), "time"] += pd.DateOffset(days=1)
 
