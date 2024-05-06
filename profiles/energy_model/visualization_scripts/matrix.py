@@ -73,6 +73,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     subfig.update_yaxes(showgrid=True)
                     for trace in subfig.data:
                         fig.add_trace(trace, row=i + 1, col=j + 1)
+                    fig.update_layout(barmode='relative')
                 else:
                     df = scenario
                     df = df.groupby(['time']).sum(numeric_only=True).reset_index()
