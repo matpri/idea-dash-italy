@@ -7,19 +7,23 @@ from plotly.subplots import make_subplots
 from profiles.energy_model import utils
 
 
-def render_plot(type, df, scenarios, aggregate):
+def render_plot(type, df, scenarios, aggregate, region):
     from profiles.energy_model.utils import plot_settings
     print('rendering plot', type)
     df = df[df.variable.str.startswith(type + '|')]
+    df = df[df.region == region]
 
     plot_info = plot_settings['Matrix'][type]
     name = plot_info['name']
     unit = plot_info['unit']
-    return plot_matrix(df, type, scenarios, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    return plot_matrix(df, type, scenarios, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                       name, unit)
 
 
 def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label, name, unit):
-    fig = make_subplots(rows=len(scenarios), cols=len(scenarios), shared_xaxes=True, shared_yaxes=True, vertical_spacing=0.02, horizontal_spacing=0.02, subplot_titles=[scenario for scenario in scenarios])
+    fig = make_subplots(rows=len(scenarios), cols=len(scenarios), shared_xaxes=True, shared_yaxes=True,
+                        vertical_spacing=0.02, horizontal_spacing=0.02,
+                        subplot_titles=[scenario for scenario in scenarios])
     base_df = base_df[base_df['variable'].str.startswith(variable)]
     base_df['variable'] = base_df['variable'].str.replace(variable + '|', '')
     if aggregate:
@@ -44,7 +48,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
             valign="middle",
         )
         return fig
-    
+
     dfs = [base_df[(base_df['scenario'] == scenario)] for scenario in scenarios]
     fig.update_layout(
         title_text=title,
@@ -117,6 +121,7 @@ def plot(df, window_id):
     '''
     print('plotting matrix')
     classes = df['variable'].str.split('|', expand=True)[0].unique().tolist()
+    regions = df['region'].unique().tolist()
 
     widget_layout = html.Div([
         dmc.Select(
@@ -145,6 +150,15 @@ def plot(df, window_id):
                 'index': window_id,
             },
         ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in regions],
+            value='CAN' if 'CAN' in regions else regions[0],
+            id={
+                'type': 'energy_model-matrix-region-select',
+                'index': window_id
+            },
+        ),
         dmc.Button('Download Data', id={'type': 'energy_model-matrix-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -153,7 +167,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, df['scenario'].unique().tolist(), True),
+        figure=render_plot(classes[0], df, df['scenario'].unique().tolist(), True, 'CAN' if 'CAN' in regions else regions[0]),
         id={
             'type': 'figure',
             'index': window_id,

@@ -34,6 +34,10 @@ def link(app):
             'index': ALL
         }, 'checked'),
         Input({
+            'type': 'energy_model-comparison-region-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'energy_model-comparison-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -51,7 +55,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_comparison(_p_type, _scenario_a, _scenario_b, _aggregate, _download, _canvas, _data):
+    def update_comparison(_p_type, _scenario_a, _scenario_b, _aggregate, _region, _download, _canvas, _data):
         print('updating comparison plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -78,6 +82,6 @@ def link(app):
         print('idx:', idx, 'plot type:', _p_type[idx])
 
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Power System Models']['Comparison Matrix'],
-                                      _scenario_a[idx], _scenario_b[idx], _aggregate[idx])
+                                      _scenario_a[idx], _scenario_b[idx], _aggregate[idx], _region[idx])
 
         return _canvas, [dash.no_update for _ in _data]

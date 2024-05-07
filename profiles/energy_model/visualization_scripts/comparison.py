@@ -6,10 +6,11 @@ from dash import html, dcc
 from profiles.energy_model import utils
 
 
-def render_plot(type, df, scenario_a, scenario_b, aggregate):
+def render_plot(type, df, scenario_a, scenario_b, aggregate, region):
     from profiles.energy_model.utils import plot_settings
     print('rendering plot', type)
     df = df[df.variable.str.startswith(type + '|')]
+    df = df[df.region == region]
     df['variable'] = df['variable'].str.replace(type + '|', '')
     df_a = df[df['scenario'] == scenario_a]
     df_b = df[df['scenario'] == scenario_b]
@@ -83,6 +84,7 @@ def plot(df, window_id):
     '''
     print('plotting comparison')
     classes = df['variable'].str.split('|', expand=True)[0].unique().tolist()
+    regions = df['region'].unique().tolist()
 
     widget_layout = html.Div([
         dmc.Select(
@@ -94,7 +96,7 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
-        dmc.Text('Select the scenarios to compare:', size='sm', weight=500, align='center', style={'margin-top': '4px'}),
+        dmc.Text('Select the scenarios to compare (A-B):', size='sm', weight=500, align='center', style={'margin-top': '4px'}),
         html.Div(
             [
                 dmc.Select(
@@ -125,6 +127,15 @@ def plot(df, window_id):
                 'index': window_id,
             },
         ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in regions],
+            value='CAN' if 'CAN' in regions else regions[0],
+            id={
+                'type': 'energy_model-comparison-region-select',
+                'index': window_id
+            },
+        ),
         dmc.Button('Download Data', id={'type': 'energy_model-comparison-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -134,7 +145,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot(classes[0], df, df['scenario'].unique().tolist()[0], df['scenario'].unique().tolist()[0],
-                            True),
+                            True, 'CAN' if 'CAN' in regions else regions[0]),
         id={
             'type': 'figure',
             'index': window_id,

@@ -91,8 +91,6 @@ def process(data):
             df['variable'] = 'Total Cost|' + df['variable']
             dfs.append(df)
 
-    full_df = pd.concat(dfs)
 
-    full_df = full_df[full_df['region']=='CAN']
-    full_df = full_df.groupby(['scenario', 'variable','time']).sum(numeric_only=True).reset_index()
-    return full_df[['scenario', 'variable', 'time', 'value']]
+    full_df = pd.concat(dfs)
+    return full_df[['scenario', 'variable', 'time', 'value', 'region']]
