@@ -150,3 +150,5 @@ def create_generic_plots(model, name):
         )
 
         return widget_layout, plot_layout
+
+    return plot
