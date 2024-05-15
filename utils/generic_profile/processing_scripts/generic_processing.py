@@ -12,6 +12,7 @@ def create_check(name, model):
         except Exception as e:
             print("cost check", e)
         return False
+    return check
 
 def create_process(name):
     def process(data):
@@ -35,3 +36,4 @@ def create_process(name):
             dfs.append(df)
         full_df = pd.concat(dfs)
         return full_df
+    return process
