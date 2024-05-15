@@ -225,6 +225,10 @@ class DataHandler:
                         selected[profile.name] = []
                     selected[profile.name].append(viz_name)
 
+        # if no visualizations are available, see if creating a generic profile works
+        if not visualizations:
+            visualizations, selected = create_generic_profile(df)
+
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[0] if not df.empty or 'scenario' in df.columns else filename
