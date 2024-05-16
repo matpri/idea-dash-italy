@@ -1,7 +1,7 @@
 import pandas as pd
-import os
 
 from profiles.copper_output import utils
+
 
 def check(df):
     """
@@ -16,12 +16,18 @@ def check(df):
     print("Checking for cost in variable column")
     try:
         if (df.model == 'copper').any():
-            if df.variable.str.contains("Costs|").any():
-                return df[df.variable.str.contains("Costs|")]['value'].sum() != 0
+            if df.variable.str.contains("Carbon Costs|").any() or df.variable.str.contains(
+                    "Capital Costs|").any() or df.variable.str.contains(
+                "Fixed O&M Costs|").any() or df.variable.str.contains(
+                "Variable O&M Costs|").any() or df.variable.str.contains("Fuel Costs|").any():
+                return df[df.variable.str.contains("Carbon Costs|") | df.variable.str.contains(
+                    "Capital Costs|") | df.variable.str.contains("Fixed O&M Costs|") | df.variable.str.contains(
+                    "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]['value'].sum() > 0
         return False
     except Exception as e:
         print("cost check", e)
         return False
+
 
 def format_df(df):
     """
@@ -34,7 +40,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
-    df = df.groupby(['region', 'variable', 'time','scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
     return df
 
 
@@ -184,6 +190,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     # Sort by region, then variable
     return total_costs_df.sort_values(by=['time', 'region', 'variable'], ascending=[True, True, True])
 
+
 def process(data):
     """
     Process emission data from multiple scenarios based on the 'folders' dictionary.
@@ -198,7 +205,9 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("Costs|")]
+        df = df[df.variable.str.contains("Carbon Costs|") | df.variable.str.contains(
+            "Capital Costs|") | df.variable.str.contains("Fixed O&M Costs|") | df.variable.str.contains(
+            "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]
         formatted_df = format_df(df)
         gen_cap = calculate_generation_capacity(formatted_df)
         fom = calculate_fom(formatted_df)
