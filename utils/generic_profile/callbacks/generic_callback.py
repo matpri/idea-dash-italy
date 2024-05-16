@@ -123,8 +123,8 @@ def link(app):
         State({
             'type': 'generic-region-select',
             'index': ALL,
-            'model': model,
-            'name': name
+            'model': MATCH,
+            'name': MATCH
         }, 'style'),
         State({
             'type': 'generic-year-select',
