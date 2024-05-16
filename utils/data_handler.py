@@ -180,9 +180,6 @@ class DataHandler:
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
 
-
-
-
     def get_viz_options(self):
         viz = {}
         for data in self.data.values():
