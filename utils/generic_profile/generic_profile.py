@@ -1,6 +1,7 @@
-from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
-from utils.generic_profile.processing_scripts import generic_processing
 from utils.generic_profile.callbacks import generic_callback
+from utils.generic_profile.processing_scripts import generic_processing
+from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
+
 
 class GenericProfile:
     def __init__(self, name, classes):
@@ -21,6 +22,7 @@ class GenericProfile:
                 'process': generic_processing.create_process(name),
                 'db_process': generic_processing.create_process(name),
                 'viz': create_generic_plots(name, class_name),
-                'callback': generic_callback.create_link(name, class_name)
             }
 
+    def link(self, app):
+        generic_callback.link(app)
