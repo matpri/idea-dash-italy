@@ -7,6 +7,8 @@ import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, Output, Input
 
+from utils.generic_profile.generic_profile import GenericProfile
+
 import profiles
 
 
@@ -18,6 +20,32 @@ model_mapping = {
     'ESMIA-PITHOS': ['ESMIA-PITHOS Output','Power System Models'],
     'NRCAN-PyPsa': ['NRCAN-PyPsa Output','Power System Models'],
 }
+
+
+def create_generic_profile(df, model):
+    classes = df.variable.str.split('|').str[0].unique().tolist()
+
+    profile = GenericProfile(model, classes)
+
+    visualizations = {}
+    selected = {}
+    for viz_name, viz_dict in profile.viz_options.items():
+        # if viz_name not in visualizations:
+        check_func = viz_dict.get('check')
+        if check_func(df):
+            if visualizations.get(profile.name) is None:
+                visualizations[profile.name] = []
+            visualizations[profile.name].append(viz_name)
+
+            if selected.get(profile.name) is None:
+                selected[profile.name] = []
+            selected[profile.name].append(viz_name)
+
+    return visualizations, selected, profile
+
+
+
+
 
 class DataHandler:
     """
@@ -207,7 +235,7 @@ class DataHandler:
 
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
-        profile_options = model_mapping.get(model, None)
+        profile_options = model_mapping.get(model, model)
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in profile_options} if profile_options else self.profiles
 
         visualizations = {}
@@ -227,7 +255,8 @@ class DataHandler:
 
         # if no visualizations are available, see if creating a generic profile works
         if not visualizations:
-            visualizations, selected = create_generic_profile(df)
+            visualizations, selected, profile = create_generic_profile(df, model)
+            self.profiles[profile.name] = profile
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
