@@ -3,9 +3,7 @@ import io
 import json
 import urllib.request as urllib
 
-import dash_mantine_components as dmc
 import pandas as pd
-from dash import html, Output, Input
 
 from utils.generic_profile.generic_profile import GenericProfile
 
