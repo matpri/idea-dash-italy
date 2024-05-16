@@ -7,6 +7,7 @@ import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
+from utils.generic_profile.callbacks import generic_callback
 
 model_mapping = {
     'copper': ['COPPER Output', 'Power System Models'],
@@ -201,6 +202,7 @@ class DataHandler:
     def link(self, app):
         for profile in self.profiles.values():
             profile.link(app)
+        generic_callback.link(app)
 
     def check_content(self, filename, content):
         if content is None:
