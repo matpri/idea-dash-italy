@@ -23,22 +23,7 @@ def create_generic_profile(df, model):
     classes = df.variable.str.split('|').str[0].unique().tolist()
 
     profile = GenericProfile(model, classes)
-
-    visualizations = {}
-    selected = {}
-    for viz_name, viz_dict in profile.viz_options.items():
-        # if viz_name not in visualizations:
-        check_func = viz_dict.get('check')
-        if check_func(df):
-            if visualizations.get(profile.name) is None:
-                visualizations[profile.name] = []
-            visualizations[profile.name].append(viz_name)
-
-            if selected.get(profile.name) is None:
-                selected[profile.name] = []
-            selected[profile.name].append(viz_name)
-
-    return visualizations, selected, profile
+    return profile
 
 
 class DataHandler:
@@ -220,14 +205,29 @@ class DataHandler:
         # make all headers lowercase
         df.columns = df.columns.str.lower()
 
+        # check if df.columns contain all of the following: model, scenario, variable, value, unit
+        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit']):
+            print(f"Columns missing in {filename}")
+            return
+
+        df = df[['model', 'scenario', 'variable', 'value', 'unit']]
+
         if filename not in self.data:
             self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
+
+
+
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
-        profile_options = model_mapping.get(model, model)
+        profile_options = model_mapping.get(model, None)
+        if profile_options is None:
+            profile = create_generic_profile(df, model)
+            self.profiles[profile.name] = profile
+            profile_options = [profile.name]
+
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
 
@@ -245,11 +245,6 @@ class DataHandler:
                     if selected.get(profile.name) is None:
                         selected[profile.name] = []
                     selected[profile.name].append(viz_name)
-
-        # if no visualizations are available, see if creating a generic profile works
-        if not visualizations:
-            visualizations, selected, profile = create_generic_profile(df, model)
-            self.profiles[profile.name] = profile
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
