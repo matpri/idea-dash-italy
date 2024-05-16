@@ -5,18 +5,16 @@ import urllib.request as urllib
 
 import pandas as pd
 
-from utils.generic_profile.generic_profile import GenericProfile
-
 import profiles
-
+from utils.generic_profile.generic_profile import GenericProfile
 
 model_mapping = {
     'copper': ['COPPER Output', 'Power System Models'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
-    'ECCC-NextGrid': ['ECCC-NextGrid Output','Power System Models'],
-    'NATEM-POWER': ['NATEM-POWER Output','Power System Models'],
-    'ESMIA-PITHOS': ['ESMIA-PITHOS Output','Power System Models'],
-    'NRCAN-PyPsa': ['NRCAN-PyPsa Output','Power System Models'],
+    'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
+    'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
+    'ESMIA-PITHOS': ['ESMIA-PITHOS Output', 'Power System Models'],
+    'NRCAN-PyPsa': ['NRCAN-PyPsa Output', 'Power System Models'],
 }
 
 
@@ -40,9 +38,6 @@ def create_generic_profile(df, model):
             selected[profile.name].append(viz_name)
 
     return visualizations, selected, profile
-
-
-
 
 
 class DataHandler:
@@ -79,6 +74,7 @@ class DataHandler:
         check_content(filename: str, content: str) -> None:
             Checks the content of a file and updates the data and visualizations accordingly.
     """
+
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -119,7 +115,6 @@ class DataHandler:
             df = df.infer_objects()
             df.value = pd.to_numeric(df.value, errors='coerce')
 
-
         filename = f'{profile}-{scenario}-{author}'
 
         if filename not in self.data:
@@ -144,8 +139,8 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[0] if not df.empty or 'scenario' in df.columns else filename
-
+        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+            0] if not df.empty or 'scenario' in df.columns else filename
 
     def process_data(self):
         self.processed_data = {}
@@ -231,7 +226,8 @@ class DataHandler:
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
         profile_options = model_mapping.get(model, model)
-        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in profile_options} if profile_options else self.profiles
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
 
         visualizations = {}
         selected = {}
@@ -255,4 +251,5 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[0] if not df.empty or 'scenario' in df.columns else filename
+        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+            0] if not df.empty or 'scenario' in df.columns else filename
