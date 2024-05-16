@@ -33,8 +33,8 @@ def create_generic_plots(model, name):
             value='CAN' if 'CAN' in regions else regions[0],
             id={
                 'type': 'generic-region-select',
-                'name': name,
-                'model': model,
+                'viz': name,
+                'profile': model,
                 'index': window_id
             },
             style={'display': 'block'}
@@ -47,8 +47,8 @@ def create_generic_plots(model, name):
             value=years[0],
             id={
                 'type': 'generic-year-select',
-                'name': name,
-                'model': model,
+                'viz': name,
+                'profile': model,
                 'index': window_id
             },
 
@@ -60,8 +60,8 @@ def create_generic_plots(model, name):
             checked=True,
             id={
                 'type': 'generic-pattern-switch',
-                'name': name,
-                'model': model,
+                'viz': name,
+                'profile': model,
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -72,8 +72,8 @@ def create_generic_plots(model, name):
             checked=False,
             id={
                 'type': 'generic-text-switch',
-                'name': name,
-                'model': model,
+                'viz': name,
+                'profile': model,
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -87,8 +87,8 @@ def create_generic_plots(model, name):
                 value='By Year',
                 id={
                     'type': 'generic-plot-select',
-                    'name': name,
-                    'model': model,
+                    'viz': name,
+                    'profile': model,
                     'index': window_id
                 },
             ),
@@ -96,8 +96,8 @@ def create_generic_plots(model, name):
                        checked=True,
                        id={
                            'type': 'generic-aggregate-switch',
-                           'name': name,
-                           'model': model,
+                           'viz': name,
+                           'profile': model,
                            'index': window_id}),
             pattern_toggle,
             text_toggle,
@@ -107,8 +107,8 @@ def create_generic_plots(model, name):
                 value=[scenarios[0]],
                 id={
                     'type': 'generic-scenario-multi-select',
-                    'name': name,
-                    'model': model,
+                    'viz': name,
+                    'profile': model,
                     'index': window_id,
                 },
                 style={'display': 'block'}
@@ -119,8 +119,8 @@ def create_generic_plots(model, name):
                 value=scenarios[0],
                 id={
                     'type': 'generic-scenario-select',
-                    'name': name,
-                    'model': model,
+                    'viz': name,
+                    'profile': model,
                     'index': window_id,
                 },
                 style={'display': 'none'}
@@ -128,14 +128,14 @@ def create_generic_plots(model, name):
             by_year_widgets,
             by_region_widgets,
             dmc.Button('Download Data', id={'type': 'generic-download-button',
-                                            'name': name,
-                                            'model': model, 'index': window_id},
+                                            'viz': name,
+                                            'profile': model, 'index': window_id},
                        variant='light',
                        # center the button
                        style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
             dcc.Download(id={'type': 'generic-download',
-                             'name': name,
-                             'model': model, 'index': window_id}),
+                             'viz': name,
+                             'profile': model, 'index': window_id}),
         ])
 
         plot_layout = dcc.Graph(
@@ -144,8 +144,8 @@ def create_generic_plots(model, name):
             id={
                 'type': 'figure',
                 'index': window_id,
-                'model': model,
-                'name': name
+                'profile': model,
+                'viz': name
             },
             style={
                 'width': '100%',

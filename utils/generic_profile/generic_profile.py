@@ -22,7 +22,9 @@ class GenericProfile:
                 'process': generic_processing.create_process(class_name),
                 'db_process': generic_processing.create_process(class_name),
                 'viz': create_generic_plots(name, class_name),
+                'link': generic_callback.create_link(class_name, name),
             }
 
     def link(self, app):
-        generic_callback.link(app)
+        for class_name in self.plot_order:
+            self.viz_options[class_name]['link'](app)

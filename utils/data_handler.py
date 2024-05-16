@@ -187,7 +187,6 @@ class DataHandler:
     def link(self, app):
         for profile in self.profiles.values():
             profile.link(app)
-        generic_callback.link(app)
 
     def check_content(self, filename, content):
         if content is None:
@@ -227,6 +226,8 @@ class DataHandler:
             profile = create_generic_profile(df, model)
             self.profiles[profile.name] = profile
             profile_options = [profile.name]
+            from main import app
+            profile.link(app)
 
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
