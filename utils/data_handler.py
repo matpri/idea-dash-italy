@@ -206,11 +206,11 @@ class DataHandler:
         df.columns = df.columns.str.lower()
 
         # check if df.columns contain all of the following: model, scenario, variable, value, unit
-        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit']):
+        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']):
             print(f"Columns missing in {filename}")
             return
 
-        df = df[['model', 'scenario', 'variable', 'value', 'unit']]
+        df = df[['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']]
 
         if filename not in self.data:
             self.data[filename] = {}

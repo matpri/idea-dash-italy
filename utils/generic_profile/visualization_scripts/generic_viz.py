@@ -1,11 +1,12 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
-from utils.generic_profile.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from utils.generic_profile.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+    pie_chart
+
 
 def create_generic_plots(model, name):
     def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
-        from profiles.natem_output.utils import plot_settings
         print('rendering plot', type)
         unit = df['unit'].unique()[0]
         if type == 'By Year':
@@ -15,9 +16,10 @@ def create_generic_plots(model, name):
         elif type == 'Trend Over Years':
             return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
         elif type == 'Pie Chart':
-            return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name,)
+            return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, )
         else:
-            return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit, pattern_active=pattern_active,
+            return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
+                                         pattern_active=pattern_active,
                                          text_active=text_active)
 
     def plot(df, window_id):
@@ -31,6 +33,8 @@ def create_generic_plots(model, name):
             value='CAN' if 'CAN' in regions else regions[0],
             id={
                 'type': 'generic-region-select',
+                'name': name,
+                'model': model,
                 'index': window_id
             },
             style={'display': 'block'}
@@ -83,8 +87,8 @@ def create_generic_plots(model, name):
                 value='By Year',
                 id={
                     'type': 'generic-plot-select',
-                'name': name,
-                'model': model,
+                    'name': name,
+                    'model': model,
                     'index': window_id
                 },
             ),
@@ -92,8 +96,8 @@ def create_generic_plots(model, name):
                        checked=True,
                        id={
                            'type': 'generic-aggregate-switch',
-                'name': name,
-                'model': model,
+                           'name': name,
+                           'model': model,
                            'index': window_id}),
             pattern_toggle,
             text_toggle,
@@ -103,8 +107,8 @@ def create_generic_plots(model, name):
                 value=[scenarios[0]],
                 id={
                     'type': 'generic-scenario-multi-select',
-                'name': name,
-                'model': model,
+                    'name': name,
+                    'model': model,
                     'index': window_id,
                 },
                 style={'display': 'block'}
@@ -115,8 +119,8 @@ def create_generic_plots(model, name):
                 value=scenarios[0],
                 id={
                     'type': 'generic-scenario-select',
-                'name': name,
-                'model': model,
+                    'name': name,
+                    'model': model,
                     'index': window_id,
                 },
                 style={'display': 'none'}
@@ -124,14 +128,14 @@ def create_generic_plots(model, name):
             by_year_widgets,
             by_region_widgets,
             dmc.Button('Download Data', id={'type': 'generic-download-button',
-                'name': name,
-                'model': model,'index': window_id},
+                                            'name': name,
+                                            'model': model, 'index': window_id},
                        variant='light',
                        # center the button
                        style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
             dcc.Download(id={'type': 'generic-download',
-                'name': name,
-                'model': model,'index': window_id}),
+                             'name': name,
+                             'model': model, 'index': window_id}),
         ])
 
         plot_layout = dcc.Graph(

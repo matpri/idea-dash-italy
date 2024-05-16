@@ -179,12 +179,12 @@ def link(app):
     def update_gencap_cost(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _pattern, _text,
                            _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style,
                            _text_style):
-        print('updating gencap_cost plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']
         name = trigger_id['name']
+        print(f'updating {name}, {model} plot')
 
         if 'generic-download-button' in trigger_id['type']:
             idx = 0
