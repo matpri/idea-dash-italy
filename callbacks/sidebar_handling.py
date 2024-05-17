@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State
+from dash import Output, Input, State, html
 import dash_mantine_components as dmc
 
 from components import ids
@@ -24,8 +24,10 @@ def link(app):
 
     app.callback(
         Output('settings-modal', 'opened'),
+        Output('settings-modal', 'children'),
         Input('settings', 'n_clicks'),
         State('settings-modal', 'opened'),
+        State('settings-modal', 'children'),
         prevent_initial_call=True,
     )(show_settings_modal)
 
@@ -73,7 +75,35 @@ def edit_cards(add_clicks, delete_click, trash_click, cancel_click, d_change, s_
         return updated_widgets, is_open
 
 
-def show_settings_modal(n_clicks, is_open):
+def show_settings_modal(n_clicks, is_open, _children):
+    from main import data_handler
+    tab_contents = []
+    tabs = []
+    for profile_name, profile in data_handler.profiles.items():
+        tabs.append(
+            dmc.Tab(
+                value=profile_name,
+                children=profile_name
+            )
+        )
+
+        tab_contents.append(
+            dmc.TabsPanel(
+                value=profile_name,
+                children=profile.settings
+            )
+        )
+
+    _children = html.Div(
+            [
+                dmc.Tabs(
+                    [
+                        dmc.TabsList(children=tabs),
+                        *tab_contents,
+                    ],
+                ),
+            ]
+        )
     if n_clicks:
-        return not is_open
-    return is_open
+        return not is_open, _children
+    return is_open, _children

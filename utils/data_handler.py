@@ -21,8 +21,8 @@ model_mapping = {
 
 def create_generic_profile(df, model):
     classes = df.variable.str.split('|').str[0].unique().tolist()
-
-    profile = GenericProfile(model, classes)
+    variables = df.variable.apply(lambda x: '|'.join(x.split('|')[1:])).unique().tolist()
+    profile = GenericProfile(model, classes, variables)
     return profile
 
 

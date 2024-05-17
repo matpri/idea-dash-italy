@@ -85,7 +85,7 @@ def get_group(key):
     return groups[key]
 
 
-def tech_edit(tech):
+def tech_edit(tech, model):
     glass_style = {
         'background': 'rgba(255, 255, 255, 0.4)',
         'backdropFilter': 'blur(20px)',
@@ -101,11 +101,11 @@ def tech_edit(tech):
                 dmc.TextInput(
                     label='Unaggregated',
                     value=names[tech],
-                    id={'type': 'generic-tech-name', 'index': tech}
+                    id={'type': 'generic-tech-name', 'index': tech, 'profile':model}
                 ),
                 daq.ColorPicker(
                     value={'hex': colors[tech]},
-                    id={'type': 'generic-tech-color', 'index': tech}
+                    id={'type': 'generic-tech-color', 'index': tech, 'profile':model}
                 )],
                 style=glass_style
             ),
@@ -113,17 +113,17 @@ def tech_edit(tech):
                 dmc.TextInput(
                     label='Aggregated',
                     value=groups[tech],
-                    id={'type': 'generic-tech-group', 'index': tech}
+                    id={'type': 'generic-tech-group', 'index': tech, 'profile':model}
                 ),
                 daq.ColorPicker(
                     value={'hex': group_colors[groups[tech]]},
-                    id={'type': 'generic-tech-group-color', 'index': tech}
+                    id={'type': 'generic-tech-group-color', 'index': tech, 'profile':model}
                 )],
                 style=glass_style
             )
         ], style={'display': 'flex', 'justifyContent': 'space-around'}),
         html.Div(
-            dmc.Button('Update', id={'type': 'generic-tech-update', 'index': tech}, disabled=True,
+            dmc.Button('Update', id={'type': 'generic-tech-update', 'index': tech, 'profile':model}, disabled=True,
                        style={'display': 'flex', 'justifyContent': 'center', 'width': '80%'}),
             style={'display': 'flex', 'justifyContent': 'center'}
         )
