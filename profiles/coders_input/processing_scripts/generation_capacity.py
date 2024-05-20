@@ -1,5 +1,6 @@
 import pandas as pd
 import os
+import geopandas as gpd
 
 from profiles.coders_input import utils
 
@@ -33,4 +34,9 @@ def process(selected: dict):
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)
-    return full_df
+
+    geometry = gpd.points_from_xy(full_df.longitude, full_df.latitude)
+    full_gdf = gpd.GeoDataFrame(full_df, geometry=geometry)
+    full_gdf.set_crs("EPSG:4326", inplace=True)
+    full_gdf = full_gdf.to_crs("EPSG:5070")
+    return full_gdf

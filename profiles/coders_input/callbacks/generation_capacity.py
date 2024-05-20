@@ -19,6 +19,7 @@ def link(app):
     )
     def update_plot(aggregate):
         from main import data_handler
+        print("gen cap callback", aggregate)
         df = data_handler.processed_data['CODERS Input']['Capacity']
 
         return render_plot(df, aggregate)

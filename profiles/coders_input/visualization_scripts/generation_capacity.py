@@ -1,4 +1,6 @@
 import dash_mantine_components as dmc
+import geojson
+import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
 
@@ -12,42 +14,77 @@ def map_color(tech, aggregate):
         return utils.get_color(tech)
 
 
+regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
+           'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',
+           'Nunavut']
+
+
 def render_plot(df, aggregate):
-    fig = go.Figure()
+    with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
+        canada = geojson.load(f)
+
+    fig_base = px.choropleth(
+        geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
+        color_discrete_map={'British Columbia': 'lightgrey', 'Alberta': 'lightgrey', 'Saskatchewan': 'lightgrey',
+                            'Manitoba': 'lightgrey', 'Ontario': 'lightgrey', 'Quebec': 'lightgrey',
+                            'New Brunswick': 'lightgrey',
+                            'Nova Scotia': 'lightgrey', 'Prince Edward Island': 'lightgrey',
+                            'Newfoundland and Labrador': 'lightgrey',
+                            'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
+        scope='north america',
+
+    )
+    fig_base.update_geos(projection_type="orthographic")
+    fig_base.update_layout(
+        title='Generator Locations',
+        showlegend=False,
+    )
+
+    fig = go.Figure(
+        data=fig_base.data,
+        layout=go.Layout(
+        )
+
+    )
+
     df['facility_installed_capacity'] = df['facility_installed_capacity'].astype(float)
     df['latitude'] = df['latitude'].astype(float)
     df['longitude'] = df['longitude'].astype(float)
 
-    if aggregate:
-        df['gen_type_copper'] = df['gen_type_copper'].apply(lambda x: utils.get_group(x))
-
     df['color'] = df['gen_type_copper'].apply(lambda x: map_color(x, aggregate))
 
-    for i, row in df.iterrows():
+    techs = df['gen_type_copper'].unique()
+
+    for tech in techs:
+        tech_df = df[df['gen_type_copper'] == tech]
         fig.add_trace(go.Scattergeo(
-            lon=[row['longitude']],
-            lat=[row['latitude']],
-            text=row['gen_type_copper'],
+            lon=tech_df['longitude'],
+            lat=tech_df['latitude'],
+            text=tech_df['gen_type_copper'],
+            name=tech_df['gen_type_copper'].unique()[0],
             mode='markers',
             marker=dict(
-                size=row['facility_installed_capacity'] / 100,
-                color=row['color'],
+                size=tech_df['facility_installed_capacity'] / 50,
+                color=map_color(tech, aggregate),
                 opacity=0.8,
                 line=dict(width=0)
             )
         ))
 
-    fig.update_geos(projection_type="natural earth")
+    fig.update_geos(projection_type="orthographic")
     fig.update_layout(
         title_text='Generator Locations',
-        showlegend=False,
+        showlegend=True,
         geo=dict(
-            showland=True,
-            landcolor="rgb(243, 243, 243)",
-            countrycolor="rgb(204, 204, 204)",
+            showcountries=False, showcoastlines=False, showland=False,
+            fitbounds="locations", showlakes=False,
+            showrivers=False,
+            subunitcolor='white'
         ),
+        margin={"r": 0, "t": 0, "l": 0, "b": 0}
     )
 
+    fig.layout.autosize = True
     return fig
 
 
