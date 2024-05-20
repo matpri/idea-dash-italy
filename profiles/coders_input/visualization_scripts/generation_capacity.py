@@ -1,12 +1,27 @@
+import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
+from profiles.coders_input import utils
 
-def render_plot(df):
+
+def map_color(tech, aggregate):
+    if aggregate:
+        return utils.get_group_colors(tech)
+    else:
+        return utils.get_color(tech)
+
+
+def render_plot(df, aggregate):
     fig = go.Figure()
     df['facility_installed_capacity'] = df['facility_installed_capacity'].astype(float)
     df['latitude'] = df['latitude'].astype(float)
     df['longitude'] = df['longitude'].astype(float)
+
+    if aggregate:
+        df['gen_type_copper'] = df['gen_type_copper'].apply(lambda x: utils.get_group(x))
+
+    df['color'] = df['gen_type_copper'].apply(lambda x: map_color(x, aggregate))
 
     for i, row in df.iterrows():
         fig.add_trace(go.Scattergeo(
@@ -16,7 +31,7 @@ def render_plot(df):
             mode='markers',
             marker=dict(
                 size=row['facility_installed_capacity'] / 100,
-                color='red',
+                color=row['color'],
                 opacity=0.8,
                 line=dict(width=0)
             )
@@ -44,9 +59,18 @@ def plot(df, window_id):
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
 
-    widget_layout = html.Div(['No widgets available for this visualization.'], style={'textAlign': 'center'})
+    widget_layout = html.Div(
+        [
+            dmc.Switch('Aggregate',
+                       checked=True,
+                       id={
+                           'type': 'coders_input-gencap-aggregate-switch',
+                           'index': window_id}
+                       ),
+        ],
+        style={'textAlign': 'center'})
     plot_layout = dcc.Graph(
-        figure=render_plot(df),
+        figure=render_plot(df, True),
         id={
             'type': 'figure',
             'index': window_id,
