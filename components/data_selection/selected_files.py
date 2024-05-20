@@ -90,14 +90,14 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
         for i, filename in enumerate(filenames):
             file, extension = filename.split('.')
 
-            if extension == 'csv':
+            if extension == 'csv' or extension == 'xlsx':
                 if file in selected_data.keys():
                     counter = 1
                     while f'{file}-{counter}' in selected_data.keys():
                         counter += 1
                     file = f'{file}-{counter}'
 
-                data_handler.check_content(file, _contents[i])
+                data_handler.check_content(file, _contents[i], extension)
                 profiles = list(data_handler.data[file]['visualizations'].keys())
                 colors = []
                 for p in profiles:
@@ -112,9 +112,9 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                 views.append(viz_edit_modal.render(app, file))
                 selected_data[file] = f'chip-{file}'
             else:
-                print(f'Only CSV files are supported, {extension} is not supported')
+                print(f'Only CSV or XLSX files are supported, {extension} is not supported')
                 return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dmc.Alert(
-                    'Only CSV files are supported', color='red', title='Error',
+                    f'Only CSV or XLSX files are supported, {extension} is not supported', color='red', title='Error',
                     withCloseButton=True
                 )
         return views, dash.no_update, 'local', list(data_handler.data.keys()), dash.no_update

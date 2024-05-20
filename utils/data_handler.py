@@ -301,7 +301,7 @@ class DataHandler:
             profile.link(app)
         generic_callback.link(app)
 
-    def check_content(self, filename, content):
+    def check_content(self, filename, content, extension):
         if content is None:
             return
 
@@ -310,7 +310,16 @@ class DataHandler:
         decoded = base64.b64decode(content_string)
 
         try:
-            df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+            if extension == 'xlsx':
+                xls = pd.ExcelFile(io.BytesIO(decoded))
+                # Get all sheet names
+                sheet_names = xls.sheet_names
+                # Read all sheets into a DataFrame list
+                df_list = [xls.parse(sheet_name) for sheet_name in sheet_names]
+                # Combine all DataFrames into one
+                df = pd.concat(df_list, ignore_index=True)
+            else:
+                df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         except pd.errors.EmptyDataError:
             df = pd.DataFrame()
 
@@ -328,9 +337,6 @@ class DataHandler:
             self.data[filename] = {}
 
         self.data[filename]['content'] = df
-
-
-
 
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
