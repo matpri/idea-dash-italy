@@ -26,6 +26,96 @@ def create_generic_profile(df, model):
     return profile
 
 
+def get_generators(api_key):
+    table = 'generators'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    return data[['latitude', 'longitude', 'gen_type_copper', 'facility_installed_capacity', 'generation_facility_code']]
+
+
+def get_transmission(api_key):
+    table = 'transmission_lines'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    node_data = data[['starting_node_code', 'ending_node_code', 'summer_capacity']]
+
+    table = 'nodes'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    line_data = data[['node_code', 'latitude', 'longitude']]
+
+    df = pd.merge(node_data, line_data, left_on='starting_node_code', right_on='node_code', how='left')
+    df = df.rename(columns={'latitude': 'latitude_start', 'longitude': 'longitude_start'})
+    df = df.drop(columns=['node_code'])
+    df = pd.merge(df, line_data, left_on='ending_node_code', right_on='node_code', how='left')
+    df = df.rename(columns={'latitude': 'latitude_end', 'longitude': 'longitude_end'})
+    df = df.drop(columns=['node_code'])
+
+    return df
+
+def get_vre_capacity_factors(api_key):
+    tables = ['wind_capacity_factor', 'solar_capacity_factor']
+    dfs = []
+    for table in tables:
+        print(table)
+        data = pd.read_csv(f'http://206.12.95.102/{table}?year=2021&key={api_key}', index_col=0)
+        dfs.append(data)
+
+    vre_data = pd.concat(dfs)
+
+    table = 'grid_cell_info'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    grid_data = data[['grid_cell', 'latitude', 'longitude']]
+
+    vre_data = pd.merge(vre_data, grid_data, left_on='grid_cell', right_on='grid_cell', how='left')
+    vre_data = vre_data.drop(columns=['grid_cell'])
+
+    return vre_data
+
+
+def get_demand(api_key):
+    table = 'provincial_demand'
+    demand_inputs = [['AB', '2021'], ['BC', '2021'], ['NB', '2021'], ['NL', '2021'], ['NS', '2021'],
+                     ['ON', '2021'], ['QC', '2021'], ['SK', '2021'], ['MB', '2021'], ['PE', '2021']]
+    timezone = {
+        'AB': -7,
+        'BC': -8,
+        'NB': -4,
+        'NL': -4,
+        'NS': -4,
+        'ON': -5,
+        'QC': -5,
+        'SK': -6,
+        'MB': -6,
+        'PE': -4
+    }
+    dfs = []
+    for prov, year in demand_inputs:
+        print(prov, year)
+        with urllib.urlopen(f'http://206.12.95.102/{table}?province={prov}&year={year}&key={api_key}') as response:
+            response_content = response.read()
+            json_response = json.loads(response_content)
+            prov_data = pd.json_normalize(json_response)
+
+        prov_data['hour'] = prov_data['annual_hour_ending'] - timezone[prov] - 1
+        prov_data = prov_data[['hour', 'demand_MWh', 'province', 'local_time']]
+        dfs.append(prov_data)
+
+    return pd.concat(dfs)
+
 class DataHandler:
     """
     Class responsible for handling data and generating visualizations.
@@ -91,6 +181,28 @@ class DataHandler:
             df = pd.concat(table_dfs)
             df.value = pd.to_numeric(df.value, errors='coerce')
             df['model'] = 'cef'
+        if scenario == 'CODERS2024':
+            print('Getting Generators...')
+            generators = get_generators(self.api_key)
+            print(generators.head())
+            print('Getting Transmission...')
+            transmission = get_transmission(self.api_key)
+            print(transmission.head())
+            # print('Getting VRE Capacity Factors...')
+            # vre_capacity_factors = get_vre_capacity_factors(self.api_key)
+            # print(vre_capacity_factors.head())
+            print('Getting Demand...')
+            demand = get_demand(self.api_key)
+            print(demand.head())
+            print('Data Pulled Successfully!')
+            generators['type'] = 'Capacity'
+            transmission['type'] = 'Transmission'
+            demand['type'] = 'Demand'
+
+            df = pd.concat([generators, transmission, demand])
+            df['model'] = 'CODERS'
+            df['scenario'] = 'CODERS2024'
+
         else:
             url = f'http://206.12.95.102/results?key={self.api_key}&scenario={scenario}&model={profile}'
             print(url)
