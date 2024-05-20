@@ -82,7 +82,13 @@ def plot(df, window_id):
     '''
     regions = df['province'].unique().tolist()
 
-    widget_layout = html.Div('No widgets available for this visualization.', style={'textAlign': 'center'})
+    widget_layout = html.Div([
+        dmc.Button('Download Data', id={'type': 'coders_input-demand-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                   style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'coders_input-demand-download', 'index': window_id}),
+    ], style={'textAlign': 'center'})
 
     plot_layout = dcc.Graph(
         figure=render_plot(df),

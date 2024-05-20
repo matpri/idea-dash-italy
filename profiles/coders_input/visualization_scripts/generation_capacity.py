@@ -105,6 +105,11 @@ def plot(df, window_id):
                            'type': 'coders_input-gencap-aggregate-switch',
                            'index': window_id}
                        ),
+            dmc.Button('Download Data', id={'type': 'coders_input-gencap-download-button', 'index': window_id},
+                       variant='light',
+                       # center the button
+                       style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+            dcc.Download(id={'type': 'coders_input-gencap-download', 'index': window_id}),
         ],
         style={'textAlign': 'center'})
     plot_layout = dcc.Graph(
