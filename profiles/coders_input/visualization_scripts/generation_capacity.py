@@ -41,6 +41,9 @@ def render_plot(df, aggregate):
         )
     )
 
+    if aggregate:
+        df['gen_type_copper'] = df['gen_type_copper'].apply(lambda x: utils.get_group(x))
+
     df['facility_installed_capacity'] = df['facility_installed_capacity'].astype(float)
     df['latitude'] = df['latitude'].astype(float)
     df['longitude'] = df['longitude'].astype(float)

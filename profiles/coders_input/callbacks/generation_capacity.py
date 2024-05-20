@@ -5,12 +5,13 @@ from profiles.coders_input.visualization_scripts.generation_capacity import rend
 
 
 def link(app):
+    print("gen cap link")
     @app.callback(
         Output({
             'type': 'figure',
             'index': MATCH,
             'profile': 'coders_input',
-            'viz': 'generation_capacity'
+            'viz': 'gencap'
         }, 'figure'),
         Input({
                            'type': 'coders_input-gencap-aggregate-switch',
@@ -20,6 +21,6 @@ def link(app):
     def update_plot(aggregate):
         from main import data_handler
         print("gen cap callback", aggregate)
-        df = data_handler.processed_data['CODERS Input']['Capacity']
+        df = data_handler.processed_data['CODERS Input']['Capacity'].copy()
 
         return render_plot(df, aggregate)
