@@ -32,24 +32,20 @@ def render_plot(df, aggregate):
                             'Newfoundland and Labrador': 'lightgrey',
                             'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
         scope='north america',
-
     )
-    fig_base.update_geos(projection_type="orthographic")
-    fig_base.update_layout(
-        title='Generator Locations',
-        showlegend=False,
-    )
+    fig_base.update_geos(projection_type="natural earth")
 
     fig = go.Figure(
         data=fig_base.data,
         layout=go.Layout(
         )
-
     )
 
     df['facility_installed_capacity'] = df['facility_installed_capacity'].astype(float)
     df['latitude'] = df['latitude'].astype(float)
     df['longitude'] = df['longitude'].astype(float)
+
+
 
     df['color'] = df['gen_type_copper'].apply(lambda x: map_color(x, aggregate))
 
@@ -71,7 +67,7 @@ def render_plot(df, aggregate):
             )
         ))
 
-    fig.update_geos(projection_type="orthographic")
+    fig.update_geos(projection_type="natural earth")
     fig.update_layout(
         title_text='Generator Locations',
         showlegend=True,
