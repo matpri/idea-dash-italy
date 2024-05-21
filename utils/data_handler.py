@@ -15,7 +15,8 @@ model_mapping = {
     'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
     'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
     'ESMIA-PITHOS': ['ESMIA-PITHOS Output', 'Power System Models'],
-    'NRCAN-PyPsa': ['NRCAN-PyPsa Output', 'Power System Models'],
+    'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
+    'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
 }
 
 
