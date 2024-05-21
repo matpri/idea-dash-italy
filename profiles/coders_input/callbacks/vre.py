@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
-from profiles.coders_input.visualization_scripts.vre import render_plot
+from profiles.coders_input.visualization_scripts.vre import vre_plot
 
 
 def link(app):
@@ -38,4 +38,4 @@ def link(app):
             if 'vre-download-button' in prop_id:
                 print('downloading')
                 return dash.no_update, dcc.send_data_frame(df.to_csv, "vre.csv", index=False)
-        return render_plot(df, variable), dash.no_update
+        return vre_plot(df, variable), dash.no_update
