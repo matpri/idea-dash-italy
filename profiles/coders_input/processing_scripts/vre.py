@@ -41,6 +41,4 @@ def process(selected: dict):
         full_df.loc[i, 'geometry'] = shapely.geometry.box(row['longitude'] - 0.3125, row['latitude'] - 0.25,
                                                             row['longitude'] + 0.3125, row['latitude'] + 0.25)
     full_gdf = gpd.GeoDataFrame(full_df, geometry='geometry')
-    full_gdf.set_crs("EPSG:4326", inplace=True)
-    full_gdf = full_gdf.to_crs("EPSG:5070")
     return full_gdf
