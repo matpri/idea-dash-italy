@@ -18,10 +18,10 @@ regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario',
            'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',
            'Nunavut']
 
+with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
+    canada = geojson.load(f)
 
 def render_plot(df, aggregate):
-    with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
-        canada = geojson.load(f)
 
     fig_base = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
@@ -69,7 +69,8 @@ def render_plot(df, aggregate):
                 color=map_color(tech, aggregate),
                 opacity=0.8,
                 line=dict(width=0)
-            )
+            ),
+            hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>'
         ))
 
     fig.update_geos(projection_type="natural earth")

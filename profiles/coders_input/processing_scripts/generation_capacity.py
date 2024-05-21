@@ -31,6 +31,9 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.type == 'Capacity']
+        df = df.groupby(['generation_facility_code']).first().reset_index()
+        # sort by capacity
+        df = df.sort_values('facility_installed_capacity', ascending=False)
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)

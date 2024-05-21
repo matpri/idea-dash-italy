@@ -35,7 +35,7 @@ def link(app):
         ctx = dash.callback_context
         if ctx.triggered:
             prop_id = ctx.triggered[0]['prop_id']
-            if 'demand-download-button' in prop_id:
+            if 'gencap-download-button' in prop_id:
                 print('downloading')
                 return dash.no_update, dcc.send_data_frame(df.to_csv, "capacity.csv", index=False)
         return render_plot(df, aggregate), dash.no_update
