@@ -9,17 +9,20 @@ from profiles.coders_input import utils
 from profiles.coders_input.callbacks import (
     generation_capacity as generation_capacity_callbacks,
     transmission as transmission_callbacks,
+vre as vre_callbacks,
     demand as demand_callbacks,
     settings as settings_callbacks,
 )
 from profiles.coders_input.processing_scripts import (
     generation_capacity as generation_capacity_processing,
     transmission as transmission_processing,
+vre as vre_processing,
     demand as demand_processing,
 )
 from profiles.coders_input.visualization_scripts import (
     generation_capacity as generation_capacity_viz,
     transmission as transmission_viz,
+vre as vre_viz,
     demand as demand_viz,
 )
 
@@ -35,6 +38,7 @@ class CopperOutput(BaseProfile):
         'Capacity',
         'Transmission',
         'Demand',
+        'VRE Capacity Factor',
         'US Demand',
         'Annual Growth',
         'Generation Type Data',
@@ -71,6 +75,16 @@ class CopperOutput(BaseProfile):
                 'viz': demand_viz.plot,
                 'callback': demand_callbacks.link,
                 'description': 'Electricity demand in each region.'
+            },
+        'VRE Capacity Factor':
+            {
+                'check': vre_processing.check,
+                'db_check': vre_processing.check,
+                'process': vre_processing.process,
+                'db_process': vre_processing.process,
+                'viz': vre_viz.plot,
+                'callback': vre_callbacks.link,
+                'description': 'Variable Renewable Energy (VRE) capacity factors.'
             },
     }
 

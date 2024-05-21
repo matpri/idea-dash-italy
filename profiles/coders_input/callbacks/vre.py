@@ -1,0 +1,41 @@
+import dash
+from dash import Output, Input, State, ALL, dcc, MATCH
+
+from profiles.coders_input.visualization_scripts.vre import render_plot
+
+
+def link(app):
+    print("gen cap link")
+    @app.callback(
+        Output({
+            'type': 'figure',
+            'index': MATCH,
+            'profile': 'coders_input',
+            'viz': 'vre'
+        }, 'figure'),
+        Output({
+            'type': 'coders_input-vre-download',
+            'index': MATCH
+        }, 'data'),
+        Input({
+                           'type': 'coders_input-vre-variable-dropdown',
+            'index': MATCH
+        }, 'value'),
+        Input({
+            'type': 'coders_input-vre-download-button',
+            'index': MATCH
+        }, 'n_clicks'),
+        prevent_initial_call=True
+    )
+    def update_plot(variable, n_clicks):
+        from main import data_handler
+        print("gen cap callback", variable)
+        df = data_handler.processed_data['CODERS Input']['VRE Capacity Factor'].copy()
+
+        ctx = dash.callback_context
+        if ctx.triggered:
+            prop_id = ctx.triggered[0]['prop_id']
+            if 'vre-download-button' in prop_id:
+                print('downloading')
+                return dash.no_update, dcc.send_data_frame(df.to_csv, "vre.csv", index=False)
+        return render_plot(df, variable), dash.no_update

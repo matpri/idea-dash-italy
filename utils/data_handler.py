@@ -68,10 +68,18 @@ def get_vre_capacity_factors(api_key):
     for table in tables:
         print(table)
         data = pd.read_csv(f'http://206.12.95.102/{table}?year=2021&key={api_key}', index_col=0)
+        data = data.reset_index()
+        data['variable'] = table
         dfs.append(data)
 
     vre_data = pd.concat(dfs)
-
+    print(vre_data.head())
+    vre_data = vre_data.melt(id_vars=['h', 'variable'], var_name='grid_cell', value_name='value')
+    vre_data['grid_cell'] = vre_data['grid_cell'].astype(int)
+    vre_data['value'] = vre_data['value'].astype(float)
+    vre_data = vre_data.groupby(['grid_cell', 'variable']).mean().reset_index()
+    # drop h
+    vre_data = vre_data.drop(columns=['h'])
     table = 'grid_cell_info'
     with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
         response_content = response.read()
@@ -79,9 +87,12 @@ def get_vre_capacity_factors(api_key):
         data = pd.json_normalize(json_response)
 
     grid_data = data[['grid_cell', 'latitude', 'longitude']]
-
+    print(grid_data.head())
     vre_data = pd.merge(vre_data, grid_data, left_on='grid_cell', right_on='grid_cell', how='left')
     vre_data = vre_data.drop(columns=['grid_cell'])
+
+    vre_data['latitude'] = vre_data['latitude'].astype(float)
+    vre_data['longitude'] = vre_data['longitude'].astype(float)
 
     return vre_data
 
@@ -188,18 +199,19 @@ class DataHandler:
             print('Getting Transmission...')
             transmission = get_transmission(self.api_key)
             print(transmission.head())
-            # print('Getting VRE Capacity Factors...')
-            # vre_capacity_factors = get_vre_capacity_factors(self.api_key)
-            # print(vre_capacity_factors.head())
+            print('Getting VRE Capacity Factors...')
+            vre_capacity_factors = get_vre_capacity_factors(self.api_key)
+            print(vre_capacity_factors.head())
             print('Getting Demand...')
             demand = get_demand(self.api_key)
             print(demand.head())
             print('Data Pulled Successfully!')
-            generators['type'] = 'Capacity'
+            generators['type'] = 'Generation Capacity'
             transmission['type'] = 'Transmission'
             demand['type'] = 'Demand'
+            vre_capacity_factors['type'] = 'VRE Capacity Factor'
 
-            df = pd.concat([generators, transmission, demand])
+            df = pd.concat([generators, transmission, demand, vre_capacity_factors])
             df['model'] = 'CODERS'
             df['scenario'] = 'CODERS2024'
 
