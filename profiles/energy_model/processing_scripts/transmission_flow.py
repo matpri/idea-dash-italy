@@ -5,6 +5,7 @@ from profiles.nextgrid_output.processing_scripts import transmission_flow_plotly
 from profiles.natem_output.processing_scripts import transmission_flow_plotly as natem_generation_supply
 from profiles.pithos_output.processing_scripts import transmission_flow_plotly as pithos_generation_supply
 from profiles.pypsa_output.processing_scripts import transmission_flow_plotly as pypsa_generation_supply
+from profiles.pypsa_can_output.processing_scripts import transmission_flow_plotly as pypsa_can_generation_supply
 
 
 
@@ -30,6 +31,8 @@ def check(df):
             return pithos_generation_supply.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_generation_supply.check(df)
+        elif df.model.unique()[0] == "PyPSA_CAN":
+            return pypsa_can_generation_supply.check(df)
         else:
             return False
     except Exception as e:
@@ -54,6 +57,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_generation_supply.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "PyPSA_CAN":
+            df = pypsa_can_generation_supply.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

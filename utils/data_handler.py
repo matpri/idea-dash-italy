@@ -341,7 +341,8 @@ class DataHandler:
 
         # check if df.columns contain all of the following: model, scenario, variable, value, unit
         if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']):
-            print(f"Columns missing in {filename}")
+            diff = {'model', 'scenario', 'variable', 'value', 'unit', 'region', 'time'} - set(df.columns)
+            print(f"Columns missing in {filename}", diff)
             return
 
         df = df[['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']]

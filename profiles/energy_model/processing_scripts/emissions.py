@@ -5,6 +5,7 @@ from profiles.nextgrid_output.processing_scripts import emissions as nextgrid_em
 from profiles.natem_output.processing_scripts import emissions as natem_emissions
 from profiles.pithos_output.processing_scripts import emissions as pithos_emissions
 from profiles.pypsa_output.processing_scripts import emissions as pypsa_emissions
+from profiles.pypsa_can_output.processing_scripts import emissions as pypsa_can_emissions
 from profiles.cef.processing_scripts import emissions as cef_emissions
 
 
@@ -31,6 +32,8 @@ def check(df):
             return pithos_emissions.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_emissions.check(df)
+        elif df.model.unique()[0] == "PyPSA_CAN":
+            return pypsa_can_emissions.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_emissions.check(df)
         else:
@@ -57,6 +60,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_emissions.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "PyPSA_CAN":
+            df = pypsa_can_emissions.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_emissions.process({scenario_name: db})
