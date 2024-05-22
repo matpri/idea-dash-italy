@@ -167,6 +167,7 @@ class DataHandler:
         self.api_key = ''
         self.profiles = self.load_profiles()
         self.data = {}
+        self.processed = []
         self.processed_data = {}
         self.viz = {}
         self.runs = pd.DataFrame()
@@ -254,29 +255,35 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
     def process_data(self):
-        self.processed_data = {}
         data_collection = {}
         for fname, data in self.data.items():
-            for profile, viz_options in data['selected'].items():
-                scenario = data['scenario']
-                if profile == 'Power System Models':
-                    model = data['content']['model'].unique()[0]
-                    scenario = model + '|' + scenario
+            if not fname in self.processed:
+                for profile, viz_options in data['selected'].items():
+                    scenario = data['scenario']
+                    if profile == 'Power System Models':
+                        model = data['content']['model'].unique()[0]
+                        scenario = model + '|' + scenario
 
-                for viz in viz_options:
-                    if data_collection.get(profile) is None:
-                        data_collection[profile] = {}
-                    if data_collection[profile].get(viz) is None:
-                        data_collection[profile][viz] = {}
-                    data_collection[profile][viz][scenario] = data['content'].copy()
+                    for viz in viz_options:
+                        if data_collection.get(profile) is None:
+                            data_collection[profile] = {}
+                        if data_collection[profile].get(viz) is None:
+                            data_collection[profile][viz] = {}
+                        data_collection[profile][viz][scenario] = data['content'].copy()
+                self.processed.append(fname)
 
         for profile, viz_options in data_collection.items():
             for viz, data in viz_options.items():
                 if self.processed_data.get(profile) is None:
                     self.processed_data[profile] = {}
                 try:
-                    self.processed_data[profile][viz] = self.profiles[profile].viz_options[viz]['process'](
-                        data_collection[profile][viz])
+                    if self.processed_data[profile].get(viz) is None:
+                        self.processed_data[profile][viz] = self.profiles[profile].viz_options[viz]['process'](
+                            data_collection[profile][viz])
+                    else:
+                        self.processed_data[profile][viz] = pd.concat(
+                            [self.processed_data[profile][viz], self.profiles[profile].viz_options[viz]['process'](
+                                data_collection[profile][viz])])
                 except Exception as e:
                     print(f"Error processing data for {profile} - {viz}: {e}")
                     self.processed_data[profile][viz] = pd.DataFrame()
