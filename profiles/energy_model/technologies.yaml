@@ -1431,3 +1431,20 @@ Electricity|Gas|CC|RNG|w/o CCS:
   group: Fossil fuel gas
   group_color: '#ff6b6b'
   name: Electricity|Gas|CC|RNG|w/o CCS
+
+
+Electricity|Hydro:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro
+Electricity|Gas|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|w/o CCS
+Electricity|Solar|PV|Residential/Comercial:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Residential/Comercial

@@ -1,0 +1,60 @@
+NG_SC:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: NG SC
+NG_CC:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: NG_CC
+coal:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: coal
+coalCCS:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: coalCCS
+diesel:
+  color: '#ffaa33'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: diesel
+biomass:
+  color: '#33a02c'
+  group: Biomass
+  group_color: '#33a02c'
+  name: biomass
+wind_ons:
+  color: '#b2df8a'
+  group: Wind
+  group_color: '#b2df8a'
+  name: wind_ons
+solar:
+  color: '#ffff99'
+  group: Solar
+  group_color: '#ffff99'
+  name: solar
+hydro_daily:
+  color: '#a6cee3'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_daily
+hydro_run:
+  color: '#a6cee3'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_run
+hydro_monthly:
+  color: '#a6cee3'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_monthly
+nuclear:
+  color: '#ff7f00'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: nuclear

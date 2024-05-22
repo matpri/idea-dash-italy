@@ -1,0 +1,111 @@
+
+Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+New Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Trend Over Years:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Pie Chart:
+    title: New Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: New Capacity by Region
+    x_label: Region
+    y_label: New Capacity (GW)
+Transmission:
+  name: Transmission
+  unit:
+  Capacity:
+    title: Capacity
+    x_label: Year
+    y_label: Transmission (GW)
+  Distance:
+    title: Distance
+    x_label: Year
+    y_label: Distance (km)
+  Expansion_limits:
+    title: Expansion Limits
+    x_label: Year
+    y_label: Expansion Limits (GW)
+Demand:
+    name: Demand
+    unit: GW
+    By Scenario:
+        title: Demand by Scenario
+        x_label: Year
+        y_label: Demand (GW)
+    By Region:
+        title: Demand by Region
+        x_label: Year
+        y_label: Demand (GW)
+US Demand:
+  name: US Demand
+  unit: GW
+  By Scenario:
+    title: US Demand by Scenario
+    x_label: Year
+    y_label: US Demand (GW)
+  By Region:
+    title: US Demand by Region
+    x_label: Year
+    y_label: US Demand (GW)
+Type Data:
+  name: Type Data
+  unit:
+  Per Technology:
+    title: Type Data by Technology
+    x_label: Technology
+    y_label: Type Data
+Annual Growth:
+    name: Annual Growth
+    unit: \%
+    By Year:
+        title: Annual Growth by Year
+        x_label: Year
+        y_label: Annual Growth (%)
+    By Region:
+        title: Annual Growth by Region
+        x_label: Region
+        y_label: Annual Growth (%)
+Tech Evolution:
+    name: Tech Evolution
+    unit:
+    By Year:
+        title: Tech Evolution by Year
+        x_label: Year
+        y_label: Tech Evolution
+    By Tech:
+        title: Tech Evolution by Region
+        x_label: Region
+        y_label: Tech Evolution
+
+
+
+
+
+

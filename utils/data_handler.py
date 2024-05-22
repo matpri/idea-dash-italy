@@ -3,21 +3,130 @@ import io
 import json
 import urllib.request as urllib
 
-import dash_mantine_components as dmc
 import pandas as pd
-from dash import html, Output, Input
 
 import profiles
-
+from utils.generic_profile.generic_profile import GenericProfile
+from utils.generic_profile.callbacks import generic_callback
 
 model_mapping = {
     'copper': ['COPPER Output', 'Power System Models'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
-    'ECCC-NextGrid': ['ECCC-NextGrid Output','Power System Models'],
-    'NATEM-POWER': ['NATEM-POWER Output','Power System Models'],
-    'ESMIA-PITHOS': ['ESMIA-PITHOS Output','Power System Models'],
-    'NRCAN-PyPsa': ['NRCAN-PyPsa Output','Power System Models'],
+    'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
+    'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
+    'ESMIA-PITHOS': ['ESMIA-PITHOS Output', 'Power System Models'],
+    'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
+    'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
 }
+
+
+def create_generic_profile(df, model):
+    classes = df.variable.str.split('|').str[0].unique().tolist()
+    variables = df.variable.apply(lambda x: '|'.join(x.split('|')[1:])).unique().tolist()
+    profile = GenericProfile(model, classes, variables)
+    return profile
+
+
+def get_generators(api_key):
+    table = 'generators'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    return data[['latitude', 'longitude', 'gen_type_copper', 'facility_installed_capacity', 'generation_facility_code']]
+
+
+def get_transmission(api_key):
+    table = 'transmission_lines'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    node_data = data[['starting_node_code', 'ending_node_code', 'summer_capacity']]
+
+    table = 'nodes'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    line_data = data[['node_code', 'latitude', 'longitude']]
+
+    df = pd.merge(node_data, line_data, left_on='starting_node_code', right_on='node_code', how='left')
+    df = df.rename(columns={'latitude': 'latitude_start', 'longitude': 'longitude_start'})
+    df = df.drop(columns=['node_code'])
+    df = pd.merge(df, line_data, left_on='ending_node_code', right_on='node_code', how='left')
+    df = df.rename(columns={'latitude': 'latitude_end', 'longitude': 'longitude_end'})
+    df = df.drop(columns=['node_code'])
+
+    return df
+
+def get_vre_capacity_factors(api_key):
+    tables = ['wind_capacity_factor', 'solar_capacity_factor']
+    dfs = []
+    for table in tables:
+        print(table)
+        data = pd.read_csv(f'http://206.12.95.102/{table}?year=2021&key={api_key}', index_col=0)
+        data = data.reset_index()
+        data['variable'] = table
+        dfs.append(data)
+
+    vre_data = pd.concat(dfs)
+    print(vre_data.head())
+    vre_data = vre_data.melt(id_vars=['h', 'variable'], var_name='grid_cell', value_name='value')
+    vre_data['grid_cell'] = vre_data['grid_cell'].astype(int)
+    vre_data['value'] = vre_data['value'].astype(float)
+    vre_data = vre_data.groupby(['grid_cell', 'variable']).mean().reset_index()
+    # drop h
+    vre_data = vre_data.drop(columns=['h'])
+    table = 'grid_cell_info'
+    with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
+        response_content = response.read()
+        json_response = json.loads(response_content)
+        data = pd.json_normalize(json_response)
+
+    grid_data = data[['grid_cell', 'latitude', 'longitude']]
+    print(grid_data.head())
+    vre_data = pd.merge(vre_data, grid_data, left_on='grid_cell', right_on='grid_cell', how='left')
+    vre_data = vre_data.drop(columns=['grid_cell'])
+
+    vre_data['latitude'] = vre_data['latitude'].astype(float)
+    vre_data['longitude'] = vre_data['longitude'].astype(float)
+
+    return vre_data
+
+
+def get_demand(api_key):
+    table = 'provincial_demand'
+    demand_inputs = [['AB', '2021'], ['BC', '2021'], ['NB', '2021'], ['NL', '2021'], ['NS', '2021'],
+                     ['ON', '2021'], ['QC', '2021'], ['SK', '2021'], ['MB', '2021'], ['PE', '2021']]
+    timezone = {
+        'AB': -7,
+        'BC': -8,
+        'NB': -4,
+        'NL': -4,
+        'NS': -4,
+        'ON': -5,
+        'QC': -5,
+        'SK': -6,
+        'MB': -6,
+        'PE': -4
+    }
+    dfs = []
+    for prov, year in demand_inputs:
+        print(prov, year)
+        with urllib.urlopen(f'http://206.12.95.102/{table}?province={prov}&year={year}&key={api_key}') as response:
+            response_content = response.read()
+            json_response = json.loads(response_content)
+            prov_data = pd.json_normalize(json_response)
+
+        prov_data['hour'] = prov_data['annual_hour_ending'] - timezone[prov] - 1
+        prov_data = prov_data[['hour', 'demand_MWh', 'province', 'local_time']]
+        dfs.append(prov_data)
+
+    return pd.concat(dfs)
 
 class DataHandler:
     """
@@ -53,6 +162,7 @@ class DataHandler:
         check_content(filename: str, content: str) -> None:
             Checks the content of a file and updates the data and visualizations accordingly.
     """
+
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -83,6 +193,29 @@ class DataHandler:
             df = pd.concat(table_dfs)
             df.value = pd.to_numeric(df.value, errors='coerce')
             df['model'] = 'cef'
+        if scenario == 'CODERS2024':
+            print('Getting Generators...')
+            generators = get_generators(self.api_key)
+            print(generators.head())
+            print('Getting Transmission...')
+            transmission = get_transmission(self.api_key)
+            print(transmission.head())
+            print('Getting VRE Capacity Factors...')
+            vre_capacity_factors = get_vre_capacity_factors(self.api_key)
+            print(vre_capacity_factors.head())
+            print('Getting Demand...')
+            demand = get_demand(self.api_key)
+            print(demand.head())
+            print('Data Pulled Successfully!')
+            generators['type'] = 'Generation Capacity'
+            transmission['type'] = 'Transmission'
+            demand['type'] = 'Demand'
+            vre_capacity_factors['type'] = 'VRE Capacity Factor'
+
+            df = pd.concat([generators, transmission, demand, vre_capacity_factors])
+            df['model'] = 'CODERS'
+            df['scenario'] = 'CODERS2024'
+
         else:
             url = f'http://206.12.95.102/results?key={self.api_key}&scenario={scenario}&model={profile}'
             print(url)
@@ -92,7 +225,6 @@ class DataHandler:
             # infer data type for each column in df
             df = df.infer_objects()
             df.value = pd.to_numeric(df.value, errors='coerce')
-
 
         filename = f'{profile}-{scenario}-{author}'
 
@@ -118,8 +250,8 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[0] if not df.empty or 'scenario' in df.columns else filename
-
+        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+            0] if not df.empty or 'scenario' in df.columns else filename
 
     def process_data(self):
         self.processed_data = {}
@@ -152,9 +284,6 @@ class DataHandler:
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
 
-
-
-
     def get_viz_options(self):
         viz = {}
         for data in self.data.values():
@@ -183,8 +312,9 @@ class DataHandler:
     def link(self, app):
         for profile in self.profiles.values():
             profile.link(app)
+        generic_callback.link(app)
 
-    def check_content(self, filename, content):
+    def check_content(self, filename, content, extension):
         if content is None:
             return
 
@@ -193,12 +323,29 @@ class DataHandler:
         decoded = base64.b64decode(content_string)
 
         try:
-            df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+            if extension == 'xlsx':
+                xls = pd.ExcelFile(io.BytesIO(decoded))
+                # Get all sheet names
+                sheet_names = xls.sheet_names
+                # Read all sheets into a DataFrame list
+                df_list = [xls.parse(sheet_name) for sheet_name in sheet_names]
+                # Combine all DataFrames into one
+                df = pd.concat(df_list, ignore_index=True)
+            else:
+                df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
         except pd.errors.EmptyDataError:
             df = pd.DataFrame()
 
         # make all headers lowercase
         df.columns = df.columns.str.lower()
+
+        # check if df.columns contain all of the following: model, scenario, variable, value, unit
+        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']):
+            diff = {'model', 'scenario', 'variable', 'value', 'unit', 'region', 'time'} - set(df.columns)
+            print(f"Columns missing in {filename}", diff)
+            return
+
+        df = df[['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']]
 
         if filename not in self.data:
             self.data[filename] = {}
@@ -208,7 +355,13 @@ class DataHandler:
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
         profile_options = model_mapping.get(model, None)
-        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in profile_options} if profile_options else self.profiles
+        if profile_options is None:
+            profile = create_generic_profile(df, model)
+            self.profiles[profile.name] = profile
+            profile_options = [profile.name]
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
 
         visualizations = {}
         selected = {}
@@ -227,4 +380,5 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[0] if not df.empty or 'scenario' in df.columns else filename
+        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+            0] if not df.empty or 'scenario' in df.columns else filename

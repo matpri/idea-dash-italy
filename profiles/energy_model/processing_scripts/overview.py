@@ -5,6 +5,7 @@ from profiles.nextgrid_output.processing_scripts import overview as nextgrid_ove
 from profiles.natem_output.processing_scripts import overview as natem_overview
 from profiles.pithos_output.processing_scripts import overview as pithos_overview
 from profiles.pypsa_output.processing_scripts import overview as pypsa_overview
+from profiles.pypsa_can_output.processing_scripts import overview as pypsa_can_overview
 from profiles.cef.processing_scripts import overview as cef_overview
 
 
@@ -31,6 +32,8 @@ def check(df):
             return pithos_overview.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_overview.check(df)
+        elif df.model.unique()[0] == "PyPSA_CAN":
+            return pypsa_can_overview.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_overview.check(df)
         else:
@@ -62,6 +65,10 @@ def process(selected: dict):
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_overview.process({scenario_name: db})
             df.model = "NRCan-PyPsa"
+            dfs.append(df)
+        elif db.model.unique()[0] == "PyPSA_CAN":
+            df = pypsa_can_overview.process({scenario_name: db})
+            df.model = "PyPSA_CAN"
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_overview.process({scenario_name: db})

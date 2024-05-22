@@ -115,6 +115,7 @@ def connect_to_database(n_clicks, api_key, children):
             url = 'http://206.12.95.102/results_types?key=' + api_key
             response = json.loads(urllib.urlopen(url).read())
             response.append({'model': 'CEF', 'scenario': 'CEF2023', 'author': 'CER'})
+            response.insert(0, {'model': 'CODERS', 'scenario': 'CODERS2024', 'author': 'EMH'})
             runs = pd.DataFrame(response)
             from main import data_handler
             data_handler.runs = runs

@@ -134,7 +134,9 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
             for profile in profiles:
                 scenario = scenario_names[i]
                 print(profile)
-                module = profile_modules[profile]
+                module = profile_modules.get(profile, None)
+                if module is None:
+                    continue
                 profile_module = __import__(module, fromlist=[profile])
                 if profile == 'Power System Models':
                     model = data_handler.data[file]['content']['model'].unique()[0]
