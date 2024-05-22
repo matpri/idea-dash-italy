@@ -85,7 +85,7 @@ def link(app):
                 ]
             )
         ],
-            value=data_handler.profiles[list(profiles.keys())[0]].plot_order[0],
+            value=data_handler.profiles[triggered_value].plot_order[0],
             id={'type': 'viz-tabs', 'index': triggered_id['index'], 'profile': triggered_value}
         )
         # for viz in profiles[triggered_value]:
