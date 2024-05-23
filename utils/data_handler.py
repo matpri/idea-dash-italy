@@ -353,6 +353,7 @@ class DataHandler:
         except pd.errors.EmptyDataError:
             df = pd.DataFrame()
 
+
         # make all headers lowercase
         df.columns = df.columns.str.lower()
 
@@ -360,7 +361,7 @@ class DataHandler:
         if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']):
             diff = {'model', 'scenario', 'variable', 'value', 'unit', 'region', 'time'} - set(df.columns)
             print(f"Columns missing in {filename}", diff)
-            return
+            return False, f"These Columns were expected: {diff}"
 
         df = df[['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']]
 
@@ -399,3 +400,5 @@ class DataHandler:
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
+
+        return True, "Data loaded successfully!"

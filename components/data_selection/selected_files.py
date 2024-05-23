@@ -97,7 +97,11 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
                         counter += 1
                     file = f'{file}-{counter}'
 
-                data_handler.check_content(file, _contents[i], extension)
+                checked, message = data_handler.check_content(file, _contents[i], extension)
+                if not checked:
+                    return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dmc.Alert(
+                        f'Failed to load {file}\n{message}', color='red', title='Error', withCloseButton=True
+                    )
                 profiles = list(data_handler.data[file]['visualizations'].keys())
                 colors = []
                 for p in profiles:
