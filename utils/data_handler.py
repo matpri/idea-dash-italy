@@ -2,6 +2,8 @@ import base64
 import io
 import json
 import urllib.request as urllib
+import multiprocessing as mp
+from typing import Tuple, Callable
 
 import pandas as pd
 
@@ -19,6 +21,18 @@ model_mapping = {
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
 }
 
+def data_processing_task(args: Tuple[str, str, dict, dict, Callable]) -> Tuple[str, str, pd.DataFrame]:
+    profile_name, viz, data, processed_data, processing_func = args
+    try:
+        if processed_data.get(viz) is None:
+            data_out = processing_func(data)
+        else:
+            data_out = pd.concat([processed_data[viz], processing_func(data)])
+    except Exception as e:
+        print(f"Error processing data for {profile_name} - {viz}: {e}")
+        data_out = pd.DataFrame()
+
+    return profile_name, viz, data_out
 
 def create_generic_profile(df, model):
     classes = df.variable.str.split('|').str[0].unique().tolist()
@@ -272,21 +286,17 @@ class DataHandler:
                         data_collection[profile][viz][scenario] = data['content'].copy()
                 self.processed.append(fname)
 
-        for profile, viz_options in data_collection.items():
-            for viz, data in viz_options.items():
-                if self.processed_data.get(profile) is None:
-                    self.processed_data[profile] = {}
-                try:
-                    if self.processed_data[profile].get(viz) is None:
-                        self.processed_data[profile][viz] = self.profiles[profile].viz_options[viz]['process'](
-                            data_collection[profile][viz])
-                    else:
-                        self.processed_data[profile][viz] = pd.concat(
-                            [self.processed_data[profile][viz], self.profiles[profile].viz_options[viz]['process'](
-                                data_collection[profile][viz])])
-                except Exception as e:
-                    print(f"Error processing data for {profile} - {viz}: {e}")
-                    self.processed_data[profile][viz] = pd.DataFrame()
+        with mp.Pool() as pool:
+            args = [(profile, viz, data, self.processed_data, self.profiles[profile].viz_options[viz]['process']
+                     ) for profile, viz_options in data_collection.items()
+                    for viz, data in viz_options.items()]
+            results = pool.map(data_processing_task, args)
+
+        # Collect results
+        for profile, viz, processed_data in results:
+            if self.processed_data.get(profile) is None:
+                self.processed_data[profile] = {}
+            self.processed_data[profile][viz] = processed_data
 
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
