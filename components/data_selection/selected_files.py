@@ -66,8 +66,8 @@ def update_chips(_contents, n_clicks, filenames, selected_runs, app):
     if ctx.triggered_id == ids.DB_LOAD_BUTTON:
         if n_clicks:
             for run in selected_runs:
-                model, scenario, author = run.split('-')
-                data_handler.select_run(model, scenario, author)
+                model, scenario, author, db = run.split('|')
+                data_handler.select_run(model, scenario, author, db)
                 db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
                                            radius='xl', size='xs', compact=True,
                                            variant='light',

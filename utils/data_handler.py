@@ -19,6 +19,7 @@ model_mapping = {
     'ESMIA-PITHOS': ['ESMIA-PITHOS Output', 'Power System Models'],
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
+    'Sutubra-TEMOA': ['Sutubra-TEMOA Output'],
 }
 
 def data_processing_task(args: Tuple[str, str, dict, dict, Callable]) -> Tuple[str, str, pd.DataFrame]:
@@ -186,8 +187,8 @@ class DataHandler:
         self.viz = {}
         self.runs = pd.DataFrame()
 
-    def select_run(self, profile, scenario, author):
-        print('Selecting run', profile, scenario, author)
+    def select_run(self, profile, scenario, author,db):
+        print('Selecting run', profile, scenario, author, db)
         if scenario == 'CEF2023':
             tables = ["benchmark_prices", "butane", "crude_oil_production", "electricity_capacity",
                       "electricity_capacity_technology", "electricity_generation", "electricity_generation_technology",
@@ -232,7 +233,8 @@ class DataHandler:
             df['scenario'] = 'CODERS2024'
 
         else:
-            url = f'http://206.12.95.102/results?key={self.api_key}&scenario={scenario}&model={profile}'
+            endpoint = 'MMCW' if db == 'MMCW' else 'results'
+            url = f'http://206.12.95.102/{endpoint}?key={self.api_key}&scenario={scenario}&model={profile}'
             print(url)
             response = urllib.urlopen(url)
             data = json.loads(response.read())

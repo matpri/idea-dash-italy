@@ -116,7 +116,18 @@ def connect_to_database(n_clicks, api_key, children):
             response = json.loads(urllib.urlopen(url).read())
             response.append({'model': 'CEF', 'scenario': 'CEF2023', 'author': 'CER'})
             response.insert(0, {'model': 'CODERS', 'scenario': 'CODERS2024', 'author': 'EMH'})
+
             runs = pd.DataFrame(response)
+            runs['DB'] = 'default'
+            try:
+                mmcw_url = 'http://206.12.95.102/MMCW_results_types?key=' + api_key
+                mmcw_response = json.loads(urllib.urlopen(mmcw_url).read())
+                mmcw_runs = pd.DataFrame(mmcw_response)
+                mmcw_runs['DB'] = 'MMCW'
+                runs = pd.concat([runs, mmcw_runs])
+
+            except Exception as e:
+                raise e
             from main import data_handler
             data_handler.runs = runs
 
@@ -149,7 +160,7 @@ def connect_to_database(n_clicks, api_key, children):
                             ],
                             position='apart'
                         ),
-                        "value": f'{row.model}-{row.scenario}-{row.author}'
+                        "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
                     }
                 )
             checkboxes=[
@@ -216,7 +227,7 @@ def get_runs(model, scenario, author):
                     ],
                     position='apart'
                 ),
-                "value": f'{row.model}-{row.scenario}-{row.author}'
+                "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
             }
         )
 
