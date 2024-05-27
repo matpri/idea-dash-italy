@@ -6,6 +6,7 @@ from profiles.natem_output.processing_scripts import transmission_capacity_plotl
 from profiles.pithos_output.processing_scripts import transmission_capacity_plotly as pithos_generation_supply
 from profiles.pypsa_output.processing_scripts import transmission_capacity_plotly as pypsa_generation_supply
 from profiles.pypsa_can_output.processing_scripts import transmission_capacity_plotly as pypsa_can_generation_supply
+from profiles.temoa_output.processing_scripts import transmission_capacity_plotly as temoa_generation_supply
 
 
 
@@ -33,6 +34,8 @@ def check(df):
             return pypsa_generation_supply.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_generation_supply.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_generation_supply.check(df)
         else:
             return False
     except Exception as e:
@@ -60,6 +63,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_generation_supply.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_generation_supply.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

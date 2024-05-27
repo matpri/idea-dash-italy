@@ -7,6 +7,8 @@ from profiles.pithos_output.processing_scripts import overview as pithos_overvie
 from profiles.pypsa_output.processing_scripts import overview as pypsa_overview
 from profiles.pypsa_can_output.processing_scripts import overview as pypsa_can_overview
 from profiles.cef.processing_scripts import overview as cef_overview
+from profiles.temoa_output.processing_scripts import overview as temoa_overview
+
 
 
 
@@ -36,6 +38,8 @@ def check(df):
             return pypsa_can_overview.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_overview.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_overview.check(df)
         else:
             return False
     except Exception as e:
@@ -69,6 +73,10 @@ def process(selected: dict):
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_overview.process({scenario_name: db})
             df.model = "PyPSA_CAN"
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_overview.process({scenario_name: db})
+            df.model = "Sutubra-TEMOA"
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_overview.process({scenario_name: db})

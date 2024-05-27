@@ -6,6 +6,7 @@ from profiles.natem_output.processing_scripts import new_capacity as natem_new_c
 from profiles.pithos_output.processing_scripts import new_capacity as pithos_new_capacity
 from profiles.pypsa_output.processing_scripts import new_capacity as pypsa_new_capacity
 from profiles.pypsa_can_output.processing_scripts import new_capacity as pypsa_can_new_capacity
+from profiles.temoa_output.processing_scripts import new_capacity as temoa_new_capacity
 
 
 
@@ -33,6 +34,8 @@ def check(df):
             return pypsa_new_capacity.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_new_capacity.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_new_capacity.check(df)
         else:
             return False
     except Exception as e:
@@ -60,6 +63,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_new_capacity.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_new_capacity.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

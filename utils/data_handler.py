@@ -19,7 +19,7 @@ model_mapping = {
     'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA Output'],
+    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models']
 }
 
 def data_processing_task(args: Tuple[str, str, dict, dict, Callable]) -> Tuple[str, str, pd.DataFrame]:

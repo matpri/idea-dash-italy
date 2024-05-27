@@ -7,6 +7,8 @@ from profiles.pithos_output.processing_scripts import matrix as pithos_matrix
 from profiles.pypsa_output.processing_scripts import matrix as pypsa_matrix
 from profiles.pypsa_can_output.processing_scripts import matrix as pypsa_can_matrix
 from profiles.cef.processing_scripts import matrix as cef_matrix
+from profiles.temoa_output.processing_scripts import matrix as temoa_matrix
+
 
 
 
@@ -34,6 +36,8 @@ def check(df):
             return pypsa_matrix.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_matrix.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_matrix.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_matrix.check(df)
         else:
@@ -63,6 +67,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_matrix.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_matrix.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_matrix.process({scenario_name: db})

@@ -6,6 +6,7 @@ from profiles.natem_output.processing_scripts import cost_total as natem_cost_to
 from profiles.pithos_output.processing_scripts import cost_total as pithos_cost_total
 from profiles.pypsa_output.processing_scripts import cost_total as pypsa_cost_total
 from profiles.pypsa_can_output.processing_scripts import cost_total as pypsa_can_cost_total
+from profiles.temoa_output.processing_scripts import cost_total as temoa_cost_total
 
 
 
@@ -33,6 +34,8 @@ def check(df):
             return pypsa_cost_total.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_cost_total.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_cost_total.check(df)
         else:
             return False
     except Exception as e:
@@ -60,6 +63,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_cost_total.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_cost_total.process({scenario_name: db})
             dfs.append(df)
         else:
             print("Model not implemented")

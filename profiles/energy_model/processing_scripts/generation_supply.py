@@ -7,6 +7,8 @@ from profiles.pithos_output.processing_scripts import generation_supply as pitho
 from profiles.pypsa_output.processing_scripts import generation_supply as pypsa_generation_supply
 from profiles.pypsa_can_output.processing_scripts import generation_supply as pypsa_can_generation_supply
 from profiles.cef.processing_scripts import generation_supply as cef_generation_supply
+from profiles.temoa_output.processing_scripts import generation_supply as temoa_generation_supply
+
 
 
 
@@ -34,6 +36,8 @@ def check(df):
             return pypsa_generation_supply.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_generation_supply.check(df)
+        elif df.model.unique()[0] == "Sutubra-TEMOA":
+            return temoa_generation_supply.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_generation_supply.check(df)
         else:
@@ -63,6 +67,9 @@ def process(selected: dict):
             dfs.append(df)
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_generation_supply.process({scenario_name: db})
+            dfs.append(df)
+        elif db.model.unique()[0] == "Sutubra-TEMOA":
+            df = temoa_generation_supply.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_generation_supply.process({scenario_name: db})
