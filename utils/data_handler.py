@@ -16,7 +16,7 @@ model_mapping = {
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
     'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
-    'ESMIA-PITHOS': ['ESMIA-PITHOS Output', 'Power System Models'],
+    'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
     'Sutubra-TEMOA': ['Sutubra-TEMOA Output'],
@@ -243,7 +243,7 @@ class DataHandler:
             df = df.infer_objects()
             df.value = pd.to_numeric(df.value, errors='coerce')
 
-        filename = f'{profile}-{scenario}-{author}'
+        filename = f'{profile}|{scenario}|{author}|{db}'
 
         if filename not in self.data:
             self.data[filename] = {}
@@ -360,12 +360,12 @@ class DataHandler:
         df.columns = df.columns.str.lower()
 
         # check if df.columns contain all of the following: model, scenario, variable, value, unit
-        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']):
-            diff = {'model', 'scenario', 'variable', 'value', 'unit', 'region', 'time'} - set(df.columns)
+        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+            diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
             print(f"Columns missing in {filename}", diff)
             return False, f"These Columns were expected: {diff}"
 
-        df = df[['model', 'scenario', 'variable', 'value', 'unit', 'region', 'time']]
+        df = df[['model', 'scenario', 'variable', 'value', 'region', 'time']]
 
         if filename not in self.data:
             self.data[filename] = {}

@@ -16,7 +16,7 @@ def check(df):
     """
     print("Checking for emissions in variable column")
     try:
-        if (df.model == 'ESMIA-PITHOS').any():
+        if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Emissions|").any():
                 return True
         return False

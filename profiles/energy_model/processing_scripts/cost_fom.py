@@ -27,7 +27,7 @@ def check(df):
             return nextgrid_cost_fom.check(df)
         elif df.model.unique()[0] == "NATEM-POWER":
             return natem_cost_fom.check(df)
-        elif df.model.unique()[0] == "ESMIA-PITHOS":
+        elif df.model.unique()[0] == "HEC-PITHOS":
             return pithos_cost_fom.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_cost_fom.check(df)
@@ -52,7 +52,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "NATEM-POWER":
             df = natem_cost_fom.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "ESMIA-PITHOS":
+        elif db.model.unique()[0] == "HEC-PITHOS":
             df = pithos_cost_fom.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":

@@ -18,7 +18,7 @@ def check(df):
     """
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'ESMIA-PITHOS').any():
+        if (df.model == 'HEC-PITHOS').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
             if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True
@@ -47,8 +47,8 @@ def aggregate_db(db, scenario):
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-
-    supply_df['time'] = pd.to_datetime(supply_df['time'])
+    supply_df = supply_df.melt(id_vars=['variable', 'region', 'hour', 'model', 'scenario'], var_name='time', value_name='value')
+    supply_df['time'] = pd.to_datetime(supply_df['time'].astype(str) + '-01-01') + pd.to_timedelta(supply_df['hour'], unit='h')
 
     # all times - 1 hour delta
     supply_df['period'] = supply_df['time'].dt.year
@@ -69,9 +69,10 @@ def aggregate_db(db, scenario):
     transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'model', 'scenario'], var_name='time', value_name='value')
+    transmission_df['time'] = pd.to_datetime(transmission_df['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission_df['hour'], unit='h')
 
     # time to datetime object
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
     transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int

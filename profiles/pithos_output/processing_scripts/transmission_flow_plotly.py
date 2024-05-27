@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for transmission in variable column")
     try:
-        if (df.model == 'ESMIA-PITHOS').any():
+        if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Transmission flow|").any():
                 return True
         return False
@@ -108,7 +108,9 @@ def preprocess(transmission, scenario="CER"):
     """
     transmission = transmission.drop(columns=['model', 'unit'])
     prov_cord = pd.read_csv('./arrow_coords.csv')
-    transmission['time'] = pd.to_datetime(transmission['time'])
+
+    transmission = transmission.melt(id_vars=['variable', 'region', 'hour', 'model', 'scenario'], var_name='time', value_name='value')
+    transmission['time'] = pd.to_datetime(transmission['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission['hour'], unit='h')
 
     # all times - 1 hour delta
     transmission['time'] = transmission['time'] - pd.Timedelta(hours=1)

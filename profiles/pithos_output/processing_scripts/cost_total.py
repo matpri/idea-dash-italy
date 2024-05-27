@@ -15,7 +15,7 @@ def check(df):
     """
     print("Checking for cost in variable column")
     try:
-        if (df.model == 'ESMIA-PITHOS').any():
+        if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.contains("Operational|").any() or df.variable.str.contains("Capital|").any():
                 return df[df.variable.str.contains("Operational|")]['value'].sum() != 0 or df[df.variable.str.contains("Capital|")]['value'].sum() != 0
         return False

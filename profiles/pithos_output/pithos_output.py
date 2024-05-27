@@ -57,7 +57,7 @@ from profiles.pithos_output.visualization_scripts import (
 
 
 class PyPsaOutput(BaseProfile):
-    name = 'ESMIA-PITHOS Output'
+    name = 'HEC-PITHOS Output'
     db_name = 'pithos'
     color = 'yellow 8'
     description = (

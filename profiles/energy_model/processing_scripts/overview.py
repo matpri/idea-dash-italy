@@ -28,7 +28,7 @@ def check(df):
             return nextgrid_overview.check(df)
         elif df.model.unique()[0] == "NATEM-POWER":
             return natem_overview.check(df)
-        elif df.model.unique()[0] == "ESMIA-PITHOS":
+        elif df.model.unique()[0] == "HEC-PITHOS":
             return pithos_overview.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_overview.check(df)
@@ -58,9 +58,9 @@ def process(selected: dict):
             df = natem_overview.process({scenario_name: db})
             df.model = "NATEM-POWER"
             dfs.append(df)
-        elif db.model.unique()[0] == "ESMIA-PITHOS":
+        elif db.model.unique()[0] == "HEC-PITHOS":
             df = pithos_overview.process({scenario_name: db})
-            df.model = "ESMIA-PITHOS"
+            df.model = "HEC-PITHOS"
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_overview.process({scenario_name: db})
