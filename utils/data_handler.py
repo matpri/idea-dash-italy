@@ -25,10 +25,7 @@ model_mapping = {
 def data_processing_task(args: Tuple[str, str, dict, dict, Callable]) -> Tuple[str, str, pd.DataFrame]:
     profile_name, viz, data, processed_data, processing_func = args
     try:
-        if processed_data.get(viz) is None:
-            data_out = processing_func(data)
-        else:
-            data_out = pd.concat([processed_data[viz], processing_func(data)])
+        data_out = processing_func(data)
     except Exception as e:
         print(f"Error processing data for {profile_name} - {viz}: {e}")
         data_out = pd.DataFrame()
@@ -298,7 +295,10 @@ class DataHandler:
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
-            self.processed_data[profile][viz] = processed_data
+            if self.processed_data[profile].get(viz) is None:
+                self.processed_data[profile][viz] = processed_data
+            else:
+                self.processed_data[profile][viz] = pd.concat([self.processed_data[profile][viz], processed_data])
 
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
