@@ -5,6 +5,7 @@ from dash import html, dcc
 from profiles.nextgrid_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 regions_list = [
+    'to BC', 'to AB', 'to SK', 'to MB', 'to ON', 'to QC', 'to NB', 'to NS', 'to PE', 'to NL', 'to YT', 'to NT', 'to NU',
     'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL', 'YT', 'NT', 'NU',
 ]
 
