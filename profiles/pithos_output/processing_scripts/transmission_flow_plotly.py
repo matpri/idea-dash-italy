@@ -157,9 +157,15 @@ def process(selected):
     for scenario_name, df in selected.items():
         trs = df.copy()
         trs = trs[trs.variable.str.startswith("Transmission flow|")]
-        trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
-        trs['time'] = pd.to_datetime(trs['time'])
+        trs = trs.dropna(axis=1, how='all')
+        trs["variable"] = trs["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+        trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])
+        trs = trs.melt(id_vars=['variable', 'region', 'hour', 'scenario', 'model'], var_name='time',
+                                               value_name='value')
+        trs['time'] = pd.to_datetime(trs['time'].astype(str) + '-01-01') + pd.to_timedelta(
+            trs['hour'], unit='h')
         # all times - 1 hour delta
+        trs['time'] = trs['time'] - pd.Timedelta(hours=1)
         trs['period'] = trs['time'].dt.year
         sub_transmission = trs[trs['period'] == trs['period'].min()]
         unique_dates = sub_transmission['time'].dt.date.unique()
