@@ -46,8 +46,14 @@ def aggregate_db(db, scenario):
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Dispatch']
+    supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-    supply_df = supply_df.melt(id_vars=['variable', 'region', 'hour', 'model', 'scenario'], var_name='time', value_name='value')
+    columns = ['variable', 'region', 'hour', 'scenario']
+    # add all columns that are numeric and not in the columns list
+    supply_columns = supply_df.columns.astype(str)
+    columns.extend([col for col in supply_columns if col not in columns and col.isnumeric()])
+    supply_df = supply_df[columns]
+    supply_df = supply_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time', value_name='value')
     supply_df['time'] = pd.to_datetime(supply_df['time'].astype(str) + '-01-01') + pd.to_timedelta(supply_df['hour'], unit='h')
 
     # all times - 1 hour delta
@@ -67,9 +73,11 @@ def aggregate_db(db, scenario):
     supply_df.drop(columns=['time'], inplace=True)
 
     transmission_df = db[classes == 'Transmission flow']
+    transmission_df = transmission_df.dropna(axis=1, how='all')
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
-    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'model', 'scenario'], var_name='time', value_name='value')
+    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time',
+                                           value_name='value')
     transmission_df['time'] = pd.to_datetime(transmission_df['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission_df['hour'], unit='h')
 
     # time to datetime object
@@ -158,3 +166,21 @@ def process(selected):
 
     full_data['time'] = full_data['time'].astype(int)
     return full_data
+
+if __name__ == '__main__':
+    # Get all the csv files in the directory
+    file = 'HEC-PITHOS_high_techcost.xlsx'
+
+    xls = pd.ExcelFile(file)
+    # Get all sheet names
+    sheet_names = xls.sheet_names
+    # Read all sheets into a DataFrame list
+    df_list = [xls.parse(sheet_name) for sheet_name in sheet_names]
+    # Combine all DataFrames into one
+    df = pd.concat(df_list, ignore_index=True)
+
+    df.columns = df.columns.str.lower()
+
+    # Process the data
+    processed_data = process({'HEC-PITHOS_high_techcost': df})
+

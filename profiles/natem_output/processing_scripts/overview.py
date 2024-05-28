@@ -93,6 +93,6 @@ def process(data):
 
     full_df = pd.concat(dfs)
 
-    full_df = full_df[full_df['region']=='CAN']
+    full_df = full_df[full_df['region'] == 'CAN']
     full_df = full_df.groupby(['scenario', 'variable','time']).sum(numeric_only=True).reset_index()
     return full_df[['scenario', 'variable', 'time', 'value']]

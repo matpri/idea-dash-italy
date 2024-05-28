@@ -16,7 +16,7 @@ model_mapping = {
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
     'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
-    'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
+    'HEC-PITHOS': ['HEC-PITHOS Output'],
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
     'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models']
@@ -347,7 +347,13 @@ class DataHandler:
                 # Get all sheet names
                 sheet_names = xls.sheet_names
                 # Read all sheets into a DataFrame list
-                df_list = [xls.parse(sheet_name) for sheet_name in sheet_names]
+                df_list = []
+                for sheet in sheet_names:
+                    print(sheet)
+                    _df = xls.parse(sheet)
+                    # infer types of the column names
+                    _df.columns = _df.columns.astype(str)
+                    df_list.append(_df)
                 # Combine all DataFrames into one
                 df = pd.concat(df_list, ignore_index=True)
             else:
@@ -365,7 +371,7 @@ class DataHandler:
             print(f"Columns missing in {filename}", diff)
             return False, f"These Columns were expected: {diff}"
 
-        df = df[['model', 'scenario', 'variable', 'value', 'region', 'time']]
+        # df = df[['model', 'scenario', 'variable', 'value', 'region', 'time']]
 
         if filename not in self.data:
             self.data[filename] = {}

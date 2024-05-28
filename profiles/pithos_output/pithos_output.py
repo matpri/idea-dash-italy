@@ -161,16 +161,16 @@ class PyPsaOutput(BaseProfile):
                 'callback': transmission_capacity_callbacks.link,
                 'description': 'Transmission capacity between regions in the model.'
             },
-        'Transmission Flow':
-            {
-                'check': transmission_flow_processing.check,
-                'db_check': transmission_flow_processing.check,
-                'process': transmission_flow_processing.process,
-                'db_process': transmission_flow_processing.process,
-                'viz': transmission_flow_viz.plot,
-                'callback': transmission_flow_callbacks.link,
-                'description': 'Transmission flow between regions in the model.'
-            },
+        # 'Transmission Flow':
+        #     {
+        #         'check': transmission_flow_processing.check,
+        #         'db_check': transmission_flow_processing.check,
+        #         'process': transmission_flow_processing.process,
+        #         'db_process': transmission_flow_processing.process,
+        #         'viz': transmission_flow_viz.plot,
+        #         'callback': transmission_flow_callbacks.link,
+        #         'description': 'Transmission flow between regions in the model.'
+        #     },
         'Total Cost':
             {
                 'check': cost_total_processing.check,
