@@ -20,8 +20,8 @@ def check(df):
     print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'HEC-PITHOS').any():
-            if df.variable.str.startswith("Generation|").any() or df.variable.str.startswith(
-                    "Flow|").any() or df.variable.str.startswith("Storage Out|").any() or df.variable.str.startswith("Storage In|").any():
+            classes = df["variable"].apply(lambda x: x.split("|")[0])
+            if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -30,84 +30,106 @@ def check(df):
 
 def aggregate_db(db, scenario):
     """
-    Aggregate data from a DataFrame.
+    Aggregate and format data from the 'db' DataFrame based on specific conditions.
 
     Parameters:
-        db (pd.DataFrame): Input DataFrame.
-        scenario (str): Scenario name.
+        db (pd.DataFrame): DataFrame to aggregate.
+        scenario (str): Name of the scenario.
 
     Returns:
-        pd.DataFrame: Aggregated DataFrame.
+        pd.DataFrame: Aggregated and formatted DataFrame.
     """
-    db.drop(columns=['model', "unit"], inplace=True, errors='ignore')
+    # safely remove model and unit column if they exist
+    db = db.drop(columns=['model', 'unit'], errors='ignore')
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Generation']
+    supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
-    transmission_df = db[classes == 'Flow']
+    supply_df['time'] = pd.to_datetime(supply_df['time'])
+
+    # all times - 1 hour delta
+    supply_df['period'] = supply_df['time'].dt.year
+    sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
+    unique_dates = sub_supply['time'].dt.date.unique()
+
+    # rename region entries based on utils.province_short
+    supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
+    # aggregate the dim_name based on the tech_agg_COPPER dictionary
+    # change value from MWh to TWh
+    supply_df['value'] = supply_df['value'] / 1000000
+    # expand value to an entire year by multiplying by 365/12
+    supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
+    # make period an int
+    supply_df['period'] = supply_df['period'].astype(int)
+
+    transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+
+    # time to datetime object
+    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
+    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
+    transmission_df['period'] = transmission_df['time'].dt.year
+    # make period an int
+    transmission_df['period'] = transmission_df['period'].astype(int)
+
+    # drop all the 0 values
+    # transmission_df = transmission_df[transmission_df.value != 0]
+    transmission_df['value'] = transmission_df['value'] * -1
+
     # aggregate df values by region, variable, time, hour
-    transmission_df = transmission_df.groupby(["region", "variable", "time"]).sum().reset_index()
     # rename from and variable based on utils.province_short
     transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
 
-    # for every export create a new row with the region value being the Region in the dimname (export$region) and the variable being the region value and the value column being -1* the value column
-    imports = []
-    exports = []
+    # drop rows where region == variable
+    transmission_df = transmission_df[transmission_df.region != transmission_df.variable]
+
+    # create a dataframe where the region and variable are swapped and the value is -1* the value
+    transmission_df_swap = transmission_df.copy()
+    transmission_df_swap["region"] = transmission_df["variable"]
+    transmission_df_swap["variable"] = transmission_df["region"]
+    transmission_df_swap["value"] = -1 * transmission_df["value"]
+
+    transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
+    transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
+    # rename region entries based on utils.province_short
+    transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
+    dim_names = []
     for index, row in transmission_df.iterrows():
-        #
-        exports.append([row["region"], row["time"], row["value"], "Exports"])
-        imports.append([row["variable"], row["time"], row["value"], "Imports"])
+        if row['value'] < 0:
+            dim_names.append(f"Exports to {row['variable']}")
+        else:
+            dim_names.append(f"Imports from {row['variable']}")
+    transmission_df['dim_name'] = dim_names
+    # change value from MWh to TWh
+    transmission_df['value'] = transmission_df['value'] / 1000000
+    # expand value to an entire year by multiplying by 365/12
+    transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
-    # create a new dataframe with the exports and imports using the same column names as the df dataframe with the additional column variable at the end
-    exports = pd.DataFrame(exports, columns=["region", "time", "value", "variable"])
-    imports = pd.DataFrame(imports, columns=["region", "time", "value", "variable"])
+    df = pd.concat([supply_df, transmission_df])
+    # df = df[df.value != 0]
 
+    df['scenario'] = scenario
+    can_df = df.groupby(['variable', 'time', 'scenario', 'period']).sum().reset_index()
 
-    storageout_df = db[classes.str.startswith("Storage Out")]
+    can_df['region'] = 'CAN'
 
-    storagein_df = db[classes.str.startswith("Storage In")]
+    df = pd.concat([df, can_df], ignore_index=True)
 
-    agg_df = pd.concat([supply_df, imports, exports, storagein_df, storageout_df])
+    # sort by dim_name and period
+    df = df.sort_values(by=['variable', 'period'])
 
-    agg_df.fillna(0, inplace=True)
-    # # map names if in dict utils.tech_agg_COPPER else leave as is
-
-    agg_df["region"] = agg_df.region.map(utils.province_short).fillna(agg_df.region)
-
-    # only take the first two letters if the region name and capitalize it
-    agg_df["region"] = agg_df.region.apply(lambda x: x[:2].upper())
-
-    # sum up same variable, time, hour, region
-    agg_df = agg_df.groupby(["variable", "time", "region"]).sum().reset_index()
-
-    # value MW to GW
-    agg_df["value"] = agg_df.value.apply(lambda x: x / 1000)
-
-    agg_df["scenario"] = scenario
-
-    # time as datetime
-    agg_df["time"] = pd.to_datetime(agg_df["time"])
-    agg_df["time"] = agg_df["time"] - pd.Timedelta(hours=1)
-    # for leap years adjust each time entry that is after February
-    agg_df.loc[agg_df["time"].dt.is_leap_year & (agg_df["time"].dt.month > 2), "time"] += pd.DateOffset(days=1)
-
-    # create period column which is int year
-    agg_df["period"] = agg_df["time"].dt.year
-    agg_df["period"] = agg_df["period"].astype(int)
-
-    return agg_df
-
+    # remove time column and rename period column
+    return df
 
 
 def process(selected):
     """
-    Process dispatch data from multiple scenarios.
+    Process the selected scenarios from the 'selected' dictionary.
 
     Parameters:
         selected (dict): Dictionary containing scenarios as keys and corresponding DataFrames as values.
@@ -117,14 +139,9 @@ def process(selected):
     """
     dfs = []
     for scenario, db in selected.items():
-        dfs.append(aggregate_db(db, scenario))
-    full_data =  pd.concat(dfs)
-    can_data = full_data.groupby(["variable", "time", 'period', "scenario"]).sum().reset_index()
-    can_data["region"] = "CAN"
+        df_processed = aggregate_db(db.copy(), scenario)
 
-    # make period column just the year
-    can_data["period"] = can_data["time"].dt.year
-    can_data["period"] = can_data["period"].astype(int)
-    full_data['period'] = full_data['time'].dt.year
-    full_data['period'] = full_data['period'].astype(int)
-    return pd.concat([full_data, can_data])
+        dfs.append(df_processed)
+
+    full_data = pd.concat(dfs)
+    return full_data
