@@ -30,6 +30,7 @@ def vre_plot(grid, variable):
             bgcolor='rgba(0,0,0,0)'),
         margin={"r": 0, "t": 0, "l": 0, "b": 0}
     )
+    fig.update_geos(projection_type="orthographic")
     fig.layout.template = None
     return fig
 

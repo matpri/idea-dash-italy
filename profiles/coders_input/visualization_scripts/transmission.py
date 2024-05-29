@@ -6,17 +6,20 @@ import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
 
-import matplotlib
 
-def create_color_map(df, cmap='viridis'):
+def create_color_map(df):
+    # get the viridis color scale from plotly
+    viridis = px.colors.sequential.Viridis
     max_capacity = df['summer_capacity'].max()
     min_capacity = df['summer_capacity'].min()
-    df['color'] = (df['summer_capacity'] - min_capacity) / (max_capacity - min_capacity)
 
-    # apply color map viridis
-    df['color'] = df['color'].apply(lambda x: matplotlib.cm.get_cmap(cmap)(x))
-    # make color to string with rgba
-    df['color'] = df['color'].apply(lambda x: f'rgba({int(x[0] * 255)}, {int(x[1] * 255)}, {int(x[2] * 255)}, 0.8)')
+    # normalize the 'summer_capacity' to the length of viridis color scale
+    df['color'] = ((df['summer_capacity'] - min_capacity) / (max_capacity - min_capacity) * (len(viridis) - 1)).astype(
+        int)
+
+    # map the normalized 'summer_capacity' to the color scale
+    df['color'] = df['color'].apply(lambda x: viridis[x])
+
     return df
 
 
@@ -43,7 +46,7 @@ def render_plot(df):
                             'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
         scope='north america',
     )
-    fig_base.update_geos(projection_type="natural earth")
+    fig_base.update_geos(projection_type="orthographic")
 
     fig = go.Figure(
         data=fig_base.data,
@@ -61,7 +64,7 @@ def render_plot(df):
             hovertemplate=f'<b>Capacity: {row["summer_capacity"]} MW</b><extra></extra>'
         ))
 
-    fig.update_geos(projection_type="natural earth")
+    fig.update_geos(projection_type="orthographic")
     fig.update_layout(
         title_text='Transmission Lines',
         showlegend=False,

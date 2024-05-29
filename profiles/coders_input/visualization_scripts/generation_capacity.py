@@ -33,7 +33,7 @@ def render_plot(df, aggregate):
                             'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
         scope='north america',
     )
-    fig_base.update_geos(projection_type="natural earth")
+    fig_base.update_geos(projection_type="orthographic")
 
     fig = go.Figure(
         data=fig_base.data,
@@ -73,7 +73,7 @@ def render_plot(df, aggregate):
             hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>'
         ))
 
-    fig.update_geos(projection_type="natural earth")
+    fig.update_geos(projection_type="orthographic")
     fig.update_layout(
         title_text='Generator Locations',
         showlegend=True,
