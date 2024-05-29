@@ -135,11 +135,13 @@ def aggregate_db(db, scenario):
     out_df['value'] = out_df['value'] * 365 / len(unique_dates)
 
     df = pd.concat([supply_df, transmission_df, out_df])
+    # fill na values with 0
+    df = df.fillna(0)
     # df = df[df.value != 0]
-    df = df.groupby(['period', 'region', 'variable']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['period', 'region', 'variable','end_node']).sum(numeric_only=True).reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario']).sum(numeric_only=True).reset_index()
+    can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
 
     can_df['region'] = 'CAN'
 
@@ -153,7 +155,7 @@ def aggregate_db(db, scenario):
 
     # make time an int
     df.time = df.time.astype(int)
-    print(df.head())
+    print(df.columns)
     return df
 
 def process(selected):

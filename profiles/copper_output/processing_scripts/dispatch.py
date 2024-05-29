@@ -55,25 +55,30 @@ def aggregate_db(db, scenario):
     # rename from and variable based on utils.province_short
     transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
+    # create a dataframe where the region and variable are swapped and the value is -1* the value
+    transmission_df_swap = transmission_df.copy()
+    transmission_df_swap["region"] = transmission_df["variable"]
+    transmission_df_swap["variable"] = transmission_df["region"]
+    transmission_df_swap["value"] = -1 * transmission_df["value"]
 
-    # for every export create a new row with the region value being the Region in the dimname (export$region) and the variable being the region value and the value column being -1* the value column
-    imports = []
-    exports = []
+    transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
+    transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
+    # rename region entries based on utils.province_short
+    transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
+    dim_names = []
     for index, row in transmission_df.iterrows():
-        #
-        exports.append([row["region"], row["time"], row["value"], "Exports"])
-        imports.append([row["variable"], row["time"], row["value"], "Imports"])
-
-    # create a new dataframe with the exports and imports using the same column names as the df dataframe with the additional column variable at the end
-    exports = pd.DataFrame(exports, columns=["region", "time", "value", "variable"])
-    imports = pd.DataFrame(imports, columns=["region", "time", "value", "variable"])
-
+        if row['value'] < 0:
+            dim_names.append(f"Exports to {row['variable']}")
+        else:
+            dim_names.append(f"Imports from {row['variable']}")
+    transmission_df['end_node'] = transmission_df['variable']
+    transmission_df['variable'] = dim_names
 
     storageout_df = db[classes.str.startswith("Storage Out")]
 
     storagein_df = db[classes.str.startswith("Storage In")]
 
-    agg_df = pd.concat([supply_df, imports, exports, storagein_df, storageout_df])
+    agg_df = pd.concat([supply_df, storagein_df, storageout_df, transmission_df])
 
     agg_df.fillna(0, inplace=True)
     # # map names if in dict utils.tech_agg_COPPER else leave as is
@@ -84,7 +89,7 @@ def aggregate_db(db, scenario):
     agg_df["region"] = agg_df.region.apply(lambda x: x[:2].upper())
 
     # sum up same variable, time, hour, region
-    agg_df = agg_df.groupby(["variable", "time", "region"]).sum().reset_index()
+    agg_df = agg_df.groupby(["variable", "time", "region"]).sum(numeric_only=True).reset_index()
 
     # value MW to GW
     agg_df["value"] = agg_df.value.apply(lambda x: x / 1000)
@@ -119,7 +124,7 @@ def process(selected):
     for scenario, db in selected.items():
         dfs.append(aggregate_db(db, scenario))
     full_data =  pd.concat(dfs)
-    can_data = full_data.groupby(["variable", "time", 'period', "scenario"]).sum().reset_index()
+    can_data = full_data.groupby(["variable", "time", 'period', "scenario"]).sum(numeric_only=True).reset_index()
     can_data["region"] = "CAN"
 
     # make period column just the year
