@@ -109,6 +109,14 @@ def aggregate_db(db, scenario):
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
+
+    # only keep the periods that are in the supply_df
+    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
+
+    #only keep the regions that are in the supply_df
+    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+
+
     df = pd.concat([supply_df, transmission_df])
     # df = df[df.value != 0]
 

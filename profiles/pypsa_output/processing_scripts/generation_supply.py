@@ -68,6 +68,8 @@ def aggregate_db(db, scenario):
 
     transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    # replace to with ''
+    transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
@@ -108,12 +110,22 @@ def aggregate_db(db, scenario):
             dim_names.append(f"Exports to {row['variable']}")
         else:
             dim_names.append(f"Imports from {row['variable']}")
-    transmission_df['dim_name'] = dim_names
+
+    transmission_df['end_node'] = transmission_df['variable']
+    transmission_df['variable'] = dim_names
     transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
+
+
+    # only keep the periods that are in the supply_df
+    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
+
+    #only keep the regions that are in the supply_df
+    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+
 
 
     df = pd.concat([supply_df, transmission_df])

@@ -58,13 +58,13 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
 
 
 def aggregate_imports(df):
-    imports = df[df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] > 0)]
-    exports = df[df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] < 0)]
+    imports = df[df['end_node'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] > 0)]
+    exports = df[df['end_node'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']) & (df['value'] < 0)]
 
     imports['variable'] = 'Imports'
     exports['variable'] = 'Exports'
 
-    df = df[~df['variable'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])]
+    df = df[~df['end_node'].isin(['BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])]
     return pd.concat([df, imports, exports])
 
 

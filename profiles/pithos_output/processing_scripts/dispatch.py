@@ -46,9 +46,15 @@ def aggregate_db(db, scenario):
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Dispatch']
+    supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-
-    supply_df['time'] = pd.to_datetime(supply_df['time'])
+    columns = ['variable', 'region', 'hour', 'scenario']
+    # add all columns that are numeric and not in the columns list
+    supply_columns = supply_df.columns.astype(str)
+    columns.extend([col for col in supply_columns if col not in columns and col.isnumeric()])
+    supply_df = supply_df[columns]
+    supply_df = supply_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time', value_name='value')
+    supply_df['time'] = pd.to_datetime(supply_df['time'].astype(str) + '-01-01') + pd.to_timedelta(supply_df['hour'], unit='h')
 
     # all times - 1 hour delta
     supply_df['period'] = supply_df['time'].dt.year
@@ -66,21 +72,27 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['period'].astype(int)
 
     transmission_df = db[classes == 'Transmission flow']
+    transmission_df = transmission_df.dropna(axis=1, how='all')
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time',
+                                           value_name='value')
+    transmission_df['time'] = pd.to_datetime(transmission_df['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission_df['hour'], unit='h')
 
     # time to datetime object
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
     transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
+
 
     # drop all the 0 values
     # transmission_df = transmission_df[transmission_df.value != 0]
     transmission_df['value'] = transmission_df['value'] * -1
 
     # aggregate df values by region, variable, time, hour
+    transmission_df = transmission_df.groupby(["region", "variable", "period", 'time']).sum().reset_index()
     # rename from and variable based on utils.province_short
     transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
@@ -104,17 +116,35 @@ def aggregate_db(db, scenario):
             dim_names.append(f"Exports to {row['variable']}")
         else:
             dim_names.append(f"Imports from {row['variable']}")
-    transmission_df['dim_name'] = dim_names
+    transmission_df['end_node'] = transmission_df['variable']
+    transmission_df['variable'] = dim_names
+    transmission_df = transmission_df.groupby(['period', 'region', 'variable', 'time']).sum().reset_index()
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
+
+    # only keep the periods that are in the supply_df
+    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
+
+    #only keep the regions that are in the supply_df
+    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+
+
+
+    # only keep the periods that are in the supply_df
+    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
+
+    #only keep the regions that are in the supply_df
+    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+
     df = pd.concat([supply_df, transmission_df])
     # df = df[df.value != 0]
+    df = df.groupby(['period', 'region', 'variable', 'time']).sum().reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'time', 'scenario', 'period']).sum().reset_index()
+    can_df = df.groupby(['variable', 'period', 'scenario', 'time']).sum().reset_index()
 
     can_df['region'] = 'CAN'
 
@@ -123,9 +153,7 @@ def aggregate_db(db, scenario):
     # sort by dim_name and period
     df = df.sort_values(by=['variable', 'period'])
 
-    # remove time column and rename period column
     return df
-
 
 def process(selected):
     """
