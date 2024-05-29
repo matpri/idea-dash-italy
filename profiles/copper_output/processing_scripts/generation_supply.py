@@ -109,27 +109,13 @@ def aggregate_db(db, scenario):
             dim_names.append(f"Exports to {row['variable']}")
         else:
             dim_names.append(f"Imports from {row['variable']}")
-    transmission_df['dim_name'] = dim_names
-    transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
+    transmission_df['end_node'] = transmission_df['variable']
+    transmission_df['variable'] = dim_names
+    transmission_df = transmission_df.groupby(['period', 'region', 'variable','end_node']).sum(numeric_only=True).reset_index()
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
     transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
-
-
-    # only keep the periods that are in the supply_df
-    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
-
-    #only keep the regions that are in the supply_df
-    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
-
-
-
-    # only keep the periods that are in the supply_dftransmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
-
-    #only keep the regions that are in the supply_df
-    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
-
 
     out_df = db[classes == 'Storage Out']
     out_df["variable"] = out_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
@@ -150,10 +136,10 @@ def aggregate_db(db, scenario):
 
     df = pd.concat([supply_df, transmission_df, out_df])
     # df = df[df.value != 0]
-    df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
+    df = df.groupby(['period', 'region', 'variable']).sum(numeric_only=True).reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario']).sum().reset_index()
+    can_df = df.groupby(['variable', 'period', 'scenario']).sum(numeric_only=True).reset_index()
 
     can_df['region'] = 'CAN'
 
@@ -167,6 +153,7 @@ def aggregate_db(db, scenario):
 
     # make time an int
     df.time = df.time.astype(int)
+    print(df.head())
     return df
 
 def process(selected):

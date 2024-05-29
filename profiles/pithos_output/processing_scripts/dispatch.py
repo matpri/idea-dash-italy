@@ -88,7 +88,7 @@ def aggregate_db(db, scenario):
 
     # drop all the 0 values
     # transmission_df = transmission_df[transmission_df.value != 0]
-    transmission_df['value'] = transmission_df['value'] * -1
+    # transmission_df['value'] = transmission_df['value'] * -1
 
     # aggregate df values by region, variable, time, hour
     transmission_df = transmission_df.groupby(["region", "variable", "period", 'time']).sum().reset_index()

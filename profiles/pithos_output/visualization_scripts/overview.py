@@ -62,7 +62,7 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    print('plotting overview', df.head())
+    # print('plotting overview', df.head())
     classes = df['variable'].unique().tolist()
 
     widget_layout = html.Div([

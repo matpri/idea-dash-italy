@@ -14,7 +14,9 @@ date_mapper = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6:
 
 
 def render_plot(type, df, aggregate, scenarios, region, year, day):
-    from profiles.natem_output.utils import plot_settings
+    from profiles.pithos_output.utils import plot_settings
+    if region == 'CAN':
+        df = df[~(df['variable'].str.startswith('Export') | df['variable'].str.startswith('Import'))]
     if type == 'Dispatched Electricity':
         plot_info = plot_settings['Dispatch']['Dispatched Electricity']
         return plot_dispatch(df, scenarios, region, year, day, aggregate, plot_info['title'], plot_info['x_label'],
@@ -92,9 +94,7 @@ def plot_dispatch(df, scenario, region, year, day, aggregate, title='Dispatched 
     )
 
     # try:
-    df = df[df['variable'] != 'Exports']
-    df = df[~df['variable'].str.startswith('Storage In|')]
-    df['variable'] = df['variable'].str.replace('Storage Out|', '')
+    df = df[~df['variable'].str.startswith('Export')]
     can_emissions = region_subset(df, scenario, region, year, day, aggregate)
     techs = can_emissions.variable.unique().tolist()
     if aggregate:
@@ -175,10 +175,7 @@ def plot_exports(df, scenario, region, year, day, aggregate, title='Exported Ele
     )
 
     # try:
-    exports = df[df['variable'] == 'Exports']
-    outs = df[df['variable'].str.startswith('Storage In|')]
-    outs['variable'] = outs['variable'].str.replace('Storage In|', '')
-    df = pd.concat([exports, outs])
+    df = df[df['variable'].str.startswith('Export')]
     can_emissions = region_subset(df, scenario, region, year, day, aggregate)
     techs = can_emissions.variable.unique().tolist()
     if aggregate:
