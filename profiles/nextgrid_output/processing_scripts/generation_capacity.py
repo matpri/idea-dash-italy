@@ -41,7 +41,6 @@ def process_gencap(prov_df, canada_df, scenario_name):
     df = pd.concat([prov_df, canada_df])
     # remove variables that contain retire
     df = df[~df['variable'].str.contains("retire")]
-    df['value'] = df['value'].div(1000)
     df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
     df['scenario'] = scenario_name
     return df

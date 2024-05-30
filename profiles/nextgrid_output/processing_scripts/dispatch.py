@@ -60,7 +60,7 @@ def aggregate_db(db, scenario):
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
     # aggregate the dim_name based on the tech_agg_COPPER dictionary
     # change value from MWh to TWh
-    supply_df['value'] = supply_df['value'] / 1000000
+    supply_df['value'] = supply_df['value']
     # expand value to an entire year by multiplying by 365/12
     supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
     # make period an int

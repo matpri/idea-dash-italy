@@ -56,7 +56,7 @@ def aggregate_db(db, scenario):
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
     # aggregate the dim_name based on the tech_agg_COPPER dictionary
     # change value from MWh to TWh
-    supply_df['value'] = supply_df['value'] / 1000000
+    supply_df['value'] = supply_df['value']
     # expand value to an entire year by multiplying by 365/12
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
@@ -109,7 +109,7 @@ def aggregate_db(db, scenario):
     transmission_df['variable'] = dim_names
     transmission_df = transmission_df.groupby(['period', 'region', 'variable','end_node']).sum().reset_index()
     # change value from MWh to TWh
-    transmission_df['value'] = transmission_df['value'] / 1000000
+    transmission_df['value'] = transmission_df['value']
     # expand value to an entire year by multiplying by 365/12
 
 

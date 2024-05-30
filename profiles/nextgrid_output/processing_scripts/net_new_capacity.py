@@ -44,7 +44,6 @@ def process_gencap(prov_df, canada_df, scenario_name):
     # make value for any variable that contains retire negative
     df.loc[df['variable'].str.contains("retire"), 'value'] = df.loc[df['variable'].str.contains("retire"), 'value'] * -1
     df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
-    df['value'] = df['value'].div(1000)
     df['scenario'] = scenario_name
     return df
 
@@ -72,7 +71,6 @@ def process_extant(gen_cap, path, scenario_name):
     # aggregate
     extant = extant.groupby(['region', 'variable', 'time']).sum().reset_index()
 
-    extant['value'] = extant['value'].div(1000)
 
     extant['scenario'] = scenario_name
     extant['time'] = extant['time'].astype(int)

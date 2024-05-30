@@ -39,7 +39,6 @@ def process_newcap(prov_df, canada_df, scenario_name):
 
     df = pd.concat([canada_df, prov_df])
     df = df[~df.variable.str.contains('retire')]  # Remove rows containing 'retire' in the 'variable' column
-    df['value'] = df['value'].div(1000)  # Convert 'value' to GW from MW
     df = df.groupby(['region', 'variable', 'time']).sum(numeric_only=True).reset_index()
     df['scenario'] = scenario_name
 

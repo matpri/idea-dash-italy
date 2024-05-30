@@ -212,9 +212,9 @@ def process(selected):
         df['scenario'] = scenario_name
         df['period'] = df['period'].astype(int)
         df = df.groupby(["region", "variable", "period", 'scenario', ]).sum(numeric_only=True).reset_index()
-        df['value'] = df['value'] / 1000
-        df['total'] = df['total'] / 1000
-        df['cumsum'] = df['cumsum'] / 1000
+        df['value'] = df['value']
+        df['total'] = df['total']
+        df['cumsum'] = df['cumsum']
 
         transmissions.append(df)
 

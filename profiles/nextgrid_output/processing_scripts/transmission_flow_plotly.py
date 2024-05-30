@@ -125,7 +125,7 @@ def preprocess(transmission, scenario="CER"):
     transmission['connection'] = transmission.apply(lambda row: connection(row), axis=1)
     transmission["period"] = transmission.period.astype(str)
     transmission["scenario"] = scenario
-    transmission["value"] = transmission.value / 1000000
+    transmission["value"] = transmission.value
     transmission["value"] = transmission["value"] * 365 / len(unique_dates)
     # prov_cord has columns from_lon, from_lat, to_lon, to_lat and region, variable add the correct from_lon, from_lat, to_lon, to_lat to transmission based on region and variable
     # Merge prov_cord into transmission
@@ -162,7 +162,7 @@ def process(selected):
         sub_transmission = trs[trs['period'] == trs['period'].min()]
         unique_dates = sub_transmission['time'].dt.date.unique()
 
-        trs['value'] = trs['value'] / 1000
+        trs['value'] = trs['value']
         trs['value'] = trs['value'] * 365 / len(unique_dates)
         # drop time
         trs = trs.drop(columns=['time'])
