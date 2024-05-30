@@ -126,7 +126,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                 valign="middle",
             )
     except Exception as e:
-        #print(title, 'plot:', e)
+        print(title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig

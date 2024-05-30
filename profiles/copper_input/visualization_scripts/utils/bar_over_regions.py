@@ -55,7 +55,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
             )
 
     except Exception as e:
-        #print(title, 'plot:', e)
+        print(title, 'plot:', e)
     fig.layout.autosize = True
     return fig
 

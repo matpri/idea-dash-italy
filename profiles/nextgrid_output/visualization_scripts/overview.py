@@ -49,7 +49,7 @@ def plot_overview(df, title, x_label, y_label, name, unit):
                 valign="middle",
             )
     except Exception as e:
-        #print(title, 'plot:', e)
+        print(title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
