@@ -127,7 +127,7 @@ def connect_to_database(n_clicks, api_key, children):
                 runs = pd.concat([runs, mmcw_runs])
 
             except Exception as e:
-                raise e
+                pass
             from main import data_handler
             data_handler.runs = runs
 
