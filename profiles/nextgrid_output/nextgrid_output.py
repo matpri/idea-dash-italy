@@ -213,16 +213,16 @@ class NextGridOutput(BaseProfile):
                 'description': 'Variable operating and maintenance costs of energy production and transmission in the model.'
 
             },
-        'Dispatch':
-            {
-                'check': dispatch_processing.check,
-                'db_check': dispatch_processing.check,
-                'process': dispatch_processing.process,
-                'db_process': dispatch_processing.process,
-                'viz': dispatch_viz.plot,
-                'callback': dispatch_callbacks.link,
-                'description': 'Dispatch of each technology in the model.'
-            },
+        # 'Dispatch':
+        #     {
+        #         'check': dispatch_processing.check,
+        #         'db_check': dispatch_processing.check,
+        #         'process': dispatch_processing.process,
+        #         'db_process': dispatch_processing.process,
+        #         'viz': dispatch_viz.plot,
+        #         'callback': dispatch_callbacks.link,
+        #         'description': 'Dispatch of each technology in the model.'
+        #     },
     }
 
     def __init__(self):
