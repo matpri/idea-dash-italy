@@ -21,7 +21,7 @@ def check(df):
                 return df[df.variable.str.startswith("Total generation capacity")].time.unique().size > 1
         return False
     except Exception as e:
-        #print("net new cap  check", e)
+        print("net new cap  check", e)
         return False
 
 

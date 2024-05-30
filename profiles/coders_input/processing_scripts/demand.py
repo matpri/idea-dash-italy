@@ -21,7 +21,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("Emission check", e)
+        print("Emission check", e)
         return False
 
 def process(selected: dict):

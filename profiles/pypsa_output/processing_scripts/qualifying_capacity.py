@@ -20,7 +20,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("gen cap  check", e)
+        print("gen cap  check", e)
         return False
 
 

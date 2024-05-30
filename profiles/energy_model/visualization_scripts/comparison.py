@@ -69,7 +69,7 @@ def plot_comparison(diff, aggregate, title, x_label, y_label, name, unit):
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
     except Exception as e:
-        #print('ERROR', title, 'plot:', e)
+        print('ERROR', title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig

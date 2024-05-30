@@ -20,7 +20,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("transmission check", e)
+        print("transmission check", e)
         return False
 
 def check_folder(folder):
@@ -44,7 +44,7 @@ def check_folder(folder):
             df = pd.read_csv(os.path.join(folder, "transmission.csv"), header=None)
             return df[4].sum() != 0
     except Exception as e:
-        #print("transmission check", e)
+        print("transmission check", e)
         return False
 
 connections = ["BC -> AB", "AB -> SK", "SK -> MB", "MB -> ON", "ON -> QC", "QC -> NB", "QC -> NL", "NB -> NS",

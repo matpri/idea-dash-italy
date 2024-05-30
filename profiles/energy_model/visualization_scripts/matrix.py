@@ -106,7 +106,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     fig.update_layout(barmode='relative')
 
     except Exception as e:
-        #print('ERROR', title, 'plot:', e)
+        print('ERROR', title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig

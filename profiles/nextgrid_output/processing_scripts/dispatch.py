@@ -25,7 +25,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("dispatch check", e)
+        print("dispatch check", e)
         return False
 
 

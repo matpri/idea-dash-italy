@@ -21,7 +21,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("net new cap  check", e)
+        print("net new cap  check", e)
         return False
 
 

@@ -37,7 +37,7 @@ def check(df):
             return True
         return False
     except Exception as e:
-        #print("cost check", e)
+        print("cost check", e)
         return False
 
 

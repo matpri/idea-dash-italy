@@ -23,7 +23,7 @@ def check(df):
                 return df[df.variable.str.startswith("Capital|VO&M costs|")]['value'].sum() != 0
         return False
     except Exception as e:
-        #print("cost check", e)
+        print("cost check", e)
         return False
 
 

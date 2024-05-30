@@ -19,7 +19,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("net new cap  check", e)
+        print("net new cap  check", e)
         return False
 
 def process_newcap(prov_df, canada_df, scenario_name):

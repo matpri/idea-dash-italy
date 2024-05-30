@@ -25,7 +25,7 @@ def check(df):
                     "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]['value'].sum() > 0
         return False
     except Exception as e:
-        #print("cost check", e)
+        print("cost check", e)
         return False
 
 

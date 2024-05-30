@@ -20,7 +20,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        #print("capacity_transmission check", e)
+        print("capacity_transmission check", e)
         return False
 
 def check_folder(folder):
@@ -45,7 +45,7 @@ def check_folder(folder):
             df = pd.read_csv(os.path.join(folder, "capacity_transmission.csv"), header=None)
             return df[3].sum() != 0
     except Exception as e:
-        #print("transmission capacity check", e)
+        print("transmission capacity check", e)
         return False
 
 line_name_map = {

@@ -21,7 +21,7 @@ def check(df):
                 return df[df.variable.str.startswith("greenhouse_gas_emissions|")]['value'].sum() != 0
         return False
     except Exception as e:
-        #print("cost check", e)
+        print("cost check", e)
         return False
 
 def process(data):
