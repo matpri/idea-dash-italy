@@ -75,7 +75,7 @@ def process(selected: dict):
             df['scenario'] = 'CEF|' + df['scenario']
             dfs.append(df)
         else:
-            #print("Model not implemented")
+            print("Model not implemented")
     return pd.concat(dfs)
 
 

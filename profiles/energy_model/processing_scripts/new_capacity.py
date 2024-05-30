@@ -68,7 +68,7 @@ def process(selected: dict):
             df = temoa_new_capacity.process({scenario_name: db})
             dfs.append(df)
         else:
-            #print("Model not implemented")
+            print("Model not implemented")
     return pd.concat(dfs)
 
 

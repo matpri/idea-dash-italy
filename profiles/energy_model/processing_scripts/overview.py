@@ -84,7 +84,7 @@ def process(selected: dict):
             df.model = "cef"
             dfs.append(df)
         else:
-            #print("Model not implemented")
+            print("Model not implemented")
     return pd.concat(dfs)
 
 

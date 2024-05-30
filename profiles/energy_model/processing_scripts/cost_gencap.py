@@ -69,7 +69,7 @@ def process(selected: dict):
             df = temoa_cost_gencap.process({scenario_name: db})
             dfs.append(df)
         else:
-            #print("Model not implemented")
+            print("Model not implemented")
     return pd.concat(dfs)
 
 
