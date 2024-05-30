@@ -21,8 +21,8 @@ regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario',
 with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
     canada = geojson.load(f)
 
-def render_plot(df, aggregate):
 
+def render_plot(df, aggregate):
     fig_base = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
         color_discrete_map={'British Columbia': 'lightgrey', 'Alberta': 'lightgrey', 'Saskatchewan': 'lightgrey',
@@ -36,10 +36,14 @@ def render_plot(df, aggregate):
     fig_base.update_geos(projection_type="orthographic")
 
     fig = go.Figure(
-        data=fig_base.data,
         layout=go.Layout(
         )
     )
+
+    for data in fig_base.data:
+        # remove legend
+        data.showlegend = False
+        fig.add_trace(data)
 
     if aggregate:
         df['gen_type_copper'] = df['gen_type_copper'].apply(lambda x: utils.get_group(x))
@@ -49,8 +53,6 @@ def render_plot(df, aggregate):
     df['facility_installed_capacity'] = df['facility_installed_capacity'].astype(float)
     df['latitude'] = df['latitude'].astype(float)
     df['longitude'] = df['longitude'].astype(float)
-
-
 
     df['color'] = df['gen_type_copper'].apply(lambda x: map_color(x, aggregate))
 
@@ -70,13 +72,14 @@ def render_plot(df, aggregate):
                 opacity=0.8,
                 line=dict(width=0)
             ),
-            hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>'
+            hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>',
+            showlegend=True
+            # increase legend size
         ))
 
     fig.update_geos(projection_type="orthographic")
     fig.update_layout(
         title_text='Generator Locations',
-        showlegend=True,
         geo=dict(
             showcountries=False, showcoastlines=False, showland=False,
             fitbounds="locations", showlakes=False,
@@ -87,6 +90,7 @@ def render_plot(df, aggregate):
     )
 
     fig.layout.autosize = True
+    fig.update_layout(legend={'itemsizing': 'constant'})
     return fig
 
 
