@@ -89,7 +89,7 @@ def link(app):
     )
     def update_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _download, _r_style, _y_style,
                         _canvas, _data, _s_style, _m_style):
-        print('updating capacity plot')
+        #print('updating capacity plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -112,7 +112,7 @@ def link(app):
                 idx = i
                 break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        #print('idx:', idx, 'plot type:', _p_type[idx])
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}

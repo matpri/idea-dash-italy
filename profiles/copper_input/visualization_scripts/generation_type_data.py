@@ -6,7 +6,7 @@ import plotly.graph_objects as go
 
 def render_plot(df, scenarios, variable,):
     from profiles.copper_input.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Type Data']['name']
     df_scen = df.copy()
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
@@ -38,7 +38,7 @@ def render_plot(df, scenarios, variable,):
         )
 
     if df_scen.empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,

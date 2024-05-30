@@ -20,7 +20,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    #print("Checking for emissions in variable column")
     try:
         if df.model.unique()[0] == "copper":
             return copper_cost_gencap.check(df)
@@ -40,7 +40,7 @@ def check(df):
         else:
             return False
     except Exception as e:
-        print("Emission check", e)
+        #print("Emission check", e)
         return False
 
 
@@ -69,7 +69,7 @@ def process(selected: dict):
             df = temoa_cost_gencap.process({scenario_name: db})
             dfs.append(df)
         else:
-            print("Model not implemented")
+            #print("Model not implemented")
     return pd.concat(dfs)
 
 

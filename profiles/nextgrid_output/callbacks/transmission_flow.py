@@ -54,7 +54,7 @@ def link(app):
         prevent_initial_call=True
     )
     def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _canvas, _s_style, _m_style):
-        print('updating transmissionflow plot')
+        #print('updating transmissionflow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])

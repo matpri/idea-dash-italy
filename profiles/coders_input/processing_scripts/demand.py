@@ -14,14 +14,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    #print("Checking for emissions in variable column")
     try:
         if (df.model == 'CODERS').any():
             if 'Demand' in df.type.unique():
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        #print("Emission check", e)
         return False
 
 def process(selected: dict):

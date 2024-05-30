@@ -4,7 +4,7 @@ from dash import Output, Input, State, ALL, MATCH, dcc
 from profiles.coders_input.visualization_scripts.demand import render_plot
 
 def link(app):
-    print('linking demand')
+    #print('linking demand')
 
     @app.callback(
         Output({

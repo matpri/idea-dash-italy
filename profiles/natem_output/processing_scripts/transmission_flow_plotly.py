@@ -13,7 +13,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for transmission in variable column")
+    #print("Checking for transmission in variable column")
     try:
         if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.startswith("Transmission flow|").any():
@@ -24,7 +24,7 @@ def check(df):
                 return test_df.value.sum() != 0
         return False
     except Exception as e:
-        print("transmission check", e)
+        #print("transmission check", e)
         return False
 
 def check_folder(folder):
@@ -37,7 +37,7 @@ def check_folder(folder):
     Returns:
         bool: True if the condition is met, False otherwise.
     """
-    print("Checking for transmission.csv in folder", folder)
+    #print("Checking for transmission.csv in folder", folder)
     try:
         if "transmission.csv" not in os.listdir(folder):
             return False
@@ -48,7 +48,7 @@ def check_folder(folder):
             df = pd.read_csv(os.path.join(folder, "transmission.csv"), header=None)
             return df[4].sum() != 0
     except Exception as e:
-        print("transmission check", e)
+        #print("transmission check", e)
         return False
 
 connections = ["BC -> AB", "AB -> SK", "SK -> MB", "MB -> ON", "ON -> QC", "QC -> NB", "QC -> NL", "NB -> NS",

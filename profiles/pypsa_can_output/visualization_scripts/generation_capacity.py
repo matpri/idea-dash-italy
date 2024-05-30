@@ -6,7 +6,7 @@ from profiles.pypsa_can_output.visualization_scripts.utils import bar_over_years
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.pypsa_can_output.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Capacity']['name']
     unit = plot_settings['Capacity']['unit']
     if type == 'By Year':

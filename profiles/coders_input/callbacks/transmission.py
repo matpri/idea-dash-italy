@@ -5,7 +5,7 @@ from profiles.coders_input.visualization_scripts.demand import render_plot
 
 
 def link(app):
-    print('linking transmission')
+    #print('linking transmission')
 
     @app.callback(
         Output({

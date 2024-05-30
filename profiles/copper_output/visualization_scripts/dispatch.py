@@ -120,7 +120,7 @@ def plot_dispatch(df, scenario, region, year, day, aggregate, title='Dispatched 
         ))
     fig.update_yaxes(showgrid=True)
     if can_emissions.empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,
@@ -134,7 +134,7 @@ def plot_dispatch(df, scenario, region, year, day, aggregate, title='Dispatched 
             valign="middle",
         )
     # except Exception as e:
-    #     print("Dispatch viz", e)
+    #     #print("Dispatch viz", e)
     #     pass
 
     fig.layout.autosize = True
@@ -204,7 +204,7 @@ def plot_exports(df, scenario, region, year, day, aggregate, title='Exported Ele
         ))
     fig.update_yaxes(showgrid=True)
     if can_emissions.empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,
@@ -218,7 +218,7 @@ def plot_exports(df, scenario, region, year, day, aggregate, title='Exported Ele
             valign="middle",
         )
     # except Exception as e:
-    #     print("Dispatch viz", e)
+    #     #print("Dispatch viz", e)
     #     pass
 
     fig.layout.autosize = True

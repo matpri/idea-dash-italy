@@ -6,7 +6,7 @@ from profiles.cef.visualization_scripts.utils import bar_over_years, bar_over_re
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.cef.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Emissions']['name']
     unit = plot_settings['Emissions']['unit']
     if type == 'By Year':

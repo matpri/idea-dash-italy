@@ -6,7 +6,7 @@ from profiles.copper_input.visualization_scripts.utils import bar_over_years, ba
 
 def render_plot(type, df, scenarios, region, year):
     from profiles.copper_input.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Annual Growth']['name']
     unit = plot_settings['Annual Growth']['unit']
     if type == 'By Year':

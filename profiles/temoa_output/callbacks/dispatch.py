@@ -110,7 +110,7 @@ def link(app):
                           figure, download):
         from main import data_handler
         ctx = dash.callback_context
-        print('updating dispatch plot', ctx.triggered)
+        #print('updating dispatch plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
         if 'temoa-dispatch-download-button' in trigger_id['type']:

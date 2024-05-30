@@ -16,7 +16,7 @@ def check(df):
     Returns:
         bool: True if the specified strings are found, False otherwise.
     """
-    print("Checking for dispatch, *out and transmission in variable column")
+    #print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'copper').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
@@ -24,7 +24,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("dispatch check", e)
+        #print("dispatch check", e)
         return False
 
 
@@ -155,7 +155,7 @@ def aggregate_db(db, scenario):
 
     # make time an int
     df.time = df.time.astype(int)
-    print(df.columns)
+    #print(df.columns)
     return df
 
 def process(selected):

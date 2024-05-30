@@ -8,7 +8,7 @@ from profiles.energy_model import utils
 
 def render_plot(type, df, scenario_a, scenario_b, aggregate, region):
     from profiles.energy_model.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     df = df[df.variable.str.startswith(type + '|')]
     df = df[df.region == region]
     df['variable'] = df['variable'].str.replace(type + '|', '')
@@ -35,7 +35,7 @@ def plot_comparison(diff, aggregate, title, x_label, y_label, name, unit):
         diff = diff.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
     if diff.empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,
@@ -69,7 +69,7 @@ def plot_comparison(diff, aggregate, title, x_label, y_label, name, unit):
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
     except Exception as e:
-        print('ERROR', title, 'plot:', e)
+        #print('ERROR', title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
@@ -82,7 +82,7 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    print('plotting comparison')
+    #print('plotting comparison')
     classes = df['variable'].str.split('|', expand=True)[0].unique().tolist()
     regions = df['region'].unique().tolist()
 

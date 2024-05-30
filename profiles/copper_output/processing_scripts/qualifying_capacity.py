@@ -13,14 +13,14 @@ def check(df):
     Returns:
         bool: True if the specified prefixes are found, False otherwise.
     """
-    print("Checking for gen cap in variable column")
+    #print("Checking for gen cap in variable column")
     try:
         if (df.model == 'copper').any():
             if df.variable.str.startswith("Qualifying_capacity_summer|").any() or df.variable.str.startswith("Qualifying_capacity_winter|").any():
                 return True
         return False
     except Exception as e:
-        print("gen cap  check", e)
+        #print("gen cap  check", e)
         return False
 
 

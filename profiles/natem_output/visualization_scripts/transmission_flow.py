@@ -80,7 +80,7 @@ def add_arrow(fig, df: pd.DataFrame, cfunc, group=None, year=None, scenario=None
         color = cfunc(norm_value)
         length = norm_value + 0.5 #np.exp(norm_value)/np.exp(df['norm_value'].max())
 
-        print(group, color, norm_value, length)
+        #print(group, color, norm_value, length)
 
         # normalize the vector between the two points
         x = (to_lon - from_lon) / np.sqrt((to_lon - from_lon) ** 2 + (to_lat - from_lat) ** 2)
@@ -140,7 +140,7 @@ def to_color_plotly(min_value):
             value_log = 1 - (np.log(value) / np.log(min_value)) # transform value to logarithmic scale between 0 and 1
         # if value_log is nan set it to 0
         value_log = 0 if np.isnan(value_log) else value_log
-        print(value, value_log)
+        #print(value, value_log)
         cmap = px.colors.sequential.__dict__[cmap_name]  # get the colormap
         color_idx = int(value_log * (len(cmap) - 1))  # map value to an index in colormap
         return cmap[color_idx]
@@ -255,7 +255,7 @@ def transmission_plot(df, scenario, year, title):
                     subunitcolor='white')
 
     fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0}, )
-    print(f"The title is: {title}")
+    #print(f"The title is: {title}")
     fig.update_layout(title=title)
     fig.update_geos(projection_type="orthographic")
     # remove box around plot

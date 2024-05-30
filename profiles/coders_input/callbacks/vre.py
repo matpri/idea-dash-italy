@@ -5,7 +5,7 @@ from profiles.coders_input.visualization_scripts.vre import vre_plot
 
 
 def link(app):
-    print("gen cap link")
+    #print("gen cap link")
     @app.callback(
         Output({
             'type': 'figure',
@@ -29,13 +29,13 @@ def link(app):
     )
     def update_plot(variable, n_clicks):
         from main import data_handler
-        print("gen cap callback", variable)
+        #print("gen cap callback", variable)
         df = data_handler.processed_data['CODERS Input']['VRE Capacity Factor'].copy()
 
         ctx = dash.callback_context
         if ctx.triggered:
             prop_id = ctx.triggered[0]['prop_id']
             if 'vre-download-button' in prop_id:
-                print('downloading')
+                #print('downloading')
                 return dash.no_update, dcc.send_data_frame(df.to_csv, "vre.csv", index=False)
         return vre_plot(df, variable), dash.no_update

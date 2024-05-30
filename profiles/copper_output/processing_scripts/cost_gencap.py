@@ -15,14 +15,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for cost in variable column")
+    #print("Checking for cost in variable column")
     try:
         if (df.model == 'copper').any():
             if df.variable.str.startswith("Capital Costs|").any():
                 return df[df.variable.str.startswith("Capital Costs|")]['value'].sum() != 0
         return False
     except Exception as e:
-        print("cost check", e)
+        #print("cost check", e)
         return False
 
 def format_df(df):

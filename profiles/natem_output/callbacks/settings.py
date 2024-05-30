@@ -15,7 +15,7 @@ def link(app):
     State('natem-settings-upload-yaml', 'filename'),
     )
     def update_settings(content, filename):
-        print('Updating Settings', content, filename)
+        #print('Updating Settings', content, filename)
         if content is None:
             return 'Using Base Profile'
 
@@ -41,7 +41,7 @@ def link(app):
         Input('natem-technology-select', 'value')
     )
     def update_tech_settings(tech):
-        print('updating tech settings', tech)
+        #print('updating tech settings', tech)
         return utils.tech_edit(tech)
 
     @app.callback(
@@ -49,7 +49,7 @@ def link(app):
         Input('natem-plot-select', 'value')
     )
     def update_tech_settings(plot):
-        print('updating tech settings', plot)
+        #print('updating tech settings', plot)
         return utils.plot_edit(plot)
 
     @app.callback(
@@ -63,7 +63,7 @@ def link(app):
         prevent_initial_call=True
     )
     def tech_update(n_clicks, names, groups, colors, group_colors, disabled):
-        print('updating tech settings', n_clicks, names, groups, colors, group_colors, disabled)
+        #print('updating tech settings', n_clicks, names, groups, colors, group_colors, disabled)
         ctx = dash.callback_context
 
         if not ctx.triggered:
@@ -71,7 +71,7 @@ def link(app):
 
         trigger = ctx.triggered[0]['prop_id'].split('.')[0]
         trigger_id = ctx.triggered_id
-        print('trigger:', trigger, trigger_id)
+        #print('trigger:', trigger, trigger_id)
         idx = 0
         for i, out in enumerate(ctx.outputs_list):
             if out['id']['index'] == trigger_id['index']:
@@ -101,7 +101,7 @@ def link(app):
         prevent_initial_call=True
     )
     def plot_update(n_clicks, titles, x_axis, y_axis, disabled):
-        print('updating plot settings', n_clicks, titles, x_axis, y_axis, disabled)
+        #print('updating plot settings', n_clicks, titles, x_axis, y_axis, disabled)
         ctx = dash.callback_context
 
         if not ctx.triggered:
@@ -109,7 +109,7 @@ def link(app):
 
         trigger = ctx.triggered[0]['prop_id'].split('.')[0]
         trigger_id = ctx.triggered_id
-        print('trigger:', trigger, trigger_id)
+        #print('trigger:', trigger, trigger_id)
         idx = 0
         for i, out in enumerate(ctx.outputs_list):
             if out['id']['index'] == trigger_id['index']:

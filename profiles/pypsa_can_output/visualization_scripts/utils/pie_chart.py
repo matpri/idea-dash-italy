@@ -24,7 +24,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
 
         fig.add_trace(go.Pie(labels=techs, values=df_scen['value'], marker=dict(colors=colors)),)
         if df_scen.empty:
-            print("No data available, since the results are all zero.")
+            #print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,
@@ -39,7 +39,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
             )
 
     except Exception as e:
-        print(title, 'plot:', e)
+        #print(title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig

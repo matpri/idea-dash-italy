@@ -6,7 +6,7 @@ from profiles.copper_output.visualization_scripts.utils import bar_over_years, b
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['New Capacity']['name']
     unit = plot_settings['New Capacity']['unit']
     if type == 'By Year':

@@ -16,14 +16,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for cost in variable column")
+    #print("Checking for cost in variable column")
     try:
         if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Capital|Capital costs|").any():
                 return df[df.variable.str.startswith("Capital|Capital costs|")]['value'].sum() != 0
         return False
     except Exception as e:
-        print("cost check", e)
+        #print("cost check", e)
         return False
 
 

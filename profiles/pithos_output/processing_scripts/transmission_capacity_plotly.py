@@ -13,14 +13,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for capacity_transmission in variable column")
+    #print("Checking for capacity_transmission in variable column")
     try:
         if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
                 return True
         return False
     except Exception as e:
-        print("capacity_transmission check", e)
+        #print("capacity_transmission check", e)
         return False
 
 def check_folder(folder):
@@ -33,7 +33,7 @@ def check_folder(folder):
     Returns:
         bool: True if the condition is met, False otherwise.
     """
-    print("Checking for capacity_transmission.csv in folder", folder)
+    #print("Checking for capacity_transmission.csv in folder", folder)
     try:
         if "capacity_transmission.csv" not in os.listdir(folder):
             return False
@@ -45,7 +45,7 @@ def check_folder(folder):
             df = pd.read_csv(os.path.join(folder, "capacity_transmission.csv"), header=None)
             return df[3].sum() != 0
     except Exception as e:
-        print("transmission capacity check", e)
+        #print("transmission capacity check", e)
         return False
 
 line_name_map = {

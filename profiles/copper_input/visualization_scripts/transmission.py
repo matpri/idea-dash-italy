@@ -6,7 +6,7 @@ from profiles.copper_input.visualization_scripts.utils import bar_over_years, ba
 
 def render_plot(type, df, year, scenarios):
     from profiles.copper_input.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Transmission']['name']
     unit = plot_settings['Transmission']['unit']
     if type == 'Capacity':

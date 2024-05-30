@@ -11,7 +11,7 @@ regions_list = [
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.temoa_output.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Supply']['name']
     unit = plot_settings['Supply']['unit']
     if type == 'By Year':

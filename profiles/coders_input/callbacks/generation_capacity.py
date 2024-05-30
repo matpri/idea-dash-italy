@@ -5,7 +5,7 @@ from profiles.coders_input.visualization_scripts.generation_capacity import rend
 
 
 def link(app):
-    print("gen cap link")
+    #print("gen cap link")
     @app.callback(
         Output({
             'type': 'figure',
@@ -29,13 +29,13 @@ def link(app):
     )
     def update_plot(aggregate, n_clicks):
         from main import data_handler
-        print("gen cap callback", aggregate)
+        #print("gen cap callback", aggregate)
         df = data_handler.processed_data['CODERS Input']['Capacity'].copy()
 
         ctx = dash.callback_context
         if ctx.triggered:
             prop_id = ctx.triggered[0]['prop_id']
             if 'gencap-download-button' in prop_id:
-                print('downloading')
+                #print('downloading')
                 return dash.no_update, dcc.send_data_frame(df.to_csv, "capacity.csv", index=False)
         return render_plot(df, aggregate), dash.no_update

@@ -13,7 +13,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for cost in variable column")
+    #print("Checking for cost in variable column")
     try:
         if (df.model == 'copper').any():
             if df.variable.str.contains("Carbon Costs|").any() or df.variable.str.contains(
@@ -25,7 +25,7 @@ def check(df):
                     "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]['value'].sum() > 0
         return False
     except Exception as e:
-        print("cost check", e)
+        #print("cost check", e)
         return False
 
 

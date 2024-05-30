@@ -17,7 +17,7 @@ def check(df):
         bool: True if the specified prefixes are found, False otherwise.
     """
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
-    print("Checking for dispatch, *out and transmission in variable column")
+    #print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'Sutubra-TEMOA').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
@@ -25,7 +25,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("dispatch check", e)
+        #print("dispatch check", e)
         return False
 
 

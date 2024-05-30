@@ -6,7 +6,7 @@ from profiles.energy_model.visualization_scripts.utils import bar_over_years, ba
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.energy_model.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['New Capacity']['name']
     unit = plot_settings['New Capacity']['unit']
     if type == 'By Year':

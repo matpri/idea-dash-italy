@@ -14,14 +14,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    #print("Checking for emissions in variable column")
     try:
         if (df.model == 'PyPSA_CAN').any():
             if df.variable.str.startswith("Emissions|").any():
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        #print("Emission check", e)
         return False
 
 
@@ -71,5 +71,5 @@ def process(selected: dict):
         dfs.append(full_data)
     full_df = pd.concat(dfs)
     full_df['time'] = full_df['time'].astype(int)
-    print("Emissions processed")
+    #print("Emissions processed")
     return full_df

@@ -44,7 +44,7 @@ def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
 
     fig.update_yaxes(showgrid=True)
     if df.empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,
@@ -58,7 +58,7 @@ def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
             valign="middle",
         )
     # except Exception as e:
-    #     print("Dispatch viz", e)
+    #     #print("Dispatch viz", e)
     #     pass
 
     fig.layout.autosize = True

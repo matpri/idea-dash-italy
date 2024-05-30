@@ -53,7 +53,7 @@ def link(app):
     )
     def update_tech_evolution(_p_type, _scenarios, _regions, _years, _r_style, _y_style,
                         _canvas):
-        print('updating tech_evolution plot')
+        #print('updating tech_evolution plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -66,7 +66,7 @@ def link(app):
                 idx = i
                 break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        #print('idx:', idx, 'plot type:', _p_type[idx])
 
         if _p_type[idx] == 'By Year':
             _r_style[idx] = {'display': 'block'}

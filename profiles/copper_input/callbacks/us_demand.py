@@ -65,7 +65,7 @@ def link(app):
                         scenario_multi_select_style, scenario_select_style, region_select_style):
         from main import data_handler
         ctx = dash.callback_context
-        print('updating us_demand plot', ctx.triggered)
+        #print('updating us_demand plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
         df = data_handler.processed_data['COPPER Input']['Demand']

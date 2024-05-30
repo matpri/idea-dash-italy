@@ -44,7 +44,7 @@ def get_model_pattern(model):
 
 def render_plot(type, df, group_by_model, group_by_scenario):
     from profiles.energy_model.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     df = df[df.variable == type].copy()
 
     plot_info = plot_settings['Overview'][type]
@@ -112,7 +112,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
 
         fig.update_yaxes(showgrid=True)
         if df.empty:
-            print("No data available, since the results are all zero.")
+            #print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,
@@ -126,7 +126,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                 valign="middle",
             )
     except Exception as e:
-        print(title, 'plot:', e)
+        #print(title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
@@ -139,7 +139,7 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    print('plotting overview')
+    #print('plotting overview')
     classes = df['variable'].unique().tolist()
 
     widget_layout = html.Div([

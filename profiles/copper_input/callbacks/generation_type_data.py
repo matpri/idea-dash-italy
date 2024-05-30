@@ -31,7 +31,7 @@ def link(app):
     def generation_type_data_callback(scenario_multi_select, variable_select, figure):
         from main import data_handler
         ctx = dash.callback_context
-        print('updating generation type data plot', ctx.triggered)
+        #print('updating generation type data plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
         df = data_handler.processed_data['COPPER Input']['Generation Type Data']

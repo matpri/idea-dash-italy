@@ -14,14 +14,14 @@ def check(df):
     Returns:
         bool: True if the specified prefixes are found, False otherwise.
     """
-    print("Checking for net new cap in variable column")
+    #print("Checking for net new cap in variable column")
     try:
         if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Total generation capacity").any():
                 return True
         return False
     except Exception as e:
-        print("net new cap  check", e)
+        #print("net new cap  check", e)
         return False
 
 

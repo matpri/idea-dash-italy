@@ -9,7 +9,7 @@ from profiles.energy_model import utils
 
 def render_plot(type, df, scenarios, aggregate, region):
     from profiles.energy_model.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     df = df[df.variable.str.startswith(type + '|')]
     df = df[df.region == region]
 
@@ -34,7 +34,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
         base_df = base_df.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
     if base_df[base_df['scenario'].isin(scenarios)].empty:
-        print("No data available, since the results are all zero.")
+        #print("No data available, since the results are all zero.")
         fig.add_annotation(
             x=0.5,
             y=0.5,
@@ -106,7 +106,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     fig.update_layout(barmode='relative')
 
     except Exception as e:
-        print('ERROR', title, 'plot:', e)
+        #print('ERROR', title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
@@ -119,7 +119,7 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    print('plotting matrix')
+    #print('plotting matrix')
     classes = df['variable'].str.split('|', expand=True)[0].unique().tolist()
     regions = df['region'].unique().tolist()
 

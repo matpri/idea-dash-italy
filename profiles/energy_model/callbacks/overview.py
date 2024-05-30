@@ -45,7 +45,7 @@ def link(app):
         prevent_initial_call=True
     )
     def update_overview(_p_type, _groupby, _download, _canvas, _data):
-        print('updating overview plot')
+        #print('updating overview plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -68,7 +68,7 @@ def link(app):
                 idx = i
                 break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        #print('idx:', idx, 'plot type:', _p_type[idx])
         _groupby_model = _groupby[idx] == 1
         _groupby_scenario = _groupby[idx] == 2
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Power System Models']['Overview'],

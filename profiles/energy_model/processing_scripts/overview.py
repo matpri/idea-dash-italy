@@ -22,7 +22,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for overview in variable column")
+    #print("Checking for overview in variable column")
     try:
         if df.model.unique()[0] == "copper":
             return copper_overview.check(df)
@@ -43,7 +43,7 @@ def check(df):
         else:
             return False
     except Exception as e:
-        print("Emission check", e)
+        #print("Emission check", e)
         return False
 
 
@@ -84,7 +84,7 @@ def process(selected: dict):
             df.model = "cef"
             dfs.append(df)
         else:
-            print("Model not implemented")
+            #print("Model not implemented")
     return pd.concat(dfs)
 
 

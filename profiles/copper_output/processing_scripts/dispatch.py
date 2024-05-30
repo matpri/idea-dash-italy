@@ -17,7 +17,7 @@ def check(df):
         bool: True if the specified prefixes are found, False otherwise.
     """
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
-    print("Checking for dispatch, *out and transmission in variable column")
+    #print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'copper').any():
             if df.variable.str.startswith("Generation|").any() or df.variable.str.startswith(
@@ -25,7 +25,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("dispatch check", e)
+        #print("dispatch check", e)
         return False
 
 def aggregate_db(db, scenario):

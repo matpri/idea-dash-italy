@@ -48,7 +48,7 @@ def link(app):
     )
     def update_transmission(_p_type, _scenarios, _years, _download,
                             _canvas, _data):
-        print('updating transmission plot')
+        #print('updating transmission plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -71,7 +71,7 @@ def link(app):
                 idx = i
                 break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        #print('idx:', idx, 'plot type:', _p_type[idx])
 
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER Input']['Transmission'],
                                    _years[idx], _scenarios[idx])

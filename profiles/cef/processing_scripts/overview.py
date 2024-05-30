@@ -13,7 +13,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for cost in variable column")
+    #print("Checking for cost in variable column")
     try:
         if generation_capacity.check(df):
             return True
@@ -23,7 +23,7 @@ def check(df):
             return True
         return False
     except Exception as e:
-        print("cost check", e)
+        #print("cost check", e)
         return False
 
 
