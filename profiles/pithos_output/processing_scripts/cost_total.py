@@ -111,7 +111,7 @@ def calculate_vom(df):
         DataFrame: Calculated VOM cost data.
 
     """
-    vom_df = df[df.variable.str.startswith("Capital|VO&M costs|")].copy()
+    vom_df = df[df.variable.str.startswith("Operational|VO&M costs|")].copy()
     vom_df['variable'] = vom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
@@ -150,7 +150,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
 
     # Carbon cost == where variable is "Carbon Cost" in formatted df and then add row for Canada as sum of all regions
 
-    carbon_cost = formatted_cost[formatted_cost.variable.str.startswith("Operational|Carbon price|")].copy()
+    carbon_cost = formatted_cost[formatted_cost.variable.str.startswith("Operational|Carbon costs|")].copy()
     can_carbon_cost = carbon_cost.groupby(["time", "scenario"], as_index=False)["value"].sum(numeric_only=True)
     can_carbon_cost = can_carbon_cost.assign(region='CAN', variable='Carbon Cost')
     carbon_cost = pd.concat([carbon_cost, can_carbon_cost], ignore_index=True)
