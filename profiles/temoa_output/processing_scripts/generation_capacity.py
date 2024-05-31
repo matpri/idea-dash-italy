@@ -16,7 +16,7 @@ def check(df):
     #print("Checking for gen cap in variable column")
     try:
         if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("Total Generation Capacity").any():
+            if df.variable.str.startswith("Total generation capacity").any():
                 return True
         return False
     except Exception as e:
@@ -59,7 +59,7 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        prov_df = df[df.variable.str.startswith("Total Generation Capacity|")]
+        prov_df = df[df.variable.str.startswith("Total generation capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'

@@ -15,7 +15,7 @@ def check(df):
     #print("Checking for net new cap in variable column")
     try:
         if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("New Generation Capacity|").any():
+            if df.variable.str.startswith("New generation capacity|").any():
                 return True
         return False
     except Exception as e:
@@ -58,7 +58,7 @@ def process(selected):
     new_caps = []
     for scenario_name, df in selected.items():
         df = df.copy()
-        prov_df = df[df.variable.str.startswith("New Generation Capacity|")]
+        prov_df = df[df.variable.str.startswith("New generation capacity|")]
 
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()

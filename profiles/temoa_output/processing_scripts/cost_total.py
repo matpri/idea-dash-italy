@@ -164,7 +164,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     # Variable OM cost weighted == sum across all variables for each region and time
     variable_om_cost_weighted = vom.groupby(["time", "region", "scenario"], as_index=False)["value"].sum(
         numeric_only=True)
-    variable_om_cost_weighted = variable_om_cost_weighted.assign(variable='variable_om_cost_weighted')
+    variable_om_cost_weighted = variable_om_cost_weighted.assign(variable='variable_om_cost+Fuel Cost')
 
     # Fuel cost weighted == where variable is "Supply" in formatted df and then add row for Canada as sum of all regions
     fuel_cost_weighted = formatted_cost[formatted_cost.variable.str.startswith("Operational|Fuel costs|")].copy()
