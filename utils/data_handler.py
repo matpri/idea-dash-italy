@@ -4,6 +4,7 @@ import json
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
+from collections import defaultdict
 
 import pandas as pd
 
@@ -19,18 +20,11 @@ model_mapping = {
     'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models']
+    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models'],
 }
 
-def data_processing_task(args: Tuple[str, str, dict, dict, Callable]) -> Tuple[str, str, pd.DataFrame]:
-    profile_name, viz, data, processed_data, processing_func = args
-    try:
-        data_out = processing_func(data)
-    except Exception as e:
-        print(f"Error processing data for {profile_name} - {viz}: {e}")
-        data_out = pd.DataFrame()
 
-    return profile_name, viz, data_out
+
 
 def create_generic_profile(df, model):
     classes = df.variable.str.split('|').str[0].unique().tolist()
@@ -272,23 +266,22 @@ class DataHandler:
         for fname, data in self.data.items():
             if not fname in self.processed:
                 for profile, viz_options in data['selected'].items():
-                    scenario = data['scenario']
-                    if profile == 'Power System Models':
-                        continue
-                        # model = data['content']['model'].unique()[0]
-                        # scenario = model + '|' + scenario
+                    if profile != 'Power System Models':
+                        scenario = data['scenario']
 
-                    for viz in viz_options:
-                        if data_collection.get(profile) is None:
-                            data_collection[profile] = {}
-                        if data_collection[profile].get(viz) is None:
-                            data_collection[profile][viz] = {}
-                        data_collection[profile][viz][scenario] = data['content'].copy()
+                        for viz in viz_options:
+                            if data_collection.get(profile) is None:
+                                data_collection[profile] = {}
+                            if data_collection[profile].get(viz) is None:
+                                data_collection[profile][viz] = {}
+                            data_collection[profile][viz][scenario] = data['content'].copy()
                 self.processed.append(fname)
 
         results = []
         for profile in data_collection.keys():
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
+
+        results.extend(self.profiles['Power System Models'].process_data(results))
 
         # Collect results
         for profile, viz, processed_data in results:
@@ -379,6 +372,7 @@ class DataHandler:
 
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
+
         profile_options = model_mapping.get(model, None)
         if profile_options is None:
             profile = create_generic_profile(df, model)
@@ -388,19 +382,13 @@ class DataHandler:
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
 
-        visualizations = {}
-        selected = {}
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
         for profile_name, profile in profiles_to_check.items():
             for viz_name, viz_dict in profile.viz_options.items():
-                # if viz_name not in visualizations:
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    if visualizations.get(profile.name) is None:
-                        visualizations[profile.name] = []
                     visualizations[profile.name].append(viz_name)
-
-                    if selected.get(profile.name) is None:
-                        selected[profile.name] = []
                     selected[profile.name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations

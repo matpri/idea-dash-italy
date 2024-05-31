@@ -1,9 +1,19 @@
 import pandas as pd
 from dash import html
 import dash_mantine_components as dmc
+import multiprocessing as mp
 
 
 # template class for a base profile with parameters: name, visualizations and unimplented function preprocess
+
+def data_processing_task(profile_name, viz, data, processing_func):
+    try:
+        data_out = processing_func(data)
+    except Exception as e:
+        print(f"Error processing data for {profile_name} - {viz}: {e}")
+        data_out = pd.DataFrame()
+
+    return profile_name, viz, data_out
 
 class BaseProfile:
     name = 'Base Profile'
@@ -27,12 +37,15 @@ class BaseProfile:
     def process_data(self, data_collection):
         print('Base collective preprocess')
         wants_overview = False
-        processed_data = []
+        args = []
         for viz_option, data in data_collection.items():
             if viz_option == 'overview':
                 wants_overview = True
                 continue
-            processed_data.append((self.name, viz_option, self.viz_options[viz_option]['process'](data)))
+            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+        with mp.Pool(mp.cpu_count()) as pool:
+            processed_data = pool.starmap(data_processing_task, args)
+
 
         if wants_overview:
             dfs = []

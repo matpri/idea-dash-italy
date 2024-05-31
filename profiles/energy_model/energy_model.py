@@ -1,8 +1,10 @@
 from random import randint
 
 import dash_mantine_components as dmc
+import pandas as pd
 import yaml
 from dash import html, dcc
+from collections import defaultdict
 
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
@@ -58,6 +60,10 @@ from profiles.energy_model.visualization_scripts import (
     transmission_flow as transmission_flow_viz,
     comparison as comparison_viz
 )
+
+power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Output', 'HEC-PITHOS Output',
+                       'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
+
 
 
 class energy_modelsOutput(BaseProfile):
@@ -235,6 +241,25 @@ class energy_modelsOutput(BaseProfile):
     def link(self, app):
         settings_callbacks.link(app)
         super().link(app)
+
+    def process_data(self, data_collection):
+        processed_data = defaultdict(list)
+        for profile, viz_option, data in data_collection:
+            if (profile in power_system_models and viz_option not in ['Comparison',
+                                                                      'Comparison Matrix'] and viz_option in self.viz_options):
+                data['scenario'] = profile + '|' + data['scenario']
+                processed_data[viz_option].append(data)
+        results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
+
+        dfs = []
+        for _, viz_option, data in results:
+            if viz_option != 'Overview':
+                data['variable'] = viz_option + '|' + data['variable']
+                dfs.append(data)
+        full_df = pd.concat(dfs)
+
+        results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
+        return results
 
     def render_settings(self):
         layout = html.Div(
