@@ -274,8 +274,9 @@ class DataHandler:
                 for profile, viz_options in data['selected'].items():
                     scenario = data['scenario']
                     if profile == 'Power System Models':
-                        model = data['content']['model'].unique()[0]
-                        scenario = model + '|' + scenario
+                        continue
+                        # model = data['content']['model'].unique()[0]
+                        # scenario = model + '|' + scenario
 
                     for viz in viz_options:
                         if data_collection.get(profile) is None:
@@ -285,11 +286,9 @@ class DataHandler:
                         data_collection[profile][viz][scenario] = data['content'].copy()
                 self.processed.append(fname)
 
-        with mp.Pool() as pool:
-            args = [(profile, viz, data, self.processed_data, self.profiles[profile].viz_options[viz]['process']
-                     ) for profile, viz_options in data_collection.items()
-                    for viz, data in viz_options.items()]
-            results = pool.map(data_processing_task, args)
+        results = []
+        for profile in data_collection.keys():
+            results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
         # Collect results
         for profile, viz, processed_data in results:
