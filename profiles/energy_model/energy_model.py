@@ -254,8 +254,9 @@ class energy_modelsOutput(BaseProfile):
         dfs = []
         for _, viz_option, data in results:
             if viz_option != 'Overview':
-                data['variable'] = viz_option + '|' + data['variable']
-                dfs.append(data)
+                df = data.copy()
+                df['variable'] = viz_option + '|' + df['variable']
+                dfs.append(df)
         full_df = pd.concat(dfs)
 
         results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])

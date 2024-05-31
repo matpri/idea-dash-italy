@@ -39,24 +39,36 @@ class BaseProfile:
         wants_overview = False
         args = []
         for viz_option, data in data_collection.items():
-            if viz_option == 'overview':
+            if viz_option == 'Overview':
                 wants_overview = True
                 continue
             args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
-        with mp.Pool(mp.cpu_count()) as pool:
-            processed_data = pool.starmap(data_processing_task, args)
+        # with mp.Pool(mp.cpu_count()) as pool:
+        #     processed_data = pool.starmap(data_processing_task, args)
+
+        processed_data = []
+        for arg in args:
+            processed_data.append(data_processing_task(*arg))
 
 
         if wants_overview:
             dfs = []
             for _, viz_option, data in processed_data:
+                if viz_option == 'Dispatch' or viz_option == 'Transmission Flow' or viz_option == 'Transmission Capacity':
+                    continue
                 data['variable'] = viz_option
                 dfs.append(data)
             full_df = pd.concat(dfs)
 
-            full_df = full_df[full_df['region'] == 'CAN']
-            full_df = full_df.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-            processed_data.append((self.name, 'Overview', full_df[['scenario', 'variable', 'time', 'value']]))
+            ab_qc = full_df[(full_df['region'] == 'AB') | (full_df['region'] == 'QC')]
+            ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
+            ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+            ab_qc['region'] = 'AB+QC'
+            full_df = pd.concat([full_df, ab_qc], ignore_index=True)
+
+            full_df = full_df[(full_df['region'] == 'CAN') | (full_df['region'] == 'AB+QC')]
+            full_df = full_df.groupby(['scenario', 'variable', 'time','region']).sum(numeric_only=True).reset_index()
+            processed_data.append((self.name, 'Overview', full_df[['scenario', 'variable', 'time', 'value','region']]))
 
         return processed_data
 

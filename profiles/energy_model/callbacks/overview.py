@@ -25,6 +25,12 @@ def link(app):
             'type': 'energy_model-overview-groupby-toggle',
             'index': ALL
         }, 'value'),
+        Input(
+            {
+                'type': 'energy_model-overview-region-toggle',
+                'index': ALL
+            }, 'value'
+        ),
 
         Input({
             'type': 'energy_model-overview-download-button',
@@ -44,7 +50,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _groupby, _download, _canvas, _data):
+    def update_overview(_p_type, _groupby, _region, _download, _canvas, _data):
         #print('updating overview plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -72,6 +78,6 @@ def link(app):
         _groupby_model = _groupby[idx] == 1
         _groupby_scenario = _groupby[idx] == 2
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Power System Models']['Overview'],
-                                   _groupby_model, _groupby_scenario)
+                                   _groupby_model, _groupby_scenario, _region[idx]=='CAN')
 
         return _canvas, [dash.no_update for _ in _data]

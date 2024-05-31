@@ -19,13 +19,19 @@ def color_to_rgba(color, alpha=0.2):
 
 def get_scenario_color(scenario, alpha=0.9):
     if scenario not in scenario_colors:
-        scenario_colors[scenario] = f"hsl({len(scenario_colors) * 360 / 12}, 50%, 50%)"
+        hue = (len(scenario_colors) * 360 / 20) % 360   # More shades of base colors
+        saturation = 50 + (len(scenario_colors) * 15 % 50)  # Varying saturation
+        lightness = 50 + (len(scenario_colors) * 15 % 50)  # Varying lightness
+        scenario_colors[scenario] = f"hsl({hue}, {saturation}%, {lightness}%)"
     color = scenario_colors[scenario]
     return color_to_rgba(color, alpha)
 
 def get_model_color(model, alpha=0.9):
     if model not in model_colors:
-        model_colors[model] = f"hsl({len(model_colors) * 360 / 12}, 50%, 50%)"
+        hue = (len(model_colors) * 360 / 20) % 360
+        saturation = 50 + (len(model_colors) * 15 % 50)
+        lightness = 50 + (len(model_colors) * 15 % 50)
+        model_colors[model] = f"hsl({hue}, {saturation}%, {lightness}%)"
     color = model_colors[model]
     return color_to_rgba(color, alpha)
 
@@ -42,10 +48,15 @@ def get_model_pattern(model):
     return model_patterns[model]
 
 
-def render_plot(type, df, group_by_model, group_by_scenario):
+def render_plot(type, df, group_by_model, group_by_scenario, can=True):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
+
+    if can:
+        df = df[df.region == 'CAN']
+    else:
+        df = df[df.region == 'AB+QC']
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
@@ -162,6 +173,18 @@ def plot(df, window_id):
             ],
             id={
                 'type': 'energy_model-overview-groupby-toggle',
+                'index': window_id,
+            },
+        ),
+        dmc.Select(
+            label='Region',
+            value='CAN',
+            data=[
+                {'label': 'CAN', 'value': 'CAN'},
+                {'label': 'AB+QC', 'value': 'AB+QC'},
+            ],
+            id={
+                'type': 'energy_model-overview-region-toggle',
                 'index': window_id,
             },
         ),
