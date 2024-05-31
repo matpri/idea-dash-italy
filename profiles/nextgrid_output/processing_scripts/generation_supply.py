@@ -133,10 +133,6 @@ def aggregate_db(db, scenario):
 
     df = pd.concat([df, can_df], ignore_index=True)
 
-    can_df['region'] = 'CAN'
-
-    df = pd.concat([df, can_df], ignore_index=True)
-
     # sort by dim_name and period
     df = df.sort_values(by=['variable', 'period'])
 
