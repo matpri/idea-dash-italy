@@ -20,7 +20,7 @@ def check(df):
     try:
         if (df.model == 'Sutubra-TEMOA').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Total generation').any() or (classes == 'Transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,15 +45,13 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Dispatch']
+    supply_df = db[classes == 'Total generation']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
 
     # all times - 1 hour delta
     supply_df['period'] = supply_df['time'].dt.year
-    sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
-    unique_dates = sub_supply['time'].dt.date.unique()
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
@@ -61,7 +59,6 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
@@ -78,6 +75,8 @@ def aggregate_db(db, scenario):
     transmission_df['period'] = transmission_df['time'].dt.year
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
+    sub_transmission_df = transmission_df[transmission_df['period'] == transmission_df['period'].min()]
+    unique_dates = sub_transmission_df['time'].dt.date.unique()
 
     transmission_df.drop(columns=['time'], inplace=True)
 
@@ -134,6 +133,9 @@ def aggregate_db(db, scenario):
 
     df['scenario'] = scenario
     can_df = df.groupby(['variable', 'period', 'scenario']).sum().reset_index()
+    # remove all imports and exports
+    can_df = can_df[~can_df.variable.str.contains('Imports from')]
+    can_df = can_df[~can_df.variable.str.contains('Exports to')]
 
     can_df['region'] = 'CAN'
 

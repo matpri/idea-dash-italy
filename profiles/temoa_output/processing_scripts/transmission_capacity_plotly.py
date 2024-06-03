@@ -16,7 +16,7 @@ def check(df):
     #print("Checking for capacity_transmission in variable column")
     try:
         if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("Total Transmission Capacity|").any():
+            if df.variable.str.startswith("Total transmission capacity|").any():
                 # remove all rows where variable = 'to {region}'
                 test = df.copy()
                 test['variable'] = test['variable'].apply(lambda x: x.split("|")[1])
@@ -179,7 +179,7 @@ def process(selected):
     transmissions = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Total Transmission Capacity|")]
+        df = df[df.variable.str.startswith("Total transmission capacity|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])
