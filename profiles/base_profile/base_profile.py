@@ -56,11 +56,12 @@ class BaseProfile:
             for _, viz_option, data in processed_data:
                 if viz_option == 'Dispatch' or viz_option == 'Transmission Flow' or viz_option == 'Transmission Capacity':
                     continue
-                data['variable'] = viz_option
-                dfs.append(data)
+                df = data.copy()
+                df['variable'] = viz_option
+                dfs.append(df)
             full_df = pd.concat(dfs)
 
-            ab_qc = full_df[(full_df['region'] == 'AB') | (full_df['region'] == 'QC')]
+            ab_qc = full_df[(full_df['region'] == 'AB') | (full_df['region'] == 'QC')].copy()
             ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
             ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
             ab_qc['region'] = 'AB+QC'
