@@ -56,6 +56,9 @@ class BaseProfile:
                 if viz_option == 'Dispatch' or viz_option == 'Transmission Flow' or viz_option == 'Transmission Capacity':
                     continue
                 df = data.copy()
+                #ab_qc remove all variables that start with Imports or Exports
+                df = df[~df.variable.str.contains('Import')]
+                df = df[~df.variable.str.contains('Export')]
                 df['variable'] = viz_option
                 dfs.append(df)
             full_df = pd.concat(dfs)
@@ -64,9 +67,6 @@ class BaseProfile:
             ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
             ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
             ab_qc['region'] = 'AB+QC'
-            #ab_qc remove all variables that start with Imports or Exports
-            ab_qc = ab_qc[~ab_qc.variable.str.contains('Import')]
-            ab_qc = ab_qc[~ab_qc.variable.str.contains('Export')]
 
             full_df = pd.concat([full_df, ab_qc], ignore_index=True)
 

@@ -48,6 +48,9 @@ def aggregate_db(db, scenario):
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    # supply remove all variables that contain Import
+    supply_df = supply_df[~supply_df.variable.str.contains("Import")]
+    supply_df = supply_df[~supply_df.variable.str.contains("Export")]
 
     supply_df['time'] = pd.to_datetime(supply_df['time'])
 
