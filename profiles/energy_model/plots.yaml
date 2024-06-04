@@ -222,6 +222,12 @@ Overview:
     title: New Capacity
     x_label: Year
     y_label: Capacity (GW)
+  Qualifying Capacity:
+    name: Qualifying Capacity
+    unit: GW
+    title: Qualifying Capacity
+    x_label: Year
+    y_label: Capacity (GW)
   Net New Capacity:
     name: Net New Capacity
     unit: GW

@@ -198,12 +198,16 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("Operational|") | df.variable.str.contains("Capital|")]
-        formatted_df = format_df(df)
-        gen_cap = calculate_generation_capacity(formatted_df)
-        fom = calculate_fom(formatted_df)
-        vom = calculate_vom(formatted_df)
-        total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
+        df = df[df.variable.str.startswith("Operational|") | df.variable.str.startswith("Capital|")]
+        df.variable = df.variable.apply(lambda x: x.split("|")[0])
+        # formatted_df = format_df(df)
+        # gen_cap = calculate_generation_capacity(formatted_df)
+        # fom = calculate_fom(formatted_df)
+        # vom = calculate_vom(formatted_df)
+        # total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
+        can_df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+        can_df['region'] = 'CAN'
+        total_cost = pd.concat([df, can_df])
         total_cost['scenario'] = scenario_name
         dfs.append(total_cost)
     full_df = pd.concat(dfs)

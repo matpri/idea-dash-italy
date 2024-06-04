@@ -82,6 +82,8 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
         template="simple_white",
     )
     try:
+        # sort df by time
+        df = df.sort_values(by=['time'])
 
         if group_by_model:
             df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)

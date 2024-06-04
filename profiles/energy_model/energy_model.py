@@ -250,9 +250,9 @@ class energy_modelsOutput(BaseProfile):
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
                 data['scenario'] = profile + '|' + data['scenario']
                 if 'time' in data.columns:
-                    data = data[data['time'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
+                    data = data[data['time'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045', '2050'])]
                 elif 'period' in data.columns:
-                    data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
+                    data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045', '2050'])]
                 processed_data[viz_option].append(data)
 
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
