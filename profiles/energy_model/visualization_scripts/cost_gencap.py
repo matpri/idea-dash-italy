@@ -31,6 +31,10 @@ def plot(df, window_id):
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
     scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
+
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
 
@@ -101,6 +105,17 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'energy_model-gencap_cost-scenario-multi-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+
+        dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value=[base_scenarios[0]],
+            id={
+                'type': 'energy_model-gencap_cost-scenario-group-select',
                 'index': window_id,
             },
             style={'display': 'block'}

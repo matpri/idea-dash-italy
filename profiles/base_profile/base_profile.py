@@ -43,13 +43,12 @@ class BaseProfile:
                 wants_overview = True
                 continue
             args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
-        # with mp.Pool(mp.cpu_count()) as pool:
-        #     processed_data = pool.starmap(data_processing_task, args)
 
-        processed_data = []
-        for arg in args:
-            processed_data.append(data_processing_task(*arg))
-
+        # if len(args) > 2:
+        #     with mp.Pool(mp.cpu_count()) as pool:
+        #         processed_data = pool.starmap(data_processing_task, args)
+        # else:
+        processed_data = [data_processing_task(*arg) for arg in args]
 
         if wants_overview:
             dfs = []
@@ -65,6 +64,10 @@ class BaseProfile:
             ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
             ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
             ab_qc['region'] = 'AB+QC'
+            #ab_qc remove all variables that start with Imports or Exports
+            ab_qc = ab_qc[~ab_qc.variable.str.contains('Import')]
+            ab_qc = ab_qc[~ab_qc.variable.str.contains('Export')]
+
             full_df = pd.concat([full_df, ab_qc], ignore_index=True)
 
             full_df = full_df[(full_df['region'] == 'CAN') | (full_df['region'] == 'AB+QC')]

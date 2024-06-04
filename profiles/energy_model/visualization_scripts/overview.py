@@ -3,6 +3,8 @@ import plotly.graph_objects as go
 from dash import html, dcc
 
 patterns = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot']
+colors = ['rgba(31, 119, 180, 0.3)', 'rgba(255, 127, 14, 0.3)', 'rgba(44, 160, 44, 0.3)', 'rgba(214, 39, 40, 0.3)',
+          'rgba(148, 103, 189, 0.3)', 'rgba(140, 86, 75, 0.3)', 'rgba(227, 119, 194, 0.3)', 'rgba(127, 127, 127, 0.3)',]
 scenario_colors = {}
 scenario_patterns = {}
 model_colors = {}
@@ -17,23 +19,29 @@ def color_to_rgba(color, alpha=0.2):
     r, g, b = [x * 255.0 for x in colorsys.hls_to_rgb(h, l, s)]
     return f"rgba({int(r)},{int(g)},{int(b)},{alpha})"
 
-def get_scenario_color(scenario, alpha=0.9):
+def get_scenario_color(scenario, alpha=0.3):
     if scenario not in scenario_colors:
-        hue = (len(scenario_colors) * 360 / 20) % 360   # More shades of base colors
-        saturation = 50 + (len(scenario_colors) * 15 % 50)  # Varying saturation
-        lightness = 50 + (len(scenario_colors) * 15 % 50)  # Varying lightness
-        scenario_colors[scenario] = f"hsl({hue}, {saturation}%, {lightness}%)"
+        if len(scenario_colors) >= len(colors):
+            hue = (len(scenario_colors) * 360 / 20) % 360   # More shades of base colors
+            saturation = 50 + (len(scenario_colors) * 15 % 50)  # Varying saturation
+            lightness = 50 + (len(scenario_colors) * 15 % 50)  # Varying lightness
+            scenario_colors[scenario] = f"hsl({hue}, {saturation}%, {lightness}%)"
+        else:
+            scenario_colors[scenario] = colors[len(scenario_colors)]
     color = scenario_colors[scenario]
-    return color_to_rgba(color, alpha)
+    return color
 
-def get_model_color(model, alpha=0.9):
+def get_model_color(model, alpha=0.3):
     if model not in model_colors:
-        hue = (len(model_colors) * 360 / 20) % 360
-        saturation = 50 + (len(model_colors) * 15 % 50)
-        lightness = 50 + (len(model_colors) * 15 % 50)
-        model_colors[model] = f"hsl({hue}, {saturation}%, {lightness}%)"
+        if len(model_colors) >= len(colors):
+            hue = (len(model_colors) * 360 / 20) % 360
+            saturation = 50 + (len(model_colors) * 15 % 50)
+            lightness = 50 + (len(model_colors) * 15 % 50)
+            model_colors[model] = f"hsl({hue}, {saturation}%, {lightness}%)"
+        else:
+            model_colors[model] = colors[len(model_colors)]
     color = model_colors[model]
-    return color_to_rgba(color, alpha)
+    return color
 
 
 def get_scenario_pattern(scenario):

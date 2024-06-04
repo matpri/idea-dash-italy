@@ -142,7 +142,9 @@ def aggregate_db(db, scenario):
 
     df['scenario'] = scenario
     can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
-
+    # can_df remove all variables that start with Import or Export
+    can_df = can_df[~can_df.variable.str.startswith('Imports from')]
+    can_df = can_df[~can_df.variable.str.startswith('Exports to')]
     can_df['region'] = 'CAN'
 
     df = pd.concat([df, can_df], ignore_index=True)
