@@ -83,7 +83,7 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                     df = df.groupby(['time']).sum(numeric_only=True).reset_index()
                     other_df = other_scenario
                     other_df = other_df.groupby(['time', 'variable']).sum(numeric_only=True).reset_index()
-                    diff = pd.merge(df, other_df, on=['time'], suffixes=('_base', '_test'))
+                    diff = pd.merge(df, other_df, on=['time'], suffixes=('_base', '_test'), how='outer')
                     diff['value'] = diff.value_test.fillna(0) - diff.value_base.fillna(0)
 
                     scen = scenario['scenario'].unique()[0]
@@ -136,7 +136,7 @@ def plot(df, window_id):
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in df['scenario'].unique()],
-            value=df['scenario'].unique().tolist(),
+            value=[],
             id={
                 'type': 'energy_model-matrix-scenario-select',
                 'index': window_id
@@ -167,7 +167,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, df['scenario'].unique().tolist(), True, 'CAN' if 'CAN' in regions else regions[0]),
+        figure=render_plot(classes[0], df, [], True, 'CAN' if 'CAN' in regions else regions[0]),
         id={
             'type': 'figure',
             'index': window_id,
