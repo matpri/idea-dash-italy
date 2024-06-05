@@ -32,15 +32,17 @@ def get_scenario_color(scenario, alpha=0.3):
     return color
 
 def get_model_color(model, alpha=0.3):
+    alpha = round(alpha, 1)
     if model not in model_colors:
         if len(model_colors) >= len(colors):
             hue = (len(model_colors) * 360 / 20) % 360
             saturation = 50 + (len(model_colors) * 15 % 50)
             lightness = 50 + (len(model_colors) * 15 % 50)
-            model_colors[model] = f"hsl({hue}, {saturation}%, {lightness}%)"
+            model_colors[model] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)")
         else:
             model_colors[model] = colors[len(model_colors)]
     color = model_colors[model]
+
     return color
 
 
@@ -56,7 +58,7 @@ def get_model_pattern(model):
     return model_patterns[model]
 
 
-def render_plot(type, df, group_by_model, group_by_scenario, can=True):
+def render_plot(type, df, group_by_model, group_by_scenario, can=True, fill=True):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
@@ -70,10 +72,10 @@ def render_plot(type, df, group_by_model, group_by_scenario, can=True):
     name = plot_info['name']
     unit = plot_info['unit']
     return plot_overview(df, group_by_model, group_by_scenario, plot_info['title'], plot_info['x_label'],
-                         plot_info['y_label'], name, unit)
+                         plot_info['y_label'], name, unit, fill)
 
 
-def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label, name, unit):
+def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label, name, unit, fill=True):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -101,7 +103,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                     line=dict(color=get_model_color(model),
                                               dash=pattern,
                                               width=2),
-                                    fill=None if i == 0 else 'tonexty',
+                                    fill=None if i == 0 and not fill else 'tonexty',
                                     fillcolor=get_model_color(model, 0.2),
                                     hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
         elif group_by_scenario:
@@ -120,7 +122,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                                   dash=pattern,
                                                   width=2,
                                                   ),
-                                        fill=None if i == 0 else 'tonexty',
+                                        fill=None if i == 0 and not fill else 'tonexty',
                                         fillcolor=get_scenario_color(scenario, 0.2),
                                         hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
@@ -162,8 +164,12 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    #print('plotting overview')
     classes = df['variable'].unique().tolist()
+
+    scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
 
     widget_layout = html.Div([
         dmc.Select(
@@ -189,6 +195,16 @@ def plot(df, window_id):
             },
         ),
         dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value='All',
+            id={
+                'type': 'energy_model-overview-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
             label='Region',
             value='CAN',
             data=[
@@ -200,6 +216,15 @@ def plot(df, window_id):
                 'index': window_id,
             },
         ),
+        dmc.Switch(
+            label='Fill Area',
+            checked=True,
+            id={
+                'type': 'energy_model-overview-fill-switch',
+                'index': window_id,
+            },
+        ),
+
         dmc.Button('Download Data', id={'type': 'energy_model-overview-download-button', 'index': window_id},
                    variant='light',
                    # center the button

@@ -48,6 +48,7 @@ def aggregate_db(db, scenario):
     supply_df = db[classes == 'Dispatch']
     supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    supply_df['time'] = pd.to_datetime(supply_df['time'])
     # all times - 1 hour delta
     supply_df['period'] = supply_df['time'].dt.year
     sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
@@ -68,6 +69,7 @@ def aggregate_db(db, scenario):
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
 
 
     transmission_df['period'] = transmission_df['time'].dt.year

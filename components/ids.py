@@ -32,6 +32,7 @@ CONTACT_MENU = 'menu-contact'
 PLOT_CANVAS = 'canvas-plot'
 
 DATA_CHANGE = 'data-change'
+UPDATE_CHIPS = 'update-chips'
 SETTINGS_CHANGE = 'settings-change'
 AFTER_CHANGE = 'after-change'
 DATA = 'data'

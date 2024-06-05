@@ -8,21 +8,23 @@ def link(app):
     @app.callback(
         Output({'type': 'modal', 'index': dash.dependencies.ALL}, 'opened'),
         Output(ids.DATA_CHANGE, 'n_clicks'),
+        Output(ids.UPDATE_CHIPS, 'n_clicks'),
         Input({'type': 'open-modal', 'index': dash.dependencies.ALL}, 'n_clicks'),
         Input({'type': 'modal-close-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
         Input({'type': 'modal-submit-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
         State({'type': 'modal', 'index': dash.dependencies.ALL}, 'opened'),
         State({'type': 'upload-chip-group', 'file': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
         State(ids.DATA_CHANGE, 'n_clicks'),
+        State(ids.UPDATE_CHIPS, 'n_clicks'),
         State({'type': 'upload-scenario-name', 'file': dash.dependencies.ALL}, 'value'),
         prevent_initial_call=True,
     )
     def handle_modals(
-            open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, scenario_names
+            open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, _update_chips, scenario_names
     ):
         print('handle_modals', open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, scenario_names)
         if not any([open_clicks, close_clicks, submit_clicks]):
-            return dash.no_update, dash.no_update
+            return dash.no_update, dash.no_update, dash.no_update
 
         # get triggered input info
         ctx = dash.callback_context
@@ -48,7 +50,7 @@ def link(app):
                 for i, ls in enumerate(ctx.states_list[1]):
                     chip = ls['id']
                     file = chip['file']
-                    scenarios = ctx.states_list[3]
+                    scenarios = ctx.states_list[4]
                     scenario = None
                     for s in scenarios:
                         if s['id']['file'] == file:
@@ -59,10 +61,10 @@ def link(app):
                 print(data_handler)
                 data_handler.process_data()
                 if n_clicks is None:
-                    return output, 1
+                    return output, 1, 1
                 else:
-                    return output, n_clicks + 1
-            return output, dash.no_update
+                    return output, n_clicks + 1, _update_chips + 1
+            return output, dash.no_update, dash.no_update
 
         # general case for 'selected' index
         if triggered_input['index'].startswith('selected'):
@@ -71,13 +73,13 @@ def link(app):
                     output[i] = open_flag
                 elif out['id']['index'] == 'data':
                     output[i] = True
-            return output, dash.no_update
+            return output, dash.no_update, dash.no_update
 
         if triggered_input['index'] == 'help':
             print('help')
             for i, out in enumerate(ctx.outputs_list[0]):
                 if out['id']['index'] == triggered_input['index']:
                     output[i] = open_flag
-            return output, dash.no_update
+            return output, dash.no_update, dash.no_update
 
         return dash.no_update
