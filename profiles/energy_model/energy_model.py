@@ -249,10 +249,25 @@ class energy_modelsOutput(BaseProfile):
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
                 data['scenario'] = profile + '|' + data['scenario']
+                if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
+                    ab_qc = data[data.region.isin(['AB', 'QC'])]
+                    # drop nan columns
+                    ab_qc = ab_qc.dropna(axis=1, how='all')
+                    columns = ab_qc.columns
+                    columns = columns.drop('region')
+                    columns = columns.drop('value').tolist()
+
+                    # Perform groupby operation
+                    ab_qc = ab_qc.groupby(columns).sum().reset_index()
+                    ab_qc['region'] = 'AB+QC'
+                    data = pd.concat([data, ab_qc])
+
                 if 'time' in data.columns:
                     data = data[data['time'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045', '2050'])]
+
+
                 elif 'period' in data.columns:
-                    data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045', '2050'])]
+                    data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
 
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
