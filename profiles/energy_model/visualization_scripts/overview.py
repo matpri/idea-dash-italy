@@ -83,6 +83,8 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
     )
     try:
         # sort df by time
+        # make time int
+        df.time = df.time.astype(int)
         df = df.sort_values(by=['time'])
 
         if group_by_model:

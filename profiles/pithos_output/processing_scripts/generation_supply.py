@@ -20,7 +20,7 @@ def check(df):
     try:
         if (df.model == 'HEC-PITHOS').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Supply').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Supply').any() or (classes == 'Total transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -59,26 +59,13 @@ def aggregate_db(db, scenario):
     # make period an int
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Transmission flow']
+    transmission_df = db[classes == 'Total transmission flow']
     transmission_df = transmission_df.dropna(axis=1, how='all')
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
-    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time',
-                                           value_name='value')
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission_df['hour'], unit='h')
 
-    # time to datetime object
-    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
-
-    transmission_df['period'] = transmission_df['time'].dt.year
-    sub_transmission = transmission_df[transmission_df['period'] == transmission_df['period'].min()]
-    unique_dates = sub_transmission['time'].dt.date.unique()
-
-    transmission_df['period'] = transmission_df['time'].dt.year
-    # make period an int
-    transmission_df['period'] = transmission_df['period'].astype(int)
-
+    transmission_df['period'] = transmission_df['time'].astype(int)
     transmission_df.drop(columns=['time'], inplace=True)
 
     # drop all the 0 values
@@ -116,9 +103,6 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-
-
-    transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
     # only keep the periods that are in the supply_df
     transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]

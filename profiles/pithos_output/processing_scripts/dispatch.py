@@ -48,14 +48,6 @@ def aggregate_db(db, scenario):
     supply_df = db[classes == 'Dispatch']
     supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-    columns = ['variable', 'region', 'hour', 'scenario']
-    # add all columns that are numeric and not in the columns list
-    supply_columns = supply_df.columns.astype(str)
-    columns.extend([col for col in supply_columns if col not in columns and col.isnumeric()])
-    supply_df = supply_df[columns]
-    supply_df = supply_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time', value_name='value')
-    supply_df['time'] = pd.to_datetime(supply_df['time'].astype(str) + '-01-01') + pd.to_timedelta(supply_df['hour'], unit='h')
-
     # all times - 1 hour delta
     supply_df['period'] = supply_df['time'].dt.year
     sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
@@ -76,12 +68,12 @@ def aggregate_db(db, scenario):
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
-    transmission_df = transmission_df.melt(id_vars=['variable', 'region', 'hour', 'scenario'], var_name='time',
-                                           value_name='value')
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'].astype(str) + '-01-01') + pd.to_timedelta(transmission_df['hour'], unit='h')
 
-    # time to datetime object
+
     transmission_df['period'] = transmission_df['time'].dt.year
+    sub_trs = transmission_df[supply_df['period'] == transmission_df['period'].min()]
+    unique_dates = sub_trs['time'].dt.date.unique()
+
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
 
