@@ -12,28 +12,32 @@ def render_plot(type, df, scenario_a, scenario_b, aggregate, region):
     df = df[df.variable.str.startswith(type + '|')]
     df = df[df.region == region]
     df['variable'] = df['variable'].str.replace(type + '|', '')
-    df_a = df[df['scenario'] == scenario_a]
-    df_b = df[df['scenario'] == scenario_b]
-    diff = pd.merge(df_a, df_b, on=['time', 'variable'], suffixes=('_base', '_test'))
-    diff['value'] = diff.value_test.fillna(0) - diff.value_base.fillna(0)
-    diff['scenario'] = scenario_a + ' - ' + scenario_b
+
 
     plot_info = plot_settings['Matrix'][type]
     name = plot_info['name']
     unit = plot_info['unit']
-    return plot_comparison(diff, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    return plot_comparison(df, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, scenario_a, scenario_b)
 
 
-def plot_comparison(diff, aggregate, title, x_label, y_label, name, unit):
+def plot_comparison(df, aggregate, title, x_label, y_label, name, unit, scenario_a, scenario_b):
     fig = go.Figure()
-    scen = diff['scenario'].unique()[0]
+    df = df.copy()
+    # drop all non column values
+    df = df.dropna(axis=1, how='all')
     if aggregate:
-        diff['variable'] = diff["variable"].map(utils.get_group).fillna(diff["variable"])
-        diff = diff.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df['variable'] = df["variable"].map(utils.get_group).fillna(df["variable"])
+        df = df.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
     else:
-        diff['variable'] = diff["variable"].map(utils.get_name).fillna(diff["variable"])
-        diff = diff.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df['variable'] = df["variable"].map(utils.get_name).fillna(df["variable"])
+        df = df.groupby(["variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_a = df[df['scenario'] == scenario_a]
+    df_b = df[df['scenario'] == scenario_b]
+    diff = pd.merge(df_a, df_b, on=['time', 'variable'], suffixes=('_base', '_test'), how='outer')
+    diff['value'] = diff.value_test.fillna(0) - diff.value_base.fillna(0)
+    diff['scenario'] = scenario_a + ' - ' + scenario_b
 
+    scen = scenario_a + ' - ' + scenario_b
     if diff.empty:
         #print("No data available, since the results are all zero.")
         fig.add_annotation(
