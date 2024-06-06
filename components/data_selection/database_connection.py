@@ -108,6 +108,7 @@ def enable_button(api_key):
     print('Enabling button', api_key)
     return api_key is None or api_key == ''
 
+
 def connect_to_database(n_clicks, api_key, children):
     if n_clicks:
         print('Connecting to database with API key:', api_key)
@@ -163,7 +164,7 @@ def connect_to_database(n_clicks, api_key, children):
                         "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
                     }
                 )
-            checkboxes=[
+            checkboxes = [
                 dmc.Checkbox(
                     label=row['label'],
                     value=row['value'],
@@ -173,11 +174,11 @@ def connect_to_database(n_clicks, api_key, children):
 
             print(runs)
             data_handler.api_key = api_key
-            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes,  {
-            "maxHeight": "280px",
-            "overflowY": "scroll",
-            "width": "100%",
-        }, model_select, scenario_select, author_select
+            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes, {
+                "maxHeight": "280px",
+                "overflowY": "scroll",
+                "width": "100%",
+            }, model_select, scenario_select, author_select
         except Exception as e:
             print(e)
             return children + [dmc.Alert(
@@ -241,16 +242,21 @@ def get_runs(model, scenario, author):
                 dmc.Checkbox(
                     label=row['label'],
                     value=row['value'],
-                    style={
-                        'background': 'rgba(47,146,231,0.2)',
-                        'border-radius': '10px',
-                        'backdrop-filter': 'blur(5px)',
-                        'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
-                        'border': '1px solid rgba(47,146,231, 0.3)',
-                        '-webkit-backdrop-filter': 'blur(5px)', }
+                    # style={
+                    #     'background': 'rgba(47,146,231,0.2)',
+                    #     'border-radius': '10px',
+                    #     'backdrop-filter': 'blur(5px)',
+                    #     'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
+                    #     'border': '1px solid rgba(47,146,231, 0.3)',
+                    #     '-webkit-backdrop-filter': 'blur(5px)', }
                 )
                 for row in data
-            ]
+            ],
+            style={
+                "maxHeight": "280px",
+                "overflowY": "scroll",
+                "width": "100%",
+            },
         ),
     ]
     return layout
