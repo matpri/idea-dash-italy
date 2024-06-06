@@ -19,7 +19,7 @@ def color_to_rgba(color, alpha=0.2):
     r, g, b = [x * 255.0 for x in colorsys.hls_to_rgb(h, l, s)]
     return f"rgba({int(r)},{int(g)},{int(b)},{alpha})"
 
-def get_scenario_color(scenario, alpha=0.3):
+def get_scenario_color(scenario, alpha=0.8):
     if scenario not in scenario_colors:
         if len(scenario_colors) >= len(colors):
             hue = (len(scenario_colors) * 360 / 20) % 360   # More shades of base colors
@@ -31,7 +31,7 @@ def get_scenario_color(scenario, alpha=0.3):
     color = scenario_colors[scenario]
     return color
 
-def get_model_color(model, alpha=0.3):
+def get_model_color(model, alpha=0.8):
     alpha = round(alpha, 1)
     if model not in model_colors:
         if len(model_colors) >= len(colors):
