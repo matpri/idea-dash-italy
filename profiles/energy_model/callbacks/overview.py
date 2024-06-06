@@ -98,8 +98,8 @@ def link(app):
         _groupby_scenario = _groupby[idx] == 2
 
         df = data_handler.processed_data['Power System Models']['Overview']
-        if _scenarios[idx] != 'All':
-            df = df[df['scenario'].str.contains([_scenarios[idx]])]
+        if _scenarios[idx] != 'ALL':
+            df = df[df['scenario'].str.contains(_scenarios[idx])]
 
         _canvas[idx] = render_plot(_p_type[idx], df,
                                    _groupby_model, _groupby_scenario, _region[idx]=='CAN', _fill[idx])

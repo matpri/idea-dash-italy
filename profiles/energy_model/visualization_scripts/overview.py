@@ -103,7 +103,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                     line=dict(color=get_model_color(model),
                                               dash=pattern,
                                               width=2),
-                                    fill=None if i == 0 and not fill else 'tonexty',
+                                    fill=None if i == 0 or not fill else 'tonexty',
                                     fillcolor=get_model_color(model, 0.2),
                                     hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
         elif group_by_scenario:
@@ -122,7 +122,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                                   dash=pattern,
                                                   width=2,
                                                   ),
-                                        fill=None if i == 0 and not fill else 'tonexty',
+                                        fill=None if i == 0 or not fill else 'tonexty',
                                         fillcolor=get_scenario_color(scenario, 0.2),
                                         hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
@@ -197,12 +197,12 @@ def plot(df, window_id):
         dmc.Select(
             label='Scenario Group',
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value='All',
+            value='ALL',
             id={
                 'type': 'energy_model-overview-scenario-group-select',
                 'index': window_id,
             },
-            style={'display': 'none'}
+            style={'display': 'block'}
         ),
         dmc.Select(
             label='Region',
