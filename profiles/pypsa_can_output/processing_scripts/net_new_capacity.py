@@ -127,7 +127,8 @@ def process(dbs: dict):
         net_new_caps.append(net_new_cap)
 
     full_net_new_cap = pd.concat(net_new_caps)
-    full_net_new_cap['time'] = full_net_new_cap['time'].astype(int)
+
+    full_net_new_cap['time'] = pd.to_numeric(full_net_new_cap['time'], downcast='integer')
 
     value_sum_per_year = full_net_new_cap.groupby('time')['value'].sum()
     years_with_non_zero_values = value_sum_per_year[value_sum_per_year != 0].index

@@ -7,11 +7,11 @@ import multiprocessing as mp
 # template class for a base profile with parameters: name, visualizations and unimplented function preprocess
 
 def data_processing_task(profile_name, viz, data, processing_func):
-    try:
-        data_out = processing_func(data)
-    except Exception as e:
-        print(f"Error processing data for {profile_name} - {viz}: {e}")
-        data_out = pd.DataFrame()
+    # try:
+    data_out = processing_func(data)
+    # except Exception as e:
+    #     print(f"Error processing data for {profile_name} - {viz}: {e}")
+    #     data_out = pd.DataFrame()
 
     return profile_name, viz, data_out
 

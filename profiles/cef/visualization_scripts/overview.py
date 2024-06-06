@@ -7,6 +7,8 @@ def render_plot(type, df):
     from profiles.cef.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
+    if 'region' in df.columns:
+        df = df[df.region == 'CAN']
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']

@@ -61,6 +61,7 @@ def process(dbs: dict):
         df = db.copy()
         prov_df = df[df.variable.str.startswith("Total generation capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
+        prov_df['time'] = pd.to_numeric(prov_df['time'], downcast='integer')
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))

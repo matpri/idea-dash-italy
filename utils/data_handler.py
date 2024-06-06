@@ -200,7 +200,7 @@ class DataHandler:
             df = pd.concat(table_dfs)
             df.value = pd.to_numeric(df.value, errors='coerce')
             df['model'] = 'cef'
-        if scenario == 'CODERS2024':
+        elif scenario == 'CODERS2024':
             print('Getting Generators...')
             generators = get_generators(self.api_key)
             print(generators.head())
