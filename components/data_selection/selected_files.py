@@ -13,7 +13,7 @@ from components import ids
 from components.data_selection import viz_edit_modal
 
 
-def render(app):
+def render():
     layout = dmc.AccordionItem([
         dmc.AccordionControl('Local Files:'),
         dmc.AccordionPanel('Upload Local Results file', id=ids.DATA_SELECTED)
@@ -21,6 +21,11 @@ def render(app):
         value='local',
         style={'width': '100%'})
 
+
+    return layout
+
+
+def link(app):
     app.callback(
         Output(ids.DATA_SELECTED, 'children'),
         Output(ids.DB_SELECTED, 'children'),
@@ -34,10 +39,7 @@ def render(app):
         State('db-checkboxes', 'value'),
         State(ids.DATA_SELECTED, 'children'),
         prevent_initial_call=True,
-    )(partial(update_chips, app=app))
-    return layout
-
-
+    )(update_chips)
 def check_content(content, found_profiles) -> Dict[str, List[str]]:
     if content is None:
         return {}
@@ -60,7 +62,7 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
     return visualizations
 
 
-def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, app):
+def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, ):
     from main import data_handler
 
     ctx = dash.callback_context
@@ -75,7 +77,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                                            variant='light',
                                            leftIcon=DashIconify(icon='carbon:edit', width=10),
                                            style={'margin': '2px'}))
-                db_views.append(viz_edit_modal.render(app, run))
+                db_views.append(viz_edit_modal.render(run))
 
             db_layout = html.Div(
                 [
@@ -123,7 +125,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                                             color=colors[0] if len(colors) == 1 else 'gray',
                                             leftIcon=DashIconify(icon='carbon:edit', width=10),
                                             style={'margin': '2px'}))
-                    views.append(viz_edit_modal.render(app, file))
+                    views.append(viz_edit_modal.render(file))
                     selected_data[file] = f'chip-{file}'
             else:
                 fail = True
@@ -137,3 +139,6 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                 ) for message in messages
             ]
         return views, dash.no_update, 'local', list(data_handler.data.keys()), dash.no_update
+
+    if ctx.triggered_id == ids.UPDATE_CHIPS:
+        return views, dash.no_update, dash.no_update, dash.no_update, dash.no_update

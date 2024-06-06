@@ -73,7 +73,7 @@ def aggregate_db(db, scenario):
 
 
     transmission_df['period'] = transmission_df['time'].dt.year
-    sub_trs = transmission_df[supply_df['period'] == transmission_df['period'].min()]
+    sub_trs = transmission_df[transmission_df['period'] == transmission_df['period'].min()]
     unique_dates = sub_trs['time'].dt.date.unique()
 
     # make period an int

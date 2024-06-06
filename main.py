@@ -8,7 +8,7 @@ from dash import html
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
     plot_handling, help_handling
 from components import ids, header, plot_canvas, sidebar
-from components.data_selection import data_modal
+from components.data_selection import data_modal, selected_files
 from components.help import help
 from utils.data_handler import DataHandler
 
@@ -30,6 +30,7 @@ sidebar_handling.link(app)
 data_viewer_handling.link(app)
 plot_handling.link(app)
 help_handling.link(app)
+selected_files.link(app)
 
 app.layout = html.Div([
     header.render(app),
