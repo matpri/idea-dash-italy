@@ -244,10 +244,12 @@ class energy_modelsOutput(BaseProfile):
 
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
-        for profile, viz_option, data in data_collection:
+        for profile, viz_option, df in data_collection:
             print(profile, viz_option)
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
+
+                data = df.copy()
                 data['scenario'] = profile + '|' + data['scenario']
                 if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
                     if ['AB', 'QC'] in data.region.unique():
@@ -274,11 +276,11 @@ class energy_modelsOutput(BaseProfile):
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
         dfs = []
-        for _, viz_option, data in results:
+        for _, viz_option, df in results:
             if viz_option != 'Overview':
-                df = data.copy()
-                df['variable'] = viz_option + '|' + df['variable']
-                dfs.append(df)
+                data = df.copy()
+                data['variable'] = viz_option + '|' + data['variable']
+                dfs.append(data)
         full_df = pd.concat(dfs)
 
         results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
