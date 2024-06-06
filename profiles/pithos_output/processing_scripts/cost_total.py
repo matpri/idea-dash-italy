@@ -52,6 +52,9 @@ def calculate_generation_capacity(df):
     # Extract generation capacity data from df
     gen_cap_df = df[df.variable.str.startswith("Capital|Capital costs|")].copy()
     gen_cap_df['variable'] = gen_cap_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+    # replace any variable that contains Transmission with Transmission
+    gen_cap_df['variable'] = gen_cap_df['variable'].apply(lambda x: 'Transmission' if 'Transmission' in x else x)
+
     # Rename entries based on gen_cap_names_dict
     gen_cap_df = gen_cap_df.groupby(["variable", "region", "time", "scenario"], as_index=False).sum(numeric_only=True)
 
@@ -83,6 +86,7 @@ def calculate_fom(df):
 
     fom_df = df[df.variable.str.startswith("Capital|FO&M costs|")].copy()
     fom_df['variable'] = fom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+    fom_df['variable'] = fom_df['variable'].apply(lambda x: 'Transmission' if 'Transmission' in x else x)
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 

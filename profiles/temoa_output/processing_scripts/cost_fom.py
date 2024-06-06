@@ -67,6 +67,7 @@ def calculate_fom(fom_df):
     # fom_df = df[df['variable'].isin(utils.fom_names)].copy()
 
     fom_df['variable'] = fom_df['variable'].map(utils.cost_tech).fillna(fom_df['variable'])
+    fom_df['variable'] = fom_df['variable'].apply(lambda x: 'Transmission' if 'Transmission' in x else x)
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
