@@ -81,7 +81,7 @@ def calculate_fom(df):
 
     """
 
-    fom_df = df[df.variable.str.startswith("Capital|FO&M costs|")].copy()
+    fom_df = df[df.variable.str.startswith("Operational|FO&M costs|")].copy()
     fom_df['variable'] = fom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
@@ -111,7 +111,7 @@ def calculate_vom(df):
         DataFrame: Calculated VOM cost data.
 
     """
-    vom_df = df[df.variable.str.startswith("Capital|VO&M costs|")].copy()
+    vom_df = df[df.variable.str.startswith("Operational|VO&M costs|")].copy()
     vom_df['variable'] = vom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
@@ -167,7 +167,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     variable_om_cost_weighted = variable_om_cost_weighted.assign(variable='variable_om_cost_weighted')
 
     # Fuel cost weighted == where variable is "Supply" in formatted df and then add row for Canada as sum of all regions
-    fuel_cost_weighted = formatted_cost[formatted_cost.variable.str.startswith("Operational|Fuel costs|")].copy()
+    fuel_cost_weighted = formatted_cost[formatted_cost.variable.str.startswith("Operational|fuel costs|")].copy()
     can_fuel_cost_weighted = fuel_cost_weighted.groupby(["time", "scenario"], as_index=False)["value"].sum(
         numeric_only=True)
     can_fuel_cost_weighted = can_fuel_cost_weighted.assign(region='CAN')

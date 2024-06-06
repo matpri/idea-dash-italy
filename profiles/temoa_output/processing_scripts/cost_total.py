@@ -111,7 +111,7 @@ def calculate_vom(df):
         DataFrame: Calculated VOM cost data.
 
     """
-    vom_df = df[df.variable.str.startswith("Capital|Variable costs|")].copy()
+    vom_df = df[df.variable.str.startswith("Operational|Variable costs|")].copy()
     vom_df['variable'] = vom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
