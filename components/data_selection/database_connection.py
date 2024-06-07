@@ -53,6 +53,12 @@ def render(app):
                     data=[{'label': 'ALL', 'value': 'ALL'}],
                     value='ALL'
                 ),
+                dmc.Select(
+                    id=ids.DB_SELECT,
+                    label='Select DB',
+                    data=[{'label': 'ALL', 'value': 'ALL'}],
+                    value='ALL'
+                ),
             ],
                 style={'display': 'flex', 'flexFlow': 'row', 'justifyContent': 'space-between',
                        'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}),
@@ -88,6 +94,7 @@ def render(app):
         Output(ids.MODEL_SELECT, 'data'),
         Output(ids.SCENARIO_SELECT, 'data'),
         Output(ids.AUTHOR_SELECT, 'data'),
+        Output(ids.DB_SELECT, 'data'),
         Input(ids.DATABASE_CONNECT_BUTTON, "n_clicks"),
         State(ids.API_KEY_INPUT, "value"),
         State(ids.DATABASE_INPUT, "children"),
@@ -99,6 +106,7 @@ def render(app):
         Input(ids.MODEL_SELECT, 'value'),
         Input(ids.SCENARIO_SELECT, 'value'),
         Input(ids.AUTHOR_SELECT, 'value'),
+        Input(ids.DB_SELECT, 'value'),
     )(get_runs)
 
     return layout
@@ -136,6 +144,7 @@ def connect_to_database(n_clicks, api_key, children):
             model_select = ['ALL'] + [model for model in runs['model'].unique()]
             scenario_select = ['ALL'] + [scenario for scenario in runs['scenario'].unique()]
             author_select = ['ALL'] + [author for author in runs['author'].unique()]
+            db_select = ['ALL'] + data_handler.runs['DB'].unique().tolist()
             for i, row in data_handler.runs.iterrows():
                 checkbox_data.append(
                     {
@@ -178,7 +187,7 @@ def connect_to_database(n_clicks, api_key, children):
                 "maxHeight": "280px",
                 "overflowY": "scroll",
                 "width": "100%",
-            }, model_select, scenario_select, author_select
+            }, model_select, scenario_select, author_select, db_select
         except Exception as e:
             print(e)
             return children + [dmc.Alert(
@@ -191,7 +200,7 @@ def connect_to_database(n_clicks, api_key, children):
     return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
-def get_runs(model, scenario, author):
+def get_runs(model, scenario, author, db):
     from main import data_handler
     runs = data_handler.runs
     if model != 'ALL':
@@ -200,6 +209,8 @@ def get_runs(model, scenario, author):
         runs = runs[runs['scenario'] == scenario]
     if author != 'ALL':
         runs = runs[runs['author'] == author]
+    if db != 'ALL':
+        runs = runs[runs['DB'] == db]
 
     data = []
 

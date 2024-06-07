@@ -22,6 +22,7 @@ DB_CONNECTED = 'db-connected'
 MODEL_SELECT = 'model-select'
 SCENARIO_SELECT = 'scenario-select'
 AUTHOR_SELECT = 'author-select'
+DB_SELECT = 'db-select'
 
 DATA_SELECTED = 'data-selected'
 
