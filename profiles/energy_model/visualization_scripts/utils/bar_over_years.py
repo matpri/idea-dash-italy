@@ -21,8 +21,6 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         num_years = df_scen.time.nunique()
         scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
 
-        df_scen.time = df.time.astype(int)
-        df_scen = df.sort_values(by=['time'])
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
             data = data.sort_values(by=['time', 'scenario'])
