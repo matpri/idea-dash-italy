@@ -212,7 +212,8 @@ def get_runs(model, scenario, author, db):
     if db != 'ALL':
         if db == 'CODERS':
             runs = runs[runs['scenario'] == 'CODERS2024']
-        runs = runs[runs['DB'] == db]
+        else:
+            runs = runs[runs['DB'] == db]
 
     data = []
 
