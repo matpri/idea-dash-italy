@@ -38,6 +38,7 @@ def link(app):
         State(ids.DATA_UPLOAD, 'filename'),
         State('db-checkboxes', 'value'),
         State(ids.DATA_SELECTED, 'children'),
+        State(ids.DB_SELECTED, 'children'),
         prevent_initial_call=True,
     )(update_chips)
 def check_content(content, found_profiles) -> Dict[str, List[str]]:
@@ -62,11 +63,19 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
     return visualizations
 
 
-def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, ):
+def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, db_views):
     from main import data_handler
 
     ctx = dash.callback_context
-    db_views = []
+
+    if type(views) is str:
+        views = []
+    if type(db_views) is str:
+        db_views = []
+    if ctx.triggered_id == ids.UPDATE_CHIPS:
+        views = []
+        db_views = []
+        return views, db_views, dash.no_update, dash.no_update, dash.no_update
     if ctx.triggered_id == ids.DB_LOAD_BUTTON:
         if n_clicks:
             for run in selected_runs:
@@ -91,10 +100,6 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
     selected_data = {}
     fail = False
     messages = []
-    if type(views) is str:
-        views = []
-    if ctx.triggered_id == ids.UPDATE_CHIPS:
-        views = []
 
     if filenames is not None:
         for i, filename in enumerate(filenames):
@@ -140,5 +145,3 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
             ]
         return views, dash.no_update, 'local', list(data_handler.data.keys()), dash.no_update
 
-    if ctx.triggered_id == ids.UPDATE_CHIPS:
-        return views, dash.no_update, dash.no_update, dash.no_update, dash.no_update
