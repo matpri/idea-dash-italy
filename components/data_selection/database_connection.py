@@ -144,7 +144,7 @@ def connect_to_database(n_clicks, api_key, children):
             model_select = ['ALL'] + [model for model in runs['model'].unique()]
             scenario_select = ['ALL'] + [scenario for scenario in runs['scenario'].unique()]
             author_select = ['ALL'] + [author for author in runs['author'].unique()]
-            db_select = ['ALL'] + data_handler.runs['DB'].unique().tolist()
+            db_select = ['ALL'] + ['CODERS'] + data_handler.runs['DB'].unique().tolist()
             for i, row in data_handler.runs.iterrows():
                 checkbox_data.append(
                     {
@@ -210,6 +210,8 @@ def get_runs(model, scenario, author, db):
     if author != 'ALL':
         runs = runs[runs['author'] == author]
     if db != 'ALL':
+        if db == 'CODERS':
+            runs = runs[runs['scenario'] == 'CODERS2024']
         runs = runs[runs['DB'] == db]
 
     data = []
