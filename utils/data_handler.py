@@ -168,7 +168,9 @@ class DataHandler:
         check_content(filename: str, content: str) -> None:
             Checks the content of a file and updates the data and visualizations accordingly.
     """
-
+    profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
+                     'NATEM-POWER Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
+                     'Sutubra-TEMOA Output']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -177,6 +179,7 @@ class DataHandler:
         self.processed_data = {}
         self.viz = {}
         self.runs = pd.DataFrame()
+
 
     def select_run(self, profile, scenario, author,db):
         print('Selecting run', profile, scenario, author, db)

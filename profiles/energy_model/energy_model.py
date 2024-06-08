@@ -1,10 +1,10 @@
+from collections import defaultdict
 from random import randint
 
 import dash_mantine_components as dmc
 import pandas as pd
 import yaml
 from dash import html, dcc
-from collections import defaultdict
 
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
@@ -65,14 +65,13 @@ power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Out
                        'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
 
 
-
 class energy_modelsOutput(BaseProfile):
     name = 'Power System Models'
     db_name = 'energy_models'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (energy_models) framework is an electricity system planning model. \n'
-        'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
+        'In this tab you will find the collection of all models that can be considered Power System Models. '
+        'It represents each models output as its own scenario which allows for easy inter model comparisons')
 
     plot_order = [
         'Overview',
@@ -100,7 +99,9 @@ class energy_modelsOutput(BaseProfile):
                 'process': overview_processing.process,
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
-                'callback': overview_callbacks.link
+                'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+
             },
         'Comparison':
             {
@@ -127,7 +128,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': emissions_processing.process,
                 'db_process': emissions_processing.process,
                 'viz': emissions_viz.plot,
-                'callback': emissions_callbacks.link
+                'callback': emissions_callbacks.link,
+                'description': 'Emissions that are produced by the generation mix in the models.'
             },
         'Capacity':
             {
@@ -136,7 +138,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': generation_capacity_processing.process,
                 'db_process': generation_capacity_processing.process,
                 'viz': generation_capacity_viz.plot,
-                'callback': generation_capacity_callbacks.link
+                'callback': generation_capacity_callbacks.link,
+                'description': 'Total generation capacity of each technology in the models.'
             },
         'Net New Capacity':
             {
@@ -145,7 +148,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': net_new_capacity_processing.process,
                 'db_process': net_new_capacity_processing.process,
                 'viz': net_new_capacity_viz.plot,
-                'callback': net_new_capacity_callbacks.link
+                'callback': net_new_capacity_callbacks.link,
+                'description': 'Net new capacity of each technology in the model.'
             },
         'New Capacity':
             {
@@ -154,7 +158,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': new_capacity_processing.process,
                 'db_process': new_capacity_processing.process,
                 'viz': new_capacity_viz.plot,
-                'callback': new_capacity_callbacks.link
+                'callback': new_capacity_callbacks.link,
+                'description': 'New generation capacity that is built for each technology in the model (does not include retired technologies).'
             },
         'Qualifying Capacity':
             {
@@ -163,7 +168,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': qualifying_capacity_processing.process,
                 'db_process': qualifying_capacity_processing.process,
                 'viz': qualifying_capacity_viz.plot,
-                'callback': qualifying_capacity_callbacks.link
+                'callback': qualifying_capacity_callbacks.link,
+                'description': 'Capacity that qualifies for the capacity market.'
             },
         'Supply':
             {
@@ -172,7 +178,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': generation_supply_processing.process,
                 'db_process': generation_supply_processing.process,
                 'viz': generation_supply_viz.plot,
-                'callback': generation_supply_callbacks.link
+                'callback': generation_supply_callbacks.link,
+                'description': 'Generation supply of each technology in the model.'
             },
         'Total Cost':
             {
@@ -181,7 +188,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': cost_total_processing.process,
                 'db_process': cost_total_processing.process,
                 'viz': cost_total_viz.plot,
-                'callback': cost_total_callbacks.link
+                'callback': cost_total_callbacks.link,
+                'description': 'Total costs of energy production and transmission in the model.'
             },
         'Capacity Cost':
             {
@@ -190,7 +198,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': cost_gencap_processing.process,
                 'db_process': cost_gencap_processing.process,
                 'viz': cost_gencap_viz.plot,
-                'callback': cost_gencap_callbacks.link
+                'callback': cost_gencap_callbacks.link,
+                'description': 'Capital costs of energy production and transmission in the model.'
             },
         'FOM Cost':
             {
@@ -199,7 +208,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': cost_fom_processing.process,
                 'db_process': cost_fom_processing.process,
                 'viz': cost_fom_viz.plot,
-                'callback': cost_fom_callbacks.link
+                'callback': cost_fom_callbacks.link,
+                'description': 'Fixed operating and maintenance costs of energy production and transmission in the model.'
             },
         'VOM Cost':
             {
@@ -208,7 +218,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': cost_vom_processing.process,
                 'db_process': cost_vom_processing.process,
                 'viz': cost_vom_viz.plot,
-                'callback': cost_vom_callbacks.link
+                'callback': cost_vom_callbacks.link,
+                'description': 'Variable operating and maintenance costs of energy production and transmission in the model.'
             },
         'Transmission Capacity':
             {
@@ -217,7 +228,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': transmission_capacity_processing.process,
                 'db_process': transmission_capacity_processing.process,
                 'viz': transmission_capacity_viz.plot,
-                'callback': transmission_capacity_callbacks.link
+                'callback': transmission_capacity_callbacks.link,
+                'description': 'Total transmission capacity between regions in the model.'
             },
         'Transmission Flow':
             {
@@ -226,7 +238,8 @@ class energy_modelsOutput(BaseProfile):
                 'process': transmission_flow_processing.process,
                 'db_process': transmission_flow_processing.process,
                 'viz': transmission_flow_viz.plot,
-                'callback': transmission_flow_callbacks.link
+                'callback': transmission_flow_callbacks.link,
+                'description': 'Transmission flow between regions in the model.'
             }
 
     }
@@ -252,7 +265,10 @@ class energy_modelsOutput(BaseProfile):
                 data = df.copy()
                 data['scenario'] = profile + '|' + data['scenario']
                 if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
-                    if ['AB', 'QC'] in data.region.unique():
+                    unique_regions = set(data['region'].unique())
+
+                    # Check if both 'A' and 'B' are in the unique values
+                    if {'AB', 'QC'}.issubset(unique_regions):
                         ab_qc = data[data.region.isin(['AB', 'QC'])]
                         # drop nan columns
                         ab_qc = ab_qc.dropna(axis=1, how='all')
@@ -266,7 +282,9 @@ class energy_modelsOutput(BaseProfile):
                         data = pd.concat([data, ab_qc])
 
                 if 'time' in data.columns:
-                    data = data[data['time'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045', '2050'])]
+                    data = data[data['time'].isin(
+                        [2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045',
+                         '2050'])]
 
 
                 elif 'period' in data.columns:
