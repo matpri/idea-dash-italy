@@ -17,10 +17,9 @@ def check(df):
     try:
         if (df.model == 'Sutubra-TEMOA').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
-                # remove all rows where variable = 'to {region}'
                 test = df.copy()
-                test['variable'] = test['variable'].apply(lambda x: x.split("|")[1])
-                test['variable'] = test['variable'].apply(lambda x: x.split("to ")[1])
+                test = test[test.variable.str.startswith("Total transmission capacity|")]
+                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
                 test = test[test.region != test.variable]
                 return test.value.sum() != 0
         return False

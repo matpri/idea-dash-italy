@@ -13,14 +13,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    #print("Checking for capacity_transmission in variable column")
+    print("Checking for New transmission capacity in variable column")
     try:
         if (df.model == 'NRCan-PyPsa').any():
-            if df.variable.str.startswith("Total transmission capacity|").any():
+            if df.variable.str.startswith("New transmission capacity|").any():
                 # remove all rows where variable = 'to {region}'
                 test = df.copy()
-                test['variable'] = test['variable'].apply(lambda x: x.split("|")[1])
-                test['variable'] = test['variable'].apply(lambda x: x.split("to ")[1])
+                test = test[test.variable.str.startswith("New transmission capacity|")]
+                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
                 test = test[test.region != test.variable]
                 return test.value.sum() != 0
         return False
@@ -179,7 +179,7 @@ def process(selected):
     transmissions = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Total transmission capacity|")]
+        df = df[df.variable.str.startswith("New transmission capacity|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])

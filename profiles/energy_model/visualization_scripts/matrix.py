@@ -21,6 +21,21 @@ def render_plot(type, df, scenarios, aggregate, region):
 
 
 def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label, name, unit):
+    if len(scenarios) == 0:
+        fig = go.Figure()
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="Please select at least one scenario",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
+        return fig
     fig = make_subplots(rows=len(scenarios), cols=len(scenarios), shared_xaxes=True, shared_yaxes=True,
                         vertical_spacing=0.02, horizontal_spacing=0.02,
                         subplot_titles=[scenario for scenario in scenarios])
@@ -72,7 +87,8 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                             color = utils.get_color(tech)
                         subfig.add_bar(x=tech_df['time'], y=tech_df['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen}<br>Technology: {tech}<br>'
-                                                     + 'Year: %{x}<br>Value: %{y:.2f}')
+                                                     + 'Year: %{x}<br>Value: %{y:.2f}', legendgroup=tech,
+                                       legendgrouptitle_text=tech)
                     subfig.update_layout(barmode='relative')
                     subfig.update_yaxes(showgrid=True)
                     for trace in subfig.data:
@@ -98,7 +114,8 @@ def plot_matrix(base_df, variable, scenarios, aggregate, title, x_label, y_label
                             color = utils.get_color(tech)
                         subfig.add_bar(x=tech_diff['time'], y=tech_diff['value'], name=tech, marker_color=color,
                                        hovertemplate=f'{scen} - {other_scen}<br>Technology: {tech}<br>'
-                                                     + 'Year: %{x}<br>Difference: %{y:.2f}')
+                                                     + 'Year: %{x}<br>Difference: %{y:.2f}', legendgroup=tech,
+                                       legendgrouptitle_text=tech)
                     subfig.update_layout(barmode='relative')
                     subfig.update_yaxes(showgrid=True)
                     for trace in subfig.data:

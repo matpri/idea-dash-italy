@@ -17,7 +17,11 @@ def check(df):
     try:
         if (df.model == 'HEC-PITHOS').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
-                return True
+                test = df.copy()
+                test = test[test.variable.str.startswith("Total transmission capacity|")]
+                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
+                test = test[test.region != test.variable]
+                return test.value.sum() != 0
         return False
     except Exception as e:
         print("capacity_transmission check", e)

@@ -17,11 +17,11 @@ def check(df):
     try:
         if (df.model == 'NATEM-POWER').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
-                test_df = df.copy()
-                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("|")[1])
-                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("to ")[1])
-                test_df = test_df[test_df.region != test_df.variable]
-                return test_df.value.sum() != 0
+                test = df.copy()
+                test = test[test.variable.str.startswith("Total transmission capacity|")]
+                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
+                test = test[test.region != test.variable]
+                return test.value.sum() != 0
         return False
     except Exception as e:
         print("capacity_transmission check", e)
