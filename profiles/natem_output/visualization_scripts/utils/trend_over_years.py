@@ -28,7 +28,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
                 color = utils.get_color(tech)
 
             fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
