@@ -1061,7 +1061,7 @@ Electricity|Storage|Pumped Hydro:
 Electricity|Biogas:
     color: '#000000'
     group: Biogas
-    group_color: '#b2df8a'
+    group_color: '#5d7aff'
     name: Electricity|Biogas
 Electricity|Biomass:
     color: '#000000'
