@@ -92,7 +92,7 @@ def aggregate_db(db, scenario):
     agg_df = agg_df.groupby(["variable", "time", "region"]).sum(numeric_only=True).reset_index()
 
     # value MW to GW
-    agg_df["value"] = agg_df.value.apply(lambda x: x / 1000)
+    agg_df["value"] = agg_df.value.apply(lambda x: x * 1e-6)
 
     agg_df["scenario"] = scenario
 
