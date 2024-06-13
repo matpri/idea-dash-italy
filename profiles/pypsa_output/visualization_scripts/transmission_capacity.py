@@ -55,7 +55,7 @@ def year_subset(Line_Flow, Year, Scenario):
     Line_Flow = Line_Flow[Line_Flow['period'] == Year]
 
     # Line_Flow = aggregate_lines(Line_Flow)
-    Line_Flow = Line_Flow[Line_Flow['total'] != 0]
+    Line_Flow = Line_Flow[Line_Flow['value'] != 0]
     return Line_Flow
 
 
@@ -147,14 +147,12 @@ def to_color_plotly(min_value):
 def transmission_plot(df, scenario, year, title):
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
 
-    min_value = df['total'].min()
-    max_value = df['total'].max()
+    min_value = df['value'].min()
+    max_value = df['value'].max()
     df = year_subset(df, year, scenario)
 
     # round value, total, cumsum to 2 decimal places
     df['value'] = df['value'].round(2)
-    df['total'] = df['total'].round(2)
-    df['cumsum'] = df['cumsum'].round(2)
 
     if df.empty:
         fig = go.Figure()
@@ -198,7 +196,7 @@ def transmission_plot(df, scenario, year, title):
     for area in fig_base.data:
         area.showlegend = False  # turn off legend
         df_region = df[df['region'] == area.name]
-        df_region = df_region[df_region['total'] != 0]
+        df_region = df_region[df_region['value'] != 0]
         template = f'{area.name}<extra></extra>'
         area.update(hovertemplate=template)
     fig_base.update_layout(margin=dict(l=0, r=0, t=0, b=0))
@@ -209,14 +207,14 @@ def transmission_plot(df, scenario, year, title):
         )
     )
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
-        str) + '<br>' + 'Existing Capacity: ' + df['cumsum'].astype(str) + ' GW <br>' + \
-                 'New Capacity: ' + df['value'].astype(str) + ' GW <br>' + 'Total Capacity: ' + df['total'].astype(
-        str) + " GW"
+        str) + '<br>' + 'Total Capacity: ' + df['value'].astype(str) + ' GW <br>' #+ \
+        #          'New Capacity: ' + df['value'].astype(str) + ' GW <br>' + 'Total Capacity: ' + df['total'].astype(
+        # str) + " GW"
 
     fig_overlay = go.Figure(
         data=go.Choropleth(
             locations=df['line'],
-            z=df['total'],
+            z=df['value'],
             geojson=arrow,
             featureidkey="properties.name",
             colorscale='GnBu',

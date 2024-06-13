@@ -188,22 +188,22 @@ def process(selected):
         df = df[df.region != df.variable]
         df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
 
-        cum_ls = []
-        for i in range(1, len(times)):
-            prev_times = times[:i]
-            new_built = df[(df['period'].isin(prev_times))]
-            columns = [*new_built.columns]
-            columns.remove('value')
-            new_built['period'] = times[i]
-            new_built = new_built.groupby(columns).sum().reset_index()
-            cum_ls.append(new_built)
+        # cum_ls = []
+        # for i in range(1, len(times)):
+        #     prev_times = times[:i]
+        #     new_built = df[(df['period'].isin(prev_times))]
+        #     columns = [*new_built.columns]
+        #     columns.remove('value')
+        #     new_built['period'] = times[i]
+        #     new_built = new_built.groupby(columns).sum().reset_index()
+        #     cum_ls.append(new_built)
 
-        cum_df = pd.concat(cum_ls)
-        df = pd.merge(df, cum_df, on=['region', 'variable', 'period', 'scenario'], how='outer')
-        df = df.rename(columns={"value_x": "value", "value_y": "cumsum"})
-        df['cumsum'] = df['cumsum'].fillna(0)
-        df['value'] = df['value'].fillna(0)
-        df['total'] = df['value'] + df['cumsum']
+        # cum_df = pd.concat(cum_ls)
+        # df = pd.merge(df, cum_df, on=['region', 'variable', 'period', 'scenario'], how='outer')
+        # df = df.rename(columns={"value_x": "value", "value_y": "cumsum"})
+        # df['cumsum'] = df['cumsum'].fillna(0)
+        # df['value'] = df['value'].fillna(0)
+        # df['total'] = df['value'] + df['cumsum']
         # if os.path.exists(os.path.join(folder, 'extant_transmission.csv')):
         #     extant_df = extant_process(os.path.join(folder, 'extant_transmission.csv'))
         #     extant_df = extant_df.rename(columns={"time": "period"})
@@ -213,26 +213,27 @@ def process(selected):
         df['period'] = df['period'].astype(int)
         df = df.groupby(["region", "variable", "period", 'scenario', ]).sum(numeric_only=True).reset_index()
         df['value'] = df['value'] / 1000
-        df['total'] = df['total'] / 1000
-        df['cumsum'] = df['cumsum'] / 1000
+        # df['total'] = df['total'] / 1000
+        # df['cumsum'] = df['cumsum'] / 1000
 
         transmissions.append(df)
 
+    # full_t = pd.concat(transmissions)
+    # years = full_t['period'].unique().tolist()
+    # years.sort()
+    # scenarios = full_t['scenario'].unique().tolist()
+    # for scenario in scenarios:
+    #     for i, year in enumerate(years):
+    #         df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == year)]
+    #         if df.empty and i > 0:
+    #             prev_time = years[i - 1]
+    #             prev_df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == prev_time)]
+    #             if not prev_df.empty:
+    #                 prev_df['period'] = year
+    #                 prev_df['cumsum'] = prev_df['total']
+    #                 prev_df['value'] = 0
+    #                 full_t = pd.concat([full_t, prev_df], ignore_index=True)
     full_t = pd.concat(transmissions)
-    years = full_t['period'].unique().tolist()
-    years.sort()
-    scenarios = full_t['scenario'].unique().tolist()
-    for scenario in scenarios:
-        for i, year in enumerate(years):
-            df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == year)]
-            if df.empty and i > 0:
-                prev_time = years[i - 1]
-                prev_df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == prev_time)]
-                if not prev_df.empty:
-                    prev_df['period'] = year
-                    prev_df['cumsum'] = prev_df['total']
-                    prev_df['value'] = 0
-                    full_t = pd.concat([full_t, prev_df], ignore_index=True)
     prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
