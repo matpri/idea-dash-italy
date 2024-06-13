@@ -299,10 +299,13 @@ class energy_modelsOutput(BaseProfile):
                 data = df.copy()
                 data['variable'] = viz_option + '|' + data['variable']
                 dfs.append(data)
-        full_df = pd.concat(dfs)
+        if len(dfs) > 0:
+            full_df = pd.concat(dfs)
 
-        results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
-        return results
+            results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
+            return results
+
+        return None
 
     def render_settings(self):
         layout = html.Div(
