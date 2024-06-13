@@ -1591,3 +1591,75 @@ Variable_OM:
     group: Variable O&M
     group_color: '#D35FB7'
     name: Variable O&M
+
+
+Fossil fuel gas CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+Fossil fuel solid CCS:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid CCS
+Coal:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid
+CoalCCS:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid CCS
+RNG:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+Fossil fuel gas industrial to grid:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas industrial to grid 
+Fossil fuel gas CCS industrial to grid:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas CCS industrial to grid 
+NGCC:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: NGCC
+NGCCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: NGCCS
+NGSC:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: NGSC
+HydroRunOfRiver:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: HydroRunOfRiver
+PeakHydro:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: PeakHydro
+BaseHydro:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: BaseHydro
+Diesel:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Diesel
