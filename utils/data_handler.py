@@ -284,7 +284,9 @@ class DataHandler:
         for profile in data_collection.keys():
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
-        results.extend(self.profiles['Power System Models'].process_data(results))
+        power_system_results=self.profiles['Power System Models'].process_data(results)
+        if power_system_results is not None:
+            results.extend(power_system_results)
 
         # Collect results
         for profile, viz, processed_data in results:
