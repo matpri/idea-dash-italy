@@ -12,6 +12,7 @@ from components.data_selection import data_modal, selected_files
 from components.help import help
 from utils.data_handler import DataHandler
 
+# setting up the app
 external_stylesheets = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
     'https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css'
@@ -19,10 +20,11 @@ external_stylesheets = [
 app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=external_stylesheets)
 
+# initialize data handler which will deal with all data related operations
 data_handler: DataHandler = DataHandler()
+
 # link profile callbacks to app
 data_handler.link(app)
-print('Profiles Found:', data_handler.profiles)
 modal_handling.link(app)
 tab_handling.link(app)
 burger_handling.link(app)
@@ -56,6 +58,12 @@ port = 8050  # or simply open on the default `8050` port
 
 
 def open_browser():
+    """
+    Open a web browser with the specified URL.
+    This is used to automatically open the browser when the server is started.
+
+    :return: None
+    """
     webbrowser.open_new("http://localhost:{}".format(port))
 
 if __name__ == '__main__':
