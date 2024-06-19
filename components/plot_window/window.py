@@ -18,7 +18,7 @@ def render():
         ),
         id=card_id,
         title='',
-        closable=True,
+        closable=False,
         icon='fa fa-chart-line'
     )
 

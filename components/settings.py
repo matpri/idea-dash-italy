@@ -3,6 +3,11 @@ from dash import html
 
 
 def render():
+    """
+    Render the settings modal.
+
+    :return: The rendered settings modal.
+    """
     from main import data_handler
     tab_contents = []
     tabs = []

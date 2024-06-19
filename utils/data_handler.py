@@ -27,6 +27,14 @@ model_mapping = {
 
 
 def create_generic_profile(df, model):
+    """
+    Creates a generic profile based on the data frame and model provided.
+
+    :param df: A pandas DataFrame containing the data.
+    :param model: The model used to create the profile.
+
+    :return: The generated generic profile.
+    """
     classes = df.variable.str.split('|').str[0].unique().tolist()
     variables = df.variable.apply(lambda x: '|'.join(x.split('|')[1:])).unique().tolist()
     profile = GenericProfile(model, classes, variables)
@@ -34,6 +42,19 @@ def create_generic_profile(df, model):
 
 
 def get_generators(api_key):
+    """
+    :param api_key: The API key required for access to the generator data.
+    :return: A DataFrame containing the latitude, longitude, generator type, installed capacity, and facility code of each generator.
+
+    This method makes an HTTP GET request to retrieve generator data from a remote server. It requires the `api_key` parameter, which is used to authenticate the request. The generator data
+    * is then parsed and transformed into a DataFrame.
+
+    Example usage:
+    ```
+    api_key = 'your_api_key'
+    generators = get_generators(api_key)
+    ```
+    """
     table = 'generators'
     with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
         response_content = response.read()
@@ -44,6 +65,12 @@ def get_generators(api_key):
 
 
 def get_transmission(api_key):
+    """
+    Retrieves transmission data from an API based on the given API key.
+
+    :param api_key: API key for accessing the transmission data.
+    :return: Dataframe containing transmission data.
+    """
     table = 'transmission_lines'
     with urllib.urlopen(f'http://206.12.95.102/{table}?key={api_key}') as response:
         response_content = response.read()
@@ -70,6 +97,10 @@ def get_transmission(api_key):
     return df
 
 def get_vre_capacity_factors(api_key):
+    """
+    :param api_key: An API key used to authenticate and access the data.
+    :return: A Pandas DataFrame containing VRE (Variable Renewable Energy) capacity factor data for wind and solar energy sources.
+    """
     tables = ['wind_capacity_factor', 'solar_capacity_factor']
     dfs = []
     for table in tables:
@@ -105,6 +136,12 @@ def get_vre_capacity_factors(api_key):
 
 
 def get_demand(api_key):
+    """
+    Retrieves demand data for multiple provinces and years.
+
+    :param api_key: The API key used for authentication.
+    :return: A pandas DataFrame containing the demand data.
+    """
     table = 'provincial_demand'
     demand_inputs = [['AB', '2021'], ['BC', '2021'], ['NB', '2021'], ['NL', '2021'], ['NS', '2021'],
                      ['ON', '2021'], ['QC', '2021'], ['SK', '2021'], ['MB', '2021'], ['PE', '2021']]
@@ -136,37 +173,7 @@ def get_demand(api_key):
 
 class DataHandler:
     """
-    Class responsible for handling data and generating visualizations.
 
-    Attributes:
-        api_key (str): API key for accessing data.
-        profiles (dict): Dictionary of available profile models.
-        data (dict): Dictionary holding data for each file.
-        processed_data (dict): Dictionary holding processed data for each profile and visualization.
-        viz (dict): Dictionary holding selected visualizations for each file.
-        runs (pd.DataFrame): DataFrame holding information about runs.
-
-    Methods:
-        select_run(profile: str, scenario: str, author: str) -> None:
-            Selects a specific run based on profile, scenario, and author.
-
-        process_data() -> None:
-            Processes the collected data and generates processed data for visualizations.
-
-        get_viz(profile: str, viz: str, window_id: str) -> Any:
-            Retrieves a specific visualization for a given profile and viz option.
-
-        get_viz_options() -> dict:
-            Retrieves the available visualization options.
-
-        load_profiles() -> dict:
-            Loads the available profile models.
-
-        link(app: Any) -> None:
-            Links the profile models to the application.
-
-        check_content(filename: str, content: str) -> None:
-            Checks the content of a file and updates the data and visualizations accordingly.
     """
     profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
                      'NATEM-POWER Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
@@ -182,6 +189,15 @@ class DataHandler:
 
 
     def select_run(self, profile, scenario, author,db):
+        """
+        Loading data from the CODERS Database, according to the selected profile, scenario, author and database.
+
+        :param profile: str: The selected profile
+        :param scenario: str: The selected scenario
+        :param author: str: The selected author
+        :param db: str: The selected database, either 'MMCW' or 'results', where MMCW requires a different URL and special access
+        :return:
+        """
         print('Selecting run', profile, scenario, author, db)
         if scenario == 'CEF2023':
             tables = ["benchmark_prices", "butane", "crude_oil_production", "electricity_capacity",
@@ -244,6 +260,7 @@ class DataHandler:
 
         self.data[filename]['content'] = df
 
+        # Check if the data has visualizations it can be processed into
         visualizations = {}
         selected = {}
         for profile_name, profile in self.profiles.items():
@@ -265,6 +282,12 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
     def process_data(self):
+        """
+        Process the data that has been loaded into the data handler.
+        :return:
+        """
+
+        # Collect data from all selected profiles
         data_collection = {}
         for fname, data in self.data.items():
             if not fname in self.processed:
@@ -284,6 +307,7 @@ class DataHandler:
         for profile in data_collection.keys():
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
+        # Process profiles that are considered Power System Models
         power_system_results=self.profiles['Power System Models'].process_data(results)
         if power_system_results is not None:
             results.extend(power_system_results)
@@ -301,6 +325,10 @@ class DataHandler:
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
 
     def get_viz_options(self):
+        """
+        Get the visualizations that are available for each profile.
+        :return:
+        """
         viz = {}
         for data in self.data.values():
             for profile, viz_options in data['selected'].items():
@@ -313,6 +341,7 @@ class DataHandler:
         return viz
 
     def load_profiles(self):
+        # Finds all profiles in the profiles folder and loads them
         found = {}
         for profile in profiles.__all__:
             module = __import__(f"{profile}", locals(), globals(), [profile])
@@ -367,8 +396,6 @@ class DataHandler:
             diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
             print(f"Columns missing in {filename}", diff)
             return False, f"These Columns were expected: {diff}"
-
-        # df = df[['model', 'scenario', 'variable', 'value', 'region', 'time']]
 
         if filename not in self.data:
             self.data[filename] = {}
