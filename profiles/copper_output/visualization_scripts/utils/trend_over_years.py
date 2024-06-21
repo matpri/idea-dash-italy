@@ -27,12 +27,20 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
             else:
                 color = utils.get_color(tech)
 
-            fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+            if 'Fuel:' in tech:
+                tech, fuel_type = tech.split('|Fuel: ')
+                fig.add_scatter(x=data["time"], y=data["value"], name=fuel_type, mode='lines+markers',
+                                marker_color=color,
+                                legendgroup=tech, legendgrouptitle=dict(text=tech),
+                                hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+            else:
+                fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                                hlovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
+        fig.update_layout(legend=dict(groupclick="toggleitem"))
         if df_scen.empty:
-            #print("No data available, since the results are all zero.")
+            # print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,
@@ -55,7 +63,6 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
 
 def subset(df, region, scenario, aggregate, season=None):
     df_scen = df.copy(deep=True)
-
 
     # Remove the years where all entries in the value column are 0
     value_sum_per_year = df_scen.groupby('time')['value'].sum()
@@ -81,7 +88,6 @@ def subset(df, region, scenario, aggregate, season=None):
     df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
 
     df_scen = df_scen[df_scen['value'] != 0]
-
 
     df_scen = df_scen.fillna(0)
     year_pad = []
