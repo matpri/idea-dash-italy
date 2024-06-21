@@ -32,10 +32,12 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
                 fig.add_scatter(x=data["time"], y=data["value"], name=fuel_type, mode='lines+markers',
                                 marker_color=color,
                                 legendgroup=tech, legendgrouptitle=dict(text=tech),
+                                legendrank=2,
                                 hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
             else:
                 fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                                hlovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                                legendrank=1,
+                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
         fig.update_layout(legend=dict(groupclick="toggleitem"))

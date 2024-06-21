@@ -41,12 +41,14 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
                             textposition='auto' if text_active else None,
                             text=f'<b>{tech} ({fuel_type})' if text_active else None,
                             legendgroup=tech,
+                            legendrank=2,
                             legendgrouptitle=dict(text=tech),
                             hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
             else:
                 fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'],
                             marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
                             textposition='auto' if text_active else None, text=tech if text_active else None,
+                            legendrank=1,
                             hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
         fig.update_layout(barmode='relative')
         fig.update_layout(legend=dict(groupclick="toggleitem"))
