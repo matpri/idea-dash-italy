@@ -9,6 +9,16 @@ from utils.generic_profile.processing_scripts import generic_processing
 from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
 
 
+def data_processing_task(profile_name, viz, data, processing_func):
+    # try:
+    data_out = processing_func(data)
+    # except Exception as e:
+    #     print(f"Error processing data for {profile_name} - {viz}: {e}")
+    #     data_out = pd.DataFrame()
+
+    return profile_name, viz, data_out
+
+
 class GenericProfile:
     def __init__(self, name, classes, variables):
         self.name = name
@@ -45,6 +55,15 @@ class GenericProfile:
     def link(self, app):
         generic_callback.link(app)
         settings.link(app)
+
+    def process_data(self, data_collection):
+        args = []
+        for viz_option, data in data_collection.items():
+            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+
+        processed_data = [data_processing_task(*arg) for arg in args]
+
+        return processed_data
 
     def render_settings(self):
         techs = list(utils.groups.keys())
@@ -97,4 +116,3 @@ class GenericProfile:
         utils.group_colors = group_colors
         utils.names = names
         utils.groups = groups
-
