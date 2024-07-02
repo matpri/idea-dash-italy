@@ -20,6 +20,7 @@ from profiles.copper_output.callbacks import (emissions as emissions_callbacks,
                                               cost_gencap as cost_gencap_callbacks,
                                               settings as settings_callbacks,
                                               dispatch as dispatch_callbacks,
+merra as merra_callbacks,
 overview as overview_callbacks
                                               )
 from profiles.copper_output.processing_scripts import (
@@ -36,6 +37,7 @@ from profiles.copper_output.processing_scripts import (
     cost_vom as cost_vom_processing,
     cost_gencap as cost_gencap_processing,
     dispatch as dispatch_processing,
+    merra as merra_processing,
     overview as overview_processing
 )
 from profiles.copper_output.visualization_scripts import (
@@ -52,6 +54,7 @@ from profiles.copper_output.visualization_scripts import (
     cost_vom as cost_vom_viz,
     cost_gencap as cost_gencap_viz,
     dispatch as dispatch_viz,
+    merra as merra_viz,
     overview as overview_viz
 )
 
@@ -68,6 +71,7 @@ class CopperOutput(BaseProfile):
         'Overview',
         'Emissions',
         'Capacity',
+        'VRE Capacity',
         'Net New Capacity',
         'New Capacity',
         'Qualifying Capacity',
@@ -111,6 +115,17 @@ class CopperOutput(BaseProfile):
                 'callback': generation_capacity_callbacks.link,
                 'description': 'Capacity of each technology in the model.'
             },
+        'VRE Capacity':
+            {
+                'check': merra_processing.check,
+                'db_check': merra_processing.check,
+                'process': merra_processing.process,
+                'db_process': merra_processing.process,
+                'viz': merra_viz.plot,
+                'callback': merra_callbacks.link,
+                'description': 'Capacity of each VRE technology grouped to their MERRA cell in the model.'
+            },
+
         'Net New Capacity':
             {
                 'check': net_new_capacity_processing.check,
