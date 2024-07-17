@@ -1,3 +1,5 @@
+import math
+
 import dash_mantine_components as dmc
 from dash import html, dcc
 
@@ -60,7 +62,7 @@ def plot(df, window_id):
     regions = df['region'].unique().tolist()
     years = df['year'].unique().tolist()
     sectors = df['sector'].unique().tolist()
-    sectors = [sector for sector in sectors if sector is not None or sector != '' or sector != 'nan']
+    sectors = [sector for sector in sectors if sector is not None and sector != '' and sector != math.nan and isinstance(sector, str)]
     services = df[(df['technology'].isna()) & (df['sector'] == sectors[0])]['short_path'].unique().tolist()
     fuels = df[(df['technology'].isna())]['context'].unique().tolist()
 

@@ -7,13 +7,16 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.cims_output import utils
 from profiles.cims_output.callbacks import (requested_quantities as requested_quantities_callbacks,
+                                            stock_lcc as stock_lcc_callbacks,
                                             settings as settings_callbacks,
                                             )
 from profiles.cims_output.processing_scripts import (
-    requested_quantities as requested_quantities_processing
+    requested_quantities as requested_quantities_processing,
+    stock_lcc as stock_lcc_processing,
 )
 from profiles.cims_output.visualization_scripts import (
-    requested_quantities as emissions_viz
+    requested_quantities as emissions_viz,
+    stock_lcc as stock_lcc_viz,
 )
 
 
@@ -26,7 +29,8 @@ class PypsaOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Requested Quantities'
+        'Requested Quantities',
+        'Stock LCC',
     ]
     viz_options = {
         # 'Overview':
@@ -48,6 +52,16 @@ class PypsaOutput(BaseProfile):
                 'viz': emissions_viz.plot,
                 'callback': requested_quantities_callbacks.link,
                 'description': 'Emissions that are produced by the generation mix in the model.'
+            },
+        'Stock LCC':
+            {
+                'check': stock_lcc_processing.check,
+                'db_check': stock_lcc_processing.check,
+                'process': stock_lcc_processing.process,
+                'db_process': stock_lcc_processing.process,
+                'viz': stock_lcc_viz.plot,
+                'callback': stock_lcc_callbacks.link,
+                'description': 'The stock of technologies in the model.'
             },
     }
 
