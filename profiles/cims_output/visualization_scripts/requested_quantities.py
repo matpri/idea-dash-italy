@@ -11,17 +11,17 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     df = process_represenation(df, representation, sector, service, fuel)
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, representation, 'x',
-                                    'y', 'name', 'unit', pattern_active=pattern_active,
+                                   'y', 'name', 'unit', pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
         return trend_over_years.plot(df, scenario, region, representation, 'x',
-                                    'y', 'name', 'unit')
+                                     'y', 'name', 'unit')
     elif type == 'Pie Chart':
         return pie_chart.plot(df, scenario, region, year, representation, 'x',
-                                    'y')
+                              'y')
     else:
         return bar_over_regions.plot(df, scenarios, year, representation, 'x',
-                                    'y', 'name', 'unit', pattern_active=pattern_active,
+                                     'y', 'name', 'unit', pattern_active=pattern_active,
                                      text_active=text_active)
 
 
@@ -51,12 +51,11 @@ def process_represenation(df, representation, sector, service, fuel):
 
 
 def plot(df, window_id):
-    '''
-
+    """
     :param df: pandas Dataframe containing the data to visualize
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
-    '''
+    """
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['year'].unique().tolist()
