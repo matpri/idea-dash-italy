@@ -8,22 +8,30 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 
 def render_plot(representation, type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
-                sector=None, service=None, emissions_list=None):
+                sector=None, service=None, emissions_list=None, plot_name='Net Emissions'):
     print('rendering plot', type)
+    from profiles.cims_output.utils import plot_settings
+    # print('rendering plot', type)
+    name = plot_settings[plot_name]['name']
+    unit = plot_settings[plot_name]['unit']
     df = process_represenation(df, representation, sector, service, emissions_list)
     if type == 'By Year':
-        return bar_over_years.plot(df, scenarios, region, representation, 'x',
-                                   'y', 'name', 'unit', pattern_active=pattern_active,
+        plot_info = plot_settings[plot_name]['By Year']
+        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                        name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
-        return trend_over_years.plot(df, scenario, region, representation, 'x',
-                                     'y', 'name', 'unit')
+        plot_info = plot_settings[plot_name]['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                        name, unit)
     elif type == 'Pie Chart':
-        return pie_chart.plot(df, scenario, region, year, representation, 'x',
-                              'y')
+        plot_info = plot_settings[plot_name]['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                        )
     else:
-        return bar_over_regions.plot(df, scenarios, year, representation, 'x',
-                                     'y', 'name', 'unit', pattern_active=pattern_active,
+        plot_info = plot_settings[plot_name]['By Region']
+        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                        name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
 
 
@@ -202,7 +210,8 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('By Sector', 'By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0], scenarios[0], sector=sectors[0], service=services[0],
-                           emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type]),
+                           emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
+                           plot_name='Net Emissions'),
         id={
             'type': 'figure',
             'index': window_id,

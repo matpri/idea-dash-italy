@@ -145,7 +145,7 @@ def link(app):
     def update_stock_lcc(_p_type, _scenarios, _scenario, _variable, _regions, _years, _pattern, _text,
                          _download, _sector, _service, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                          _pattern_style, _text_style):
-        # print('updating stock_lcc plot')
+        print('updating stock_lcc plot', _variable)
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -174,7 +174,7 @@ def link(app):
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
-                                  parameter=_variable)
+                                  parameter=_variable, plot_name=_variable)
 
         elif _p_type == 'Trend Over Years':
             _m_style = {'display': 'none'}
@@ -188,7 +188,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
-                                  parameter=_variable)
+                                  parameter=_variable, plot_name=_variable)
 
         elif _p_type == 'Pie Chart':
             _m_style = {'display': 'none'}
@@ -201,7 +201,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
-                                  parameter=_variable)
+                                  parameter=_variable, plot_name=_variable)
 
         else:
             _m_style = {'display': 'block'}
@@ -216,6 +216,6 @@ def link(app):
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
-                                  parameter=_variable)
+                                  parameter=_variable, plot_name=_variable)
 
         return _canvas, _r_style, _y_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style

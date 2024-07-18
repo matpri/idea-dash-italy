@@ -1,284 +1,235 @@
-Emissions:
-  name: Emissions
-  unit: MtCO2eq
+Requested Quantities:
+  name: Requested Quantities
+  unit:
   By Year:
-    title: Emissions by Year
+    title: Requested Quantities by Year
     x_label: Year
-    y_label: Emissions (MtCO2eq)
+    y_label: Requested Quantities
   Trend Over Years:
-    title: Emissions by Year
+    title: Requested Quantities by Year
     x_label: Year
-    y_label: Emissions (MtCO2eq)
+    y_label: Requested Quantities
   Pie Chart:
-    title: Emissions
+    title: Requested Quantities
     x_label:
     y_label:
   By Region:
-    title: Emissions by Region
+    title: Requested Quantities by Region
     x_label: Region
-    y_label: Emissions (MtCO2eq)
-Capacity:
-  name: Capacity
-  unit: GW
+    y_label: Requested Quantities
+New Stock:
+  name: New Stock
+  unit:
   By Year:
-    title: Capacity by Year
+    title: New Stock by Year
     x_label: Year
-    y_label: Capacity (GW)
+    y_label: New Stock
   Trend Over Years:
-    title: Capacity by Year
+    title: New Stock by Year
     x_label: Year
-    y_label: Capacity (GW)
+    y_label: New Stock
   Pie Chart:
-    title: Capacity
+    title: New Stock
     x_label:
     y_label:
   By Region:
-    title: Capacity by Region
+    title: New Stock by Region
     x_label: Region
-    y_label: Capacity (GW)
-New Capacity:
-  name: Capacity
-  unit: GW
+    y_label: New Stock
+Added Retrofit Stock:
+  name: Added Retrofit Stock
+  unit:
   By Year:
-    title: New Capacity by Year
+    title: Added Retrofit Stock by Year
     x_label: Year
-    y_label: New Capacity (GW)
+    y_label: Added Retrofit Stock
   Trend Over Years:
-    title: New Capacity by Year
+    title: Added Retrofit Stock by Year
     x_label: Year
-    y_label: New Capacity (GW)
+    y_label: Added Retrofit Stock
   Pie Chart:
-    title: New Capacity
+    title: Added Retrofit Stock
     x_label:
     y_label:
   By Region:
-    title: New Capacity by Region
+    title: Added Retrofit Stock by Region
     x_label: Region
-    y_label: New Capacity (GW)
-Net New Capacity:
-  name: Capacity
-  unit: GW
+    y_label: Added Retrofit Stock
+Retrofit Stock:
+  name: Retrofit Stock
+  unit:
   By Year:
-    title: Net New Capacity by Year
+    title: Retrofit Stock by Year
     x_label: Year
-    y_label: Net New Capacity (GW)
+    y_label: Retrofit Stock
   Trend Over Years:
-    title: Capacity by Year
+    title: Retrofit Stock by Year
     x_label: Year
-    y_label: Net New Capacity (GW)
+    y_label: Retrofit Stock
   Pie Chart:
-    title: Net New Capacity
+    title: Retrofit Stock
     x_label:
     y_label:
   By Region:
-    title: Net New Capacity by Region
+    title: Retrofit Stock by Region
     x_label: Region
-    y_label: Net New Capacity (GW)
-Qualifying Capacity:
-  name: Qualifying Capacity
-  unit: GW
+    y_label: Retrofit Stock
+Total Stock:
+  name: Total Stock
+  unit:
   By Year:
-    title: Qualifying Capacity by Year
+    title: Total Stock by Year
     x_label: Year
-    y_label: Qualifying Capacity (GW)
+    y_label: Total Stock
   Trend Over Years:
-    title: Qualifying Capacity by Year
+    title: Total Stock by Year
     x_label: Year
-    y_label: Qualifying Capacity (GW)
+    y_label: Total Stock
   Pie Chart:
-    title: Qualifying Capacity
+    title: Total Stock
     x_label:
     y_label:
   By Region:
-    title: Qualifying Capacity by Region
+    title: Total Stock by Region
     x_label: Region
-    y_label: Qualifying Capacity (GW)
-Supply:
-    name: Supply
-    unit: TWh
-    By Year:
-        title: Supply by Year
-        x_label: Year
-        y_label: Supply (TWh)
+    y_label: Total Stock
+Net Emissions:
+  name: Net Emissions
+  unit:
+  By Year:
+    title: Net Emissions by Year
+    x_label: Year
+    y_label: Net Emissions
+  Trend Over Years:
+    title: Net Emissions by Year
+    x_label: Year
+    y_label: Net Emissions
+  Pie Chart:
+    title: Net Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Net Emissions by Region
+    x_label: Region
+    y_label: Net Emissions
+Avoided Emissions:
+  name: Avoided Emissions
+  unit:
+  By Year:
+    title: Avoided Emissions by Year
+    x_label: Year
+    y_label: Avoided Emissions
+  Trend Over Years:
+    title: Avoided Emissions by Year
+    x_label: Year
+    y_label: Avoided Emissions
+  Pie Chart:
+    title: Avoided Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Avoided Emissions by Region
+    x_label: Region
+    y_label: Avoided Emissions
+Negative Emissions:
+  name: Negative Emissions
+  unit:
+  By Year:
+    title: Negative Emissions by Year
+    x_label: Year
+    y_label: Negative Emissions
+  Trend Over Years:
+    title: Negative Emissions by Year
+    x_label: Year
+    y_label: Negative Emissions
+  Pie Chart:
+    title: Negative Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Negative Emissions by Region
+    x_label: Region
+    y_label: Negative Emissions
+Emitted Emissions:
+  name: Emitted Emissions
+  unit:
+  By Year:
+    title: Emitted Emissions by Year
+    x_label: Year
+    y_label: Emitted Emissions
+  Trend Over Years:
+    title: Emitted Emissions by Year
+    x_label: Year
+    y_label: Emitted Emissions
+  Pie Chart:
+    title: Emitted Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Emitted Emissions by Region
+    x_label: Region
+    y_label: Emitted Emissions
+Emissions Cost:
+  name: Emissions Cost
+  unit:
+  By Year:
+    title: Emissions Cost by Year
+    x_label: Year
+    y_label: Emissions Cost
+  Trend Over Years:
+    title: Emissions Cost by Year
+    x_label: Year
+    y_label: Emissions Cost
+  Pie Chart:
+    title: Emissions Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Emissions Cost by Region
+    x_label: Region
+    y_label: Emissions Cost
 
-    Trend Over Years:
-        title: Supply by Year
-        x_label: Year
-        y_label:  Supply (TWh)
-    Pie Chart:
-        title: Supply
-        x_label:
-        y_label:
-    By Region:
-        title: Supply by Region
-        x_label: Region
-        y_label: Supply (TWh)
-Transmission Capacity:
-  name: Transmission Capacity
-  unit: Capacity (GW)
-  Map Plot:
-    title: Transmission Capacity by Line
-    x_label:
-    y_label:
-  Bar Plot:
-    title: Transmission Capacity by Line
-    x_label: Line
-    y_label: Capacity (GW)
-Transmission Flow:
-  name: Transmission Flow
-  unit: Flow (GW)
-  Map Plot:
-    title: Transmission Flow by Line
-    x_label:
-    y_label:
-  Bar Plot:
-    title: Transmission Flow by Line
-    x_label: Line
-    y_label: Flow (GW)
-Total Cost:
-  name: Cost
-  unit: Billion $
-  By Year:
-    title: Total Cost by Year
-    x_label: Year
-    y_label: Total Cost (Billion $)
-  Trend Over Years:
-    title: Total Cost by Year
-    x_label: Year
-    y_label: Total Cost (Billion $)
-  Pie Chart:
-    title: Total Cost
-    x_label:
-    y_label:
-  By Region:
-    title: Total Cost by Region
-    x_label: Region
-    y_label: Total Cost (Billion $)
-Capacity Cost:
-  name: Cost
-  unit: Billion $
-  By Year:
-    title: Capacity Cost by Year
-    x_label: Year
-    y_label: Capacity Cost (Billion $)
-  Trend Over Years:
-    title: Capacity Cost by Year
-    x_label: Year
-    y_label: Capacity Cost (Billion $)
-  Pie Chart:
-    title: Capacity Cost
-    x_label:
-    y_label:
-  By Region:
-    title: Capacity Cost by Region
-    x_label: Region
-    y_label: Capacity Cost (Billion $)
-FOM Cost:
-  name: Cost
-  unit: Million $
-  By Year:
-    title: Fixed O&M Cost by Year
-    x_label: Year
-    y_label: Fixed O&M Cost (Million $)
-  Trend Over Years:
-    title: Fixed O&M Cost by Year
-    x_label: Year
-    y_label: Fixed O&M Cost (Million $)
-  Pie Chart:
-    title: Fixed O&M Cost
-    x_label:
-    y_label:
-  By Region:
-    title: Fixed O&M Cost by Region
-    x_label: Region
-    y_label: Fixed O&M Cost (Million $)
-VOM Cost:
-  name: Cost
-  unit: Million $
-  By Year:
-      title: Variable O&M Cost by Year
-      x_label: Year
-      y_label: Variable O&M Cost (Million $)
-
-  Trend Over Years:
-      title: Variable O&M Cost by Year
-      x_label: Year
-      y_label:  Variable O&M Cost (Million $)
-  Pie Chart:
-      title: Variable O&M Cost
-      x_label:
-      y_label:
-  By Region:
-      title: Variable O&M Cost by Region
-      x_label: Region
-      y_label: Variable O&M Cost (Million $)
-Dispatch:
-  Dispatched Electricity:
-    title: Dispatched Electricity by Year
-    x_label: Year
-    y_label: Dispatched Electricity (TWh)
-  Exported Electricity:
-    title: Exported Electricity by Year
-    x_label: Year
-    y_label: Exported Electricity (TWh)
 Overview:
-  Capacity:
-    name: Capacity
-    unit: GW
-    title: Capacity
+  Requested Quantities:
+    title: Requested Quantities
     x_label: Year
-    y_label: Capacity (GW)
-  New Capacity:
-    name: New Capacity
-    unit: GW
-    title: New Capacity
+    y_label: Requested Quantities
+  New Stock:
+    title: New Stock
     x_label: Year
-    y_label: Capacity (GW)
-  Net New Capacity:
-    name: Net New Capacity
-    unit: GW
-    title: Net New Capacity
+    y_label: New Stock
+  Added Retrofit Stock:
+    title: Added Retrofit Stock
     x_label: Year
-    y_label: Capacity (GW)
-  Emissions:
-    name: Emissions
-    unit: MtCO2eq
-    title: Emissions
+    y_label: Added Retrofit Stock
+  Retrofit Stock:
+    title: Retrofit Stock
     x_label: Year
-    y_label: Emissions (MtCO2eq)
-  Supply:
-    name: Supply
-    unit: TWh
-    title: Supply
+    y_label: Retrofit Stock
+  Total Stock:
+    title: Total Stock
     x_label: Year
-    y_label: Supply (TWh)
-  Total Cost:
-    name: Cost
-    unit: Billion $
-    title: Total Cost
+    y_label: Total Stock
+  Avoided Emissions:
+    title: Avoided Emissions
     x_label: Year
-    y_label: Total Cost (Billion $)
-  Capacity Cost:
-    name: Cost
-    unit: Billion $
-    title: Capacity Cost
+    y_label: Avoided Emissions
+  Negative Emissions:
+    title: Negative Emissions
     x_label: Year
-    y_label: Capacity Cost (Billion $)
-  FOM Cost:
-    name: Cost
-    unit: Million $
-    title: Fixed O&M Cost
+    y_label: Negative Emissions
+  Emitted Emissions:
+    title: Emitted Emissions
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
-  VOM Cost:
-      name: Cost
-      unit: Million $
-      title: Variable O&M Cost
-      x_label: Year
-      y_label: Variable O&M Cost (Million $)
-
-
-
+    y_label: Emitted Emissions
+  Emissions Cost:
+    title: Emissions Cost
+    x_label: Year
+    y_label: Emissions Cost
+  Net Emissions:
+    title: Net Emissions
+    x_label: Year
+    y_label: Net Emissions
 
 
 

@@ -14,7 +14,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    #print("Checking for emissions in variable column")
+    # print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIMS').any():
             if (df.parameter.str.contains('stock')).any():
@@ -24,12 +24,16 @@ def check(df):
         print("Emission check", e)
         return False
 
+
 def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
         df = df[df['parameter'].str.contains('stock')]
         df = df[~df['region'].str.contains('CAN')]
+        df['parameter'] = df['parameter'].replace(
+            {'new_stock': 'New Stock', 'added_retrofit_stock': 'Added Retrofit Stock',
+             'retrofit_stock': 'Retrofit Stock', 'total_stock': 'Total Stock'})
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df['scenario'] = scenario_name
         dfs.append(df)

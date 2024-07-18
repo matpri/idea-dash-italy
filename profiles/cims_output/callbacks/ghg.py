@@ -204,7 +204,7 @@ def link(app):
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
-                                  emissions_list=emissions_list)
+                                  emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Trend Over Years':
             _m_style = {'display': 'none'}
@@ -217,7 +217,8 @@ def link(app):
                                   data_handler.processed_data['CIMS Output']['GHG'],
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector, service=_service, emissions_list=emissions_list)
+                                  _years, scenario=_scenario, sector=_sector, service=_service,
+                                  emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Pie Chart':
             _m_style = {'display': 'none'}
@@ -228,7 +229,8 @@ def link(app):
             _canvas = render_plot(_representation, 'Pie Chart', data_handler.processed_data['CIMS Output']['GHG'],
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector, service=_service, emissions_list=emissions_list)
+                                  _years, scenario=_scenario, sector=_sector, service=_service,
+                                  emissions_list=emissions_list, plot_name=_emission)
 
         else:
             _m_style = {'display': 'block'}
@@ -242,6 +244,6 @@ def link(app):
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
-                                  emissions_list=emissions_list)
+                                  emissions_list=emissions_list, plot_name=_emission)
 
         return _canvas, _r_style, _y_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style

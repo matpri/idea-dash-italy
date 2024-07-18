@@ -8,23 +8,32 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 
 def render_plot(type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
-                sector=None, service=None, parameter='new_stock'):
+                sector=None, service=None, parameter='new_stock', plot_name='New Stock'):
+    print('rendering plot', type)
+    from profiles.cims_output.utils import plot_settings
+    # print('rendering plot', type)
+    name = plot_settings[plot_name]['name']
+    unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
     df = process_represenation(df, sector, service, parameter)
     print('processed', df)
     if type == 'By Year':
-        return bar_over_years.plot(df, scenarios, region, parameter, 'x',
-                                   'y', 'name', 'unit', pattern_active=pattern_active,
+        plot_info = plot_settings[plot_name]['By Year']
+        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                   name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
-        return trend_over_years.plot(df, scenario, region, parameter, 'x',
-                                     'y', 'name', 'unit')
+        plot_info = plot_settings[plot_name]['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                     name, unit)
     elif type == 'Pie Chart':
-        return pie_chart.plot(df, scenario, region, year, parameter, 'x',
-                              'y')
+        plot_info = plot_settings[plot_name]['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                              )
     else:
-        return bar_over_regions.plot(df, scenarios, year, parameter, 'x',
-                                     'y', 'name', 'unit', pattern_active=pattern_active,
+        plot_info = plot_settings[plot_name]['By Region']
+        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
+                                     name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
 
 
@@ -56,7 +65,7 @@ def plot(df, window_id):
     sectors = [sector for sector in sectors if
                sector is not None and sector != '' and sector != math.nan and isinstance(sector, str)]
     services = df[df['sector'] == sectors[0]]['short_path'].unique().tolist()
-    stock_parameters = df[df['parameter'].str.contains('stock')]['parameter'].unique().tolist()
+    stock_parameters = df['parameter'].unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -179,7 +188,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0], scenarios[0], sector=sectors[0], service=services[0],
-                           parameter=stock_parameters[0]),
+                           parameter=stock_parameters[0], plot_name=stock_parameters[0]),
         id={
             'type': 'figure',
             'index': window_id,
