@@ -192,42 +192,62 @@ Emissions Cost:
 Overview:
   Requested Quantities:
     title: Requested Quantities
+    name: Requested Quantities
+    unit:
     x_label: Year
     y_label: Requested Quantities
   New Stock:
     title: New Stock
+    name: New Stock
+    unit:
     x_label: Year
     y_label: New Stock
   Added Retrofit Stock:
     title: Added Retrofit Stock
+    name: Added Retrofit Stock
+    unit:
     x_label: Year
     y_label: Added Retrofit Stock
   Retrofit Stock:
     title: Retrofit Stock
+    name: Retrofit Stock
+    unit:
     x_label: Year
     y_label: Retrofit Stock
   Total Stock:
     title: Total Stock
+    name: Total Stock
+    unit:
     x_label: Year
     y_label: Total Stock
   Avoided Emissions:
     title: Avoided Emissions
+    name: Avoided Emissions
+    unit:
     x_label: Year
     y_label: Avoided Emissions
   Negative Emissions:
     title: Negative Emissions
+    name: Negative Emissions
+    unit:
     x_label: Year
     y_label: Negative Emissions
   Emitted Emissions:
     title: Emitted Emissions
+    name: Emitted Emissions
+    unit:
     x_label: Year
     y_label: Emitted Emissions
-  Emissions Cost:
-    title: Emissions Cost
+  Emissions Costs:
+    title: Emissions Costs
+    name: Emissions Costs
+    unit:
     x_label: Year
     y_label: Emissions Cost
   Net Emissions:
     title: Net Emissions
+    name: Net Emissions
+    unit:
     x_label: Year
     y_label: Net Emissions
 

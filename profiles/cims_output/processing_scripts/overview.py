@@ -68,7 +68,7 @@ def process(data):
             dfs.append(df)
         if stock_lcc.check(db):
             df = stock_lcc.process({scenario_name: db})
-            stock_parameters = df[df['parameter'].str.contains('stock')]['parameter'].unique().tolist()
+            stock_parameters = df['parameter'].unique().tolist()
             for parameter in stock_parameters:
                 stock = df[df['parameter'] == parameter].copy()
                 stock['variable'] = parameter

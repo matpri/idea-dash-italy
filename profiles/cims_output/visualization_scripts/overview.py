@@ -5,8 +5,11 @@ from dash import html, dcc
 
 def render_plot(type, df):
     #print('rendering plot', type)
+    from profiles.cims_output.utils import plot_settings
     df = df[df.variable == type].copy()
-    return plot_overview(df, type, 'Year', 'Value', type, 'unit')
+    plot_settings = plot_settings['Overview'][type]
+
+    return plot_overview(df, type, plot_settings['x_label'], plot_settings['y_label'], plot_settings['name'], plot_settings['unit'])
 
 
 def plot_overview(df, title, x_label, y_label, name, unit):
