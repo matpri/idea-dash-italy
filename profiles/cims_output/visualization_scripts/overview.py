@@ -3,19 +3,10 @@ import plotly.graph_objects as go
 from dash import html, dcc
 
 
-def render_plot(type, df, can=True):
-    from profiles.cims_output.utils import plot_settings
+def render_plot(type, df):
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
-    if can:
-        df = df[df.region == 'CAN']
-    else:
-        df = df[df.region == 'AB+QC']
-
-    plot_info = plot_settings['Overview'][type]
-    name = plot_info['name']
-    unit = plot_info['unit']
-    return plot_overview(df, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    return plot_overview(df, type, 'Year', 'Value', type, 'unit')
 
 
 def plot_overview(df, title, x_label, y_label, name, unit):

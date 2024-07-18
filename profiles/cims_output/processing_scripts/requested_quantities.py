@@ -30,8 +30,8 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df['parameter'] == 'requested_quantities']
+        df = df[~df['region'].str.contains('CAN')]
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)
-    full_df['time'] = full_df['year'].astype(int)
     return full_df

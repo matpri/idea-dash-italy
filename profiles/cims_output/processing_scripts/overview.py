@@ -1,9 +1,16 @@
 import pandas as pd
 
-from profiles.cims_output.processing_scripts import (generation_capacity, emissions, new_capacity, net_new_capacity,
-                                                       generation_supply,
-                                                       cost_vom, cost_fom, cost_gencap, cost_total)
+from profiles.cims_output.processing_scripts import (ghg, requested_quantities, stock_lcc)
 
+emissions_mapping = {
+    'Net Emissions': ['total_cumul_net_emissions',
+                      'total_cumul_avoided_emissions',
+                      'total_cumul_negative_emissions',
+                      'total_cumul_bio_emissions'],
+    'Avoided Emissions': ['total_cumul_avoided_emissions'],
+    'Negative Emissions': ['total_cumul_negative_emissions'],
+    'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions'],
+    'Emissions Costs': ['total_cumul_emissions_cost']}
 
 def check(df):
     """
@@ -17,23 +24,11 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if generation_capacity.check(df):
+        if ghg.check(df):
             return True
-        if new_capacity.check(df):
+        if requested_quantities.check(df):
             return True
-        if net_new_capacity.check(df):
-            return True
-        if emissions.check(df):
-            return True
-        if generation_supply.check(df):
-            return True
-        if cost_vom.check(df):
-            return True
-        if cost_fom.check(df):
-            return True
-        if cost_gencap.check(df):
-            return True
-        if cost_total.check(df):
+        if stock_lcc.check(df):
             return True
         return False
     except Exception as e:
@@ -54,45 +49,35 @@ def process(data):
     """
     dfs = []
     for scenario_name, db in data.items():
-        if generation_capacity.check(db):
-            df = generation_capacity.process({scenario_name: db})
-            df['variable'] = 'Capacity'
+        if ghg.check(db):
+            df = ghg.process({scenario_name: db})
+            for key, value in emissions_mapping.items():
+                emissions = df[df['parameter'].isin(value)].copy()
+                emissions['variable'] = key
+                emissions = emissions.rename(columns={'value_num': 'value', 'year': 'time'})
+                emissions = emissions.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+                emissions = emissions[['scenario', 'variable', 'time', 'value']]
+                dfs.append(emissions)
+        if requested_quantities.check(db):
+            df = requested_quantities.process({scenario_name: db})
+            df = df[(df['technology'].isna()) & (df['context'] != 'Total')].groupby(
+                ['region', 'year', 'scenario']).sum(numeric_only=True).reset_index()
+            df = df.rename(columns={'value_num': 'value', 'year': 'time'})
+            df['variable'] = 'Requested Quantities'
+            df = df[['scenario', 'variable', 'time', 'value']]
             dfs.append(df)
-        if new_capacity.check(db):
-            df = new_capacity.process({scenario_name: db})
-            df['variable'] = 'New Capacity'
-            dfs.append(df)
-        if net_new_capacity.check(db):
-            df = net_new_capacity.process({scenario_name: db})
-            df['variable'] = 'Net New Capacity'
-            dfs.append(df)
-        if emissions.check(db):
-            df = emissions.process({scenario_name: db})
-            df['variable'] = 'Emissions'
-            dfs.append(df)
-        if generation_supply.check(db):
-            df = generation_supply.process({scenario_name: db})
-            df['variable'] = 'Supply'
-            dfs.append(df)
-        if cost_vom.check(db):
-            df = cost_vom.process({scenario_name: db})
-            df['variable'] = 'VOM Cost'
-            dfs.append(df)
-        if cost_fom.check(db):
-            df = cost_fom.process({scenario_name: db})
-            df['variable'] = 'FOM Cost'
-            dfs.append(df)
-        if cost_gencap.check(db):
-            df = cost_gencap.process({scenario_name: db})
-            df['variable'] = 'Capacity Cost'
-            dfs.append(df)
-        if cost_total.check(db):
-            df = cost_total.process({scenario_name: db})
-            df['variable'] = 'Total Cost'
+        if stock_lcc.check(db):
+            df = stock_lcc.process({scenario_name: db})
+            stock_parameters = df[df['parameter'].str.contains('stock')]['parameter'].unique().tolist()
+            for parameter in stock_parameters:
+                stock = df[df['parameter'] == parameter].copy()
+                stock['variable'] = parameter
+                stock = stock.rename(columns={'value_num': 'value', 'year': 'time'})
+                stock = stock.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+                stock = stock[['scenario', 'variable', 'time', 'value']]
+                dfs.append(stock)
             dfs.append(df)
 
     full_df = pd.concat(dfs)
-
-    full_df = full_df[full_df['region']=='CAN']
     full_df = full_df.groupby(['scenario', 'variable','time']).sum(numeric_only=True).reset_index()
     return full_df[['scenario', 'variable', 'time', 'value']]

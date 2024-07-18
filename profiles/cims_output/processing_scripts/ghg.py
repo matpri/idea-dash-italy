@@ -29,6 +29,8 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
         df = df[df['parameter'].str.contains('emissions')]
+        # remove where region is CAN
+        df = df[~df['region'].str.contains('CAN')]
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df['scenario'] = scenario_name
         dfs.append(df)

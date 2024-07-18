@@ -1,25 +1,29 @@
 from random import randint
 
 import dash_mantine_components as dmc
+import pandas as pd
 import yaml
 from dash import html, dcc
 
-from profiles.base_profile.base_profile import BaseProfile
+from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 from profiles.cims_output import utils
 from profiles.cims_output.callbacks import (requested_quantities as requested_quantities_callbacks,
                                             stock_lcc as stock_lcc_callbacks,
                                             ghg as ghg_callbacks,
+                                            overview as overview_callbacks,
                                             settings as settings_callbacks,
                                             )
 from profiles.cims_output.processing_scripts import (
     requested_quantities as requested_quantities_processing,
     stock_lcc as stock_lcc_processing,
     ghg as ghg_processing,
+    overview as overview_processing
 )
 from profiles.cims_output.visualization_scripts import (
     requested_quantities as emissions_viz,
     stock_lcc as stock_lcc_viz,
-    ghg as ghg_viz
+    ghg as ghg_viz,
+    overview as overview_viz,
 )
 
 
@@ -32,21 +36,22 @@ class PypsaOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
+        'Overview',
         'Requested Quantities',
         'Stock LCC',
         'GHG'
     ]
     viz_options = {
-        # 'Overview':
-        #     {
-        #         'check': overview_processing.check,
-        #         'db_check': overview_processing.check,
-        #         'process': overview_processing.process,
-        #         'db_process': overview_processing.process,
-        #         'viz': overview_viz.plot,
-        #         'callback': overview_callbacks.link,
-        #         'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-        #     },
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
         'Requested Quantities':
             {
                 'check': requested_quantities_processing.check,
@@ -89,6 +94,15 @@ class PypsaOutput(BaseProfile):
     def link(self, app):
         settings_callbacks.link(app)
         super().link(app)
+
+    def process_data(self, data_collection):
+        print('Base collective preprocess')
+        args = []
+        for viz_option, data in data_collection.items():
+            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+        processed_data = [data_processing_task(*arg) for arg in args]
+
+        return processed_data
 
     def render_settings(self):
         layout = html.Div(
