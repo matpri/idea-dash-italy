@@ -169,17 +169,17 @@ Emitted Emissions:
     title: Emitted Emissions by Region
     x_label: Region
     y_label: Emitted Emissions
-Emissions Cost:
-  name: Emissions Cost
+Emissions Costs:
+  name: Emissions Costs
   unit:
   By Year:
-    title: Emissions Cost by Year
+    title: Emissions Costs by Year
     x_label: Year
-    y_label: Emissions Cost
+    y_label: Emissions Costs
   Trend Over Years:
-    title: Emissions Cost by Year
+    title: Emissions Costs by Year
     x_label: Year
-    y_label: Emissions Cost
+    y_label: Emissions Costs
   Pie Chart:
     title: Emissions Cost
     x_label:
