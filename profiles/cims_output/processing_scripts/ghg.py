@@ -17,7 +17,7 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIMS').any():
-            if (df.parameter.str.contains('stock')).any():
+            if (df.parameter.str.contains('emissions')).any():
                 return True
         return False
     except Exception as e:
@@ -28,7 +28,7 @@ def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df['parameter'].str.contains('stock')]
+        df = df[df['parameter'].str.contains('emissions')]
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df['scenario'] = scenario_name
         dfs.append(df)

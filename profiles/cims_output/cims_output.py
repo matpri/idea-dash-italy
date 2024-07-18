@@ -8,15 +8,18 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.cims_output import utils
 from profiles.cims_output.callbacks import (requested_quantities as requested_quantities_callbacks,
                                             stock_lcc as stock_lcc_callbacks,
+                                            ghg as ghg_callbacks,
                                             settings as settings_callbacks,
                                             )
 from profiles.cims_output.processing_scripts import (
     requested_quantities as requested_quantities_processing,
     stock_lcc as stock_lcc_processing,
+    ghg as ghg_processing,
 )
 from profiles.cims_output.visualization_scripts import (
     requested_quantities as emissions_viz,
     stock_lcc as stock_lcc_viz,
+    ghg as ghg_viz
 )
 
 
@@ -31,6 +34,7 @@ class PypsaOutput(BaseProfile):
     plot_order = [
         'Requested Quantities',
         'Stock LCC',
+        'GHG'
     ]
     viz_options = {
         # 'Overview':
@@ -63,6 +67,16 @@ class PypsaOutput(BaseProfile):
                 'callback': stock_lcc_callbacks.link,
                 'description': 'The stock of technologies in the model.'
             },
+        'GHG':
+            {
+                'check': ghg_processing.check,
+                'db_check': ghg_processing.check,
+                'process': ghg_processing.process,
+                'db_process': ghg_processing.process,
+                'viz': ghg_viz.plot,
+                'callback': ghg_callbacks.link,
+                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
+            }
     }
 
     def __init__(self):
