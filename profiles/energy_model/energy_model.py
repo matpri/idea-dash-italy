@@ -24,6 +24,7 @@ from profiles.energy_model.callbacks import (
     transmission_capacity as transmission_capacity_callbacks,
     transmission_flow as transmission_flow_callbacks,
     comparison as comparison_callbacks,
+    heatmap as heatmap_callbacks,
     settings as settings_callbacks
 
 )
@@ -58,7 +59,8 @@ from profiles.energy_model.visualization_scripts import (
     cost_total as cost_total_viz,
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
-    comparison as comparison_viz
+    comparison as comparison_viz,
+    heatmap as heatmap_viz
 )
 
 power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Output', 'HEC-PITHOS Output',
@@ -75,6 +77,7 @@ class energy_modelsOutput(BaseProfile):
 
     plot_order = [
         'Overview',
+        'Heatmap',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -100,6 +103,17 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+
+            },
+        'Heatmap':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': heatmap_viz.plot,
+                'callback': heatmap_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
             },
@@ -286,11 +300,16 @@ class energy_modelsOutput(BaseProfile):
                         [2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045',
                          '2050'])]
 
+                    # make time into int
+                    data['time'] = pd.to_numeric(data['time'])
+
+
 
                 elif 'period' in data.columns:
                     data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
 
+        processed_data['Heatmap'] = processed_data['Overview'].copy()
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
         dfs = []
@@ -303,6 +322,7 @@ class energy_modelsOutput(BaseProfile):
             full_df = pd.concat(dfs)
 
             results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
+
             return results
 
         return None
