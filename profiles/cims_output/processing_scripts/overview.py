@@ -55,16 +55,16 @@ def process(data):
                 emissions = df[df['parameter'].isin(value)].copy()
                 emissions['variable'] = key
                 emissions = emissions.rename(columns={'value_num': 'value', 'year': 'time'})
-                emissions = emissions.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-                emissions = emissions[['scenario', 'variable', 'time', 'value']]
+                emissions = emissions.groupby(['scenario', 'variable', 'time', 'sector']).sum(numeric_only=True).reset_index()
+                emissions = emissions[['scenario', 'variable', 'time', 'value', 'sector']]
                 dfs.append(emissions)
         if requested_quantities.check(db):
             df = requested_quantities.process({scenario_name: db})
             df = df[(df['technology'].isna()) & (df['context'] != 'Total')].groupby(
-                ['region', 'year', 'scenario']).sum(numeric_only=True).reset_index()
+                ['region', 'year', 'scenario', 'sector']).sum(numeric_only=True).reset_index()
             df = df.rename(columns={'value_num': 'value', 'year': 'time'})
             df['variable'] = 'Requested Quantities'
-            df = df[['scenario', 'variable', 'time', 'value']]
+            df = df[['scenario', 'variable', 'time', 'value', 'sector']]
             dfs.append(df)
         if stock_lcc.check(db):
             df = stock_lcc.process({scenario_name: db})
@@ -73,11 +73,11 @@ def process(data):
                 stock = df[df['parameter'] == parameter].copy()
                 stock['variable'] = parameter
                 stock = stock.rename(columns={'value_num': 'value', 'year': 'time'})
-                stock = stock.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-                stock = stock[['scenario', 'variable', 'time', 'value']]
+                stock = stock.groupby(['scenario', 'variable', 'time', 'sector']).sum(numeric_only=True).reset_index()
+                stock = stock[['scenario', 'variable', 'time', 'value', 'sector']]
                 dfs.append(stock)
             dfs.append(df)
 
     full_df = pd.concat(dfs)
-    full_df = full_df.groupby(['scenario', 'variable','time']).sum(numeric_only=True).reset_index()
-    return full_df[['scenario', 'variable', 'time', 'value']]
+    full_df = full_df.groupby(['scenario', 'variable','time', 'sector']).sum(numeric_only=True).reset_index()
+    return full_df[['scenario', 'variable', 'time', 'value', 'sector']]
