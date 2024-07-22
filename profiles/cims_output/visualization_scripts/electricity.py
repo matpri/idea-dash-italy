@@ -20,20 +20,20 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
         variable = 'Requested Quantities'
 
     if r_type == 'By Year':
-        return bar_over_years.plot(df_plt, scenarios, region, 'Electricity:' + variable, 'Year',
+        return bar_over_years.plot(df_plt, scenarios, region, 'Electricity: ' + variable, 'Year',
                                    variable,
                                    name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif r_type == 'Trend Over Years':
-        return trend_over_years.plot(df_plt, scenario, region, 'Electricity:' + variable, 'Year',
+        return trend_over_years.plot(df_plt, scenario, region, 'Electricity: ' + variable, 'Year',
                                    variable,
                                      name, unit)
     elif r_type == 'Pie Chart':
-        return pie_chart.plot(df_plt, scenario, region, year, 'Electricity:' + variable, 'Year',
+        return pie_chart.plot(df_plt, scenario, region, year, 'Electricity: ' + variable, 'Year',
                                    variable)
 
     else:
-        return bar_over_regions.plot(df_plt, scenarios, year, 'Electricity:' + 'Electricity:' + variable, 'Year',
+        return bar_over_regions.plot(df_plt, scenarios, year, 'Electricity: ' + variable, 'Year',
                                    variable,
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
@@ -83,10 +83,8 @@ def plot(df, window_id):
     years = df_plt.year.unique().tolist()
     scenarios = df_plt.scenario.unique().tolist()
 
-    variables = df_plt[df_plt['parameter'].str.contains('emissions')][
-        'parameter'].unique().tolist() if plot_type == 'GHG' else \
-        df_plt[df_plt['parameter'].str.contains('stock')][
-            'parameter'].unique().tolist() if plot_type == 'Stock' else []
+    variables = [] if plot_type == 'Requested Quantities' else df_plt[
+        'parameter'].unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',

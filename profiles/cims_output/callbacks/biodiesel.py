@@ -162,7 +162,10 @@ def link(app):
         variables = dash.no_update
         if trigger_id['type'] == 'cims-biodiesel-plot-select':
             variables = [] if plot_type == 'Requested Quantities' else df_plt['parameter'].unique().tolist()
-            variable = variables[0] if variables else dash.no_update
+            if variables:
+                variable = variables[0]
+            else:
+                'Requested Quantities'
 
         _canvas = render_plot(_data, plot_type, plot, rep_switch, year, region, scenarios, scenario, variable,
                               pattern_switch, text_switch)

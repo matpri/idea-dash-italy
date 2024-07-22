@@ -3,6 +3,16 @@ import os
 
 from profiles.cims_output.processing_scripts.utils import requested_quantities, ghg, stock_lcc
 
+emissions_mapping = {
+    'Net Emissions': ['total_cumul_net_emissions',
+                      'total_cumul_avoided_emissions',
+                      'total_cumul_negative_emissions',
+                      'total_cumul_bio_emissions'],
+    'Avoided Emissions': ['total_cumul_avoided_emissions'],
+    'Negative Emissions': ['total_cumul_negative_emissions'],
+    'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions'],
+    'Emissions Costs': ['total_cumul_emissions_cost']}
+
 
 def check(df):
     """
@@ -39,7 +49,16 @@ def process(selected: dict):
         # remove where region is CAN
         df_ghg = df.copy()
         df_ghg = ghg.process({scenario_name: df_ghg})
+        ghg_ls = []
+        for name, emission_list in emissions_mapping.items():
+            subset = df_ghg[df_ghg.parameter.isin(emission_list)][
+                ['region', 'year', 'value_num', 'scenario', 'context', 'sub_context']].groupby(
+                ['region', 'year', 'scenario', 'context', 'sub_context']).sum().reset_index()
+            subset['parameter'] = name
+            ghg_ls.append(subset)
+        df_ghg = pd.concat(ghg_ls)
         df_ghg['plot'] = 'GHG'
+
         df_stock = df.copy()
         df_stock = stock_lcc.process({scenario_name: df_stock})
         df_stock['plot'] = 'Stock'

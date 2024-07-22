@@ -6,25 +6,36 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, variable, pattern_active=True,
                 text_active=False):
+    from profiles.cims_output.utils import plot_settings
     df_plt = df[
         (df['plot'] == p_type)
         ]
 
-    df_plt = process_represenation(p_type, by_rep, variable, df_plt)
+    name = plot_settings[p_type]['name']
+    unit = plot_settings[p_type]['unit']
+
+    df_plt = process_represenation(p_type, by_rep, variable, df_plt)\
+
+    if p_type == 'Requested Quantities':
+        variable = 'Requested Quantities'
 
     if r_type == 'By Year':
-        return bar_over_years.plot(df_plt, scenarios, region, 'title', 'x_label', 'y_label',
-                                   'name', 'unit', pattern_active=pattern_active,
+        return bar_over_years.plot(df_plt, scenarios, region, 'Biodiesel: ' + variable, 'Year',
+                                   variable,
+                                   name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif r_type == 'Trend Over Years':
-        return trend_over_years.plot(df_plt, scenario, region, 'title', 'x_label', 'y_label',
-                                     'name', 'unit')
+        return trend_over_years.plot(df_plt, scenario, region, 'Biodiesel: ' + variable, 'Year',
+                                   variable,
+                                     name, unit)
     elif r_type == 'Pie Chart':
-        return pie_chart.plot(df_plt, scenario, region, year, 'title', 'x_label', 'y_label',
-                              )
+        return pie_chart.plot(df_plt, scenario, region, year, 'Biodiesel: ' + variable, 'Year',
+                                   variable)
+
     else:
-        return bar_over_regions.plot(df_plt, scenarios, year, 'title', 'x_label', 'y_label',
-                                     'name', 'unit', pattern_active=pattern_active,
+        return bar_over_regions.plot(df_plt, scenarios, year, 'Biodiesel: ' + variable, 'Year',
+                                   variable,
+                                     name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
 
 
@@ -45,6 +56,7 @@ def process_represenation(p_type, by_rep, variable, df):
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
     else:
+        df = df[df['context'] == 'Total']
         if by_rep:
             filtered_df = df[
                 (df['technology'].isna())
@@ -71,10 +83,8 @@ def plot(df, window_id):
     years = df_plt.year.unique().tolist()
     scenarios = df_plt.scenario.unique().tolist()
 
-    variables = df_plt[df_plt['parameter'].str.contains('emissions')][
-        'parameter'].unique().tolist() if plot_type == 'GHG' else \
-        df_plt[df_plt['parameter'].str.contains('stock')][
-            'parameter'].unique().tolist() if plot_type == 'Stock' else []
+    variables = [] if plot_type == 'Requested Quantities' else df_plt[
+        'parameter'].unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
