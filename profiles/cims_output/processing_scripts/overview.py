@@ -1,6 +1,6 @@
 import pandas as pd
 
-from profiles.cims_output.processing_scripts import (ghg, requested_quantities, stock_lcc)
+from profiles.cims_output.processing_scripts.utils import ghg, stock_lcc, requested_quantities
 
 emissions_mapping = {
     'Net Emissions': ['total_cumul_net_emissions',

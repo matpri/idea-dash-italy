@@ -1,7 +1,6 @@
 from random import randint
 
 import dash_mantine_components as dmc
-import pandas as pd
 import yaml
 from dash import html, dcc
 
@@ -10,19 +9,21 @@ from profiles.cims_output import utils
 from profiles.cims_output.callbacks import (requested_quantities as requested_quantities_callbacks,
                                             stock_lcc as stock_lcc_callbacks,
                                             ghg as ghg_callbacks,
+                                            agriculture as agriculture_callbacks,
                                             overview as overview_callbacks,
                                             settings as settings_callbacks,
                                             )
 from profiles.cims_output.processing_scripts import (
-    requested_quantities as requested_quantities_processing,
-    stock_lcc as stock_lcc_processing,
-    ghg as ghg_processing,
-    overview as overview_processing
+    overview as overview_processing,
+    agriculture as agriculture_processing
 )
+from profiles.cims_output.processing_scripts.utils import ghg as ghg_processing, stock_lcc as stock_lcc_processing, \
+    requested_quantities as requested_quantities_processing
 from profiles.cims_output.visualization_scripts import (
     requested_quantities as emissions_viz,
     stock_lcc as stock_lcc_viz,
     ghg as ghg_viz,
+    agriculture as agriculture_viz,
     overview as overview_viz,
 )
 
@@ -39,7 +40,8 @@ class PypsaOutput(BaseProfile):
         'Overview',
         'Requested Quantities',
         'Stock LCC',
-        'GHG'
+        'GHG',
+        'Agriculture'
     ]
     viz_options = {
         'Overview':
@@ -80,6 +82,16 @@ class PypsaOutput(BaseProfile):
                 'db_process': ghg_processing.process,
                 'viz': ghg_viz.plot,
                 'callback': ghg_callbacks.link,
+                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
+            },
+        'Agriculture':
+            {
+                'check': agriculture_processing.check,
+                'db_check': agriculture_processing.check,
+                'process': agriculture_processing.process,
+                'db_process': agriculture_processing.process,
+                'viz': agriculture_viz.plot,
+                'callback': agriculture_callbacks.link,
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             }
     }
