@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, MATCH, dcc
 
-from profiles.cims_output.visualization_scripts.agriculture import render_plot
+from profiles.cims_output.visualization_scripts.petroleum_crude import render_plot
 
 
 def link(app):
@@ -10,113 +10,113 @@ def link(app):
             'type': 'figure',
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'agriculture'
+            'viz': 'petroleum_crude'
         }, 'figure'),
         Output({
-            'type': 'cims-agriculture-region-select',
+            'type': 'cims-petroleum_crude-region-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-year-select',
+            'type': 'cims-petroleum_crude-year-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-petroleum_crude-variable-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-petroleum_crude-rep_switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-scenario-multi-select',
+            'type': 'cims-petroleum_crude-scenario-multi-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-scenario-select',
+            'type': 'cims-petroleum_crude-scenario-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-petroleum_crude-rep_switch',
             'index': MATCH
         }, 'label'),
         Output({
-            'type': 'cims-agriculture-pattern-switch',
+            'type': 'cims-petroleum_crude-pattern-switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-text-switch',
+            'type': 'cims-petroleum_crude-text-switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-petroleum_crude-variable-select',
             'index': MATCH
         }, 'data'), Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-petroleum_crude-variable-select',
             'index': MATCH
         }, 'value'),
         Output({
-            'type': 'cims-agriculture-download',
+            'type': 'cims-petroleum_crude-download',
             'index': MATCH
         }, 'data'),
         Input({
-            'type': 'cims-agriculture-plot-select',
+            'type': 'cims-petroleum_crude-plot-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-rep-select',
+            'type': 'cims-petroleum_crude-rep-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-region-select',
+            'type': 'cims-petroleum_crude-region-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-year-select',
+            'type': 'cims-petroleum_crude-year-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-petroleum_crude-variable-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-scenario-multi-select',
+            'type': 'cims-petroleum_crude-scenario-multi-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-scenario-select',
+            'type': 'cims-petroleum_crude-scenario-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-petroleum_crude-rep_switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-pattern-switch',
+            'type': 'cims-petroleum_crude-pattern-switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-text-switch',
+            'type': 'cims-petroleum_crude-text-switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-download-button',
+            'type': 'cims-petroleum_crude-download-button',
             'index': MATCH
         }, 'n_clicks'),
         prevent_initial_call=True
     )
     def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
                     text_switch, download_btn):
-        print('Agriculture')
+        print('Petroleum Crude')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS Output']['Agriculture']
+        _data = data_handler.processed_data['CIMS Output']['Petroleum Crude']
 
-        if trigger_id['type'] == 'cims-agriculture-download-button':
+        if trigger_id['type'] == 'cims-petroleum_crude-download-button':
             return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
                     dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                    dcc.send_data_frame(_data.to_csv, "agriculture.csv"))
+                    dcc.send_data_frame(_data.to_csv, "petroleum_crude.csv"))
 
         _m_style = dash.no_update
         _r_style = dash.no_update
@@ -160,7 +160,7 @@ def link(app):
 
         df_plt = _data[_data['plot'] == plot_type]
         variables = dash.no_update
-        if trigger_id['type'] == 'cims-agriculture-plot-select':
+        if trigger_id['type'] == 'cims-petroleum_crude-plot-select':
             variables = [] if plot_type == 'Requested Quantities' else df_plt['parameter'].unique().tolist()
             if variables:
                 variable = variables[0]

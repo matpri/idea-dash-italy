@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, MATCH, dcc
 
-from profiles.cims_output.visualization_scripts.agriculture import render_plot
+from profiles.cims_output.visualization_scripts.commercial import render_plot
 
 
 def link(app):
@@ -10,113 +10,113 @@ def link(app):
             'type': 'figure',
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'agriculture'
+            'viz': 'commercial'
         }, 'figure'),
         Output({
-            'type': 'cims-agriculture-region-select',
+            'type': 'cims-commercial-region-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-year-select',
+            'type': 'cims-commercial-year-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-commercial-variable-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-commercial-rep_switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-scenario-multi-select',
+            'type': 'cims-commercial-scenario-multi-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-scenario-select',
+            'type': 'cims-commercial-scenario-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-commercial-rep_switch',
             'index': MATCH
         }, 'label'),
         Output({
-            'type': 'cims-agriculture-pattern-switch',
+            'type': 'cims-commercial-pattern-switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-text-switch',
+            'type': 'cims-commercial-text-switch',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-commercial-variable-select',
             'index': MATCH
         }, 'data'), Output({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-commercial-variable-select',
             'index': MATCH
         }, 'value'),
         Output({
-            'type': 'cims-agriculture-download',
+            'type': 'cims-commercial-download',
             'index': MATCH
         }, 'data'),
         Input({
-            'type': 'cims-agriculture-plot-select',
+            'type': 'cims-commercial-plot-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-rep-select',
+            'type': 'cims-commercial-rep-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-region-select',
+            'type': 'cims-commercial-region-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-year-select',
+            'type': 'cims-commercial-year-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-commercial-variable-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-scenario-multi-select',
+            'type': 'cims-commercial-scenario-multi-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-scenario-select',
+            'type': 'cims-commercial-scenario-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-agriculture-rep_switch',
+            'type': 'cims-commercial-rep_switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-pattern-switch',
+            'type': 'cims-commercial-pattern-switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-text-switch',
+            'type': 'cims-commercial-text-switch',
             'index': MATCH
         }, 'checked'),
         Input({
-            'type': 'cims-agriculture-download-button',
+            'type': 'cims-commercial-download-button',
             'index': MATCH
         }, 'n_clicks'),
         prevent_initial_call=True
     )
     def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
                     text_switch, download_btn):
-        print('Agriculture')
+        print('Commercial')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS Output']['Agriculture']
+        _data = data_handler.processed_data['CIMS Output']['Commercial']
 
-        if trigger_id['type'] == 'cims-agriculture-download-button':
+        if trigger_id['type'] == 'cims-commercial-download-button':
             return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
                     dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                    dcc.send_data_frame(_data.to_csv, "agriculture.csv"))
+                    dcc.send_data_frame(_data.to_csv, "commercial.csv"))
 
         _m_style = dash.no_update
         _r_style = dash.no_update
@@ -160,7 +160,7 @@ def link(app):
 
         df_plt = _data[_data['plot'] == plot_type]
         variables = dash.no_update
-        if trigger_id['type'] == 'cims-agriculture-plot-select':
+        if trigger_id['type'] == 'cims-commercial-plot-select':
             variables = [] if plot_type == 'Requested Quantities' else df_plt['parameter'].unique().tolist()
             if variables:
                 variable = variables[0]

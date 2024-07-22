@@ -20,20 +20,20 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
         variable = 'Requested Quantities'
 
     if r_type == 'By Year':
-        return bar_over_years.plot(df_plt, scenarios, region, 'Agriculture:' + variable, 'Year',
+        return bar_over_years.plot(df_plt, scenarios, region, 'Pulp and Paper:' + variable, 'Year',
                                    variable,
                                    name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif r_type == 'Trend Over Years':
-        return trend_over_years.plot(df_plt, scenario, region, 'Agriculture:' + variable, 'Year',
+        return trend_over_years.plot(df_plt, scenario, region, 'Pulp and Paper:' + variable, 'Year',
                                    variable,
                                      name, unit)
     elif r_type == 'Pie Chart':
-        return pie_chart.plot(df_plt, scenario, region, year, 'Agriculture:' + variable, 'Year',
+        return pie_chart.plot(df_plt, scenario, region, year, 'Pulp and Paper:' + variable, 'Year',
                                    variable)
 
     else:
-        return bar_over_regions.plot(df_plt, scenarios, year, 'Agriculture:' + 'Agriculture:' + variable, 'Year',
+        return bar_over_regions.plot(df_plt, scenarios, year, 'Pulp and Paper:' + 'Pulp and Paper:' + variable, 'Year',
                                    variable,
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
@@ -93,7 +93,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'cims-agriculture-region-select',
+            'type': 'cims-pulp_and_paper-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -105,7 +105,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'cims-agriculture-year-select',
+            'type': 'cims-pulp_and_paper-year-select',
             'index': window_id
         },
 
@@ -116,7 +116,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'cims-agriculture-pattern-switch',
+            'type': 'cims-pulp_and_paper-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -126,7 +126,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'cims-agriculture-text-switch',
+            'type': 'cims-pulp_and_paper-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -137,7 +137,7 @@ def plot(df, window_id):
         data=[{'label': variable, 'value': variable} for variable in variables],
         value=variables[0],
         id={
-            'type': 'cims-agriculture-variable-select',
+            'type': 'cims-pulp_and_paper-variable-select',
             'index': window_id
         },
         style={'display': 'block'} if len(variables) > 0 else {'display': 'none'}
@@ -149,7 +149,7 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in plot_types],
             value=plot_type,
             id={
-                'type': 'cims-agriculture-plot-select',
+                'type': 'cims-pulp_and_paper-plot-select',
                 'index': window_id
             },
         ),
@@ -160,7 +160,7 @@ def plot(df, window_id):
             label='By Sector',
             checked=False,
             id={
-                'type': 'cims-agriculture-rep_switch',
+                'type': 'cims-pulp_and_paper-rep_switch',
                 'index': window_id
             },
             style={'display': 'block'} if plot_type == 'Requested Quantities' else {'display': 'none'}
@@ -171,7 +171,7 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'cims-agriculture-rep-select',
+                'type': 'cims-pulp_and_paper-rep-select',
                 'index': window_id
             },
         ),
@@ -182,7 +182,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'cims-agriculture-scenario-multi-select',
+                'type': 'cims-pulp_and_paper-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -192,18 +192,18 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'cims-agriculture-scenario-select',
+                'type': 'cims-pulp_and_paper-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'cims-agriculture-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'cims-pulp_and_paper-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'cims-agriculture-download', 'index': window_id}),
+        dcc.Download(id={'type': 'cims-pulp_and_paper-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -214,7 +214,7 @@ def plot(df, window_id):
             'type': 'figure',
             'index': window_id,
             'profile': 'cims_output',
-            'viz': 'agriculture'
+            'viz': 'pulp_and_paper'
         },
         style={
             'width': '100%',
