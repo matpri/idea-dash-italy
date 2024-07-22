@@ -10,12 +10,14 @@ from profiles.cims_output.callbacks import (requested_quantities as requested_qu
                                             stock_lcc as stock_lcc_callbacks,
                                             ghg as ghg_callbacks,
                                             agriculture as agriculture_callbacks,
+                                            biodiesel as biodiesel_callbacks,
                                             overview as overview_callbacks,
                                             settings as settings_callbacks,
                                             )
 from profiles.cims_output.processing_scripts import (
     overview as overview_processing,
-    agriculture as agriculture_processing
+    agriculture as agriculture_processing,
+    biodiesel as biodiesel_processing
 )
 from profiles.cims_output.processing_scripts.utils import ghg as ghg_processing, stock_lcc as stock_lcc_processing, \
     requested_quantities as requested_quantities_processing
@@ -24,6 +26,7 @@ from profiles.cims_output.visualization_scripts import (
     stock_lcc as stock_lcc_viz,
     ghg as ghg_viz,
     agriculture as agriculture_viz,
+    biodiesel as biodiesel_viz,
     overview as overview_viz,
 )
 
@@ -41,7 +44,8 @@ class PypsaOutput(BaseProfile):
         'Requested Quantities',
         'Stock LCC',
         'GHG',
-        'Agriculture'
+        'Agriculture',
+        'Biodiesel'
     ]
     viz_options = {
         'Overview':
@@ -92,6 +96,16 @@ class PypsaOutput(BaseProfile):
                 'db_process': agriculture_processing.process,
                 'viz': agriculture_viz.plot,
                 'callback': agriculture_callbacks.link,
+                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
+            },
+        'Biodiesel':
+            {
+                'check': biodiesel_processing.check,
+                'db_check': biodiesel_processing.check,
+                'process': biodiesel_processing.process,
+                'db_process': biodiesel_processing.process,
+                'viz': biodiesel_viz.plot,
+                'callback': biodiesel_callbacks.link,
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             }
     }
