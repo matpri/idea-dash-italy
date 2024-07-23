@@ -1,6 +1,6 @@
 Requested Quantities:
   name: Requested Quantities
-  unit:
+  unit: J
   By Year:
     title: Requested Quantities by Year
     x_label: Year
@@ -20,7 +20,7 @@ Requested Quantities:
     
 GHG:
   name: GHG
-  unit:
+  unit: tCO2e
   By Year:
     title: GHG by Year
     x_label: Year
@@ -155,7 +155,7 @@ Net Emissions:
     y_label: Net Emissions
 Avoided Emissions:
   name: Avoided Emissions
-  unit:
+  unit: tCO2e
   By Year:
     title: Avoided Emissions by Year
     x_label: Year
@@ -174,7 +174,7 @@ Avoided Emissions:
     y_label: Avoided Emissions
 Negative Emissions:
   name: Negative Emissions
-  unit:
+  unit: tCO2e
   By Year:
     title: Negative Emissions by Year
     x_label: Year
@@ -193,7 +193,7 @@ Negative Emissions:
     y_label: Negative Emissions
 Emitted Emissions:
   name: Emitted Emissions
-  unit:
+  unit: tCO2e
   By Year:
     title: Emitted Emissions by Year
     x_label: Year
@@ -212,7 +212,7 @@ Emitted Emissions:
     y_label: Emitted Emissions
 Emissions Costs:
   name: Emissions Costs
-  unit:
+  unit: $
   By Year:
     title: Emissions Costs by Year
     x_label: Year
@@ -234,7 +234,7 @@ Overview:
   Requested Quantities:
     title: Requested Quantities
     name: Requested Quantities
-    unit:
+    unit: J
     x_label: Year
     y_label: Requested Quantities
   New Stock:
@@ -264,31 +264,31 @@ Overview:
   Avoided Emissions:
     title: Avoided Emissions
     name: Avoided Emissions
-    unit:
+    unit: tCO2e
     x_label: Year
     y_label: Avoided Emissions
   Negative Emissions:
     title: Negative Emissions
     name: Negative Emissions
-    unit:
+    unit: tCO2e
     x_label: Year
     y_label: Negative Emissions
   Emitted Emissions:
     title: Emitted Emissions
     name: Emitted Emissions
-    unit:
+    unit: tCO2e
     x_label: Year
     y_label: Emitted Emissions
   Emissions Costs:
     title: Emissions Costs
     name: Emissions Costs
-    unit:
+    unit: $
     x_label: Year
     y_label: Emissions Cost
   Net Emissions:
     title: Net Emissions
     name: Net Emissions
-    unit:
+    unit: tCO2e
     x_label: Year
     y_label: Net Emissions
 
