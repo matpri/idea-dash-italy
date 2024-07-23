@@ -1,6 +1,6 @@
 Requested Quantities:
   name: Requested Quantities
-  unit: J
+  unit: GJ
   By Year:
     title: Requested Quantities by Year
     x_label: Year
@@ -234,7 +234,7 @@ Overview:
   Requested Quantities:
     title: Requested Quantities
     name: Requested Quantities
-    unit: J
+    unit: GJ
     x_label: Year
     y_label: Requested Quantities
   New Stock:
