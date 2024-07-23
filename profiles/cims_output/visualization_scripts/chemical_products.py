@@ -56,7 +56,7 @@ def process_represenation(p_type, by_rep, variable, df):
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
     else:
-        df = df[df['context'] == 'Total']
+        df = df[df['context'] != 'Total']
         if by_rep:
             filtered_df = df[
                 (df['technology'].isna())
