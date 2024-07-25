@@ -9,7 +9,7 @@ def db_check(df):
     print("Checking for OPF_Results in variable column")
     try:
         classes = df["variable"].apply(lambda x: x.split("|")[0])
-        if (classes == 'OPF_Results').any():
+        if (classes == 'OPF Results').any():
             return True
         return False
     except Exception as e:
@@ -21,9 +21,7 @@ def aggregate_db(db, scenario):
     db.drop(columns=['model', "unit"], inplace=True)
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
-    df = db[classes == 'OPF_Results']
-    df = df.iloc[:-3]
-    df = df[df.value != 0]
+    df = db[classes == 'OPF Results']
 
     # sum over value and group by time and variable
     df = df.groupby(['time', 'variable']).sum().reset_index()

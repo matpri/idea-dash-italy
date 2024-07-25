@@ -10,7 +10,7 @@ def render_plot(df, scenarios):
     print('rendering plot', type)
     name = plot_settings['OPF Costs']['name']
     unit = plot_settings['OPF Costs']['unit']
-    title = plot_settings['OPF Costs']['title']
+    title = plot_settings['OPF Costs']['Total']['title']
     x_axis_label = plot_settings['OPF Costs']['Total']['x_label']
     y_axis_label = plot_settings['OPF Costs']['Total']['y_label']
 

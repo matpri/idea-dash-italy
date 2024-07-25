@@ -45,24 +45,28 @@ class silverOutput(BaseProfile):
     ]
     viz_options = {
         'OPF Costs': {
-            'processing_func': opf_costs_processing.process,
-            'viz_func': opf_costs_viz.plot,
+            'process': opf_costs_processing.process,
+            'viz': opf_costs_viz.plot,
             'callback': opf_costs_callbacks.link,
+            'check': opf_costs_processing.check,
         },
         'OPF Results': {
-            'processing_func': opf_results_processing.process,
-            'viz_func': opf_results_viz.plot,
+            'process': opf_results_processing.process,
+            'viz': opf_results_viz.plot,
             'callback': opf_results_callbacks.link,
+            'check': opf_results_processing.db_check,
         },
         'UC Results': {
-            'processing_func': uc_results_processing.process,
-            'viz_func': uc_results_viz.plot,
+            'process': uc_results_processing.process,
+            'viz': uc_results_viz.plot,
             'callback': uc_results_callbacks.link,
+            'check': uc_results_processing.check,
         },
         'Price OPF': {
-            'processing_func': price_opf_processing.process,
-            'viz_func': price_opf_viz.plot,
+            'process': price_opf_processing.process,
+            'viz': price_opf_viz.plot,
             'callback': price_opf_callbacks.link,
+            'check': price_opf_processing.check,
         }
     }
 
