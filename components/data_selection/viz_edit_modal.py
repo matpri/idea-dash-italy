@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 from dash import html
 
 
-def render(app, file):
+def render(file):
     from main import data_handler
     # flatten the list of lists
     chip_groups = {}

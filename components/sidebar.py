@@ -13,6 +13,9 @@ from components.plot_window import window
 
 
 def render():
+    """
+    :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
+    """
     layout = html.Div([
         dmc.Aside(
             id='sidebar',

@@ -15,7 +15,7 @@ def render():
         ),
         opened=False,
         size='60%',
-        id='uploaded-data-modal',
+        id='data-viewer-data-modal',
         children=dmc.LoadingOverlay([
             html.Div(
                 id='view-data-div',

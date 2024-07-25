@@ -1,3 +1,11 @@
+.font-weight-semi-bold {
+    font-weight: 600;
+}
+
+.grey-text {
+    color: #6c757d;
+}
+
 /*.lm-Widget.lm-TabBar {*/
 /*    height: 15px !important;*/
 /*    min-height: 15px;*/
@@ -7,6 +15,13 @@
 
 /*.lm-TabBar-tab{*/
 /*    height: 5px !important;*/
+/*}*/
+
+/*.lm-DockPanel{*/
+/*    background-image: url(/assets/welcome.png);*/
+/*    background-size: cover;*/
+/*    background-repeat: no-repeat;*/
+/*    background-position: center;*/
 /*}*/
 
 /*lm-TabBar-tab {*/
@@ -36,4 +51,20 @@
 #sidebar:hover,
 #sidebar:hover .my-button {
     opacity: 1;
+}
+
+/* restyle radio items */
+.radio-group .form-check {
+  padding-left: 0;
+}
+
+.radio-group .btn-group > .form-check:not(:last-child) > .btn {
+  border-top-right-radius: 0;
+  border-bottom-right-radius: 0;
+}
+
+.radio-group .btn-group > .form-check:not(:first-child) > .btn {
+  border-top-left-radius: 0;
+  border-bottom-left-radius: 0;
+  margin-left: -1px;
 }

@@ -13,10 +13,11 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for transmission in variable column")
+    #print("Checking for transmission in variable column")
     try:
-        if df.variable.str.startswith("transmission|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Flow|").any():
+                return True
         return False
     except Exception as e:
         print("transmission check", e)
@@ -32,7 +33,7 @@ def check_folder(folder):
     Returns:
         bool: True if the condition is met, False otherwise.
     """
-    print("Checking for transmission.csv in folder", folder)
+    #print("Checking for transmission.csv in folder", folder)
     try:
         if "transmission.csv" not in os.listdir(folder):
             return False
@@ -108,9 +109,12 @@ def preprocess(transmission, scenario="CER"):
     transmission = transmission.drop(columns=['model', 'unit'])
     prov_cord = pd.read_csv('./arrow_coords.csv')
     transmission['time'] = pd.to_datetime(transmission['time'])
-    unique_dates = transmission['time'].dt.date.unique()
+
+    # all times - 1 hour delta
+    transmission['time'] = transmission['time'] - pd.Timedelta(hours=1)
     transmission['period'] = transmission['time'].dt.year
-    transmission['period'] = transmission['period'].astype(int)
+    sub_transmission = transmission[transmission['period'] == transmission['period'].min()]
+    unique_dates = sub_transmission['time'].dt.date.unique()
     transmission = transmission.drop(columns=['time'])
     transmission = transmission[transmission.value != 0]
     transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
@@ -150,15 +154,16 @@ def process(selected):
     transmissions = []
     for scenario_name, df in selected.items():
         trs = df.copy()
-        trs = trs[trs.variable.str.startswith("transmission|")]
+        trs = trs[trs.variable.str.startswith("Flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
         trs['time'] = pd.to_datetime(trs['time'])
-        trs['day'] = trs['time'].dt.date
-        unique_dates = trs['day'].unique()
-
+        # all times - 1 hour delta
+        trs['time'] = trs['time'] - pd.Timedelta(hours=1)
         trs['period'] = trs['time'].dt.year
-        trs['period'] = trs['period'].astype(int)
-        trs['value'] = trs['value'] / 1000000
+        sub_transmission = trs[trs['period'] == trs['period'].min()]
+        unique_dates = sub_transmission['time'].dt.date.unique()
+
+        trs['value'] = trs['value'] / 1000
         trs['value'] = trs['value'] * 365 / len(unique_dates)
         # drop time
         trs = trs.drop(columns=['time'])
@@ -171,16 +176,13 @@ def process(selected):
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
+    full_t = pd.concat(transmissions)
+    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
 
-    total_data = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./arrow_coords.csv')
-    # change period to int
-    total_data['period'] = total_data['period'].astype(int)
-    total_data['short_region'] = total_data['region'].map(utils.province_short)
-    total_data['short_variable'] = total_data['variable'].map(utils.province_short)
-    total_data = pd.merge(total_data, prov_cord, how='inner', left_on=['region', 'variable'],
-                          right_on=['region', 'variable'])
-    total_data['from_lat'] = total_data['from_lat'].astype(float)
-    total_data['from_lon'] = total_data['from_lon'].astype(float)
-
-    return total_data
+    full_t['short_region'] = full_t['region'].map(utils.province_short)
+    full_t['short_variable'] = full_t['variable'].map(utils.province_short)
+    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
+                      right_on=['region', 'variable'])
+    full_t['from_lat'] = full_t['from_lat'].astype(float)
+    full_t['from_lon'] = full_t['from_lon'].astype(float)
+    return full_t

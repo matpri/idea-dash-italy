@@ -4,14 +4,14 @@ from dash import html, dcc
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['VOM Cost']['name']
     unit = plot_settings['VOM Cost']['unit']
     if type == 'By Year':
         plot_info = plot_settings['VOM Cost']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['VOM Cost']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
@@ -20,7 +20,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario):
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
         plot_info = plot_settings['VOM Cost']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
 
 
 def plot(df, window_id):
@@ -39,7 +39,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value= 'CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'copper-cost_vom-region-select',
+            'type': 'copper-vom_cost-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -51,11 +51,31 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'copper-cost_vom-year-select',
+            'type': 'copper-vom_cost-year-select',
             'index': window_id
         },
 
         style={'display': 'none'}
+    )
+
+    pattern_toggle = dmc.Switch(
+        label='Pattern',
+        checked=True,
+        id={
+            'type': 'copper-vom_cost-pattern-switch',
+            'index': window_id,
+        },
+        style={'display': 'block'}
+    )
+
+    text_toggle = dmc.Switch(
+        label='Text',
+        checked=False,
+        id={
+            'type': 'copper-vom_cost-text-switch',
+            'index': window_id,
+        },
+        style={'display': 'block'}
     )
 
     widget_layout = html.Div([
@@ -64,21 +84,23 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'copper-cost_vom-plot-select',
+                'type': 'copper-vom_cost-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'copper-cost_vom-aggregate-switch',
+                       'type': 'copper-vom_cost-aggregate-switch',
                        'index': window_id}),
+        pattern_toggle,
+        text_toggle,
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'copper-cost_vom-scenario-multi-select',
+                'type': 'copper-vom_cost-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -88,27 +110,28 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'copper-cost_vom-scenario-select',
+                'type': 'copper-vom_cost-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'copper-cost_vom-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'copper-vom_cost-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'copper-cost_vom-download', 'index': window_id}),
+        dcc.Download(id={'type': 'copper-vom_cost-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0], years[0],scenarios[0]),
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+                           years[0],scenarios[0]),
         id={
             'type': 'figure',
             'index': window_id,
             'profile': 'copper_output',
-            'viz': 'cost_vom'
+            'viz': 'vom_cost'
         },
         style={
             'width': '100%',

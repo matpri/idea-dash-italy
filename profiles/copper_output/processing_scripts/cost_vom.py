@@ -14,10 +14,11 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for cost in variable column")
+    #print("Checking for cost in variable column")
     try:
-        if df.variable.str.startswith("cost|").any():
-            return df[df.variable.str.startswith("cost|")]['value'].sum() != 0
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Variable O&M Costs|").any():
+                return df[df.variable.str.startswith("Variable O&M Costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -38,7 +39,7 @@ def format_df(df):
     return df
 
 
-def calculate_vom(df):
+def calculate_vom(vom_df):
     """
     Calculates the variable operating and maintenance (VOM) cost data from the DataFrame.
 
@@ -49,8 +50,8 @@ def calculate_vom(df):
         DataFrame: Calculated VOM cost data.
 
     """
-    vom_df = df[df['variable'].isin(utils.vom_names)].copy()
-    vom_df['variable'] = vom_df['variable'].map(utils.cost_tech).fillna(vom_df['variable'])
+    # vom_df = df[df['variable'].isin(utils.vom_names)].copy()
+    # vom_df['variable'] = vom_df['variable'].map(utils.cost_tech).fillna(vom_df['variable'])
     vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
     # Aggregate data over all regions by variable, time, and scenario and sum the values
@@ -79,8 +80,8 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("cost|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
+        df = df[df.variable.str.startswith("Variable O&M Costs|")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         formatted_df = calculate_vom(formatted_df)
         formatted_df['scenario'] = scenario_name

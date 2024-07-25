@@ -13,10 +13,11 @@ def check(df):
     Returns:
         bool: True if the specified strings are found, False otherwise.
     """
-    print("Checking for gen cap in variable column")
+    #print("Checking for gen cap in variable column")
     try:
-        if df.variable.str.startswith("Results_summary_ABA_generation_mix|").any() or df.variable.str.startswith("Results_summary_Canada_generation_mix|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Total Capacity").any():
+                return True
         return False
     except Exception as e:
         print("gen cap  check", e)
@@ -58,15 +59,12 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        prov_df = df[df.variable.str.startswith("Results_summary_ABA_generation_mix|")]
-        canada_df = df[df.variable.str.startswith("Results_summary_Canada_generation_mix|")]
-
-        # make value column float
+        prov_df = df[df.variable.str.startswith("Total Capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
-        canada_df['value'] = canada_df['value'].astype(float)
-
-        prov_df['variable'] = prov_df['variable'].apply(lambda x: x.split("|")[1])
-        canada_df['variable'] = canada_df['variable'].apply(lambda x: x.split("|")[1])
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df['region'] = 'CAN'
+        prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         gen_cap = process_gencap(prov_df, canada_df, scenario_name)
 
         gen_caps.append(gen_cap)

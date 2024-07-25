@@ -43,7 +43,7 @@ def render(app):
                 dmc.Divider(),
                 html.Div(
                     dmc.AccordionMultiple([
-                        selected_files.render(app),
+                        selected_files.render(),
                         selected_db.render()],
                         style={'width': '100%', 'alignItems': 'center'},
                         id=ids.DATA_SELECTED_VIEW,

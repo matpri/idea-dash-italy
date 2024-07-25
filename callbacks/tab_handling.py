@@ -64,7 +64,15 @@ def link(app):
         for viz_type in plots:
             viz_tab_list.append(
                 dmc.Tab(
-                    viz_type,
+                    dmc.Tooltip(
+                        multiline=True,
+                        # width=220,
+                        withArrow=True,
+                        transition="fade",
+                        transitionDuration=200,
+                        label=data_handler.profiles[triggered_value].viz_options[viz_type].get('description', ''),
+                        children=[viz_type]
+                    ),
                     id={'type': 'viz-tab', 'index': triggered_id['index'], 'profile': triggered_value,
                         'viz': viz_type},
                     value=viz_type,
@@ -77,7 +85,7 @@ def link(app):
                 ]
             )
         ],
-            value=data_handler.profiles[list(profiles.keys())[0]].plot_order[0],
+            value=data_handler.profiles[triggered_value].plot_order[0],
             id={'type': 'viz-tabs', 'index': triggered_id['index'], 'profile': triggered_value}
         )
         # for viz in profiles[triggered_value]:

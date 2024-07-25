@@ -13,10 +13,11 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for capacity_transmission in variable column")
+    #print("Checking for capacity_transmission in variable column")
     try:
-        if df.variable.str.startswith("capacity_transmission|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Total Transmission|").any():
+                return True
         return False
     except Exception as e:
         print("capacity_transmission check", e)
@@ -32,7 +33,7 @@ def check_folder(folder):
     Returns:
         bool: True if the condition is met, False otherwise.
     """
-    print("Checking for capacity_transmission.csv in folder", folder)
+    #print("Checking for capacity_transmission.csv in folder", folder)
     try:
         if "capacity_transmission.csv" not in os.listdir(folder):
             return False
@@ -173,7 +174,7 @@ def process(selected):
     transmissions = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("capacity_transmission|")]
+        df = df[df.variable.str.startswith("Total Transmission|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])
@@ -187,35 +188,57 @@ def process(selected):
         df = df[df.region != df.variable]
         df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
 
-        cum_ls = []
-        for i in range(1, len(times)):
-            prev_times = times[:i]
-            new_built = df[(df['period'].isin(prev_times))]
-            columns = [*new_built.columns]
-            columns.remove('value')
-            new_built = new_built.groupby(columns).sum().reset_index()
-            new_built['period'] = times[i]
-            cum_ls.append(new_built)
+        # cum_ls = []
+        # for i in range(1, len(times)):
+        #     prev_times = times[:i]
+        #     new_built = df[(df['period'].isin(prev_times))]
+        #     columns = [*new_built.columns]
+        #     columns.remove('value')
+        #     new_built['period'] = times[i]
+        #     new_built = new_built.groupby(columns).sum().reset_index()
+        #     cum_ls.append(new_built)
 
-        cum_df = pd.concat(cum_ls)
-        df = pd.concat([df, cum_df], ignore_index=True)
+        # cum_df = pd.concat(cum_ls)
+        # df = pd.merge(df, cum_df, on=['region', 'variable', 'period', 'scenario'], how='outer')
+        # df = df.rename(columns={"value_x": "value", "value_y": "cumsum"})
+        # df['cumsum'] = df['cumsum'].fillna(0)
+        # df['value'] = df['value'].fillna(0)
+        # df['total'] = df['value'] + df['cumsum']
+        # if os.path.exists(os.path.join(folder, 'extant_transmission.csv')):
+        #     extant_df = extant_process(os.path.join(folder, 'extant_transmission.csv'))
+        #     extant_df = extant_df.rename(columns={"time": "period"})
+        #     df = pd.concat([df, extant_df], ignore_index=True)
 
         df['scenario'] = scenario_name
         df['period'] = df['period'].astype(int)
-        df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
+        df = df.groupby(["region", "variable", "period", 'scenario', ]).sum(numeric_only=True).reset_index()
         df['value'] = df['value'] / 1000
+        # df['total'] = df['total'] / 1000
+        # df['cumsum'] = df['cumsum'] / 1000
 
         transmissions.append(df)
 
-    total_data = pd.concat(transmissions)
-    prov_cord = pd.read_csv('./arrow_coords.csv')
-    # change period to int
-    total_data['period'] = total_data['period'].astype(int)
-    total_data['short_region'] = total_data['region'].map(utils.province_short)
-    total_data['short_variable'] = total_data['variable'].map(utils.province_short)
-    total_data = pd.merge(total_data, prov_cord, how='inner', left_on=['region', 'variable'],
+    # full_t = pd.concat(transmissions)
+    # years = full_t['period'].unique().tolist()
+    # years.sort()
+    # scenarios = full_t['scenario'].unique().tolist()
+    # for scenario in scenarios:
+    #     for i, year in enumerate(years):
+    #         df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == year)]
+    #         if df.empty and i > 0:
+    #             prev_time = years[i - 1]
+    #             prev_df = full_t[(full_t['scenario'] == scenario) & (full_t['period'] == prev_time)]
+    #             if not prev_df.empty:
+    #                 prev_df['period'] = year
+    #                 prev_df['cumsum'] = prev_df['total']
+    #                 prev_df['value'] = 0
+    #                 full_t = pd.concat([full_t, prev_df], ignore_index=True)
+    full_t = pd.concat(transmissions)
+    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+    full_t['short_region'] = full_t['region'].map(utils.province_short)
+    full_t['short_variable'] = full_t['variable'].map(utils.province_short)
+    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
                   right_on=['region', 'variable'])
-    total_data['from_lat'] = total_data['from_lat'].astype(float)
-    total_data['from_lon'] = total_data['from_lon'].astype(float)
-
-    return total_data
+    full_t['from_lat'] = full_t['from_lat'].astype(float)
+    full_t['from_lon'] = full_t['from_lon'].astype(float)
+    return full_t

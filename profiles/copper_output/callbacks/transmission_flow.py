@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL
 
-from profiles.copper_output.visualization_scripts.transmission_capacity import render_plot
+from profiles.copper_output.visualization_scripts.transmission_flow import render_plot
 
 
 def link(app):
@@ -12,33 +12,49 @@ def link(app):
             'profile': 'copper_output',
             'viz': 'transmission_flow'
         }, 'figure'),
-
-
-
+        Output({
+            'type': 'copper-transmissionflow-scenario-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper-transmissionflow-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
+        Input({
+            'type': 'copper-transmissionflow-plot-select',
+            'index': ALL
+        }, 'value'),
         Input({
             'type': 'copper-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'value'),
 
         Input({
+            'type': 'copper-transmissionflow-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-transmissionflow-year-select',
             'index': ALL
         }, 'value'),
-
-        State({
-            'type': 'copper-transmissionflow-year-select',
-            'index': ALL
-        }, 'style'),
         State({
             'type': 'figure',
             'index': ALL,
             'profile': 'copper_output',
             'viz': 'transmission_flow'
         }, 'figure'),
+        State({
+            'type': 'copper-transmissionflow-scenario-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-transmissionflow-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
         prevent_initial_call=True
     )
-    def update_transmissionflow(_scenarios, _years, _seasons, _canvas):
-        print('updating transmissionflow plot')
+    def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _canvas, _s_style, _m_style):
+        #print('updating transmissionflow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -47,9 +63,22 @@ def link(app):
             if (id['id']['index'] == trigger_id['index']):
                 idx = i
                 break
-        _canvas[idx] = render_plot(data_handler.processed_data['COPPER Output']['Transmission Flow'],
-                                   _scenarios[idx],
-                                   _years[idx],
-                                   title='Transmission Flow by Region')
 
-        return _canvas
+        if _p_type[idx] == 'Map Plot':
+            _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _canvas[idx] = render_plot('Map Plot',
+                                       data_handler.processed_data['COPPER Output']['Transmission Flow'],
+                                       _scenario[idx],
+                                       _years[idx]
+                                       )
+        elif _p_type[idx] == 'Bar Plot':
+            _m_style[idx] = {'display': 'block'}
+            _s_style[idx] = {'display': 'none'}
+            _canvas[idx] = render_plot('Bar Plot',
+                                       data_handler.processed_data['COPPER Output']['Transmission Flow'],
+                                       _scenarios[idx],
+                                       _years[idx]
+                                       )
+
+        return _canvas, _s_style, _m_style

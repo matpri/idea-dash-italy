@@ -53,6 +53,12 @@ def render(app):
                     data=[{'label': 'ALL', 'value': 'ALL'}],
                     value='ALL'
                 ),
+                dmc.Select(
+                    id=ids.DB_SELECT,
+                    label='Select DB',
+                    data=[{'label': 'ALL', 'value': 'ALL'}],
+                    value='ALL'
+                ),
             ],
                 style={'display': 'flex', 'flexFlow': 'row', 'justifyContent': 'space-between',
                        'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}),
@@ -88,6 +94,7 @@ def render(app):
         Output(ids.MODEL_SELECT, 'data'),
         Output(ids.SCENARIO_SELECT, 'data'),
         Output(ids.AUTHOR_SELECT, 'data'),
+        Output(ids.DB_SELECT, 'data'),
         Input(ids.DATABASE_CONNECT_BUTTON, "n_clicks"),
         State(ids.API_KEY_INPUT, "value"),
         State(ids.DATABASE_INPUT, "children"),
@@ -99,6 +106,7 @@ def render(app):
         Input(ids.MODEL_SELECT, 'value'),
         Input(ids.SCENARIO_SELECT, 'value'),
         Input(ids.AUTHOR_SELECT, 'value'),
+        Input(ids.DB_SELECT, 'value'),
     )(get_runs)
 
     return layout
@@ -108,6 +116,7 @@ def enable_button(api_key):
     print('Enabling button', api_key)
     return api_key is None or api_key == ''
 
+
 def connect_to_database(n_clicks, api_key, children):
     if n_clicks:
         print('Connecting to database with API key:', api_key)
@@ -115,14 +124,27 @@ def connect_to_database(n_clicks, api_key, children):
             url = 'http://206.12.95.102/results_types?key=' + api_key
             response = json.loads(urllib.urlopen(url).read())
             response.append({'model': 'CEF', 'scenario': 'CEF2023', 'author': 'CER'})
+            response.insert(0, {'model': 'CODERS', 'scenario': 'CODERS2024', 'author': 'EMH'})
+
             runs = pd.DataFrame(response)
+            runs['DB'] = 'default'
+            try:
+                mmcw_url = 'http://206.12.95.102/MMCW_results_types?key=' + api_key
+                mmcw_response = json.loads(urllib.urlopen(mmcw_url).read())
+                mmcw_runs = pd.DataFrame(mmcw_response)
+                mmcw_runs['DB'] = 'MMCW'
+                runs = pd.concat([runs, mmcw_runs])
+
+            except Exception as e:
+                pass
             from main import data_handler
             data_handler.runs = runs
 
             checkbox_data = []
-            model_select = [model for model in runs['model'].unique()]
-            scenario_select = [scenario for scenario in runs['scenario'].unique()]
-            author_select = [author for author in runs['author'].unique()]
+            model_select = ['ALL'] + [model for model in runs['model'].unique()]
+            scenario_select = ['ALL'] + [scenario for scenario in runs['scenario'].unique()]
+            author_select = ['ALL'] + [author for author in runs['author'].unique()]
+            db_select = ['ALL'] + ['CODERS'] + data_handler.runs['DB'].unique().tolist()
             for i, row in data_handler.runs.iterrows():
                 checkbox_data.append(
                     {
@@ -148,10 +170,10 @@ def connect_to_database(n_clicks, api_key, children):
                             ],
                             position='apart'
                         ),
-                        "value": f'{row.model}-{row.scenario}-{row.author}'
+                        "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
                     }
                 )
-            checkboxes=[
+            checkboxes = [
                 dmc.Checkbox(
                     label=row['label'],
                     value=row['value'],
@@ -161,11 +183,11 @@ def connect_to_database(n_clicks, api_key, children):
 
             print(runs)
             data_handler.api_key = api_key
-            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes,  {
-            "maxHeight": "280px",
-            "overflowY": "scroll",
-            "width": "100%",
-        }, model_select, scenario_select, author_select
+            return dash.no_update, {'display': 'none'}, {'display': 'block'}, checkboxes, {
+                "maxHeight": "280px",
+                "overflowY": "scroll",
+                "width": "100%",
+            }, model_select, scenario_select, author_select, db_select
         except Exception as e:
             print(e)
             return children + [dmc.Alert(
@@ -174,11 +196,11 @@ def connect_to_database(n_clicks, api_key, children):
                 color='red',
                 withCloseButton=True,
                 style={'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}
-            )]
-    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
+            )], dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
-def get_runs(model, scenario, author):
+def get_runs(model, scenario, author, db):
     from main import data_handler
     runs = data_handler.runs
     if model != 'ALL':
@@ -187,6 +209,11 @@ def get_runs(model, scenario, author):
         runs = runs[runs['scenario'] == scenario]
     if author != 'ALL':
         runs = runs[runs['author'] == author]
+    if db != 'ALL':
+        if db == 'CODERS':
+            runs = runs[runs['scenario'] == 'CODERS2024']
+        else:
+            runs = runs[runs['DB'] == db]
 
     data = []
 
@@ -215,7 +242,7 @@ def get_runs(model, scenario, author):
                     ],
                     position='apart'
                 ),
-                "value": f'{row.model}_{row.scenario}_{row.author}'
+                "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
             }
         )
 
@@ -229,16 +256,21 @@ def get_runs(model, scenario, author):
                 dmc.Checkbox(
                     label=row['label'],
                     value=row['value'],
-                    style={
-                        'background': 'rgba(47,146,231,0.2)',
-                        'border-radius': '10px',
-                        'backdrop-filter': 'blur(5px)',
-                        'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
-                        'border': '1px solid rgba(47,146,231, 0.3)',
-                        '-webkit-backdrop-filter': 'blur(5px)', }
+                    # style={
+                    #     'background': 'rgba(47,146,231,0.2)',
+                    #     'border-radius': '10px',
+                    #     'backdrop-filter': 'blur(5px)',
+                    #     'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.5)',
+                    #     'border': '1px solid rgba(47,146,231, 0.3)',
+                    #     '-webkit-backdrop-filter': 'blur(5px)', }
                 )
                 for row in data
-            ]
+            ],
+            style={
+                "maxHeight": "280px",
+                "overflowY": "scroll",
+                "width": "100%",
+            },
         ),
     ]
     return layout

@@ -26,7 +26,8 @@ def render(app):
                 'margin': '10px'
             },
             multiple=True
-        )
+        ),
+        html.Div(id='data-loading-notification'),
     ], id=ids.DATA_LOCAL_INPUT, style={"width": "60%", 'display': 'block'})
 
     return layout

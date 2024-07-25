@@ -203,6 +203,11 @@ Fixed_OM.nuclear_SMR:
   group: Nuclear
   group_color: '#ff7f00'
   name: Fixed_OM.nuclear_SMR
+transmission:
+  color: '#000000'
+  group: Transmission
+  group_color: '#fb5ebf'
+  name: transmission
 Hydro Capital Cost:
   color: '#000000'
   group: Hydro
@@ -898,3 +903,216 @@ windons:
   group: Wind
   group_color: '#b2df8a'
   name: windons
+Electricity|Biomass|w/o CCS:
+  color: '#000000'
+  group: Biomass
+  group_color: '#33a02c'
+  name: Electricity|Biomass|w/o CCS
+Electricity|Hydro|Daily:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Electricity|Hydro|Daily
+Electricity|Hydro|Monthly:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Monthly
+Electricity|Hydro|Run:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Run
+Electricity|Wind:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind
+Electricity|Wind|Offshore:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore
+Electricity|Wind|Onshore:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore
+Electricity|Solar:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar
+Electricity|Solar|PV|Open Land:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Open Land
+Electricity|Geothermal:
+    color: '#000000'
+    group: Geothermal
+    group_color: '#e31a1c'
+    name: Electricity|Geothermal
+Electricity|Nuclear:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear
+Electricity|Hydrogen|Blue:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen|Blue
+Electricity|Hydrogen|Green:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen|Green
+Electricity|Coal|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/ CCS
+Electricity|Coal|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/o CCS
+Electricity|Oil|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|w/o CCS
+Electricity|Gas|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|w/ CCS
+Electricity|Gas|CC|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/ CCS
+Electricity|Gas|CC|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/o CCS
+Electricity|Gas|CG|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/ CCS
+Electricity|Gas|CG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/o CCS
+Electricity|Gas|CG|Backup|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|Backup|w/o CCS
+Electricity|Gas|CG|RNG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|RNG|w/o CCS
+Electricity|Gas|SC|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/o CCS
+Electricity|Gas|SC|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/ CCS
+Electricity|Gas|SC|RNG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|RNG|w/o CCS
+Electricity|Gas|SC|RNG|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|RNG|w/ CCS
+Electricity|Gas|SC|Backup|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|Backup|w/o CCS
+Electricity|Gas|SC|Backup|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|Backup|w/ CCS
+Electricity|Storage|Battery|Lithium:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium
+Electricity|Storage|Pumped Hydro:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Pumped Hydro
+wind_ons_recon:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: wind_ons_recon
+wind_ofs_recon:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: wind_ofs_recon
+solar_recon:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: solar_recon
+hydro_daily_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_daily_renewal
+hydro_monthly_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_monthly_renewal
+ror_hydro_renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ror_hydro_renewal
+Electricity|Gas|CC|Backup|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|Backup|w/o CCS
+Electricity|Gas|CC|RNG|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|RNG|w/o CCS
+
+'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b4d'
+  name: 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas'
+
+'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b8a'
+  name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas'

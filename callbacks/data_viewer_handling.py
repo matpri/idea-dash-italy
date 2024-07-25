@@ -2,8 +2,21 @@ import dash
 import dash_mantine_components as dmc
 from dash import html, Input, Output, State, ALL
 
+
 from components import ids
 
+profile_modules = {
+    'COPPER Output': 'profiles.copper_output',
+    'COPPER Input': 'profiles.copper_input',
+    'SILVER Output': 'profiles.silver_output',
+    'Canada Energy Futures': 'profiles.cef',
+    'ECCC-NextGrid Output': 'profiles.nextgrid_output',
+    'NATEM-POWER Output': 'profiles.natem_output',
+    'ESMIA-PITHOS Output': 'profiles.pithos_output',
+    'NRCAN-PyPsa Output': 'profiles.pypsa_output',
+    'Power System Models': 'profiles.energy_model',
+
+}
 
 def link(app):
     app.callback(
@@ -13,14 +26,14 @@ def link(app):
     )(update_chips)
 
     app.callback(
-        Output('uploaded-data-modal', 'opened'),
+        Output('data-viewer-data-modal', 'opened'),
         Output(ids.AFTER_CHANGE, 'n_clicks'),
         Input('data-viewer', 'n_clicks'),
         Input('submit-data', 'n_clicks'),
         Input('cancel-data', 'n_clicks'),
-        State('uploaded-data-modal', 'opened'),
-        State({'type': 'data-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
-        State({'type': 'scenario-name', 'file': ALL, }, 'value'),
+        State('data-viewer-data-modal', 'opened'),
+        State({'type': 'data-viewer-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
+        State({'type': 'data-viewer-scenario-name', 'file': ALL}, 'value'),
         prevent_initial_call=True,
     )(view_modal)
 
@@ -34,12 +47,12 @@ def update_chips(file):
             chips.append(dmc.Chip(
                 viz,
                 value=viz,
-                id={'type': 'upload-chip', 'file': file, 'profile': profile, 'viz': viz},
+                id={'type': 'data-viewer-chip', 'file': file, 'profile': profile, 'viz': viz},
                 size='sm',
             ))
         chip_groups[profile] = dmc.ChipGroup(
             children=chips,
-            id={'type': 'upload-chip-group', 'file': file, 'profile': profile},
+            id={'type': 'data-viewer-chip-group', 'file': file, 'profile': profile},
             value=data_handler.data[file]['selected'][profile],
             multiple=True,
             style={'paddingBottom': '4px'}
@@ -49,7 +62,7 @@ def update_chips(file):
         html.Div(
             [
                 dmc.TextInput(
-                    id={'type': 'upload-scenario-name', 'file': file},
+                    id={'type': 'data-viewer-scenario-name', 'file': file},
                     label='Scenario Name',
                     value=data_handler.data[file]['scenario'],
                     placeholder='Enter Scenario Name',
@@ -62,7 +75,7 @@ def update_chips(file):
                         [
                             dmc.TabsList(
                                 [dmc.Tab(profile,
-                                         id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                         id={'type': 'data-viewer-tab', 'file': file, 'profile': profile},
                                          value=profile)
                                  for profile in chip_groups.keys()
                                  ]
@@ -71,7 +84,7 @@ def update_chips(file):
                                 dmc.TabsPanel(
                                     children=
                                     chip_groups[profile],
-                                    id={'type': 'upload-tab', 'file': file, 'profile': profile},
+                                    id={'type': 'data-viewer-tabpanel', 'file': file, 'profile': profile},
                                     value=profile,
                                     style={
                                         'background': 'rgba(47,146,231,0.2)',
@@ -113,7 +126,25 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
             file = chip['file']
             profile = chip['profile']
             data_handler.data[file]['selected'][profile] = values[i]
+        for i, ls in enumerate(ctx.states_list[2]):
+            file = ls['id']['file']
+            og_scenario = data_handler.data[file]['scenario']
             data_handler.data[file]['scenario'] = scenario_names[i]
+            profiles = list(data_handler.data[file]['selected'].keys())
+            for profile in profiles:
+                scenario = scenario_names[i]
+                print(profile)
+                module = profile_modules.get(profile, None)
+                if module is None:
+                    continue
+                profile_module = __import__(module, fromlist=[profile])
+                if profile == 'Power System Models':
+                    model = data_handler.data[file]['content']['model'].unique()[0]
+                    scenario = model + '|' + scenario
+                    og_scenario = model + '|' + og_scenario
+                og_pattern = profile_module.utils.pattern_from_key(og_scenario)
+                profile_module.utils.pattern_dict[scenario] = og_pattern
+
         data_handler.process_data()
 
         return not is_open, 1 if n_click is None else n_click + 1

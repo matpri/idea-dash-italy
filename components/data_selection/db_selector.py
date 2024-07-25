@@ -29,7 +29,7 @@ def render():
                     ],
                     position='apart'
                 ),
-                "value": f'{row.model}-{row.scenario}-{row.author}'
+                "value": f'{row.model}|{row.scenario}|{row.author}|{row.DB}'
             }
         )
 

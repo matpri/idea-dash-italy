@@ -14,10 +14,11 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    #print("Checking for emissions in variable column")
     try:
-        if df.variable.str.startswith("Results_summary_carbon_AP_Tech|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Emissions|").any():
+                return True
         return False
     except Exception as e:
         print("Emission check", e)
@@ -60,8 +61,8 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
-        df = df[df.variable.str.startswith("Results_summary_carbon_AP_Tech|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|")[1])
+        df = df[df.variable.str.startswith("Emissions|")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         # formatted_df = aggregate_technologies(formatted_df)
         canadian_total = calc_canadian(formatted_df)
@@ -70,5 +71,5 @@ def process(selected: dict):
         dfs.append(full_data)
     full_df = pd.concat(dfs)
     full_df['time'] = full_df['time'].astype(int)
-    print("Emissions processed")
+    #print("Emissions processed")
     return full_df

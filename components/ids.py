@@ -22,6 +22,7 @@ DB_CONNECTED = 'db-connected'
 MODEL_SELECT = 'model-select'
 SCENARIO_SELECT = 'scenario-select'
 AUTHOR_SELECT = 'author-select'
+DB_SELECT = 'db-select'
 
 DATA_SELECTED = 'data-selected'
 
@@ -32,6 +33,7 @@ CONTACT_MENU = 'menu-contact'
 PLOT_CANVAS = 'canvas-plot'
 
 DATA_CHANGE = 'data-change'
+UPDATE_CHIPS = 'update-chips'
 SETTINGS_CHANGE = 'settings-change'
 AFTER_CHANGE = 'after-change'
 DATA = 'data'

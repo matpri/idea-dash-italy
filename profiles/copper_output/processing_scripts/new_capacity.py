@@ -12,10 +12,11 @@ def check(df):
     Returns:
         bool: True if the specified prefixes are found, False otherwise.
     """
-    print("Checking for net new cap in variable column")
+    #print("Checking for net new cap in variable column")
     try:
-        if df.variable.str.startswith("Results_summary_New_installed_capacity|").any() or df.variable.str.startswith("Results_summary_New_installed_ABA|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("New Capacity|").any():
+                return True
         return False
     except Exception as e:
         print("net new cap  check", e)
@@ -57,11 +58,11 @@ def process(selected):
     new_caps = []
     for scenario_name, df in selected.items():
         df = df.copy()
-        prov_df = df[df.variable.str.startswith("Results_summary_New_installed_ABA|")]
-        canada_df = df[df.variable.str.startswith("Results_summary_New_installed_capacity|")]
+        prov_df = df[df.variable.str.startswith("New Capacity|")]
 
-        prov_df['variable'] = prov_df['variable'].apply(lambda x: x.split("|")[1])
-        canada_df['variable'] = canada_df['variable'].apply(lambda x: x.split("|")[1])
+        prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df['region'] = 'CAN'
         new_cap = process_newcap(prov_df, canada_df, scenario_name)
 
         new_caps.append(new_cap)

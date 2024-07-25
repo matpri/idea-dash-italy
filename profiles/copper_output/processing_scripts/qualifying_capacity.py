@@ -13,10 +13,11 @@ def check(df):
     Returns:
         bool: True if the specified prefixes are found, False otherwise.
     """
-    print("Checking for gen cap in variable column")
+    #print("Checking for gen cap in variable column")
     try:
-        if df.variable.str.startswith("Qualifying_capacity_summer|").any() or df.variable.str.startswith("Qualifying_capacity_winter|").any():
-            return True
+        if (df.model == 'copper').any():
+            if df.variable.str.startswith("Qualifying_capacity_summer|").any() or df.variable.str.startswith("Qualifying_capacity_winter|").any():
+                return True
         return False
     except Exception as e:
         print("gen cap  check", e)
@@ -80,8 +81,8 @@ def process(dbs: dict):
         winter_df = df[df.variable.str.startswith("Qualifying_capacity_winter|")]
         summer_df = df[df.variable.str.startswith("Qualifying_capacity_summer|")]
 
-        winter_df['variable'] = winter_df['variable'].apply(lambda x: x.split("|")[1])
-        summer_df['variable'] = summer_df['variable'].apply(lambda x: x.split("|")[1])
+        winter_df['variable'] = winter_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        summer_df['variable'] = summer_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         gen_cap = process_qual_cap(winter_df, summer_df, scenario_name)
 
         gen_caps.append(gen_cap)

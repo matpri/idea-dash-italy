@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -23,7 +23,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
-            data = data.sort_values(by=['time', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
+            data = data.sort_values(by=['time', 'scenario'])
 
             x = []
             x.append(data["time"].values)
@@ -33,13 +33,27 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
             else:
                 color = utils.get_color(tech)
 
-            fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'], marker_color=color,
-                        marker_pattern_shape=scen_patterns,
-                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
+            if 'Fuel:' in tech:
+                tech, fuel_type = tech.split('|Fuel: ')
+                fig.add_bar(x=x, y=data["value"], name=fuel_type, customdata=data['total'],
+                            marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
+                            textposition='auto' if text_active else None, text=f'<b>{tech} ({fuel_type})' if text_active else None,
+                            legendgroup=tech,
+                            legendgrouptitle_text=tech,
+                            legendrank=2,
+                            hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+            else:
+                fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'], marker_color=color,
+                            marker_pattern_shape=scen_patterns if pattern_active else None,
+                            legendgroup=tech,
+                            legendrank=1,
+                            textposition='auto' if text_active else None, text=tech if text_active else None,
+                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
         fig.update_layout(barmode='relative')
+        fig.update_layout(legend=dict(groupclick="toggleitem"))
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
-            print("No data available, since the results are all zero.")
+            #print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,

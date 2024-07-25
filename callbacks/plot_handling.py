@@ -1,19 +1,23 @@
-import dash
 from dash import Input, Output, State, ALL, callback_context, MATCH
 
 
 def link(app):
-    from main import data_handler
     app.callback(
         Output({'type': 'plot', 'index': MATCH}, 'figure'),
         Input({'type': 'figure', 'index': MATCH,
-                'profile': ALL, 'viz': ALL}, 'figure'),
+               'profile': ALL, 'viz': ALL}, 'figure'),
+        Input({
+            'type': 'figure',
+            'index': MATCH,
+            'model': ALL,
+            'name': ALL
+        }, 'figure'),
         State({'type': 'plot', 'index': MATCH}, 'figure'),
         prevent_initial_call=True,
     )(update_plot)
 
 
-def update_plot(_figs, _plots):
+def update_plot(_figs, _figs2, _plots):
     ctx = callback_context
 
     triggered_id = ctx.triggered_id

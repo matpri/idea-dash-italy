@@ -4,14 +4,14 @@ from dash import html, dcc
 from profiles.copper_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.copper_output.utils import plot_settings
-    print('rendering plot', type)
+    #print('rendering plot', type)
     name = plot_settings['Emissions']['name']
     unit = plot_settings['Emissions']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Emissions']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Emissions']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
@@ -20,7 +20,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario):
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
         plot_info = plot_settings['Emissions']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
 
 
 def plot(df, window_id):
@@ -58,6 +58,26 @@ def plot(df, window_id):
         style={'display': 'none'}
     )
 
+    pattern_toggle = dmc.Switch(
+        label='Pattern',
+        checked=True,
+        id={
+            'type': 'copper-emissions-pattern-switch',
+            'index': window_id,
+        },
+        style={'display': 'block'}
+    )
+
+    text_toggle = dmc.Switch(
+        label='Text',
+        checked=False,
+        id={
+            'type': 'copper-emissions-text-switch',
+            'index': window_id,
+        },
+        style={'display': 'block'}
+    )
+
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
@@ -73,6 +93,8 @@ def plot(df, window_id):
                    id={
                        'type': 'copper-emissions-aggregate-switch',
                        'index': window_id}),
+        pattern_toggle,
+        text_toggle,
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],

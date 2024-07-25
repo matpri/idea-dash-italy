@@ -10,14 +10,19 @@ from components.plot_window import viz_container
 def render(card_id):
     from main import data_handler
 
-    profiles = data_handler.get_viz_options()
+    profile_options = data_handler.get_viz_options()
+    profiles = list(profile_options.keys())
+
+    # sort keys by data_handler.profile_order
+    profiles.sort(key=lambda x: data_handler.profile_order.index(x) if x in data_handler.profile_order else 1000)
+
 
     if not profiles:
         return html.Div()
 
     profile_tab_list = []
 
-    for profile in profiles.keys():
+    for profile in profiles:
         profile_tab_list.append(
             dmc.Tab(
                 dmc.Tooltip(
@@ -42,20 +47,28 @@ def render(card_id):
             ]
         )
     ],
-        value=list(profiles.keys())[0],
+        value=profiles[0],
         id={'type': 'profile-tabs', 'index': card_id}
     )
 
-    viz_options = profiles[list(profiles.keys())[0]]
-    plots = [plot_option for plot_option in data_handler.profiles[list(profiles.keys())[0]].plot_order if
+    viz_options = profile_options[profiles[0]]
+    plots = [plot_option for plot_option in data_handler.profiles[profiles[0]].plot_order if
              plot_option in viz_options]
 
     viz_tab_list = []
     for viz_type in plots:
         viz_tab_list.append(
             dmc.Tab(
-                viz_type,
-                id={'type': 'viz-tab', 'index': card_id, 'profile': list(profiles.keys())[0],
+                dmc.Tooltip(
+                    multiline=True,
+                    # width=220,
+                    withArrow=True,
+                    transition="fade",
+                    transitionDuration=200,
+                    label=data_handler.profiles[profiles[0]].viz_options[viz_type].get('description', ''),
+                    children=[viz_type]
+                ),
+                id={'type': 'viz-tab', 'index': card_id, 'profile': profiles[0],
                     'viz': viz_type},
                 value=viz_type,
             )
@@ -68,11 +81,11 @@ def render(card_id):
         )
     ],
         value=plots[0],
-        id={'type': 'viz-tabs', 'index': card_id, 'profile': list(profiles.keys())[0]}
+        id={'type': 'viz-tabs', 'index': card_id, 'profile': profiles[0]}
     )
 
-    widgets, plot = data_handler.get_viz(list(profiles.keys())[0], plots[0], card_id)
-    _w, _f, _hp = viz_container.render(card_id, list(profiles.keys())[0], plots[0], widgets, plot)
+    widgets, plot = data_handler.get_viz(profiles[0], plots[0], card_id)
+    _b, _w, _f, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
     layout = [
         dbc.Collapse(
             [
@@ -87,7 +100,7 @@ def render(card_id):
             is_open=True,
         ),
         html.Div([
-            _w,
+            _b,
             html.Div(
                 [
                     dmc.ActionIcon(
@@ -123,9 +136,18 @@ def render(card_id):
                    # all in one row,
                    'justify-content': 'space-between', }
         ),
-        _f,
+        # flexgroup _w and _f
+        html.Div(
+            [
+                _w,
+                _f
+            ],
+            style={'display': 'flex',
+                   'justify-content': 'space-between',
+                   'height': '90%',
+                   'width': '100%'}
+        ),
         _hp
-
     ]
 
     return layout

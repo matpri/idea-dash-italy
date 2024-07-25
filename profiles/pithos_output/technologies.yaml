@@ -1,0 +1,1593 @@
+Day Hydro Capacity:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Day Hydro Capacity
+Day Hydro Out:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Day Hydro Out
+Day Hydro Renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Day Hydro Renewal
+FixedOM Solar:
+  color: '#000000'
+  group: Solar
+  group_color: '#ffff99'
+  name: FixedOM Solar
+FixedOM Wind_ofs:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: FixedOM Wind_ofs
+FixedOM Wind_ons:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: FixedOM Wind_ons
+Fixed_OM.biomass:
+  color: '#000000'
+  group: Biomass
+  group_color: '#33a02c'
+  name: Fixed_OM.biomass
+Fixed_OM.coal_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fixed_OM.coal_backup_pre2025
+Fixed_OM.coal_ccs_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fixed_OM.coal_ccs_pre2025
+Fixed_OM.coal_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fixed_OM.coal_fuelblending_pre2025
+Fixed_OM.coal_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fixed_OM.coal_pre2025
+Fixed_OM.coal_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fixed_OM.coal_retire_pre2025
+Fixed_OM.diesel_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_backup_post2025
+Fixed_OM.diesel_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_backup_pre2025
+Fixed_OM.diesel_bio_post2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_bio_post2025
+Fixed_OM.diesel_bio_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_bio_pre2025
+Fixed_OM.diesel_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_ccs_pre2025
+Fixed_OM.diesel_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_fuelblending_pre2025
+Fixed_OM.diesel_pre2025:
+  color: '#ffaa33'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_pre2025
+Fixed_OM.diesel_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fixed_OM.diesel_retire_pre2025
+Fixed_OM.gasCCS_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCCS_post2025
+Fixed_OM.gasCC_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_backup_post2025
+Fixed_OM.gasCC_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_backup_pre2025
+Fixed_OM.gasCC_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_ccs_pre2025
+Fixed_OM.gasCC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_fuelblending_pre2025
+Fixed_OM.gasCC_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_pre2025
+Fixed_OM.gasCC_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_retire_pre2025
+Fixed_OM.gasCC_rng_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_rng_post2025
+Fixed_OM.gasCC_rng_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasCC_rng_pre2025
+Fixed_OM.gasSC_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_backup_post2025
+Fixed_OM.gasSC_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_backup_pre2025
+Fixed_OM.gasSC_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_ccs_pre2025
+Fixed_OM.gasSC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_fuelblending_pre2025
+Fixed_OM.gasSC_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_pre2025
+Fixed_OM.gasSC_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_retire_pre2025
+Fixed_OM.gasSC_rng_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_rng_post2025
+Fixed_OM.gasSC_rng_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fixed_OM.gasSC_rng_pre2025
+Fixed_OM.h2blue_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Fixed_OM.h2blue_CT
+Fixed_OM.h2green_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Fixed_OM.h2green_CT
+Fixed_OM.nuclear:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: Fixed_OM.nuclear
+Fixed_OM.nuclear_SMR:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: Fixed_OM.nuclear_SMR
+transmission:
+  color: '#000000'
+  group: Transmission
+  group_color: '#fb5ebf'
+  name: transmission
+Hydro Capital Cost:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Hydro Capital Cost
+Month Hydro Capacity:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Month Hydro Capacity
+Month Hydro Out:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Month Hydro Out
+Month Hydro Renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Month Hydro Renewal
+New Storage Capacity:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: New Storage Capacity
+ROR Hydro Capacity:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ROR Hydro Capacity
+ROR Hydro Out:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ROR Hydro Out
+ROR Hydro Renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ROR Hydro Renewal
+Solar:
+  color: '#ffff99'
+  group: Solar
+  group_color: '#ffff99'
+  name: Solar
+Solar_Recon:
+  color: '#000000'
+  group: Solar
+  group_color: '#ffff99'
+  name: Solar_Recon
+Variable_OM.biomass:
+  color: '#000000'
+  group: Biomass
+  group_color: '#33a02c'
+  name: Variable_OM.biomass
+Variable_OM.coal_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Variable_OM.coal_backup_pre2025
+Variable_OM.coal_ccs_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Variable_OM.coal_ccs_pre2025
+Variable_OM.coal_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Variable_OM.coal_fuelblending_pre2025
+Variable_OM.coal_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Variable_OM.coal_pre2025
+Variable_OM.coal_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Variable_OM.coal_retire_pre2025
+Variable_OM.diesel_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_backup_post2025
+Variable_OM.diesel_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_backup_pre2025
+Variable_OM.diesel_bio_post2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_bio_post2025
+Variable_OM.diesel_bio_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_bio_pre2025
+Variable_OM.diesel_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_ccs_pre2025
+Variable_OM.diesel_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_fuelblending_pre2025
+Variable_OM.diesel_pre2025:
+  color: '#ffaa33'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_pre2025
+Variable_OM.diesel_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Variable_OM.diesel_retire_pre2025
+Variable_OM.gasCCS_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCCS_post2025
+Variable_OM.gasCC_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_backup_post2025
+Variable_OM.gasCC_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_backup_pre2025
+Variable_OM.gasCC_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_ccs_pre2025
+Variable_OM.gasCC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_fuelblending_pre2025
+Variable_OM.gasCC_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_pre2025
+Variable_OM.gasCC_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_retire_pre2025
+Variable_OM.gasCC_rng_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_rng_post2025
+Variable_OM.gasCC_rng_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasCC_rng_pre2025
+Variable_OM.gasSC_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_backup_post2025
+Variable_OM.gasSC_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_backup_pre2025
+Variable_OM.gasSC_ccs_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_ccs_pre2025
+Variable_OM.gasSC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_fuelblending_pre2025
+Variable_OM.gasSC_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_pre2025
+Variable_OM.gasSC_retire_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_retire_pre2025
+Variable_OM.gasSC_rng_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_rng_post2025
+Variable_OM.gasSC_rng_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Variable_OM.gasSC_rng_pre2025
+Variable_OM.h2blue_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Variable_OM.h2blue_CT
+Variable_OM.h2green_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Variable_OM.h2green_CT
+Variable_OM.nuclear:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: Variable_OM.nuclear
+Variable_OM.nuclear_SMR:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: Variable_OM.nuclear_SMR
+Wind_ofs:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ofs
+Wind_ofs Out:
+  color: '#b2df8a'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ofs Out
+Wind_ofs_Recon:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ofs_Recon
+Wind_ons:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ons
+Wind_ons Out:
+  color: '#b2df8a'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ons Out
+Wind_ons_Recon:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Wind_ons_Recon
+biomass:
+  color: '#33a02c'
+  group: Biomass
+  group_color: '#33a02c'
+  name: biomass
+coal_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: coal_backup_pre2025
+coal_ccs_pre2025:
+  color: '#8b4513'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid CCS
+coal_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: coal_fuelblending_pre2025
+coal_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid
+coal_retire_pre2025:
+  color: '#b15928'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Fossil fuel solid
+daystoragehydro:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: daystoragehydro
+diesel_backup_post2025:
+  color: '#ffe5a7'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid backup
+diesel_backup_pre2025:
+  color: '#ffe5a7'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid backup
+diesel_bio_post2025:
+  color: '#ffcc66'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid bio
+diesel_bio_pre2025:
+  color: '#ffcc66'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid bio
+diesel_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: diesel_ccs_pre2025
+diesel_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: diesel_fuelblending_pre2025
+diesel_pre2025:
+  color: '#ffaa33'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid
+diesel_retire_pre2025:
+  color: '#ffaa33'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Fossil fuel liquid
+gasCCS_post2025:
+  color: '#ffaaa3'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas CCS
+gasCC_backup_post2025:
+  color: '#ffcbc5'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas backup
+gasCC_backup_pre2025:
+  color: '#ffcbc5'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas backup
+gasCC_ccs_pre2025:
+  color: '#ffaaa3'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas CCS
+gasCC_free_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gasCC_fuelblending_pre2025
+gasCC_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCC_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCC_rng_post2025:
+  color: '#1f78b4'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+gasCC_rng_pre2025:
+  color: '#1f78b4'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+gasCG_free_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCG_free_retire2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCG_free_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCG_restricted_backup_pre2025:
+  color: '#ffcbc5'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas backup
+gasCG_restricted_ccs_pre2025:
+  color: '#ffaaa3'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas CCS
+gasCG_restricted_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCG_restricted_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasCG_restricted_rng_pre2025:
+  color: '#1f78b4'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+gasSC_backup_post2025:
+  color: '#ffcbc5'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas backup
+gasSC_backup_pre2025:
+  color: '#ffcbc5'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas backup
+gasSC_ccs_pre2025:
+  color: '#ffaaa3'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas CCS
+gasSC_fuelblending_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gasSC_fuelblending_pre2025
+gasSC_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasSC_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gasSC_rng_post2025:
+  color: '#1f78b4'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+gasSC_rng_pre2025:
+  color: '#1f78b4'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: RNG
+gascc_backup_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gascc_backup_post2025
+gascc_backup_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gascc_backup_pre2025
+gascc_ccs_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gascc_ccs_pre2025
+gascc_free_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascc_free_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascc_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascc_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascc_rng_post2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gascc_rng_post2025
+gascc_rng_pre2025:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: gascc_rng_pre2025
+gasccs_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_free_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_free_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_free_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_restricted_backup_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_restricted_ccs_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_restricted_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_restricted_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gascg_restricted_rng_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_backup_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_backup_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_ccs_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_ccs_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_free_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_retire_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_rng_post2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+gassc_rng_pre2025:
+  color: '#ff6b6b'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Fossil fuel gas
+h2blue_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Blue hydrogen
+h2blue_ct:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: h2blue_ct
+h2green_CT:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: Green hydrogen
+h2green_ct:
+  color: '#000000'
+  group: Hydrogen
+  group_color: '#1f78b4'
+  name: h2green_ct
+hydro_daily:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_daily
+hydro_monthly:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_monthly
+hydro_run:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: hydro_run
+monthstoragehydro:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: monthstoragehydro
+nuclear:
+  color: '#ff7f00'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: nuclear
+nuclear_SMR:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: nuclear_SMR
+nuclear_smr:
+  color: '#000000'
+  group: Nuclear
+  group_color: '#ff7f00'
+  name: nuclear_smr
+solar:
+  color: '#ffff99'
+  group: Solar
+  group_color: '#ffff99'
+  name: solar
+storage_LI:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: storage_LI
+storage_PH:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: storage_PH
+storage_li:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: storage_li
+storage_ph:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: storage_ph
+wind_ofs:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: wind_ofs
+wind_ons:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: wind_ons
+windofs:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: windofs
+windons:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: windons
+Electricity|Biomass|w/o CCS:
+  color: '#000000'
+  group: Biomass
+  group_color: '#33a02c'
+  name: Electricity|Biomass|w/o CCS
+Electricity|Hydro|Daily:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Electricity|Hydro|Daily
+Electricity|Hydro|Monthly:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Monthly
+Electricity|Hydro|Run:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Run
+Electricity|Wind:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind
+Electricity|Wind|Offshore:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore
+Electricity|Wind|Onshore:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore
+Electricity|Solar:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar
+Electricity|Solar|PV|Open Land:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Open Land
+Electricity|Geothermal:
+    color: '#000000'
+    group: Geothermal
+    group_color: '#e31a1c'
+    name: Electricity|Geothermal
+Electricity|Nuclear:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear
+Electricity|Hydrogen|Blue:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen|Blue
+Electricity|Hydrogen|Green:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen|Green
+Electricity|Coal|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/ CCS
+Electricity|Coal|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/o CCS
+Electricity|Oil|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|w/o CCS
+Electricity|Gas|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|w/ CCS
+Electricity|Gas|CC|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/ CCS
+Electricity|Gas|CC|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/o CCS
+Electricity|Gas|CG|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/ CCS
+Electricity|Gas|CG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/o CCS
+Electricity|Gas|CG|Backup|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|Backup|w/o CCS
+Electricity|Gas|CG|RNG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|RNG|w/o CCS
+Electricity|Gas|SC|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/o CCS
+Electricity|Gas|SC|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/ CCS
+Electricity|Gas|SC|RNG|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|RNG|w/o CCS
+Electricity|Gas|SC|RNG|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|RNG|w/ CCS
+Electricity|Gas|SC|Backup|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|Backup|w/o CCS
+Electricity|Gas|SC|Backup|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|Backup|w/ CCS
+Electricity|Storage|Battery|Lithium:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium
+Electricity|Storage|Pumped Hydro:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Pumped Hydro
+Electricity|Biogas:
+    color: '#000000'
+    group: Biogas
+    group_color: '#5d7aff'
+    name: Electricity|Biogas
+Electricity|Biomass:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass
+Electricity|Coal|IGCC:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|IGCC
+Electricity|Coal|Pulverized:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|Pulverized
+Electricity|Gas|CC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC
+Electricity|Gas|CG:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG
+Electricity|Gas|SC:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC
+Electricity|Import:
+    color: '#000000'
+    group: Import
+    group_color: '#fb9a99'
+    name: Electricity|Import
+Electricity|Nuclear|Conventional:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|Conventional
+Electricity|Nuclear|SMR:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR
+Electricity|Oil|Diesel:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Diesel
+Electricity|Oil|Fuel Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil
+Electricity|Solar|PV:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV
+Electricity|Wind|2021:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|2021
+Electricity|Wind|New:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|New
+Electricity|Gas|Recip Engine|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/o CCS
+Electricity|Gas|Unspecified|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/ CCS
+Electricity|Gas|Unspecified|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Unspecified|w/o CCS
+Electricity|Hydro|Baseload:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Baseload
+Electricity|Hydro|Reservoir:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Reservoir
+Electricity|Ocean|Wave:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Wave
+Electricity|Oil|Fuel Oil|Boiler:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|Boiler
+Electricity|Oil|Fuel Oil|CC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|CC
+Electricity|Oil|Fuel Oil|SC:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|Fuel Oil|SC
+Electricity|Storage|Battery|Lead:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lead
+Electricity|Storage|Battery|Lithium|LFC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|LFC
+Electricity|Storage|Battery|Lithium|NMC:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Lithium|NMC
+Electricity|Storage|Battery|VRF:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|VRF
+Electricity|Storage|Compressed Air:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Compressed Air
+Electricity|Oil:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil
+Electricity|Solar|PV|Decentralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Decentralized
+Electricity|Solar|CSP|Centralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Centralized
+Electricity|Solar|CSP|Decentralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PC|Decentralized
+Electricity|Storage|Centralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Centralized
+Electricity|Storage|Decentralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Decentralized
+Electricity|Storage|Flywheel:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Flywheel
+Electricity|Wind||Onshore|Centralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Centralized
+Electricity|Wind|Onshore|Decentralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Decentralized
+Electricity|Wind|Offshore|Centralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Centralized
+Electricity|Wind|Offshore|Decentralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Decentralized
+Electricity|Ocean|Thermal:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Thermal
+Electricity|Ocean|Tidal:
+    color: '#000000'
+    group: Ocean
+    group_color: '#1f78b4'
+    name: Electricity|Ocean|Tidal
+Electricity|Hydrogen:
+    color: '#000000'
+    group: Hydrogen
+    group_color: '#1f78b4'
+    name: Electricity|Hydrogen
+Electricity|Biomass|Waste:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Waste
+Electricity|Biomass|Conventional:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|Conventional
+Electricity|DR:
+    color: '#000000'
+    group: Demand response
+    group_color: '#fb9a99'
+    name: Electricity|DR
+Electricity|Hydro|Dam:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Dam
+Electricity|Nuclear|SMR|Gas Cooled:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Gas Cooled
+Electricity|Nuclear|SMR|Liquid Water:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Liquid Water
+Electricity|Nuclear|SMR|Metal Cooled:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Metal Cooled
+Electricity|Nuclear|SMR|Molten Salt:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Molten Salt
+Electricity|Gas|Conventional Fuel|Centralized|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Centralized|w/ CCS
+Electricity|Gas|Conventional Fuel|Centralized|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Centralized|w/o CCS
+Electricity|Gas|Conventional Fuel|Decentralized|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Decentralized|w/ CCS
+Electricity|Gas|Conventional Fuel|Decentralized|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Conventional Fuel|Decentralized|w/o CCS
+Biomass / Geothermal:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Biomass / Geothermal
+Coal & Coke:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Coal & Coke
+Uranium:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Uranium
+Natural Gas:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Natural Gas
+Hydro / Wave / Tidal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Hydro / Wave / Tidal
+Electricity|Biomass|w/ CCS:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: Electricity|Biomass|w/ CCS
+Electricity|Gas|RNG|Centralized|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|RNG|Centralized|w/ CCS
+Electricity|Gas|RNG|Centralized|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|RNG|Centralized|w/o CCS
+Electricity|Nuclear|SMR|Light Water:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|SMR|Light Water
+Electricity|Solar|PV|Centralized:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Centralized
+Electricity|Storage|Battery|Centralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Centralized
+Electricity|Storage|Battery|Decentralized:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|Decentralized
+Electricity|Wind|Onshore|Centralized:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Centralized
+
+Electricity|Gas|Recip Engine|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Recip Engine|w/ CCS
+
+
+hydro_daily_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_daily_renewal
+hydro_monthly_renewal:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: hydro_monthly_renewal
+ror_hydro_renewal:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: ror_hydro_renewal
+Electricity|Gas|CC|Backup|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|Backup|w/o CCS
+Electricity|Gas|CC|RNG|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|CC|RNG|w/o CCS
+
+
+Electricity|Hydro:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro
+Electricity|Gas|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|w/o CCS
+Electricity|Solar|PV|Residential/Comercial:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Residential/Comercial
+
+Electricity|Diesel|CT|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Diesel|CT|w/o CCS
+Electricity|Diesel|CT|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Diesel|CT|w/ CCS
+Electricity|Gas|CT|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CT|w/o CCS
+
+Electricity|Gas|CC|CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|CCS
+Electricity|Gas|CT|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CT|w/ CCS
+Electricity|Oil|CT|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|CT|w/o CCS
+Electricity|Oil|CT|w/ CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|CT|w/ CCS
+Electricity|Oil|ST|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|ST|w/o CCS
+Electricity|Hydro|Daily|w/o CCS:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Daily|w/o CCS
+Electricity|Hydro|Daily|w/ CCS:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Daily|w/ CCS
+Electricity|Hydro|Monthly|w/o CCS:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Monthly|w/o CCS
+Electricity|Hydro|Monthly|w/ CCS:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Monthly|w/ CCS
+Electricity|Hydro|ROR|w/o CCS:
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|ROR|w/o CCS
+Electricity|Nuclear|CANDU:
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Electricity|Nuclear|CANDU
+Electricity|Storage|Battery|10H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|10H
+Electricity|Storage|Battery|6H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|6H
+Electricity|Storage|Battery|5H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|5H
+Electricity|Storage|Battery|4H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|4H
+Electricity|Storage|Battery|3H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|3H
+Electricity|Storage|Battery|2H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|2H
+Electricity|Storage|Battery|1H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery|1H
+Electricity|Storage|Pumped Hydro|4H:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Pumped Hydro|4H
+
+Capacity:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capacity
+Capital:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capacity
+Operational:
+  color: '#000000'
+  group: Operational
+  group_color: '#40B0A6'
+  name: Operational
+Carbon_Tax:
+  color: '#000000'
+  group: Carbon Tax
+  group_color: '#DC267F'
+  name: Carbon Tax
+Fixed_OM:
+  color: '#000000'
+  group: Fixed O&M
+  group_color: '#E69F00'
+  name: Fixed O&M
+Variable_OM:
+    color: '#000000'
+    group: Variable O&M
+    group_color: '#D35FB7'
+    name: Variable O&M
