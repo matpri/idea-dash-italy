@@ -89,7 +89,7 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('By Year', data_handler.processed_data['SILVER Output']['Price OPF'],
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['Price OPF'],
                                        _scenarios[idx])
 
         else:

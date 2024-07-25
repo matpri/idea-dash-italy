@@ -36,7 +36,7 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['Total', 'By Technology']],
             value='Total',
             id={
-                'type': 'copper-price_opf-plot-select',
+                'type': 'silver-price_opf-plot-select',
                 'index': window_id
             },
         ),
@@ -55,7 +55,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'copper-price_opf-scenario-select',
+                'type': 'silver-price_opf-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
