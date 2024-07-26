@@ -14,6 +14,8 @@ from profiles.silver_output.callbacks import (
     uc_results as uc_results_callbacks,
     uc_emissions as uc_emissions_callbacks,
     price_opf as price_opf_callbacks,
+opf_curtailment as opf_curtailment_callbacks,
+uc_curtailment as uc_curtailment_callbacks,
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
@@ -22,8 +24,8 @@ from profiles.silver_output.processing_scripts import (
     uc_results as uc_results_processing,
     uc_emissions as uc_emissions_processing,
     price_opf as price_opf_processing,
-
-
+opf_curtailment as opf_curtailment_processing,
+uc_curtailment as uc_curtailment_processing,
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
@@ -32,6 +34,8 @@ from profiles.silver_output.visualization_scripts import (
     uc_emissions as uc_emissions_viz,
     opf_emissions as opf_emissions_viz,
     price_opf as price_opf_viz,
+opf_curtailment as opf_curtailment_viz,
+uc_curtailment as uc_curtailment_viz,
 )
 
 
@@ -47,11 +51,13 @@ class silverOutput(BaseProfile):
         'OPF Costs',
         'OPF Results',
         'OPF Emissions',
+        'OPF_VRE_Curtailment',
         'UC Results',
         'UC Emissions',
+        'UC_VRE_Curtailment',
         'Price OPF',
-
     ]
+
     viz_options = {
         'OPF Costs': {
             'process': opf_costs_processing.process,
@@ -71,6 +77,12 @@ class silverOutput(BaseProfile):
             'callback': opf_emissions_callbacks.link,
             'check': opf_emissions_processing.db_check,
         },
+        'OPF_VRE_Curtailment': {
+            'process': opf_curtailment_processing.process,
+            'viz': opf_curtailment_viz.plot,
+            'callback': opf_curtailment_callbacks.link,
+            'check': opf_curtailment_processing.db_check,
+        },
         'UC Results': {
             'process': uc_results_processing.process,
             'viz': uc_results_viz.plot,
@@ -82,6 +94,12 @@ class silverOutput(BaseProfile):
             'viz': uc_emissions_viz.plot,
             'callback': uc_emissions_callbacks.link,
             'check': uc_emissions_processing.check,
+        },
+        'UC_VRE_Curtailment': {
+            'process': uc_curtailment_processing.process,
+            'viz': uc_curtailment_viz.plot,
+            'callback': uc_curtailment_callbacks.link,
+            'check': uc_curtailment_processing.db_check,
         },
         'Price OPF': {
             'process': price_opf_processing.process,

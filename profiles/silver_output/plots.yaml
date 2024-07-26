@@ -20,6 +20,28 @@ UC Results:
     title: UC Results by Technology
     x_label: Year
     y_label: MW
+UC Emissions:
+  name: UC Emissions
+  unit: tCO2
+  Total:
+    title: Total UC Emissions
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: UC Emissions by Technology
+    x_label: Year
+    y_label: tCO2
+UC_VRE_Curtailment:
+  name: UC VRE Curtailment
+  unit: tCO2
+  Total:
+    title: Total UC VRE Curtailment
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: UC VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
 OPF Results:
   name: OPF Results
   unit: MW
@@ -31,6 +53,28 @@ OPF Results:
     title: OPF Results by Technology
     x_label: Year
     y_label: MW
+OPF Emissions:
+  name: OPF Emissions
+  unit: tCO2
+  Total:
+    title: Total OPF Emissions
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: OPF Emissions by Technology
+    x_label: Year
+    y_label: tCO2
+OPF_VRE_Curtailment:
+  name: OPF VRE Curtailment
+  unit: tCO2
+  Total:
+    title: Total OPF VRE Curtailment
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: OPF VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
 OPF Costs:
   name: OPF Costs
   unit: CAD
