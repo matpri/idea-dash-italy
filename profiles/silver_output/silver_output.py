@@ -10,20 +10,27 @@ from profiles.silver_output.callbacks import (
     settings as settings_callbacks,
     opf_costs as opf_costs_callbacks,
     opf_results as opf_results_callbacks,
+    opf_emissions as opf_emissions_callbacks,
     uc_results as uc_results_callbacks,
+    uc_emissions as uc_emissions_callbacks,
     price_opf as price_opf_callbacks,
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
     opf_results as opf_results_processing,
+    opf_emissions as opf_emissions_processing,
     uc_results as uc_results_processing,
+    uc_emissions as uc_emissions_processing,
     price_opf as price_opf_processing,
+
 
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
     opf_results as opf_results_viz,
     uc_results as uc_results_viz,
+    uc_emissions as uc_emissions_viz,
+    opf_emissions as opf_emissions_viz,
     price_opf as price_opf_viz,
 )
 
@@ -38,8 +45,10 @@ class silverOutput(BaseProfile):
 
     plot_order = [
         'OPF Costs',
-        'OPF Results'
+        'OPF Results',
+        'OPF Emissions',
         'UC Results',
+        'UC Emissions',
         'Price OPF',
 
     ]
@@ -56,11 +65,23 @@ class silverOutput(BaseProfile):
             'callback': opf_results_callbacks.link,
             'check': opf_results_processing.db_check,
         },
+        'OPF Emissions': {
+            'process': opf_emissions_processing.process,
+            'viz': opf_emissions_viz.plot,
+            'callback': opf_emissions_callbacks.link,
+            'check': opf_emissions_processing.db_check,
+        },
         'UC Results': {
             'process': uc_results_processing.process,
             'viz': uc_results_viz.plot,
             'callback': uc_results_callbacks.link,
             'check': uc_results_processing.check,
+        },
+        'UC Emissions': {
+            'process': uc_emissions_processing.process,
+            'viz': uc_emissions_viz.plot,
+            'callback': uc_emissions_callbacks.link,
+            'check': uc_emissions_processing.check,
         },
         'Price OPF': {
             'process': price_opf_processing.process,
