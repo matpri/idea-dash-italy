@@ -102,19 +102,21 @@ To keep your project organized, we recommend following this folder structure for
 ```
 - profiles
    - custom_model
-       - custom_model.py
-         - processing_scripts
-             - viz_type1.py
-             - viz_type2.py
-             - ...
-         - viz_scripts
-             - viz_type1.py
-             - viz_type2.py
-             - ...
-         - callbacks
-             - viz_type1.py
-             - viz_type2.py
-             - ...
+     - custom_model.py
+     - plots.yaml
+     - technologies.yaml
+     - processing_scripts
+         - viz_type1.py
+         - viz_type2.py
+         - ...
+     - viz_scripts
+         - viz_type1.py
+         - viz_type2.py
+         - ...
+     - callbacks
+         - viz_type1.py
+         - viz_type2.py
+         - ...
 ```
 
 This is optional, but what is necessary for IDEA to find your profile and seamlessly add it to the platform is the
@@ -193,6 +195,24 @@ The folder and the file can have any name but inside the file you must define a 
             },
             ...
         }
+        def __init__(self):
+            super().__init__()
+            self.settings = self.render_settings()
+    
+        def link(self, app):
+            settings_callbacks.link(app)
+            super().link(app)
+    
+        def render_settings(self):
+            """
+                Define layout of settings for this profile (simply and copy and paste from other profiles if no custom settings needed)
+            """
+    
+            return layout
+    
+        
+    
+        
     ```
     
    Replace `Custom Model Profile` with your specific profile name and add `viz_options`.
