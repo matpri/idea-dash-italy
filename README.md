@@ -68,6 +68,25 @@ After following these steps, IDEA should now be running on your local system. Op
 
 Enjoy exploring and analyzing data with IDEA! Please refer to the User Guide (if available) for more details on how to use IDEA.
 
+### Repo Structure
+- **assets**: files defining style and static content
+  - **help**: definition of the pages in the help section
+- **callbacks**: functions linking to the app to create functionality of IDEA
+- **components**: visual components defining widgets and page layout (some include simple callbacks)
+- **profiles**: custom logic defined for specific data (so called model profiles)
+  - "profile name"
+    - callbacks
+    - processing_scripts
+    - visualization_scripts
+    - "profile name".py
+    - plots.yaml
+    - technologies.yaml
+- **utils**
+  - **generic_profile**: logic defining generic visualizations that are created when data does not fit any defined profiles but follow IAMC format
+  - **data_handler**: logic for loading, checking and processing data in IDEA, calls functions from profiles
+- **main.py**: instantiates app, links callbacks to app and creates starting page
+
+
 ## Extending IDEA
 
 ### How to add a New Model Profile
