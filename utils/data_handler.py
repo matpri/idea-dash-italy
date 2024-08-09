@@ -13,6 +13,7 @@ from utils.generic_profile.generic_profile import GenericProfile
 from utils.generic_profile.callbacks import generic_callback
 
 model_mapping = {
+    'silver' : ['SILVER Output'],
     'copper': ['COPPER Output', 'Power System Models'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
