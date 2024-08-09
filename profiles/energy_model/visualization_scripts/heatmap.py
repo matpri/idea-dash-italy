@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+import numpy as np
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
@@ -27,8 +28,29 @@ def render_plot(type, df, scenarios, year):
         return fig
     df = df[df.variable == type]
     df = df[df.region == 'CAN']
-    df = df[df.time == year]
     df = df[df.scenario.isin(scenarios)]
+
+    scen_diff_by_year = []
+    for scenario in scenarios:
+        for scenario2 in scenarios:
+            if scenario != scenario2:
+                df1 = df[df.scenario == scenario]
+                df2 = df[df.scenario == scenario2]
+                df1 = df1.drop(['variable', 'region'], axis=1)
+                df2 = df2.drop(['variable', 'region'], axis=1)
+                df1 = df1.pivot_table(values='value', columns='time')
+                df2 = df2.pivot_table(values='value', columns='time')
+                df1 = df1.to_numpy()
+                df2 = df2.to_numpy()
+                diff = df1 - df2
+                scen_diff_by_year.append(diff)
+
+    scen_diff = np.asarray(scen_diff_by_year).flatten()
+    min_val = np.min(scen_diff)
+    max_val = np.max(scen_diff)
+
+
+    df = df[df.time == year]
     df_scenarios = df.scenario.unique().tolist()
     for scenario in scenarios:
         if scenario not in df_scenarios:
@@ -36,19 +58,35 @@ def render_plot(type, df, scenarios, year):
 
     df = df.drop(['time', 'variable', 'region'], axis=1)
     df = df.pivot_table(values='value', columns='scenario')
-    heatmap = pd.DataFrame(columns=df.columns, index=df.columns, data=0)
+    heatmap = pd.DataFrame(columns=df.columns, index=df.columns[::-1], data=0)
     print(heatmap)
     for i in df.columns:
+        masked = False
         for j in df.columns:
-            heatmap.loc[i, j] = df[i].to_numpy() - df[j].to_numpy()
-    fig = go.Figure(data=go.Heatmap(
-        z=heatmap,
-        x=heatmap.columns,
-        y=heatmap.index,
-        colorscale='RdBu',
-        zmid=0,
 
-    ))
+                heatmap.loc[i, j] = df[i].to_numpy() - df[j].to_numpy()
+    fig = go.Figure(
+        data=go.Heatmap(
+            z=heatmap,
+            x=heatmap.columns,
+            y=heatmap.index,
+            colorscale='RdBu',
+            zmid=0,
+            zmin=min_val,
+            zmax=max_val,
+
+            reversescale=True,
+        ),
+        # have x-axis labels on top
+        layout=go.Layout(
+            xaxis=dict(side='top'),
+            yaxis=dict(title=''),
+            title=f'{type} difference by scenario in {year}',
+            margin=dict(l=100, r=100, t=50, b=50),
+            template='simple_white',
+        )
+
+    )
 
     return fig
 
@@ -77,7 +115,7 @@ def plot(df, window_id):
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in df['scenario'].unique()],
-            value=[],
+            value=df['scenario'].unique(),
             id={
                 'type': 'energy_model-heatmap-scenario-select',
                 'index': window_id
@@ -101,7 +139,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, [], years[0]),
+        figure=render_plot(classes[0], df, df['scenario'].unique(), years[0]),
         id={
             'type': 'figure',
             'index': window_id,
