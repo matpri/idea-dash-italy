@@ -38,6 +38,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'silver-price_opf-time_step-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'silver-price_opf-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -61,7 +65,7 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_price_opf(_p_type, _scenarios, _scenario, _download, _canvas, _data, _s_style, _m_style):
+    def update_price_opf(_p_type, _scenarios, _scenario, _ts,_download, _canvas, _data, _s_style, _m_style):
         print('updating price_opf plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -90,11 +94,11 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['Price OPF'],
-                                       _scenarios[idx])
+                                       _scenarios[idx], time_size=_ts[idx])
 
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['Price OPF'], _scenario[idx])
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['Price OPF'], _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

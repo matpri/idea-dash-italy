@@ -5,7 +5,7 @@ from dash import html, dcc
 from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
 
 
-def render_plot(type, df, scenarios):
+def render_plot(type, df, scenarios, time_size='hourly'):
     from profiles.silver_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Price OPF']['name']
@@ -15,9 +15,9 @@ def render_plot(type, df, scenarios):
     x_axis_label = plot_settings['Price OPF'][type]['x_label']
     y_axis_label = plot_settings['Price OPF'][type]['y_label']
     if type == 'Total':
-        fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label)
+        fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     else:
-        fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label)
+        fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     return fig
 
 
@@ -59,6 +59,16 @@ def plot(df, window_id):
                 'index': window_id,
             },
             style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Timestep',
+            data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
+            value='hourly',
+            id={
+                'type': 'silver-price_opf-time_step-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
         ),
 
         dmc.Button('Download Data', id={'type': 'silver-price_opf-download-button', 'index': window_id},

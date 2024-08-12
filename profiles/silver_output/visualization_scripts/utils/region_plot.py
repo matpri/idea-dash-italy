@@ -1,10 +1,11 @@
+import pandas as pd
 import plotly.graph_objects as go
 
 from profiles.silver_output import utils
 from profiles.silver_output.utils import custom_sort_key
 
 
-def render(df, scenario, title, y_axis_label, x_axis_label):
+def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
     # turn date range into a readable format
 
     fig = go.Figure()
@@ -18,6 +19,38 @@ def render(df, scenario, title, y_axis_label, x_axis_label):
     df_scen = df.copy(deep=True)
     df_scen = df_scen[df_scen['scenario'] == scenario]
 
+    df_scen['time'] = pd.to_datetime(df_scen['time'])
+    # groupby time based on time_size
+    if time_size == 'daily':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
+    elif time_size == 'monthly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
+    elif time_size == 'yearly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+    else:
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    cols = df_scen.columns.tolist()
+    # remove value column
+    cols.remove('value')
+    df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
+
+    df_scen['time'] = pd.to_datetime(df_scen['time'])
+    # groupby time based on time_size
+    if time_size == 'daily':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
+    elif time_size == 'monthly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
+    elif time_size == 'yearly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+    else:
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    cols = df_scen.columns.tolist()
+    # remove value column
+    cols.remove('value')
+    df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
+
     can_supply = df_scen.sort_values(by=['time', 'variable'], key=lambda x: x.map(custom_sort_key))
     can_emissions = can_supply[can_supply['value'] != 0]
     techs = can_emissions.variable.unique().tolist()
@@ -30,9 +63,10 @@ def render(df, scenario, title, y_axis_label, x_axis_label):
             x=df_tech['time'],
             y=df_tech['value'],
             name=tech,
-            mode='lines',
+            mode='lines' if len(df_tech['time']) > 1 else 'markers',
             # set line color to respective tech color
             line=dict(color=utils.get_color(tech)),
+            marker=dict(color=utils.get_color(tech)),
             stackgroup='one'
         ))
     fig.update_yaxes(showgrid=True)
