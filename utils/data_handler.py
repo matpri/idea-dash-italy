@@ -22,6 +22,7 @@ model_mapping = {
     'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
     'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models'],
+    'CIMS': ['CIMS Output']
 }
 
 
@@ -392,11 +393,19 @@ class DataHandler:
         # make all headers lowercase
         df.columns = df.columns.str.lower()
 
-        # check if df.columns contain all of the following: model, scenario, variable, value, unit
-        if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
-            diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
-            print(f"Columns missing in {filename}", diff)
-            return False, f"These Columns were expected: {diff}"
+        if 'model' in df.columns:
+            model = df.model.unique()[0]
+            if model not in model_mapping:
+                # check if df.columns contain all the following: model, scenario, variable, value, unit
+                if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                    diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
+                    print(f"Columns missing in {filename}", diff)
+                    return False, f"These Columns were expected: {diff}"
+
+            else:
+                # make sure scenario is in the columns
+                if 'scenario' not in df.columns:
+                    return False, "Scenario column is missing from the data."
 
         if filename not in self.data:
             self.data[filename] = {}
