@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
-from profiles.natem_output.visualization_scripts.cost_gencap import render_plot
+from utils.generic_profile.visualization_scripts.generic_viz import render_plot
 
 
 def link(app):
@@ -216,6 +216,7 @@ def link(app):
 
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Year',
+                                           name,
                                            data_handler.processed_data[model][name],
                                            _aggregates[idx],
                                            _scenarios[idx],
@@ -232,6 +233,7 @@ def link(app):
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend Over Years',
+                                           name,
                                            data_handler.processed_data[model][name],
                                            _aggregates[idx],
                                            _scenarios[idx],
@@ -247,6 +249,7 @@ def link(app):
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart',
+                                           name,
                                            data_handler.processed_data[model][name],
                                            _aggregates[idx],
                                            _scenarios[idx],
@@ -262,6 +265,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Region',
+                                           name,
                                            data_handler.processed_data[model][name],
                                            _aggregates[idx],
                                            _scenarios[idx],

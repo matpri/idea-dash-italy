@@ -5,23 +5,23 @@ from utils.generic_profile.visualization_scripts.utils import bar_over_years, ba
     pie_chart
 
 
-def create_generic_plots(model, name):
-    def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
-        print('rendering plot', type)
-        unit = df['unit'].unique()[0]
-        if type == 'By Year':
-            return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
-                                       pattern_active=pattern_active,
-                                       text_active=text_active)
-        elif type == 'Trend Over Years':
-            return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
-        elif type == 'Pie Chart':
-            return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, )
-        else:
-            return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
-                                         pattern_active=pattern_active,
-                                         text_active=text_active)
+def render_plot(type, name, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, ):
+    print('rendering plot', type)
+    unit = df['unit'].unique()[0]
+    if type == 'By Year':
+        return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
+                                   pattern_active=pattern_active,
+                                   text_active=text_active)
+    elif type == 'Trend Over Years':
+        return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
+    elif type == 'Pie Chart':
+        return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, )
+    else:
+        return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
+                                     pattern_active=pattern_active,
+                                     text_active=text_active)
 
+def create_generic_plots(model, name):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
@@ -139,7 +139,7 @@ def create_generic_plots(model, name):
         ])
 
         plot_layout = dcc.Graph(
-            figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+            figure=render_plot('By Year', name, df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                                years[0], scenarios[0]),
             id={
                 'type': 'figure',

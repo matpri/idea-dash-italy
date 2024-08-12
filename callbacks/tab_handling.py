@@ -88,26 +88,7 @@ def link(app):
             value=data_handler.profiles[triggered_value].plot_order[0],
             id={'type': 'viz-tabs', 'index': triggered_id['index'], 'profile': triggered_value}
         )
-        # for viz in profiles[triggered_value]:
-        #     viz_tab_list.append(
-        #         dmc.Tab(
-        #             viz,
-        #             id={'type': 'viz-tab', 'index': triggered_id['index'], 'profile': triggered_value,
-        #                 'viz': viz},
-        #             value=viz,
-        #         )
-        #     )
-        #
-        # viz_tab = dmc.Tabs([
-        #     dmc.TabsList(
-        #         [
-        #             *viz_tab_list
-        #         ]
-        #     )
-        # ],
-        #     value=profiles[triggered_value][0],
-        #     id={'type': 'viz-tabs', 'index': triggered_id['index'], 'profile': triggered_value}
-        # )
+
 
         for i, out in enumerate(ctx.outputs_list):
             if out['id']['index'] == triggered_id['index']:

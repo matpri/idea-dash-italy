@@ -1,0 +1,91 @@
+Price OPF:
+  name: Price OPF
+  unit: CAD
+  Total:
+    title: Total Price OPF
+    x_label: Year
+    y_label: Price OPF
+  By Technology:
+    title: Price OPF by Technology
+    x_label: Year
+    y_label: Price OPF
+UC Results:
+  name: UC Results
+  unit: MW
+  Total:
+    title: Total UC Results
+    x_label: Year
+    y_label: MW
+  By Technology:
+    title: UC Results by Technology
+    x_label: Year
+    y_label: MW
+UC Emissions:
+  name: UC Emissions
+  unit: tCO2
+  Total:
+    title: Total UC Emissions
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: UC Emissions by Technology
+    x_label: Year
+    y_label: tCO2
+UC_VRE_Curtailment:
+  name: UC VRE Curtailment
+  unit: tCO2
+  Total:
+    title: Total UC VRE Curtailment
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: UC VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
+OPF Results:
+  name: OPF Results
+  unit: MW
+  Total:
+    title: Total OPF Results
+    x_label: Year
+    y_label: MW
+  By Technology:
+    title: OPF Results by Technology
+    x_label: Year
+    y_label: MW
+OPF Emissions:
+  name: OPF Emissions
+  unit: tCO2
+  Total:
+    title: Total OPF Emissions
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: OPF Emissions by Technology
+    x_label: Year
+    y_label: tCO2
+OPF_VRE_Curtailment:
+  name: OPF VRE Curtailment
+  unit: tCO2
+  Total:
+    title: Total OPF VRE Curtailment
+    x_label: Year
+    y_label: tCO2
+  By Technology:
+    title: OPF VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
+OPF Costs:
+  name: OPF Costs
+  unit: CAD
+  Total:
+    title: Total OPF Costs
+    x_label: Year
+    y_label: CAD
+
+
+
+
+
+
+

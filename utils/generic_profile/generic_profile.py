@@ -44,12 +44,13 @@ class GenericProfile:
         self.viz_options = {}
 
         for class_name in classes:
+            plot = create_generic_plots(name, class_name)
             self.viz_options[class_name] = {
                 'check': generic_processing.create_check(class_name, name),
                 'db_check': generic_processing.create_check(class_name, name),
                 'process': generic_processing.create_process(class_name),
                 'db_process': generic_processing.create_process(class_name),
-                'viz': create_generic_plots(name, class_name),
+                'viz': plot,
             }
 
     def link(self, app):
