@@ -65,7 +65,7 @@ def plot(df, window_id):
             data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
             value='hourly',
             id={
-                'type': 'silver-opf_curtailment-time_step-select',
+                'type': 'silver-opf_vre_curtailment-time_step-select',
                 'index': window_id,
             },
             style={'display': 'block'}
