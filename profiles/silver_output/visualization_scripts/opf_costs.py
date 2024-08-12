@@ -1,11 +1,12 @@
 import dash_mantine_components as dmc
+import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
 
 from profiles.silver_output import utils
 
 
-def render_plot(df, scenarios):
+def render_plot(df, scenarios, time_size='hourly'):
     from profiles.silver_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['OPF Costs']['name']
@@ -13,6 +14,7 @@ def render_plot(df, scenarios):
     title = plot_settings['OPF Costs']['Total']['title']
     x_axis_label = plot_settings['OPF Costs']['Total']['x_label']
     y_axis_label = plot_settings['OPF Costs']['Total']['y_label']
+
 
     fig = go.Figure()
     # add title
@@ -27,6 +29,22 @@ def render_plot(df, scenarios):
         df_scen = df.copy(deep=True)
         df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
 
+        df_scen['time'] = pd.to_datetime(df_scen['time'])
+        # groupby time based on time_size
+        if time_size == 'daily':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
+        elif time_size == 'monthly':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
+        elif time_size == 'yearly':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+        else:
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+        cols = df_scen.columns.tolist()
+        # remove value column
+        cols.remove('value')
+        df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
+
         can_supply = df_scen.sort_values(by=['time'])
         can_opf_costs = can_supply[can_supply['value'] != 0]
         total = can_opf_costs.groupby(['time', 'scenario']).sum().reset_index()
@@ -39,9 +57,10 @@ def render_plot(df, scenarios):
                 x=df_scen['time'],
                 y=df_scen['value'],
                 name=scen,
-                mode='lines',
+                mode='lines' if len(df_scen['time']) > 1 else 'markers',
                 # set line color to respective tech color
                 line=dict(color=utils.get_color(scen)),
+                marker=dict(color=utils.get_color(scen)),
             ))
         fig.update_yaxes(showgrid=True)
         fig.update_xaxes(
@@ -89,7 +108,6 @@ def plot(df, window_id):
     '''
     scenarios = df['scenario'].unique().tolist()
 
-
     widget_layout = html.Div([
         dmc.MultiSelect(
             label='Scenarios',
@@ -97,6 +115,16 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'silver-opf_costs-scenario-multi-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Timestep',
+            data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
+            value='hourly',
+            id={
+                'type': 'silver-opf_costs-time_step-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -110,7 +138,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot( df, [scenarios[0]]),
+        figure=render_plot(df, [scenarios[0]], 'hourly'),
         id={
             'type': 'figure',
             'index': window_id,

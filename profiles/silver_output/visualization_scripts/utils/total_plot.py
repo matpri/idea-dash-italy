@@ -1,8 +1,9 @@
+import pandas as pd
 import plotly.graph_objects as go
 
 from profiles.silver_output import utils
 
-def render(df, scenarios, title, y_axis_label, x_axis_label):
+def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly'):
     # turn date range into a readable format
 
     fig = go.Figure()
@@ -18,21 +19,38 @@ def render(df, scenarios, title, y_axis_label, x_axis_label):
         df_scen = df.copy(deep=True)
         df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
 
+        df_scen['time'] = pd.to_datetime(df_scen['time'])
+        # groupby time based on time_size
+        if time_size == 'daily':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
+        elif time_size == 'monthly':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
+        elif time_size == 'yearly':
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+        else:
+            df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+        cols = df_scen.columns.tolist()
+        # remove value column
+        cols.remove('value')
+        df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
+
         can_supply = df_scen.sort_values(by=['time'])
         can_opf_costs = can_supply[can_supply['value'] != 0]
         total = can_opf_costs.groupby(['time', 'scenario']).sum().reset_index()
 
         # create stacked bar chart
         for i, scen in enumerate(scenarios):
-            df_scen = total[total['scenario'].isin(scenarios)]
+            df_scen = total[total['scenario'] == scen]
             df_scen = df_scen.sort_values(by=['time'])
             fig.add_trace(go.Scatter(
                 x=df_scen['time'],
                 y=df_scen['value'],
                 name=scen,
-                mode='lines',
+                mode='lines' if len(df_scen['time']) > 1 else 'markers',
                 # set line color to respective tech color
                 line=dict(color=utils.get_color(scen)),
+                marker=dict(color=utils.get_color(scen)),
             ))
         fig.update_yaxes(showgrid=True)
         fig.update_xaxes(

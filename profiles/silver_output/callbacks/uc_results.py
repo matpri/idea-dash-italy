@@ -38,6 +38,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'silver-uc_results-time_step-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'silver-uc_results-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -61,7 +65,7 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_uc_results(_p_type, _scenarios, _scenario, _download, _canvas, _data, _s_style, _m_style):
+    def update_uc_results(_p_type, _scenarios, _scenario, _ts, _download, _canvas, _data, _s_style, _m_style):
         print('updating uc_results plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -89,12 +93,12 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('By Year', data_handler.processed_data['SILVER Output']['UC Results'],
-                                       _scenarios[idx])
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['UC Results'],
+                                        _scenarios[idx], time_size=_ts[idx])
 
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['UC Results'], _scenario[idx])
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['UC Results'], _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style
