@@ -94,7 +94,7 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['UC Results'],
-                                        _scenario[idx], time_size=_ts[idx])
+                                        _scenarios[idx], time_size=_ts[idx])
 
         else:
             _m_style[idx] = {'display': 'none'}
