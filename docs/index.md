@@ -33,3 +33,5 @@ If you are interested in seeing your model results in IDEA, please refer to the 
 ## Sections
 - [Setup and Installation](setup-and-installation.md)
 - [Extending IDEA](extending-idea.md)
+- [IAMC Format](iamc-format.md)
+- [User Guide](user-guide.md)
