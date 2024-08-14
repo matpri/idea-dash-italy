@@ -33,7 +33,7 @@ formatted data for the best experience and supporting easier collaboration with 
 
 To load data from the IDEA database, click the "Database" button. Enter your API key and click "Connect." Once the data
 is loaded, you can select the runs you want to use and click "Load." You can also filter the runs by the model,
-scenario, or author.
+scenario, author or database. You can load in data either from our results database, or from the CODERS database. The data from the CODERS database will showcase some of the data accessible through the CODERS database, commonly used for our energy models. 
 
 ![Accessing the DB](../assets/help/data_db.gif)
 

@@ -29,6 +29,7 @@ If you are using non-PYAM formatted data, please refer to the [IDEA Panel reposi
 
 If you are interested in seeing your model results in IDEA, please refer to the [Extending IDEA](extending-idea.md) section for instructions on how to add a new model profile or contact us for a possible collaboration.
 
+At the moment we have custom plots for our COPPER, SILVER, MESSAGE and CIMS model. Additionally, we have plots showcasing some of the data accessible through the CODERS database, commonly used for our energy models.
 
 ## Sections
 - [Setup and Installation](setup-and-installation.md)
