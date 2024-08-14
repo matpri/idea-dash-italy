@@ -12,5 +12,3 @@ pandas
 PyYAML
 openpyxl
 matplotlib
-sphinx
-sphinx_rtd_theme
