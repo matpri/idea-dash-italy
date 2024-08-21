@@ -291,6 +291,7 @@ class DataHandler:
 
         # Collect data from all selected profiles
         data_collection = {}
+        process_power_system = False
         for fname, data in self.data.items():
             if not fname in self.processed:
                 for profile, viz_options in data['selected'].items():
@@ -303,16 +304,18 @@ class DataHandler:
                             if data_collection[profile].get(viz) is None:
                                 data_collection[profile][viz] = {}
                             data_collection[profile][viz][scenario] = data['content'].copy()
+                    else:
+                        process_power_system = True
                 self.processed.append(fname)
 
         results = []
         for profile in data_collection.keys():
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
-        # Process profiles that are considered Power System Models
-        power_system_results=self.profiles['Power System Models'].process_data(results)
-        if power_system_results is not None:
-            results.extend(power_system_results)
+        if process_power_system:
+            power_system_results=self.profiles['Power System Models'].process_data(results)
+            if power_system_results is not None:
+                results.extend(power_system_results)
 
         # Collect results
         for profile, viz, processed_data in results:
