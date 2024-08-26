@@ -61,6 +61,8 @@ def render_plot(df, scenarios, time_size='hourly'):
                 # set line color to respective tech color
                 line=dict(color=utils.get_color(scen)),
                 marker=dict(color=utils.get_color(scen)),
+                customdata=df_scen[['scenario']],  # Add any other columns as needed
+                hovertemplate='<b>Scenario:</b> %{customdata[0]}<br>Time: %{x}<br>OPF Cost: %{y:.2f} ' + unit + '<br><extra></extra>'
             ))
         fig.update_yaxes(showgrid=True)
         fig.update_xaxes(

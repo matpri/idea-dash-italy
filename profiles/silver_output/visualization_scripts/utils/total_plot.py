@@ -38,7 +38,7 @@ def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly')
         can_supply = df_scen.sort_values(by=['time'])
         can_opf_costs = can_supply[can_supply['value'] != 0]
         total = can_opf_costs.groupby(['time', 'scenario']).sum().reset_index()
-
+        unit = y_axis_label
         # create stacked bar chart
         for i, scen in enumerate(scenarios):
             df_scen = total[total['scenario'] == scen]
@@ -51,6 +51,10 @@ def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly')
                 # set line color to respective tech color
                 line=dict(color=utils.get_color(scen)),
                 marker=dict(color=utils.get_color(scen)),
+                hovertemplate=f'<b>{scen}</b><br><br>' +
+                              'Time: %{x}<br>' +
+                              'Total: %{y:.2f} + %{unit}<br>' +
+                              '<extra></extra>' 
             ))
         fig.update_yaxes(showgrid=True)
         fig.update_xaxes(
