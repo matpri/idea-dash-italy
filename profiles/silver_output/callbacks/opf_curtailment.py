@@ -102,6 +102,6 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Technology',
                                        data_handler.processed_data['SILVER Output']['OPF_VRE_Curtailment'],
-                                       _scenarios[idx], time_size=_ts[idx])
+                                       _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style
