@@ -61,7 +61,6 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
         df_tech = df_tech.sort_values(by=['time'])
         output = tech.split('|')[0]
         tech_type = tech.split('|')[1]
-        scenario = df_tech['scenario']
         unit = y_axis_label
         fig.add_trace(go.Scatter(
             x=df_tech['time'],
@@ -73,9 +72,9 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
             marker=dict(color=utils.get_color(tech)),
             stackgroup='one',
             hovertemplate=f'<b>{tech_type}</b><br><br>' +
-                            'Scenario: %{scenario} TWh<br>'
+                            f'Scenario: {scenario} <br>' +
                               'Time: %{x}<br>' +
-                              '%{output}: %{y:.2f} + %{unit}<br>' +
+                              f'{output}:'+ '%{y:.2f}' + ' '+f'{unit}<br>' +
                               '<extra></extra>'
         ))
     fig.update_yaxes(showgrid=True)

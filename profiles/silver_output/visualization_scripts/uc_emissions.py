@@ -8,12 +8,12 @@ from profiles.silver_output.visualization_scripts.utils import total_plot, regio
 def render_plot(type, df, scenarios, time_size='hourly'):
     from profiles.silver_output.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['OPF Emissions']['name']
-    unit = plot_settings['OPF Emissions']['unit']
+    name = plot_settings['UC Emissions']['name']
+    unit = plot_settings['UC Emissions']['unit']
 
-    title = plot_settings['OPF Emissions'][type]['title']
-    x_axis_label = plot_settings['OPF Emissions'][type]['x_label']
-    y_axis_label = plot_settings['OPF Emissions'][type]['y_label']
+    title = plot_settings['UC Emissions'][type]['title']
+    x_axis_label = plot_settings['UC Emissions'][type]['x_label']
+    y_axis_label = plot_settings['UC Emissions'][type]['y_label']
     if type == 'Total':
         fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     else:

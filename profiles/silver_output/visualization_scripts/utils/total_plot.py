@@ -53,7 +53,7 @@ def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly')
                 marker=dict(color=utils.get_color(scen)),
                 hovertemplate=f'<b>{scen}</b><br><br>' +
                               'Time: %{x}<br>' +
-                              'Total: %{y:.2f} + %{unit}<br>' +
+                              'Total:'+ '%{y:.2f}' + ' '+f'{unit}<br>' +
                               '<extra></extra>' 
             ))
         fig.update_yaxes(showgrid=True)
