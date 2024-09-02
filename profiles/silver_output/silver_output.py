@@ -16,6 +16,7 @@ from profiles.silver_output.callbacks import (
     price_opf as price_opf_callbacks,
 opf_curtailment as opf_curtailment_callbacks,
 uc_curtailment as uc_curtailment_callbacks,
+map_plots as map_plots_callbacks,
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
@@ -26,6 +27,7 @@ from profiles.silver_output.processing_scripts import (
     price_opf as price_opf_processing,
 opf_curtailment as opf_curtailment_processing,
 uc_curtailment as uc_curtailment_processing,
+map_plots as map_plots_processing,
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
@@ -36,6 +38,7 @@ from profiles.silver_output.visualization_scripts import (
     price_opf as price_opf_viz,
 opf_curtailment as opf_curtailment_viz,
 uc_curtailment as uc_curtailment_viz,
+map_plots as map_plots_viz,
 )
 
 
@@ -56,6 +59,7 @@ class silverOutput(BaseProfile):
         'UC Emissions',
         'UC_VRE_Curtailment',
         'Price OPF',
+        'Map Plots'
     ]
 
     viz_options = {
@@ -106,6 +110,12 @@ class silverOutput(BaseProfile):
             'viz': price_opf_viz.plot,
             'callback': price_opf_callbacks.link,
             'check': price_opf_processing.check,
+        },
+        'Map Plots': {
+            'process': map_plots_processing.process,
+            'viz': map_plots_viz.plot,
+            'callback': map_plots_callbacks.link,
+            'check': map_plots_processing.check,
         }
     }
 
