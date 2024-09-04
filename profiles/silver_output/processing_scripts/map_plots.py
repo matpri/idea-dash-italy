@@ -42,18 +42,21 @@ def process(selected):
         df['classes'] = df["variable"].apply(lambda x: x.split("|")[0])
 
         for cls in df['classes'].unique():
-            if 'Line Flow' not in cls:
-                df_cls = df[df['classes'] == cls]
+            # if 'Line Flow' not in cls:
+            df_cls = df[df['classes'] == cls]
 
-                # drop columns that are all nan
-                df_cls = df_cls.dropna(axis=1, how='all')
-                columns = df_cls.columns.tolist()
-                columns.remove('value')
-                df_cls = df_cls.groupby(columns).sum(numeric_only=True).reset_index()
-                df_cls['scenario'] = scenario
-                df_cls['time'] = pd.to_datetime(df_cls['time'])
-                df_cls['period'] = df_cls['time'].dt.year.astype(int)
+            # drop columns that are all nan
+            df_cls = df_cls.dropna(axis=1, how='all')
+            columns = df_cls.columns.tolist()
+            columns.remove('value')
+            df_cls = df_cls.groupby(columns).sum(numeric_only=True).reset_index()
+            df_cls['scenario'] = scenario
+            df_cls['time'] = pd.to_datetime(df_cls['time'])
+            df_cls['period'] = df_cls['time'].dt.year.astype(int)
 
-                dfs.append(df_cls)
+            # remove *| from variable
+            df_cls['variable'] = df_cls['variable'].apply(lambda x: x.split("|")[-1])
+
+            dfs.append(df_cls)
 
     return pd.concat(dfs)

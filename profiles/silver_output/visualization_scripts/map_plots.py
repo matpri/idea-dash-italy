@@ -5,6 +5,7 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 import pandas as pd
 from dash import html, dcc
+import matplotlib.pyplot as plt
 
 from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
 
@@ -34,7 +35,7 @@ def render_plot(type, df, scenario, time_size='hourly'):
     # remove value column
     cols.remove('value')
     scen_df = scen_df.groupby(cols).sum(numeric_only=True).reset_index()
-    
+
     choropleth_layer = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
         color_discrete_map={'British Columbia': 'lightgrey', 'Alberta': 'lightgrey', 'Saskatchewan': 'lightgrey',
@@ -45,61 +46,132 @@ def render_plot(type, df, scenario, time_size='hourly'):
                             'Yukon': 'lightgrey', 'Northwest Territories': 'lightgrey', 'Nunavut': 'lightgrey'},
         scope='north america',
     ).data
-    
+
     for i in range(len(choropleth_layer)):
         choropleth_layer[i].showlegend = False
 
     fig = go.Figure()
-    
+
     for trace in choropleth_layer:
         fig.add_trace(trace)
 
-    techs = scen_df['variable'].unique()
-    scen_df['latitude'] = scen_df['latitude'].astype(float)
-    scen_df['longitude'] = scen_df['longitude'].astype(float)
-    scen_df['value'] = scen_df['value'].astype(float)
+    if 'Line Flow' not in type:
 
-    # Create a list to store frames for animation
-    frames = []
+        techs = scen_df['variable'].unique()
+        scen_df['latitude'] = scen_df['latitude'].astype(float)
+        scen_df['longitude'] = scen_df['longitude'].astype(float)
+        scen_df['value'] = scen_df['value'].astype(float)
 
-    for time in scen_df['time'].unique():
-        frame_data = list(choropleth_layer)
+        # Create a list to store frames for animation
+        frames = []
+
+        for time in scen_df['time'].unique():
+            frame_data = list(choropleth_layer)
+            for tech in techs:
+                tech_df = scen_df[(scen_df['variable'] == tech) & (scen_df['time'] == time)]
+                frame_data.append(go.Scattergeo(
+                    lon=tech_df['longitude'],
+                    lat=tech_df['latitude'],
+                    text=tech_df['variable'],
+                    name=tech,
+                    mode='markers',
+                    marker=dict(
+                        size=tech_df['value'].abs() / 20,
+                        opacity=0.8,
+                        line=dict(width=0)
+                    ),
+                    hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>',
+                    showlegend=True
+                ))
+            frames.append(go.Frame(data=frame_data, name=str(time)))
+
+        # Add the initial traces to the figure
+        initial_time = scen_df['time'].min()
         for tech in techs:
-            tech_df = scen_df[(scen_df['variable'] == tech) & (scen_df['time'] == time)]
-            frame_data.append(go.Scattergeo(
+            tech_df = scen_df[(scen_df['variable'] == tech) & (scen_df['time'] == initial_time)]
+            fig.add_trace(go.Scattergeo(
                 lon=tech_df['longitude'],
                 lat=tech_df['latitude'],
                 text=tech_df['variable'],
                 name=tech,
                 mode='markers',
                 marker=dict(
-                    size=tech_df['value'].abs()/20,
+                    size=tech_df['value'] / 30,
                     opacity=0.8,
                     line=dict(width=0)
                 ),
                 hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>',
                 showlegend=True
             ))
-        frames.append(go.Frame(data=frame_data, name=str(time)))
 
-    # Add the initial traces to the figure
-    initial_time = scen_df['time'].min()
-    for tech in techs:
-        tech_df = scen_df[(scen_df['variable'] == tech) & (scen_df['time'] == initial_time)]
-        fig.add_trace(go.Scattergeo(
-            lon=tech_df['longitude'],
-            lat=tech_df['latitude'],
-            text=tech_df['variable'],
-            name=tech,
-            mode='markers',
-            marker=dict(
-                size=tech_df['value']/30,
-                opacity=0.8,
-                line=dict(width=0)
-            ),
-            hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>',
-            showlegend=True
-        ))
+    else:
+        # Initialize frames list and convert data types
+        frames = []
+        scen_df['latitude_from'] = scen_df['latitude_from'].astype(float)
+        scen_df['latitude_to'] = scen_df['latitude_to'].astype(float)
+        scen_df['longitude_from'] = scen_df['longitude_from'].astype(float)
+        scen_df['longitude_to'] = scen_df['longitude_to'].astype(float)
+        scen_df['value'] = scen_df['value'].astype(float)
+
+        # Calculate min and max values for color scaling
+        min_value = scen_df['value'].min()
+        max_value = scen_df['value'].max()
+
+        # Create frames for each time step
+        for time in scen_df['time'].unique():
+            frame_data = list(choropleth_layer)
+            time_df = scen_df[scen_df['time'] == time]
+            for i, row in time_df.iterrows():
+                # Calculate color based on value
+                color = plt.cm.viridis((row['value'] - min_value) / (max_value - min_value))
+                rgba_color = f'rgba({int(color[0]*255)},{int(color[1]*255)},{int(color[2]*255)},{color[3]})'
+                
+                frame_data.append(
+                    go.Scattergeo(
+                        lat=[row['latitude_from'], row['latitude_to']],
+                        lon=[row['longitude_from'], row['longitude_to']],
+                        mode='lines',
+                        line=dict(
+                            width=1 + (row['value'] - min_value) / (max_value - min_value) * 10,
+                            color=rgba_color
+                        ),
+                        name=row['region'] + ' Import from ' + row['variable'],
+                        showlegend=True,
+                        # hovertemplate='<b>%{name}</b><br>' +
+                        #               'From: (%{lat[0]:.2f}, %{lon[0]:.2f})<br>' +
+                        #               'To: (%{lat[1]:.2f}, %{lon[1]:.2f})<br>' +
+                        #               'Value: %{text:.2f}<extra></extra>',
+                        # text=[row['value'], row['value']]  # Duplicate value for both points
+                    )
+                )
+            frames.append(go.Frame(data=frame_data, name=str(time)))
+
+        # Add initial traces to the figure
+        initial_time = scen_df['time'].min()
+        time_df = scen_df[scen_df['time'] == initial_time]
+        for i, row in time_df.iterrows():
+            # Calculate color based on value
+            color = plt.cm.viridis((row['value'] - min_value) / (max_value - min_value))
+            rgba_color = f'rgba({int(color[0]*255)},{int(color[1]*255)},{int(color[2]*255)},{color[3]})'
+            
+            fig.add_trace(
+                go.Scattergeo(
+                    lat=[row['latitude_from'], row['latitude_to']],
+                    lon=[row['longitude_from'], row['longitude_to']],
+                    mode='lines',
+                    line=dict(
+                        width=1 + (row['value'] - min_value) / (max_value - min_value) * 10,
+                        color=rgba_color
+                    ),
+                    name=row['region'] + ' Import from ' + row['variable'],
+                    showlegend=True,
+                    # hovertemplate='<b>%{name}</b><br>' +
+                    #               'From: (%{lat[0]:.2f}, %{lon[0]:.2f})<br>' +
+                    #               'To: (%{lat[1]:.2f}, %{lon[1]:.2f})<br>' +
+                    #               'Value: %{text:.2f}<extra></extra>',
+                    # text=[row['value'], row['value']]  # Duplicate value for both points
+                )
+            )
 
     # Update layout to include slider and buttons only if there's more than one unique date
     if len(scen_df['time'].unique()) > 1:
@@ -113,7 +185,8 @@ def render_plot(type, df, scenario, time_size='hourly'):
                          args=[None, {'frame': {'duration': 500, 'redraw': True}, 'fromcurrent': True}]),
                     dict(label='⏸',
                          method='animate',
-                         args=[[None], {'frame': {'duration': 0, 'redraw': False}, 'mode': 'immediate', 'transition': {'duration': 0}}])
+                         args=[[None], {'frame': {'duration': 0, 'redraw': False}, 'mode': 'immediate',
+                                        'transition': {'duration': 0}}])
                 ],
                 pad={"r": 10, "t": 10},
                 x=0.1,
@@ -158,6 +231,7 @@ def render_plot(type, df, scenario, time_size='hourly'):
     fig.update_layout(legend={'itemsizing': 'constant'})
     return fig
 
+
 def plot(df, window_id):
     '''
 
@@ -167,8 +241,6 @@ def plot(df, window_id):
     '''
     scenarios = df['scenario'].unique().tolist()
     classes = df['classes'].unique().tolist()
-
-    classes = [cls for cls in classes if 'Line Flow' not in cls]
 
     widget_layout = html.Div([
         dmc.Select(
