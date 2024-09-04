@@ -150,13 +150,13 @@ def render_plot(type, df, scenario, time_size='hourly'):
             center=dict(lat=56.1304, lon=-106.3468),
             visible=True,
         ),
-        margin={"r": 0, "t": 0, "l": 0, "b": 0}
+        margin={"r": 0, "t": 0, "l": 0, "b": 0},
+        # Set legend position using dict format
+        legend=dict(y=0.2),
     )
-
     fig.layout.autosize = True
     fig.update_layout(legend={'itemsizing': 'constant'})
     return fig
-
 
 def plot(df, window_id):
     '''
