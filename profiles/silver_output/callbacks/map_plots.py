@@ -222,4 +222,4 @@ def link(app):
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['SILVER Output']['Map Plots'], 
                                    _scenario[idx], selected_time, time_size=_ts[idx])
 
-        return _canvas, [dash.no_update for _ in _data], [dash.no_update for _ in _date], [dash.no_update for _ in _date], [dash.no_update for _ in _time], [dash.no_update for _ in _time], [dash.no_update for _ in _time]
+        return _canvas, [dash.no_update for _ in _data], [dash.no_update for _ in _date], [dash.no_update for _ in _date], [dash.no_update for _ in _time], [dash.no_update for _ in _time], [dash.no_update for _ in _time], [dash.no_update for _ in _style]
