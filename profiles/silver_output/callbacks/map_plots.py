@@ -163,7 +163,7 @@ def link(app):
                 _date[idx] = date
                 _time[idx] = 0
 
-                unique_times = sorted(scen_df[scen_df['time'].dt.strftime('%Y') == date]['time'].dt.strftime('%Y-%b').unique().tolist())
+                unique_times = sorted(scen_df[scen_df['time'].dt.strftime('%Y') == date]['time'].dt.strftime('%Y-%m').unique().tolist())
                 date_marks = {
                     i: {'label': time.split('-')[-1], 'style': {'transform': 'rotate(90deg) translate(20px, -10px)'}}
                     for i, time in enumerate(unique_times)
@@ -209,15 +209,28 @@ def link(app):
         # Get the selected date
         selected_date = _date[idx]
 
+        time_format = '%Y-%m-%d'
+        date_format = '%Y-%m-%d %H:%M:%S'
+        if _ts[idx] == 'hourly':
+            time_format = '%Y-%m-%d'
+            date_format = '%Y-%m-%d %H:%M:%S'
+        if _ts[idx] == 'daily':
+            time_format = '%Y-%m'
+            date_format = '%Y-%m-%d'
+        elif _ts[idx] == 'monthly':
+            time_format = '%Y'
+            date_format = '%Y-%m'
+        elif _ts[idx] == 'yearly':
+            time_format = '%Y'
+            date_format = '%Y-%m'
+
         # Get the unique times for the selected date
         unique_times = sorted(data_handler.processed_data['SILVER Output']['Map Plots'][
-            data_handler.processed_data['SILVER Output']['Map Plots']['time'].dt.strftime('%Y-%m-%d') == selected_date
-        ]['time'].unique().tolist())
+            data_handler.processed_data['SILVER Output']['Map Plots']['time'].dt.strftime(time_format) == selected_date
+        ]['time'].dt.strftime(date_format).unique().tolist())
 
         # Get the selected time
         selected_time = unique_times[_time[idx]]
-
-        selected_date_time = f'{selected_date} {selected_time}'
 
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['SILVER Output']['Map Plots'], 
                                    _scenario[idx], selected_time, time_size=_ts[idx])

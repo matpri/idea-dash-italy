@@ -1,6 +1,7 @@
 import dash_mantine_components as dmc
 import geojson
 import plotly.graph_objects as go
+from datetime import datetime
 from plotly.subplots import make_subplots
 import plotly.express as px
 import pandas as pd
@@ -22,14 +23,21 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
     scen_df['time'] = pd.to_datetime(scen_df['time'])
     scen_df = scen_df.dropna(axis=1, how='all')
     # groupby time based on time_size
+    time_format = '%Y-%m-%d %H:%M:%S'
     if time_size == 'daily':
         scen_df['time'] = scen_df['time'].dt.strftime('%Y-%m-%d')
+        time_format = '%Y-%m-%d'
     elif time_size == 'monthly':
         scen_df['time'] = scen_df['time'].dt.strftime('%Y-%m')
+        time_format = '%Y-%m'
     elif time_size == 'yearly':
         scen_df['time'] = scen_df['time'].dt.strftime('%Y')
+        time_format = '%Y'
     else:
         scen_df['time'] = scen_df['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    if isinstance(selected_time, str):
+        selected_time = datetime.strptime(selected_time, time_format)
 
     cols = scen_df.columns.tolist()
     # remove value column
