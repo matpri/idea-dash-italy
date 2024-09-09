@@ -107,7 +107,10 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
         time_df = scen_df[scen_df['time'] == selected_time]
         for i, row in time_df.iterrows():
             # Calculate color based on value
-            color = plt.cm.viridis((row['value'] - min_value) / (max_value - min_value))
+            if max_value == min_value:
+                color = plt.cm.viridis(0)
+            else:
+                color = plt.cm.viridis((row['value'] - min_value) / (max_value - min_value))
             rgba_color = f'rgba({int(color[0] * 255)},{int(color[1] * 255)},{int(color[2] * 255)},{color[3]})'
 
             fig.add_trace(
@@ -116,7 +119,7 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     lon=[row['longitude_from'], row['longitude_to']],
                     mode='lines',
                     line=dict(
-                        width=1 + (row['value'] - min_value) / (max_value - min_value) * 10,
+                        width=1 + (row['value'] - min_value) / (max_value - min_value) * 10 if max_value != min_value else 1,
                         color=rgba_color
                     ),
                     name=row['region'] + ' Import from ' + row['variable'],
