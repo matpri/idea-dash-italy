@@ -86,7 +86,10 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     opacity=0.8,
                     line=dict(width=0)
                 ),
-                hovertemplate='<b>Technology: %{text}</b><br> Capacity: %{marker.size:.2f} MW<br>',
+                hovertemplate='<b>%{text}</b><br>' +
+                              'Capacity: %{marker.size:.2f} MW<br>' +
+                              f'Time: {selected_time.strftime(time_format)}<br>' +
+                              '<extra></extra>',
                 showlegend=True
             ))
 
@@ -124,6 +127,10 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     ),
                     name=row['region'] + ' Import from ' + row['variable'],
                     showlegend=True,
+                    hovertemplate='<b>' + row['region'] + ' Import from ' + row['variable'] + '</b><br>' +
+                                  'Flow: ' + f'{row["value"]:.2f} MW<br>' +
+                                  f'Time: {selected_time.strftime(time_format)}<br>' +
+                                  '<extra></extra>',
                 )
             )
 
