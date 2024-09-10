@@ -9,6 +9,10 @@ Price OPF:
     title: Price OPF by Technology
     x_label: Year
     y_label: Price OPF
+  By Plant:
+    title: Price OPF by Plant
+    x_label: Year
+    y_label: Price OPF
 UC Results:
   name: UC Results
   unit: MW
@@ -18,6 +22,10 @@ UC Results:
     y_label: MW
   By Technology:
     title: UC Results by Technology
+    x_label: Year
+    y_label: MW
+  By Plant:
+    title: UC Results by Plant
     x_label: Year
     y_label: MW
 UC Emissions:
@@ -31,6 +39,10 @@ UC Emissions:
     title: UC Emissions by Technology
     x_label: Year
     y_label: tCO2
+  By Plant:
+    title: UC Emissions by Plant
+    x_label: Year
+    y_label: tCO2
 UC_VRE_Curtailment:
   name: UC VRE Curtailment
   unit: tCO2
@@ -40,6 +52,10 @@ UC_VRE_Curtailment:
     y_label: tCO2
   By Technology:
     title: UC VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
+  By Plant:
+    title: UC VRE Curtailment by Plant
     x_label: Year
     y_label: tCO2
 OPF Results:
@@ -53,6 +69,10 @@ OPF Results:
     title: OPF Results by Technology
     x_label: Year
     y_label: MW
+  By Plant:
+    title: OPF Results by Plant
+    x_label: Year
+    y_label: MW
 OPF Emissions:
   name: OPF Emissions
   unit: tCO2
@@ -64,6 +84,10 @@ OPF Emissions:
     title: OPF Emissions by Technology
     x_label: Year
     y_label: tCO2
+  By Plant:
+    title: OPF Emissions by Plant
+    x_label: Year
+    y_label: tCO2
 OPF_VRE_Curtailment:
   name: OPF VRE Curtailment
   unit: tCO2
@@ -73,6 +97,10 @@ OPF_VRE_Curtailment:
     y_label: tCO2
   By Technology:
     title: OPF VRE Curtailment by Technology
+    x_label: Year
+    y_label: tCO2
+  By Plant:
+    title: OPF VRE Curtailment by Plant
     x_label: Year
     y_label: tCO2
 OPF Costs:
@@ -104,10 +132,3 @@ UC Line Flow:
     title: UC Line Flow by Line
     x_label: Year
     y_label: MW
-
-
-
-
-
-
-
