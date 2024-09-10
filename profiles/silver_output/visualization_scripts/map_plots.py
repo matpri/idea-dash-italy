@@ -8,7 +8,7 @@ import pandas as pd
 from dash import html, dcc
 import matplotlib.pyplot as plt
 
-from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
+from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot
 
 regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
            'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',

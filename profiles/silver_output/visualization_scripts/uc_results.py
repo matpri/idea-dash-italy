@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
-from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
+from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot
 
 
 def render_plot(type, df, scenarios, time_size='hourly'):
@@ -17,7 +17,7 @@ def render_plot(type, df, scenarios, time_size='hourly'):
     if type == 'Total':
         fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     else:
-        fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
+        fig = tech_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     return fig
 
 

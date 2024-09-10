@@ -17,6 +17,8 @@ from profiles.silver_output.callbacks import (
 opf_curtailment as opf_curtailment_callbacks,
 uc_curtailment as uc_curtailment_callbacks,
 map_plots as map_plots_callbacks,
+opf_lineflow as opf_lineflow_callbacks,
+uc_lineflow as uc_lineflow_callbacks,
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
@@ -28,6 +30,8 @@ from profiles.silver_output.processing_scripts import (
 opf_curtailment as opf_curtailment_processing,
 uc_curtailment as uc_curtailment_processing,
 map_plots as map_plots_processing,
+opf_lineflow as opf_lineflow_processing,
+uc_lineflow as uc_lineflow_processing,
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
@@ -39,6 +43,8 @@ from profiles.silver_output.visualization_scripts import (
 opf_curtailment as opf_curtailment_viz,
 uc_curtailment as uc_curtailment_viz,
 map_plots as map_plots_viz,
+opf_lineflow as opf_lineflow_viz,
+uc_lineflow as uc_lineflow_viz,
 )
 
 
@@ -55,9 +61,11 @@ class silverOutput(BaseProfile):
         'OPF Results',
         'OPF Emissions',
         'OPF_VRE_Curtailment',
+        'OPF Line Flow',
         'UC Results',
         'UC Emissions',
         'UC_VRE_Curtailment',
+        'UC Line Flow',
         'Price OPF',
         'Map Plots'
     ]
@@ -87,6 +95,12 @@ class silverOutput(BaseProfile):
             'callback': opf_curtailment_callbacks.link,
             'check': opf_curtailment_processing.db_check,
         },
+        'OPF Line Flow': {
+            'process': opf_lineflow_processing.process,
+            'viz': opf_lineflow_viz.plot,
+            'callback': opf_lineflow_callbacks.link,
+            'check': opf_lineflow_processing.db_check,
+        },
         'UC Results': {
             'process': uc_results_processing.process,
             'viz': uc_results_viz.plot,
@@ -104,6 +118,12 @@ class silverOutput(BaseProfile):
             'viz': uc_curtailment_viz.plot,
             'callback': uc_curtailment_callbacks.link,
             'check': uc_curtailment_processing.db_check,
+        },
+        'UC Line Flow': {
+            'process': uc_lineflow_processing.process,
+            'viz': uc_lineflow_viz.plot,
+            'callback': uc_lineflow_callbacks.link,
+            'check': uc_lineflow_processing.db_check,
         },
         'Price OPF': {
             'process': price_opf_processing.process,

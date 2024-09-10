@@ -35,9 +35,9 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
     cols.remove('value')
     df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
 
-    can_supply = df_scen.sort_values(by=['time', 'region'], key=lambda x: x.map(custom_sort_key))
+    can_supply = df_scen.sort_values(by=['time', 'variable'], key=lambda x: x.map(custom_sort_key))
     can_emissions = can_supply[can_supply['value'] != 0]
-    regions = can_emissions.region.unique().tolist()
+    techs = can_emissions.variable.unique().tolist()
 
     # Determine the number of unique time entries
     unique_times = can_emissions['time'].nunique()
@@ -45,10 +45,10 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
     if unique_times == 1:
         # Create a pie chart
         fig = go.Figure(data=[go.Pie(
-            labels=can_emissions['region'],
+            labels=can_emissions['variable'],
             values=can_emissions['value'],
             hole=.3,
-            marker=dict(colors=[utils.get_color(region) for region in can_emissions['region']])
+            marker=dict(colors=[utils.get_color(tech) for tech in can_emissions['variable']])
         )])
         fig.update_traces(textposition='inside', textinfo='percent+label')
         fig.update_layout(
@@ -57,15 +57,15 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
         )
     elif unique_times < 10:
         # Create a bar plot
-        for region in regions:
-            df_region = can_emissions[can_emissions['region'] == region]
-            df_region = df_region.sort_values(by=['time'])
+        for tech in techs:
+            df_tech = can_emissions[can_emissions['variable'] == tech]
+            df_tech = df_tech.sort_values(by=['time'])
             fig.add_trace(go.Bar(
-                x=df_region['time'],
-                y=df_region['value'],
-                name=region,
-                marker_color=utils.get_color(region),
-                hovertemplate=f'<b>{region}</b><br><br>' +
+                x=df_tech['time'],
+                y=df_tech['value'],
+                name=tech,
+                marker_color=utils.get_color(tech),
+                hovertemplate=f'<b>{tech}</b><br><br>' +
                               f'Scenario: {scenario} <br>' +
                               'Time: %{x}<br>' +
                               f'Value: %{{y:.2f}} {y_axis_label}<br>' +
@@ -74,19 +74,22 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
         fig.update_layout(barmode='stack')
     else:
         # Create a stacked area chart (original behavior)
-        for region in regions:
-            df_region = can_emissions[can_emissions['region'] == region]
-            df_region = df_region.sort_values(by=['time'])
+        for tech in techs:
+            df_tech = can_emissions[can_emissions['variable'] == tech]
+            df_tech = df_tech.sort_values(by=['time'])
+            output = tech.split('|')[0]
+            tech_type = tech.split('|')[1]
             fig.add_trace(go.Scatter(
-                x=df_region['time'],
-                y=df_region['value'],
-                name=region,
+                x=df_tech['time'],
+                y=df_tech['value'],
+                name=tech,
                 mode='lines',
-                line=dict(color=utils.get_color(region)),
+                line=dict(color=utils.get_color(tech)),
                 stackgroup='one',
-                hovertemplate=f'<b>{region}</b><br><br>' +
+                hovertemplate=f'<b>{tech_type}</b><br><br>' +
                               f'Scenario: {scenario} <br>' +
                               'Time: %{x}<br>' +
+                              f'{output}: %{{y:.2f}} {y_axis_label}<br>' +
                               '<extra></extra>'
             ))
         fig.update_yaxes(showgrid=True)

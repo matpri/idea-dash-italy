@@ -82,6 +82,28 @@ OPF Costs:
     title: Total OPF Costs
     x_label: Year
     y_label: CAD
+OPF Line Flow:
+  name: OPF Line Flow
+  unit: MW
+  Total:
+    title: Total OPF Line Flow
+    x_label: Year
+    y_label: MW
+  By Line:
+    title: OPF Line Flow by Line
+    x_label: Year
+    y_label: MW
+UC Line Flow:
+  name: UC Line Flow
+  unit: MW
+  Total:
+    title: Total UC Line Flow
+    x_label: Year
+    y_label: MW
+  By Line:
+    title: UC Line Flow by Line
+    x_label: Year
+    y_label: MW
 
 
 
