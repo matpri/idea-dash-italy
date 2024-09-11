@@ -33,6 +33,7 @@ def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly')
         cols = df_scen.columns.tolist()
         # remove value column
         cols.remove('value')
+        cols.remove('region')
         df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
 
         can_supply = df_scen.sort_values(by=['time'])

@@ -24,9 +24,9 @@ def aggregate_db(db, scenario):
     df = db[classes == 'OPF Emissions']
 
     # sum over value and group by time and variable
-    df = df.groupby(['time', 'variable']).sum().reset_index()
+    df = df.groupby(['time', 'variable', 'region']).sum().reset_index()
     df['scenario'] = scenario
-    df = df[['time', 'variable', 'value', 'scenario']]
+    df = df[['time', 'variable', 'value', 'region','scenario']]
     df['time'] = pd.to_datetime(df['time'])
     df['period'] = df['time'].dt.year.astype(int)
     return df
