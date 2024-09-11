@@ -42,67 +42,68 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
     # Determine the number of unique time entries
     unique_times = can_emissions['time'].nunique()
 
-    if unique_times == 1:
-        # Create a pie chart
-        fig = go.Figure(data=[go.Pie(
-            labels=can_emissions['region'],
-            values=can_emissions['value'],
-            hole=.3,
-            marker=dict(colors=[utils.get_color(region) for region in can_emissions['region']])
-        )])
-        fig.update_traces(textposition='inside', textinfo='percent+label')
-        fig.update_layout(
-            title_text=title,
-            annotations=[dict(text=f'Total: {can_emissions["value"].sum():.2f} {y_axis_label}', showarrow=False)]
+    # if unique_times == 1:
+    #     # Create a pie chart
+    #     fig = go.Figure(data=[go.Pie(
+    #         labels=can_emissions['region'],
+    #         values=can_emissions['value'],
+    #         hole=.3,
+    #         marker=dict(colors=[utils.get_color(region) for region in can_emissions['region']])
+    #     )])
+    #     fig.update_traces(textposition='inside', textinfo='percent+label')
+    #     fig.update_layout(
+    #         title_text=title,
+    #         annotations=[dict(text=f'Total: {can_emissions["value"].sum():.2f} {y_axis_label}', showarrow=False)]
+    #     )
+    # elif unique_times < 10:
+    #     # Create a bar plot
+    #     for region in regions:
+    #         df_region = can_emissions[can_emissions['region'] == region]
+    #         df_region = df_region.sort_values(by=['time'])
+    #         fig.add_trace(go.Bar(
+    #             x=df_region['time'],
+    #             y=df_region['value'],
+    #             name=region,
+    #             marker_color=utils.get_color(region),
+    #             hovertemplate=f'<b>{region}</b><br><br>' +
+    #                           f'Scenario: {scenario} <br>' +
+    #                           'Time: %{x}<br>' +
+    #                           f'Value: %{{y:.2f}} {y_axis_label}<br>' +
+    #                           '<extra></extra>'
+    #         ))
+    #     fig.update_layout(barmode='stack')
+    # else:
+    # Create a stacked area chart (original behavior)
+    for region in regions:
+        df_region = can_emissions[can_emissions['region'] == region]
+        df_region = df_region.sort_values(by=['time'])
+        fig.add_trace(go.Scatter(
+            x=df_region['time'],
+            y=df_region['value'],
+            name=region,
+            mode='lines' if unique_times > 1 else 'markers',
+            line=dict(color=utils.get_color(region)),
+            marker=dict(color=utils.get_color(region)),
+            # stackgroup='one',
+            hovertemplate=f'<b>{region}</b><br><br>' +
+                            f'Scenario: {scenario} <br>' +
+                            'Time: %{x}<br>' +
+                            '<extra></extra>'
+        ))
+    fig.update_yaxes(showgrid=True)
+    fig.update_xaxes(
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+            ])
         )
-    elif unique_times < 10:
-        # Create a bar plot
-        for region in regions:
-            df_region = can_emissions[can_emissions['region'] == region]
-            df_region = df_region.sort_values(by=['time'])
-            fig.add_trace(go.Bar(
-                x=df_region['time'],
-                y=df_region['value'],
-                name=region,
-                marker_color=utils.get_color(region),
-                hovertemplate=f'<b>{region}</b><br><br>' +
-                              f'Scenario: {scenario} <br>' +
-                              'Time: %{x}<br>' +
-                              f'Value: %{{y:.2f}} {y_axis_label}<br>' +
-                              '<extra></extra>'
-            ))
-        fig.update_layout(barmode='stack')
-    else:
-        # Create a stacked area chart (original behavior)
-        for region in regions:
-            df_region = can_emissions[can_emissions['region'] == region]
-            df_region = df_region.sort_values(by=['time'])
-            fig.add_trace(go.Scatter(
-                x=df_region['time'],
-                y=df_region['value'],
-                name=region,
-                mode='lines',
-                line=dict(color=utils.get_color(region)),
-                stackgroup='one',
-                hovertemplate=f'<b>{region}</b><br><br>' +
-                              f'Scenario: {scenario} <br>' +
-                              'Time: %{x}<br>' +
-                              '<extra></extra>'
-            ))
-        fig.update_yaxes(showgrid=True)
-        fig.update_xaxes(
-            rangeslider_visible=True,
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="1d", step="day", stepmode="backward"),
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(step="all")
-                ])
-            )
-        )
+    )
 
     fig.layout.autosize = True
     return fig
