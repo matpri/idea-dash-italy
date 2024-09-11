@@ -41,6 +41,8 @@ def aggregate_db(db, scenario):
     """
     # safely remove model and unit column if they exist
     db = db.drop(columns=['model', 'unit'], errors='ignore')
+    db['region'] = db['region'].astype(str)
+    db['variable'] = db['variable'].astype(str)
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
