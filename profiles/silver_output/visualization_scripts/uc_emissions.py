@@ -2,22 +2,24 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
-from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
+from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot, region_plot
 
 
 def render_plot(type, df, scenarios, time_size='hourly'):
     from profiles.silver_output.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['OPF Emissions']['name']
-    unit = plot_settings['OPF Emissions']['unit']
+    name = plot_settings['UC Emissions']['name']
+    unit = plot_settings['UC Emissions']['unit']
 
-    title = plot_settings['OPF Emissions'][type]['title']
-    x_axis_label = plot_settings['OPF Emissions'][type]['x_label']
-    y_axis_label = plot_settings['OPF Emissions'][type]['y_label']
+    title = plot_settings['UC Emissions'][type]['title']
+    x_axis_label = plot_settings['UC Emissions'][type]['x_label']
+    y_axis_label = plot_settings['UC Emissions'][type]['y_label']
     if type == 'Total':
         fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
-    else:
+    elif type == 'By Plant':
         fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
+    else:
+        fig = tech_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     return fig
 
 
@@ -33,7 +35,7 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['Total', 'By Technology']],
+            data=[{'label': plot, 'value': plot} for plot in ['Total', 'By Plant', 'By Technology']],
             value='Total',
             id={
                 'type': 'silver-uc_emissions-plot-select',

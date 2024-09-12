@@ -97,11 +97,18 @@ def link(app):
             _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['OPF_VRE_Curtailment'],
                                        _scenarios[idx], time_size=_ts[idx])
 
+        elif _p_type[idx] == 'By Plant':
+            _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _canvas[idx] = render_plot('By Plant',
+                                       data_handler.processed_data['SILVER Output']['OPF_VRE_Curtailment'],
+                                       _scenario[idx], time_size=_ts[idx])
+
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Technology',
                                        data_handler.processed_data['SILVER Output']['OPF_VRE_Curtailment'],
-                                       _scenarios[idx], time_size=_ts[idx])
+                                       _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

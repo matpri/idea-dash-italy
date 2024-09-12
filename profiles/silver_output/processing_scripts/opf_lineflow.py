@@ -6,10 +6,10 @@ import pandas as pd
 
 def db_check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
-    print("Checking for OPF_Results in variable column")
+    print("Checking for OPF_Emissions in variable column")
     try:
         classes = df["variable"].apply(lambda x: x.split("|")[0])
-        if (classes == 'OPF Results').any():
+        if (classes == 'OPF Line Flow').any():
             return True
         return False
     except Exception as e:
@@ -21,14 +21,16 @@ def aggregate_db(db, scenario):
     db.drop(columns=['model', "unit"], inplace=True)
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
-    df = db[classes == 'OPF Results']
+    df = db[classes == 'OPF Line Flow']
 
     # sum over value and group by time and variable
-    df = df.groupby(['time', 'variable', 'region']).sum().reset_index()
+    df = df.groupby(['region', 'time', 'variable']).sum().reset_index()
     df['scenario'] = scenario
-    df = df[['time', 'variable', 'value', 'region','scenario']]
+    df['line'] = df['variable'].apply(lambda x: x.split("|")[1])
+    df['region'] = df['line'] + ' -> ' + df['region']
     df['time'] = pd.to_datetime(df['time'])
     df['period'] = df['time'].dt.year.astype(int)
+    df = df[['time', 'region', 'value', 'scenario']]
     return df
 
 

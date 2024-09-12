@@ -2,24 +2,22 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
-from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot, region_plot
+from profiles.silver_output.visualization_scripts.utils import total_plot, region_plot
 
 
 def render_plot(type, df, scenarios, time_size='hourly'):
     from profiles.silver_output.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['Price OPF']['name']
-    unit = plot_settings['Price OPF']['unit']
+    name = plot_settings['UC Line Flow']['name']
+    unit = plot_settings['UC Line Flow']['unit']
 
-    title = plot_settings['Price OPF'][type]['title']
-    x_axis_label = plot_settings['Price OPF'][type]['x_label']
-    y_axis_label = plot_settings['Price OPF'][type]['y_label']
+    title = plot_settings['UC Line Flow'][type]['title']
+    x_axis_label = plot_settings['UC Line Flow'][type]['x_label']
+    y_axis_label = plot_settings['UC Line Flow'][type]['y_label']
     if type == 'Total':
         fig = total_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
-    elif type == 'By Plant':
-        fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     else:
-        fig = tech_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
+        fig = region_plot.render(df, scenarios, title, x_axis_label, y_axis_label, time_size)
     return fig
 
 
@@ -35,10 +33,10 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['Total', 'By Plant', 'By Technology']],
+            data=[{'label': plot, 'value': plot} for plot in ['Total', 'By Line']],
             value='Total',
             id={
-                'type': 'silver-price_opf-plot-select',
+                'type': 'silver-uc_line_flow-plot-select',
                 'index': window_id
             },
         ),
@@ -47,7 +45,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'silver-price_opf-scenario-multi-select',
+                'type': 'silver-uc_line_flow-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -57,7 +55,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'silver-price_opf-scenario-select',
+                'type': 'silver-uc_line_flow-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -67,17 +65,17 @@ def plot(df, window_id):
             data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
             value='hourly',
             id={
-                'type': 'silver-price_opf-time_step-select',
+                'type': 'silver-uc_line_flow-time_step-select',
                 'index': window_id,
             },
             style={'display': 'block'}
         ),
 
-        dmc.Button('Download Data', id={'type': 'silver-price_opf-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'silver-uc_line_flow-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'silver-price_opf-download', 'index': window_id}),
+        dcc.Download(id={'type': 'silver-uc_line_flow-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -86,7 +84,7 @@ def plot(df, window_id):
             'type': 'figure',
             'index': window_id,
             'profile': 'silver_output',
-            'viz': 'price_opf'
+            'viz': 'uc_line_flow'
         },
         style={
             'width': '100%',

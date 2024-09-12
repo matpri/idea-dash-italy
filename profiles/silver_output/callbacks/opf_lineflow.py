@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.silver_output.visualization_scripts.uc_curtailment import render_plot
+from profiles.silver_output.visualization_scripts.opf_lineflow import render_plot
 
 
 def link(app):
@@ -10,81 +10,82 @@ def link(app):
             'type': 'figure',
             'index': ALL,
             'profile': 'silver_output',
-            'viz': 'uc_vre_curtailment'
+            'viz': 'opf_line_flow'
         }, 'figure'),
         Output({
-            'type': 'silver-uc_vre_curtailment-download',
+            'type': 'silver-opf_line_flow-download',
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'silver-uc_vre_curtailment-scenario-select',
+            'type': 'silver-opf_line_flow-scenario-select',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'silver-uc_vre_curtailment-scenario-multi-select',
+            'type': 'silver-opf_line_flow-scenario-multi-select',
             'index': ALL
         }, 'style'),
         Input({
-            'type': 'silver-uc_vre_curtailment-plot-select',
+            'type': 'silver-opf_line_flow-plot-select',
             'index': ALL
         }, 'value'),
-        
+
         Input({
-            'type': 'silver-uc_vre_curtailment-scenario-multi-select',
-            'index': ALL
-        }, 'value'),
-        Input({
-            'type': 'silver-uc_vre_curtailment-scenario-select',
+            'type': 'silver-opf_line_flow-scenario-multi-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'silver-uc_vre_curtailment-time_step-select',
+            'type': 'silver-opf_line_flow-scenario-select',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'silver-uc_vre_curtailment-download-button',
+            'type': 'silver-opf_line_flow-time_step-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'silver-opf_line_flow-download-button',
             'index': ALL
         }, 'n_clicks'),
         State({
             'type': 'figure',
             'index': ALL,
             'profile': 'silver_output',
-            'viz': 'uc_vre_curtailment'
+            'viz': 'opf_line_flow'
         }, 'figure'),
         State({
-            'type': 'silver-uc_vre_curtailment-download',
+            'type': 'silver-opf_line_flow-download',
             'index': ALL
         }, 'data'),
         State({
-            'type': 'silver-uc_vre_curtailment-scenario-select',
+            'type': 'silver-opf_line_flow-scenario-select',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'silver-uc_vre_curtailment-scenario-multi-select',
+            'type': 'silver-opf_line_flow-scenario-multi-select',
             'index': ALL
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_uc_vre_curtailment(_p_type, _scenarios, _scenario, _ts, _download, _canvas, _data, _s_style, _m_style):
-        print('updating uc_vre_curtailment plot')
+    def update_opf_line_flow(_p_type, _scenarios, _scenario, _ts, _download, _canvas, _data, _s_style, _m_style):
+        print('updating opf_line_flow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'silver-uc_vre_curtailment-download-button' in trigger_id['type']:
+        if 'silver-opf_line_flow-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'silver-uc_vre_curtailment-download-button')):
+                        (id['id']['type'] == 'silver-opf_line_flow-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['UC_VRE_Curtailment'].to_csv, "uc_vre_curtailment.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['OPF Line Flow'].to_csv,
+                                             "opf_line_flow.csv")
             return _canvas, _data, _s_style, _m_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'silver-uc_vre_curtailment-plot-select')):
+                    (id['id']['type'] == 'silver-opf_line_flow-plot-select')):
                 idx = i
                 break
 
@@ -93,17 +94,14 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['UC_VRE_Curtailment'],
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['OPF Line Flow'],
                                        _scenarios[idx], time_size=_ts[idx])
-        elif _p_type[idx] == 'By Plant':
-            _m_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Plant',
-                                       data_handler.processed_data['SILVER Output']['UC_VRE_Curtailment'],
-                                       _scenario[idx], time_size=_ts[idx])
+
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['UC_VRE_Curtailment'], _scenario[idx], time_size=_ts[idx])
+            _canvas[idx] = render_plot('By Line',
+                                       data_handler.processed_data['SILVER Output']['OPF Line Flow'],
+                                       _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

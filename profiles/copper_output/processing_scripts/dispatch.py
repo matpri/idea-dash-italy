@@ -41,6 +41,9 @@ def aggregate_db(db, scenario):
     """
     db.drop(columns=['model', "unit"], inplace=True, errors='ignore')
 
+    db['region'] = db['region'].astype(str)
+    db['variable'] = db['variable'].astype(str)
+
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])

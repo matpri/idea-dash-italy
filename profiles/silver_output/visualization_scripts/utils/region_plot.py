@@ -35,39 +35,60 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
     cols.remove('value')
     df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
 
-    df_scen['time'] = pd.to_datetime(df_scen['time'])
-    # groupby time based on time_size
-    if time_size == 'daily':
-        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
-    elif time_size == 'monthly':
-        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
-    elif time_size == 'yearly':
-        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
-    else:
-        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
-
-    cols = df_scen.columns.tolist()
-    # remove value column
-    cols.remove('value')
-    df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
-
-    can_supply = df_scen.sort_values(by=['time', 'variable'], key=lambda x: x.map(custom_sort_key))
+    can_supply = df_scen.sort_values(by=['time', 'region'], key=lambda x: x.map(custom_sort_key))
     can_emissions = can_supply[can_supply['value'] != 0]
-    techs = can_emissions.variable.unique().tolist()
+    regions = can_emissions.region.unique().tolist()
 
-    # create stacked bar chart
-    for i, tech in enumerate(techs):
-        df_tech = can_emissions[can_emissions['variable'] == tech]
-        df_tech = df_tech.sort_values(by=['time'])
+    # Determine the number of unique time entries
+    unique_times = can_emissions['time'].nunique()
+
+    # if unique_times == 1:
+    #     # Create a pie chart
+    #     fig = go.Figure(data=[go.Pie(
+    #         labels=can_emissions['region'],
+    #         values=can_emissions['value'],
+    #         hole=.3,
+    #         marker=dict(colors=[utils.get_color(region) for region in can_emissions['region']])
+    #     )])
+    #     fig.update_traces(textposition='inside', textinfo='percent+label')
+    #     fig.update_layout(
+    #         title_text=title,
+    #         annotations=[dict(text=f'Total: {can_emissions["value"].sum():.2f} {y_axis_label}', showarrow=False)]
+    #     )
+    # elif unique_times < 10:
+    #     # Create a bar plot
+    #     for region in regions:
+    #         df_region = can_emissions[can_emissions['region'] == region]
+    #         df_region = df_region.sort_values(by=['time'])
+    #         fig.add_trace(go.Bar(
+    #             x=df_region['time'],
+    #             y=df_region['value'],
+    #             name=region,
+    #             marker_color=utils.get_color(region),
+    #             hovertemplate=f'<b>{region}</b><br><br>' +
+    #                           f'Scenario: {scenario} <br>' +
+    #                           'Time: %{x}<br>' +
+    #                           f'Value: %{{y:.2f}} {y_axis_label}<br>' +
+    #                           '<extra></extra>'
+    #         ))
+    #     fig.update_layout(barmode='stack')
+    # else:
+    # Create a stacked area chart (original behavior)
+    for region in regions:
+        df_region = can_emissions[can_emissions['region'] == region]
+        df_region = df_region.sort_values(by=['time'])
         fig.add_trace(go.Scatter(
-            x=df_tech['time'],
-            y=df_tech['value'],
-            name=tech,
-            mode='lines' if len(df_tech['time']) > 1 else 'markers',
-            # set line color to respective tech color
-            line=dict(color=utils.get_color(tech)),
-            marker=dict(color=utils.get_color(tech)),
-            stackgroup='one'
+            x=df_region['time'],
+            y=df_region['value'],
+            name=region,
+            mode='lines' if unique_times > 1 else 'markers',
+            line=dict(color=utils.get_color(region)),
+            marker=dict(color=utils.get_color(region)),
+            # stackgroup='one',
+            hovertemplate=f'<b>{region}</b><br><br>' +
+                            f'Scenario: {scenario} <br>' +
+                            'Time: %{x}<br>' +
+                            '<extra></extra>'
         ))
     fig.update_yaxes(showgrid=True)
     fig.update_xaxes(
@@ -83,7 +104,6 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
             ])
         )
     )
-
 
     fig.layout.autosize = True
     return fig
