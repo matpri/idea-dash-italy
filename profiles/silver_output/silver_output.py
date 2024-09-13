@@ -19,6 +19,7 @@ uc_curtailment as uc_curtailment_callbacks,
 map_plots as map_plots_callbacks,
 opf_lineflow as opf_lineflow_callbacks,
 uc_lineflow as uc_lineflow_callbacks,
+overview as overview_callbacks
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
@@ -32,6 +33,7 @@ uc_curtailment as uc_curtailment_processing,
 map_plots as map_plots_processing,
 opf_lineflow as opf_lineflow_processing,
 uc_lineflow as uc_lineflow_processing,
+overview as overview_processing
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
@@ -45,6 +47,7 @@ uc_curtailment as uc_curtailment_viz,
 map_plots as map_plots_viz,
 opf_lineflow as opf_lineflow_viz,
 uc_lineflow as uc_lineflow_viz,
+overview as overview_viz
 )
 
 
@@ -57,6 +60,7 @@ class silverOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
+        'Overview',
         'OPF Costs',
         'OPF Results',
         'OPF Emissions',
@@ -71,6 +75,16 @@ class silverOutput(BaseProfile):
     ]
 
     viz_options = {
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
         'OPF Costs': {
             'process': opf_costs_processing.process,
             'viz': opf_costs_viz.plot,
