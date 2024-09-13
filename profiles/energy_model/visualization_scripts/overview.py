@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
 
@@ -90,7 +91,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
         df = df.sort_values(by=['time'])
 
         if group_by_model:
-            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            df[['model', 'scenario']] = df['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
             models = df.model.unique().tolist()
             for model in models:
                 data = df[df.model == model]
@@ -107,43 +108,49 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                                     fillcolor=get_model_color(model, 0.2),
                                     hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
         elif group_by_scenario:
-            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            df[['model', 'scenario']] = df['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
+
             scenarios = df.scenario.unique().tolist()
             for scenario in scenarios:
                 data = df[df.scenario == scenario]
                 sub_fig = go.Figure()
                 for i, model in enumerate(data.model.unique().tolist()):
+                    scen, version = ('|'.join(scenario.split('|')[:-1]), scenario.split('|')[-1]) if '|' in scenario else (scenario, '')
                     data_model = data[data.model == model]
                     data_model = data_model.sort_values(by=['time'])
                     pattern = get_model_pattern(model)
                     sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {scenario}',
                                         mode='lines+markers',
-                                        line=dict(color=get_scenario_color(scenario),
+                                        line=dict(color=get_scenario_color(scen),
                                                   dash=pattern,
                                                   width=2,
                                                   ),
                                         fill=None if i == 0 or not fill else 'tonexty',
-                                        fillcolor=get_scenario_color(scenario, 0.2),
+                                        fillcolor=get_scenario_color(scen, 0.2),
                                         hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
         elif group_by_version:
             versions = df.version.unique().tolist()
             for version in versions:
                 data = df[df.version == version]
+                data[['model', 'scenario']] = data['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
+                data['scenario'] = data['scenario'].apply(lambda x: '|'.join(x.split('|')[:-1]) if len(x.split('|')) > 1 else x)
                 sub_fig = go.Figure()
                 for i, model in enumerate(data.model.unique().tolist()):
                     data_model = data[data.model == model]
                     data_model = data_model.sort_values(by=['time'])
                     pattern = get_model_pattern(model)
-                    sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {version}',
-                                        mode='lines+markers',
-                                        line=dict(color=get_scenario_color(version),
-                                                  dash=pattern,
-                                                  width=2,
-                                                  ),
-                                        fill=None if i == 0 or not fill else 'tonexty',
-                                        fillcolor=get_scenario_color(version, 0.2),
-                                        hovertemplate=f'<b>{model} - {version}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                    for scenario in data_model.scenario.unique().tolist():
+                        data_scenario = data_model[data_model.scenario == scenario]
+                        sub_fig.add_scatter(x=data_scenario["time"], y=data_scenario["value"], name=f'{model} - {scenario} - {version}',
+                                            mode='lines+markers',
+                                            line=dict(color=get_scenario_color(version),
+                                                      dash=pattern,
+                                                      width=2,
+                                                      ),
+                                            fill=None if i == 0 or not fill else 'tonexty',
+                                            fillcolor=get_scenario_color(version, 0.2),
+                                            hovertemplate=f'<b>{model} - {scenario} - {version}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
 
         else:
