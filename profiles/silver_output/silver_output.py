@@ -3,8 +3,9 @@ from random import randint
 import dash_mantine_components as dmc
 import yaml
 from dash import html, dcc
+import pandas as pd
 
-from profiles.base_profile.base_profile import BaseProfile
+from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 from profiles.silver_output import utils
 from profiles.silver_output.callbacks import (
     settings as settings_callbacks,
@@ -56,8 +57,8 @@ class silverOutput(BaseProfile):
     db_name = 'silver'
     color = 'silver'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (silver) framework is an electricity system planning model. \n'
-        'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
+        'The Strategic Integration of Large-capacity Variable Energy Resources (SILVER) tool is a generic electricity network optimization tool written in Python based on object-oriented programming. \n'
+        'It has been designed to be adaptable in different dimensions: temporal, spatial, technology representation and market design.')
 
     plot_order = [
         'Overview',
@@ -164,6 +165,17 @@ class silverOutput(BaseProfile):
         settings_callbacks.link(app)
         for viz in self.viz_options:
             self.viz_options[viz]['callback'](app)
+
+    #not sure if this function should be here
+    def process_data(self, data_collection):
+        print('Base collective preprocess')
+        args = []
+        for viz_option, data in data_collection.items():
+            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+        processed_data = [data_processing_task(*arg) for arg in args]
+
+        return processed_data
+
 
     def render_settings(self):
         layout = html.Div(

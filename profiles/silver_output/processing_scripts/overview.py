@@ -25,19 +25,19 @@ def check(df):
             return True
         if uc_emissions.check(df):
             return True
-        if uc_curtailment.check(df):
+        if uc_curtailment.db_check(df):
             return True
-        if opf_results.check(df):
+        if opf_results.db_check(df):
             return True
-        if opf_emissions.check(df):
+        if opf_emissions.db_check(df):
             return True
-        if opf_curtailment.check(df):
+        if opf_curtailment.db_check(df):
             return True
         if opf_costs.check(df):
             return True
-        if opf_lineflow.check(df):
+        if opf_lineflow.db_check(df):
             return True
-        if uc_lineflow.check(df):
+        if uc_lineflow.db_check(df):
             return True
         return False
     except Exception as e:
@@ -70,19 +70,19 @@ def process(data):
             df = uc_emissions.process({scenario_name: db})
             df['variable'] = 'UC Emissions'
             dfs.append(df)
-        if uc_curtailment.check(db):
+        if uc_curtailment.db_check(db):
             df = uc_curtailment.process({scenario_name: db})
             df['variable'] = 'UC VRE Curtailment'
             dfs.append(df)
-        if opf_results.check(db):
+        if opf_results.db_check(db):
             df = opf_results.process({scenario_name: db})
             df['variable'] = 'OPF Results'
             dfs.append(df)
-        if opf_emissions.check(db):
+        if opf_emissions.db_check(db):
             df = opf_emissions.process({scenario_name: db})
             df['variable'] = 'OPF Emissions'
             dfs.append(df)
-        if opf_curtailment.check(db):
+        if opf_curtailment.db_check(db):
             df = opf_curtailment.process({scenario_name: db})
             df['variable'] = 'OPF VRE Curtailment'
             dfs.append(df)
@@ -90,17 +90,17 @@ def process(data):
             df = opf_costs.process({scenario_name: db})
             df['variable'] = 'OPF Costs'
             dfs.append(df)
-        if opf_lineflow.check(db):
+        if opf_lineflow.db_check(db):
             df = opf_lineflow.process({scenario_name: db})
             df['variable'] = 'OPF Line Flow'
             dfs.append(df)
-        if uc_lineflow.check(db):
+        if uc_lineflow.db_check(db):
             df = uc_lineflow.process({scenario_name: db})
             df['variable'] = 'UC Line Flow'
             dfs.append(df)
 
     full_df = pd.concat(dfs)
 
-    full_df = full_df[full_df['region']=='CAN']
+    # full_df = full_df[full_df['region']=='CAN']
     full_df = full_df.groupby(['scenario', 'variable','time']).sum(numeric_only=True).reset_index()
     return full_df[['scenario', 'variable', 'time', 'value']]
