@@ -58,7 +58,7 @@ def get_model_pattern(model):
     return model_patterns[model]
 
 
-def render_plot(type, df, group_by_model, group_by_scenario, can=True, fill=True):
+def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
@@ -71,11 +71,11 @@ def render_plot(type, df, group_by_model, group_by_scenario, can=True, fill=True
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
     unit = plot_info['unit']
-    return plot_overview(df, group_by_model, group_by_scenario, plot_info['title'], plot_info['x_label'],
+    return plot_overview(df, group_by_model, group_by_scenario, group_by_version, plot_info['title'], plot_info['x_label'],
                          plot_info['y_label'], name, unit, fill)
 
 
-def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label, name, unit, fill=True):
+def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title, x_label, y_label, name, unit, fill=True):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -126,6 +126,26 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                         fillcolor=get_scenario_color(scenario, 0.2),
                                         hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
+        elif group_by_version:
+            versions = df.version.unique().tolist()
+            for version in versions:
+                data = df[df.version == version]
+                sub_fig = go.Figure()
+                for i, model in enumerate(data.model.unique().tolist()):
+                    data_model = data[data.model == model]
+                    data_model = data_model.sort_values(by=['time'])
+                    pattern = get_model_pattern(model)
+                    sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {version}',
+                                        mode='lines+markers',
+                                        line=dict(color=get_scenario_color(version),
+                                                  dash=pattern,
+                                                  width=2,
+                                                  ),
+                                        fill=None if i == 0 or not fill else 'tonexty',
+                                        fillcolor=get_scenario_color(version, 0.2),
+                                        hovertemplate=f'<b>{model} - {version}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                fig.add_traces(data=sub_fig.data)
+
         else:
             scenarios = df.scenario.unique().tolist()
             for scenario in scenarios:
@@ -188,6 +208,7 @@ def plot(df, window_id):
                 {'label': 'No Grouping', 'value': 0},
                 {'label': 'Group by Model', 'value': 1},
                 {'label': 'Group by Scenario', 'value': 2},
+                {'label': 'Group by Version', 'value': 3},
             ],
             id={
                 'type': 'energy_model-overview-groupby-toggle',
@@ -233,7 +254,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, False, False),
+        figure=render_plot(classes[0], df, False, False, False),
         id={
             'type': 'figure',
             'index': window_id,
