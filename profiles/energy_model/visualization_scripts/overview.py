@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
 
@@ -90,7 +91,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
         df = df.sort_values(by=['time'])
 
         if group_by_model:
-            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            df[['model', 'scenario']] = df['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
             models = df.model.unique().tolist()
             for model in models:
                 data = df[df.model == model]
@@ -107,7 +108,7 @@ def plot_overview(df, group_by_model, group_by_scenario, title, x_label, y_label
                                     fillcolor=get_model_color(model, 0.2),
                                     hovertemplate=f'<b>{model} - {scenario}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
         elif group_by_scenario:
-            df[['model', 'scenario']] = df['scenario'].str.split('|', expand=True)
+            df[['model', 'scenario']] = df['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
             scenarios = df.scenario.unique().tolist()
             for scenario in scenarios:
                 data = df[df.scenario == scenario]
