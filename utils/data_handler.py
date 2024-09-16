@@ -257,8 +257,13 @@ class DataHandler:
 
         filename = f'{profile}|{scenario}|{author}|{db}'
 
-        if filename not in self.data:
-            self.data[filename] = {}
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
+
+        self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
@@ -282,6 +287,8 @@ class DataHandler:
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
+
+        return filename
 
     def process_data(self):
         """
@@ -410,8 +417,13 @@ class DataHandler:
                 if 'scenario' not in df.columns:
                     return False, "Scenario column is missing from the data."
 
-        if filename not in self.data:
-            self.data[filename] = {}
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
+
+        self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
@@ -441,4 +453,4 @@ class DataHandler:
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
-        return True, "Data loaded successfully!"
+        return True, "Data loaded successfully!", filename
