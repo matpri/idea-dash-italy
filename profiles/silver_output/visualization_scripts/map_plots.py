@@ -233,7 +233,7 @@ def plot(df, window_id):
                      value=0,
                      marks=date_marks,
                      tooltip={"placement": "bottom", "always_visible": True},
-                     updatemode='drag',
+                     updatemode='mouseup',
                  )],
                     style={'display': 'block'}
                  ),
