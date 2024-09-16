@@ -277,6 +277,7 @@ class energy_modelsOutput(BaseProfile):
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
 
                 data = df.copy()
+                data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
                 data['scenario'] = profile + '|' + data['scenario']
                 if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
                     unique_regions = set(data['region'].unique())
