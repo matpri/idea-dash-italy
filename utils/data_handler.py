@@ -13,6 +13,7 @@ from utils.generic_profile.generic_profile import GenericProfile
 from utils.generic_profile.callbacks import generic_callback
 
 model_mapping = {
+    'silver' : ['SILVER Output'],
     'copper': ['COPPER Output', 'Power System Models'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
@@ -256,8 +257,13 @@ class DataHandler:
 
         filename = f'{profile}|{scenario}|{author}|{db}'
 
-        if filename not in self.data:
-            self.data[filename] = {}
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
+
+        self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
@@ -282,6 +288,8 @@ class DataHandler:
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
+        return filename
+
     def process_data(self):
         """
         Process the data that has been loaded into the data handler.
@@ -290,6 +298,7 @@ class DataHandler:
 
         # Collect data from all selected profiles
         data_collection = {}
+        process_power_system = False
         for fname, data in self.data.items():
             if not fname in self.processed:
                 for profile, viz_options in data['selected'].items():
@@ -302,16 +311,18 @@ class DataHandler:
                             if data_collection[profile].get(viz) is None:
                                 data_collection[profile][viz] = {}
                             data_collection[profile][viz][scenario] = data['content'].copy()
+                    else:
+                        process_power_system = True
                 self.processed.append(fname)
 
         results = []
         for profile in data_collection.keys():
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
-        # Process profiles that are considered Power System Models
-        power_system_results=self.profiles['Power System Models'].process_data(results)
-        if power_system_results is not None:
-            results.extend(power_system_results)
+        if process_power_system:
+            power_system_results=self.profiles['Power System Models'].process_data(results)
+            if power_system_results is not None:
+                results.extend(power_system_results)
 
         # Collect results
         for profile, viz, processed_data in results:
@@ -406,8 +417,13 @@ class DataHandler:
                 if 'scenario' not in df.columns:
                     return False, "Scenario column is missing from the data."
 
-        if filename not in self.data:
-            self.data[filename] = {}
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
+
+        self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
@@ -437,4 +453,4 @@ class DataHandler:
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
-        return True, "Data loaded successfully!"
+        return True, "Data loaded successfully!", filename

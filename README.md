@@ -68,6 +68,25 @@ After following these steps, IDEA should now be running on your local system. Op
 
 Enjoy exploring and analyzing data with IDEA! Please refer to the User Guide (if available) for more details on how to use IDEA.
 
+### Repo Structure
+- **assets**: files defining style and static content
+  - **help**: definition of the pages in the help section
+- **callbacks**: functions linking to the app to create functionality of IDEA
+- **components**: visual components defining widgets and page layout (some include simple callbacks)
+- **profiles**: custom logic defined for specific data (so called model profiles)
+  - "profile name"
+    - callbacks
+    - processing_scripts
+    - visualization_scripts
+    - "profile name".py
+    - plots.yaml
+    - technologies.yaml
+- **utils**
+  - **generic_profile**: logic defining generic visualizations that are created when data does not fit any defined profiles but follow IAMC format
+  - **data_handler**: logic for loading, checking and processing data in IDEA, calls functions from profiles
+- **main.py**: instantiates app, links callbacks to app and creates starting page
+
+
 ## Extending IDEA
 
 ### How to add a New Model Profile
@@ -83,19 +102,21 @@ To keep your project organized, we recommend following this folder structure for
 ```
 - profiles
    - custom_model
-       - custom_model.py
-         - processing_scripts
-             - viz_type1.py
-             - viz_type2.py
-             - ...
-         - viz_scripts
-             - viz_type1.py
-             - viz_type2.py
-             - ...
-         - callbacks
-             - viz_type1.py
-             - viz_type2.py
-             - ...
+     - custom_model.py
+     - plots.yaml
+     - technologies.yaml
+     - processing_scripts
+         - viz_type1.py
+         - viz_type2.py
+         - ...
+     - viz_scripts
+         - viz_type1.py
+         - viz_type2.py
+         - ...
+     - callbacks
+         - viz_type1.py
+         - viz_type2.py
+         - ...
 ```
 
 This is optional, but what is necessary for IDEA to find your profile and seamlessly add it to the platform is the
@@ -174,6 +195,24 @@ The folder and the file can have any name but inside the file you must define a 
             },
             ...
         }
+        def __init__(self):
+            super().__init__()
+            self.settings = self.render_settings()
+    
+        def link(self, app):
+            settings_callbacks.link(app)
+            super().link(app)
+    
+        def render_settings(self):
+            """
+                Define layout of settings for this profile (simply and copy and paste from other profiles if no custom settings needed)
+            """
+    
+            return layout
+    
+        
+    
+        
     ```
     
    Replace `Custom Model Profile` with your specific profile name and add `viz_options`.

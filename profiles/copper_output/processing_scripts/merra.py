@@ -38,6 +38,7 @@ def process(selected: dict):
         dfs.append(df)
     full_df = pd.concat(dfs)
     full_df['region'] = full_df['region'].astype(int)
+    full_df['time'] = full_df['time'].astype(int)
     subsets = []
 
     for year in full_df['time'].unique():
