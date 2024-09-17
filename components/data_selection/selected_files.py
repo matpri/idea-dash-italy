@@ -80,7 +80,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
         if n_clicks:
             for run in selected_runs:
                 model, scenario, author, db = run.split('|')
-                data_handler.select_run(model, scenario, author, db)
+                run = data_handler.select_run(model, scenario, author, db)
                 db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
                                            radius='xl', size='xs', compact=True,
                                            variant='light',
@@ -112,7 +112,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                         counter += 1
                     file = f'{file}-{counter}'
 
-                checked, message = data_handler.check_content(file, _contents[i], extension)
+                checked, message, file = data_handler.check_content(file, _contents[i], extension)
 
                 if not checked:
                     fail = True
