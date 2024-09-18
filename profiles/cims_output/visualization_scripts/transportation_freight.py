@@ -59,7 +59,7 @@ def process_represenation(p_type, by_rep, variable, df):
         df = df[df['context'] != 'Total']
         if by_rep:
             filtered_df = df[
-                (df['technology'].isna())
+                (df['technology'].isna()) & ~df.sector.isna() & (df.short_path == df.sector)
             ]
             filtered_df = filtered_df[['region', 'context', 'year', 'value_num', 'scenario']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'context': 'variable', 'year': 'time'})

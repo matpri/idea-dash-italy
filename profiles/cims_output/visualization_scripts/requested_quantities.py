@@ -46,16 +46,35 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
         by_fuel['source'] = by_fuel['short_path'].apply(lambda x: x.split('.')[-1])
         by_fuel['target'] = by_fuel['short_path'].apply(
             lambda x: x.split('.')[-2] if len(x.split('.')) > 1 else 'Total')
-        by_fuel = by_fuel[['source', 'target', 'context', 'value_num']]
+        by_fuel['source_depth'] = by_fuel['short_path'].apply(lambda x: len(x.split('.')))
+        by_fuel['target_depth'] = by_fuel['short_path'].apply(lambda x: len(x.split('.')) - 1)
+
+        by_fuel = by_fuel[['source', 'target', 'context', 'value_num', 'source_depth', 'target_depth']]
+
+        max_depth = max(by_fuel['source_depth'].max(), by_fuel['target_depth'].max())
+
+        by_fuel['source_depth'] = 1 - by_fuel['source_depth'] / max_depth
+        by_fuel['target_depth'] = 1 -  by_fuel['target_depth'] / max_depth
 
         # map source and target to integers adding a new column for label that is the source and target separated by a comma
-        nodes = list(set(by_fuel['source'].tolist() + by_fuel['target'].tolist()))
+        nodes = []
+        x_poses = []
+        for i, row in by_fuel.iterrows():
+            if row['source'] not in nodes:
+                nodes.append(row['source'])
+                x_poses.append(row['source_depth'])
+            if row['target'] not in nodes:
+                nodes.append(row['target'])
+                x_poses.append(row['target_depth'])
         by_fuel['source_int'] = by_fuel['source'].apply(lambda x: nodes.index(x))
         by_fuel['target_int'] = by_fuel['target'].apply(lambda x: nodes.index(x))
 
         colors = [get_color(context) for context in by_fuel['context'].unique().tolist()]
         context_colors = dict(zip(by_fuel['context'].unique().tolist(), colors))
         contexts = by_fuel['context'].unique().tolist()
+
+
+
 
         fig = go.Figure(data=[go.Sankey(
             arrangement='snap',
@@ -64,6 +83,8 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
                 thickness=20,
                 line=dict(color="black", width=0.5),
                 label=nodes,
+                x = x_poses,
+
             ),
             link=dict(
                 source=by_fuel['source_int'].tolist(),
@@ -94,7 +115,7 @@ def process_represenation(df, representation, sector, service, fuel):
             (df['technology'].isna()) &
             (df['sector'] == sector)
             ]
-        filtered_df = filtered_df[filtered_df.short_path == service]
+        filtered_df = filtered_df[(filtered_df.short_path == service) & (filtered_df['context'] != 'Total')]
         filtered_df = filtered_df[['region', 'context', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'context': 'variable', 'year': 'time'})
 
@@ -104,7 +125,7 @@ def process_represenation(df, representation, sector, service, fuel):
         filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     else:
-        filtered_df = df[(df['technology'].isna()) & (df['context'] == fuel)].groupby(
+        filtered_df = df[(df['technology'].isna()) & (df['context'] == fuel) & ~df.sector.isna() & (df.short_path == df.sector)].groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
         filtered_df = filtered_df[['region', 'sector', 'year', 'value_num', 'scenario']]
