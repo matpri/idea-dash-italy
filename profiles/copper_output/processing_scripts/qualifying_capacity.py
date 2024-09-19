@@ -62,6 +62,7 @@ def process_qual_cap(winter_df, summer_df, scenario_name):
 
     # df = df[df['value'] != 0]
     df = df[~df['variable'].str.contains('retire')]
+    df = df[~df['variable'].str.contains('Retire')]
     df['value'] = df.value.div(1000)
     return df
 

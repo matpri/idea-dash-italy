@@ -1116,3 +1116,9 @@ Electricity|Gas|CC|RNG|w/o CCS:
   group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b8a'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas'
+
+'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas'
