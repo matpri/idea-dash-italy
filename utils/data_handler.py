@@ -333,6 +333,41 @@ class DataHandler:
             else:
                 self.processed_data[profile][viz] = pd.concat([self.processed_data[profile][viz], processed_data])
 
+        dfs = {}
+        classes = []
+        variables = []
+        for model, viz_option in self.processed_data.items():
+            if model == 'Power System Models' or model == 'Generic Comparison':
+                continue
+            for viz, viz_data in viz_option.items():
+                if viz == 'Overview':
+                    continue
+                columns = viz_data.columns.tolist()
+                # check if column of viz_data contains 'variable', 'value', 'region', 'time', 'scenario'
+                if all(col in columns for col in ['variable', 'value', 'region', 'time', 'scenario']):
+                    df = viz_data.copy()
+                    variables += df.variable.unique().tolist()
+                    df['variable'] = viz + '|' + df['variable']
+                    df['scenario'] = model + '|' + df['scenario']
+                    df['unit'] = 'unit'
+                    if dfs.get(viz, None) is None:
+                        dfs[viz] = [df]
+                    else :
+                        dfs[viz].append(df)
+                    classes.append(viz)
+                else:
+                    print(f"Data for {model} - {viz} does not contain the necessary columns")
+
+        if classes:
+            classes = list(set(classes))
+            profile = GenericProfile('Generic Comparison', classes, variables)
+            self.profiles['Generic Comparison'] = profile
+            self.processed_data['Generic Comparison'] = {}
+            for viz, df in zip(classes, dfs):
+                self.processed_data['Generic Comparison'][viz] = pd.concat(dfs[viz])
+        print(self.processed_data)
+
+
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
 
@@ -342,14 +377,11 @@ class DataHandler:
         :return:
         """
         viz = {}
-        for data in self.data.values():
-            for profile, viz_options in data['selected'].items():
-                if viz_options:
-                    if viz.get(profile) is None:
-                        viz[profile] = []
-                    viz[profile].extend(viz_options)
-        for profile, viz_options in viz.items():
-            viz[profile] = list(set(viz_options))
+        for model, viz_options in self.processed_data.items():
+            for viz_name in viz_options.keys():
+                if viz.get(model) is None:
+                    viz[model] = []
+                viz[model].append(viz_name)
         return viz
 
     def load_profiles(self):
@@ -454,3 +486,5 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return True, "Data loaded successfully!", filename
+
+
