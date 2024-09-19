@@ -10,6 +10,8 @@ scenario_colors = {}
 scenario_patterns = {}
 model_colors = {}
 model_patterns = {}
+version_colors = {}
+version_patterns = {}
 
 def color_to_rgba(color, alpha=0.2):
     import colorsys
@@ -46,6 +48,20 @@ def get_model_color(model, alpha=0.8):
 
     return color
 
+def get_version_color(version, alpha=0.8):
+    alpha = round(alpha, 1)
+    if version not in version_colors:
+        if len(version_colors) >= len(colors):
+            hue = (len(version_colors) * 360 / 20) % 360
+            saturation = 50 + (len(version_colors) * 15 % 50)
+            lightness = 50 + (len(version_colors) * 15 % 50)
+            version_colors[version] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)")
+        else:
+            version_colors[version] = colors[len(version_colors)]
+    color = version_colors[version]
+
+    return color
+
 
 def get_scenario_pattern(scenario):
     if scenario not in scenario_patterns:
@@ -58,6 +74,10 @@ def get_model_pattern(model):
         model_patterns[model] = patterns[len(model_patterns) % len(patterns)]
     return model_patterns[model]
 
+def get_version_pattern(model):
+    if model not in version_patterns:
+        version_patterns[model] = patterns[len(version_patterns) % len(patterns)]
+    return version_patterns[model]
 
 def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True):
     from profiles.energy_model.utils import plot_settings
@@ -118,8 +138,8 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                     scen, version = ('|'.join(scenario.split('|')[:-1]), scenario.split('|')[-1]) if '|' in scenario else (scenario, '')
                     data_model = data[data.model == model]
                     data_model = data_model.sort_values(by=['time'])
-                    pattern = get_model_pattern(model)
-                    sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {scenario}',
+                    pattern = get_model_pattern(f'{model} - {scen}')
+                    sub_fig.add_scatter(x=data_model["time"], y=data_model["value"], name=f'{model} - {scen} - {version}',
                                         mode='lines+markers',
                                         line=dict(color=get_scenario_color(scen),
                                                   dash=pattern,
@@ -136,20 +156,20 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                 data[['model', 'scenario']] = data['scenario'].apply(lambda x: pd.Series([x.split('|')[0], '|'.join(x.split('|')[1:])]))
                 data['scenario'] = data['scenario'].apply(lambda x: '|'.join(x.split('|')[:-1]) if len(x.split('|')) > 1 else x)
                 sub_fig = go.Figure()
-                for i, model in enumerate(data.model.unique().tolist()):
+                for _, model in enumerate(data.model.unique().tolist()):
                     data_model = data[data.model == model]
                     data_model = data_model.sort_values(by=['time'])
-                    pattern = get_model_pattern(model)
-                    for scenario in data_model.scenario.unique().tolist():
+                    for i, scenario in enumerate(data_model.scenario.unique().tolist()):
+                        pattern = get_version_pattern(scenario)
                         data_scenario = data_model[data_model.scenario == scenario]
                         sub_fig.add_scatter(x=data_scenario["time"], y=data_scenario["value"], name=f'{model} - {scenario} - {version}',
                                             mode='lines+markers',
-                                            line=dict(color=get_scenario_color(version),
+                                            line=dict(color=get_version_color(version),
                                                       dash=pattern,
                                                       width=2,
                                                       ),
                                             fill=None if i == 0 or not fill else 'tonexty',
-                                            fillcolor=get_scenario_color(version, 0.2),
+                                            fillcolor=get_version_color(version, 0.2),
                                             hovertemplate=f'<b>{model} - {scenario} - {version}</b><br><br>' + 'Year: %{x}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
                 fig.add_traces(data=sub_fig.data)
 
