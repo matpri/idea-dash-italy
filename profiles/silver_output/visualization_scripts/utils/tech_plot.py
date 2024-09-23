@@ -56,7 +56,7 @@ def render(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
             title_text=title,
             annotations=[dict(text=f'Total: {can_emissions["value"].sum():.2f} {y_axis_label}', showarrow=False)]
         )
-    elif unique_times < 10:
+    elif unique_times < 12:
         # Create a bar plot
         for tech in techs:
             df_tech = can_emissions[can_emissions['variable'] == tech]
