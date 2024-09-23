@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -19,7 +19,8 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
         num_years = df_scen.time.nunique()
-        scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
+
+        scen_patterns = pattern_list * num_years if pattern_list else [utils.pattern_from_key(scen) for scen in scenarios] * num_years
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]

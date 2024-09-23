@@ -5,7 +5,7 @@ from utils.generic_profile import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -26,7 +26,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
             x = []
             x.append(data["region"].values)
             x.append(data['scenario'].values)
-            scen_patterns = [utils.pattern_from_key(scen) for scen in data['scenario'].values]
+            scen_patterns = pattern_list if pattern_list else [utils.pattern_from_key(scen) for scen in scenarios]
 
             if aggregate:
                 color = utils.get_group_colors(tech)

@@ -8,6 +8,7 @@ from utils.generic_profile.callbacks import generic_callback, settings
 from utils.generic_profile.processing_scripts import generic_processing
 from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
 
+plotly_pattern_list = ['', '/', 'x', '-', '|', '+', '.', '\\']
 
 def data_processing_task(profile_name, viz, data, processing_func):
     # try:
@@ -42,9 +43,10 @@ class GenericProfile:
         self.plot_order.sort()
 
         self.viz_options = {}
+        self.pattern_dict = {}
 
         for class_name in classes:
-            plot = create_generic_plots(name, class_name)
+            plot = create_generic_plots(name, class_name, self)
             self.viz_options[class_name] = {
                 'check': generic_processing.create_check(class_name, name),
                 'db_check': generic_processing.create_check(class_name, name),
@@ -56,6 +58,12 @@ class GenericProfile:
     def link(self, app):
         generic_callback.link(app)
         settings.link(app)
+
+
+    def pattern_from_key(self, key):
+        if key not in self.pattern_dict:
+            self.pattern_dict[key] = plotly_pattern_list[len(self.pattern_dict) % len(plotly_pattern_list)]
+        return self.pattern_dict[key]
 
     def process_data(self, data_collection):
         args = []
