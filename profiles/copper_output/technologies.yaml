@@ -1117,7 +1117,7 @@ Electricity|Gas|CC|RNG|w/o CCS:
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas'
 
-  'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas':
+'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
   group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff4786'
