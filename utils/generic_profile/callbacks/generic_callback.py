@@ -242,6 +242,21 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx], pattern_list=patterns)
+        elif _p_type[idx] == 'Trend in one Years':
+            _m_style[idx] = {'display': 'none'}
+            _r_style[idx] = {'display': 'block'}
+            _y_style[idx] = {'display': 'block'}
+            _s_style[idx] = {'display': 'block'}
+            _pattern_style[idx] = {'display': 'none'}
+            _text_style[idx] = {'display': 'none'}
+            if _aggregates[idx] is not None:
+                _canvas[idx] = render_plot('Trend in one Years',
+                                           name,
+                                           data_handler.processed_data[model][name],
+                                           _aggregates[idx],
+                                           _scenarios[idx],
+                                           _regions[idx],
+                                           _years[idx], scenario=_scenario[idx], pattern_list=patterns)
 
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
