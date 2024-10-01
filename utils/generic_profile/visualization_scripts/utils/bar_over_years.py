@@ -65,6 +65,9 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
 def subset(df, region, scenarios, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
+    df_scen['time'] = pd.to_datetime(df_scen['time'])
+    df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+
 
     # Remove the years where all entries in the value column are 0
     value_sum_per_year = df_scen.groupby('time')['value'].sum()

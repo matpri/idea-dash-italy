@@ -62,6 +62,8 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
 
 def subset(df, year, scenarios, aggregate, season=None):
     df_scen = df.copy(deep=True)
+    df_scen['time'] = pd.to_datetime(df_scen['time'])
+    df_scen['time'] = df_scen['time'].dt.strftime('%Y')
     df_scen = df_scen[df_scen['region'] != 'CAN']
     regions = df_scen['region'].unique().tolist()
     if season is not None:

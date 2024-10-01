@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+import pandas as pd
 from dash import html, dcc
 
 from utils.generic_profile.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
@@ -28,7 +29,7 @@ def create_generic_plots(model, name, profile):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
-        years = df['time'].unique().tolist()
+        years = pd.to_datetime(df['time']).dt.strftime('%Y').unique().tolist()
 
         by_year_widgets = dmc.Select(
             label='Region',
