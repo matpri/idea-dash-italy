@@ -10,6 +10,7 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
 from profiles.energy_model.callbacks import (
     overview as overview_callbacks,
+    output_stats as output_stats_callbacks,
     matrix as matrix_callbacks,
     emissions as emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
@@ -30,6 +31,7 @@ from profiles.energy_model.callbacks import (
 )
 from profiles.energy_model.processing_scripts import (
     overview as overview_processing,
+    output_stats as output_stats_processing,
     matrix as matrix_processing,
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
@@ -46,6 +48,7 @@ from profiles.energy_model.processing_scripts import (
 )
 from profiles.energy_model.visualization_scripts import (
     overview as overview_viz,
+    output_stats as output_stats_viz,
     matrix as matrix_viz,
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
@@ -76,6 +79,7 @@ class energy_modelsOutput(BaseProfile):
         'It represents each models output as its own scenario which allows for easy inter model comparisons')
 
     plot_order = [
+        'Output Stats',
         'Overview',
         'Heatmap',
         'Comparison',
@@ -103,6 +107,16 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+            },
+        'Output Stats':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': output_stats_viz.plot,
+                'callback': output_stats_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
             },
@@ -271,7 +285,11 @@ class energy_modelsOutput(BaseProfile):
 
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
+        make_heatmap = False
         for profile, viz_option, df in data_collection:
+            if viz_option == 'Heatmap':
+                make_heatmap = True
+                continue
             print(profile, viz_option)
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
@@ -279,7 +297,7 @@ class energy_modelsOutput(BaseProfile):
                 data = df.copy()
                 data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
                 data['scenario'] = profile + '|' + data['scenario']
-                if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
+                if not viz_option in ['Overview', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
                     unique_regions = set(data['region'].unique())
 
                     # Check if both 'A' and 'B' are in the unique values
@@ -309,8 +327,20 @@ class energy_modelsOutput(BaseProfile):
                 elif 'period' in data.columns:
                     data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
+        if make_heatmap:
+            processed_data['Heatmap'] = processed_data['Overview'].copy()
 
-        processed_data['Heatmap'] = processed_data['Overview'].copy()
+        output_stats = processed_data['Overview'][0].copy()
+        stats = []
+        for c in output_stats.variable.unique():
+            if c in self.viz_options:
+                data = output_stats[output_stats.variable == c]
+                # last year time step
+                data['time'] = pd.to_datetime(data['time'], format='%Y')
+                data = data[data['time'] == data['time'].max()]
+                stats.append(data)
+        processed_data['Output Stats'] = stats
+
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
         dfs = []
