@@ -1,36 +1,61 @@
 import dash_mantine_components as dmc
 import pandas as pd
+import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
 
 
+def get_contrasting_font_color(rgb_color):
+    """Get a contrasting font color (black or white) based on the background color brightness."""
+    r, g, b = [int(x) for x in rgb_color[4:-1].split(',')]
+    brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
+    return '#ffffff' if brightness < 128 else '#000000'
+
 def render_plot(df, *args, **kwargs):
     # Create a Plotly table
     db = df.copy()
-    db =  db[db.region == 'CAN']
+    db = db[db.region == 'CAN']
     db = db[['scenario', 'variable', 'value']]
     df_pivot = db.pivot(index='variable', columns='scenario', values='value')
     # Create a Plotly Table
-    header_values = ['Variable'] + list(df_pivot.columns)
+    header_values = [''] + list(df_pivot.columns)
     cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
+    min_value = db.value.min()
+    max_value = db.value.max()
+    normalized_data = (db.value - min_value) / (max_value - min_value)
+    # Get colors from a continuous color scale (e.g., Viridis)
+    colors = [px.colors.sample_colorscale('Viridis', value)[0] for value in normalized_data]
+
+    colors_by_row = [['#ffffff'] * len(df_pivot.index)] + [colors]# Determine font colors based on the background color
+    font_colors = [['#000000'] * len(df_pivot.index)] + [[get_contrasting_font_color(color) for color in colors]]
+    # Calculate the width for each column
+    column_width = []
+    column_width.append(max(df_pivot.index.str.len()) * 8)
+    for col in df_pivot.columns:
+        column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+
+
+    print(column_width)
+
+
     # Create Plotly table
-
-
     fig = go.Figure(data=[go.Table(
+        columnorder = [i+1 for i in range(len(df_pivot.columns) + 1)],
+        columnwidth=column_width,
         header=dict(values=header_values,
-                    fill_color='paleturquoise',
-                    align='left'),
+                    fill_color=['#ffffff', '#248ce6', '#248ce6'],
+                    font=dict(color='white'),
+                    align='center'),
         cells=dict(values=cell_values,
-                   fill_color=[['#ffebcc'] * len(cell_values[0])] + [[('lavender' if v < 0 else '#ccffcc') for v in col] for
-                                                                     col in cell_values[1:]],
+                   fill_color=colors_by_row,
+                   line_color= colors_by_row,
+                   font=dict(color=font_colors),
+
                    align='left'))
     ])
 
-
     return fig
-
-
 
 
 def plot(df, window_id):
