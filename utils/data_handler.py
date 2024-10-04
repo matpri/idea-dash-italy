@@ -6,6 +6,7 @@ import multiprocessing as mp
 from typing import Tuple, Callable
 from collections import defaultdict
 
+import chardet
 import pandas as pd
 
 import profiles
@@ -427,9 +428,18 @@ class DataHandler:
                 # Combine all DataFrames into one
                 df = pd.concat(df_list, ignore_index=True)
             else:
-                df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
+                # Detect the encoding using chardet
+                detected_encoding = chardet.detect(decoded)['encoding']
+                print(f"Detected encoding: {detected_encoding}")
+
+                # Use the detected encoding to decode the file content
+                df = pd.read_csv(io.StringIO(decoded.decode(detected_encoding)))
         except pd.errors.EmptyDataError:
             df = pd.DataFrame()
+        except UnicodeDecodeError as e:
+            print(f"Decoding error: {e}")
+            # Fallback to a common alternative encoding (ISO-8859-1)
+            df = pd.read_csv(io.StringIO(decoded.decode('ISO-8859-1')))
 
 
         # make all headers lowercase
