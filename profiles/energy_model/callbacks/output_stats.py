@@ -102,7 +102,7 @@ def link(app):
         if _scenarios[idx] != 'ALL':
             df = df[df['scenario'].str.contains(_scenarios[idx])]
 
-        _canvas[idx] = render_plot(_p_type[idx], df,
+        _canvas[idx] = render_plot(df,
                                    _groupby_model, _groupby_scenario, _groupby_version, _region[idx]=='CAN', _fill[idx])
 
         _fillswitch[idx] = {'display': 'none'}
