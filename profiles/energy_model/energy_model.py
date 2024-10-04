@@ -330,16 +330,18 @@ class energy_modelsOutput(BaseProfile):
         if make_heatmap:
             processed_data['Heatmap'] = processed_data['Overview'].copy()
 
-        output_stats = processed_data['Overview'][0].copy()
-        stats = []
-        for c in output_stats.variable.unique():
-            if c in self.viz_options:
-                data = output_stats[output_stats.variable == c]
-                # last year time step
-                data['time'] = pd.to_datetime(data['time'], format='%Y')
-                data = data[data['time'] == data['time'].max()]
-                stats.append(data)
-        processed_data['Output Stats'] = stats
+        output_stats = []
+
+        if 'Overview' in processed_data:
+            for p_data in processed_data['Overview']:
+                for c in p_data.variable.unique():
+                    if c in self.viz_options:
+                        data = p_data[p_data.variable == c]
+                        # last year time step
+                        data['time'] = pd.to_datetime(data['time'], format='%Y')
+                        data = data[data['time'] == data['time'].max()]
+                        output_stats.append(data)
+        processed_data['Output Stats'] = output_stats
 
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 

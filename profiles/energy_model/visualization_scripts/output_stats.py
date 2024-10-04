@@ -1,4 +1,5 @@
 import dash_mantine_components as dmc
+import numpy as np
 import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
@@ -7,6 +8,7 @@ from dash import html, dcc
 
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
+    print(rgb_color)
     r, g, b = [int(x) for x in rgb_color[4:-1].split(',')]
     brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
     return '#ffffff' if brightness < 128 else '#000000'
@@ -17,18 +19,31 @@ def render_plot(df, *args, **kwargs):
     db = db[db.region == 'CAN']
     db = db[['scenario', 'variable', 'value']]
     df_pivot = db.pivot(index='variable', columns='scenario', values='value')
+    # fill na with ''
+    df_pivot = df_pivot.fillna('')
     # Create a Plotly Table
     header_values = [''] + list(df_pivot.columns)
     cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
-    min_value = db.value.min()
-    max_value = db.value.max()
-    normalized_data = (db.value - min_value) / (max_value - min_value)
-    # Get colors from a continuous color scale (e.g., Viridis)
-    colors = [px.colors.sample_colorscale('Viridis', value)[0] for value in normalized_data]
+    min_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+    max_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
 
-    colors_by_row = [['#ffffff'] * len(df_pivot.index)] + [colors]# Determine font colors based on the background color
-    font_colors = [['#000000'] * len(df_pivot.index)] + [[get_contrasting_font_color(color) for color in colors]]
+    def normalize(value):
+        if isinstance(value, (int, float)):
+            return (value - min_value) / (max_value - min_value)
+        return None
+
+    colors = []
+
+    for col in df_pivot.columns:
+        normalized_data = [normalize(val) for val in df_pivot[col]]
+        colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in normalized_data])]
+
+
+    colors_by_row = [['#ffffff', '#e5eeec' ] * (len(df_pivot.index) //2)] + colors# Determine font colors based on the background color
+    font_colors = [['#000000'] * len(df_pivot.index)]
+    for column in colors:
+        font_colors.append([get_contrasting_font_color(color) for color in column])
     # Calculate the width for each column
     column_width = []
     column_width.append(max(df_pivot.index.str.len()) * 8)
