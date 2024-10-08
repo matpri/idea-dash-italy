@@ -71,6 +71,10 @@ def aggregate_db(db, scenario):
 
     transmission_df = db[classes == 'Flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+    # flip region and variable
+    transmission_df['region'], transmission_df['variable'] = transmission_df['variable'], transmission_df['region']
+
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
