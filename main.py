@@ -1,3 +1,4 @@
+import os
 import webbrowser
 from threading import Timer
 
@@ -20,6 +21,9 @@ external_stylesheets = [
 app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=external_stylesheets)
 
+# get all files in data folder that end either with csv or xlsx
+data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx')]
+
 # initialize data handler which will deal with all data related operations
 data_handler: DataHandler = DataHandler()
 
@@ -34,11 +38,15 @@ plot_handling.link(app)
 help_handling.link(app)
 selected_files.link(app)
 
+print(data_files)
+print(bool(data_files))
+data_handler.preload_data(data_files)
+
 app.layout = html.Div([
     header.render(app),
     html.Div([
         dlc.BoxPanel([
-            plot_canvas.render(),
+            plot_canvas.render(bool(data_files)),
         ], id='test', addToDom=True),
         sidebar.render(),
         data_modal.render(app),
