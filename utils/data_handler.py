@@ -506,18 +506,24 @@ class DataHandler:
                 counter += 1
             filename = f'{filename}_{counter}'
 
-        self.data[filename] = {}
-
-        self.data[filename]['content'] = df
-
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
 
         profile_options = model_mapping.get(model, None)
         if profile_options is None:
-            profile = create_generic_profile(df, model)
-            self.profiles[profile.name] = profile
-            profile_options = [profile.name]
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.name] = profile
+                profile_options = [profile.name]
+
+            else:
+                return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
+
+
+        self.data[filename] = {}
+
+        self.data[filename]['content'] = df
 
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
