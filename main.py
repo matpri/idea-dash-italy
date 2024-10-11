@@ -1,6 +1,7 @@
 import os
 import webbrowser
 from threading import Timer
+import argparse  # Import argparse for CLI argument parsing
 
 import dash
 import dash_lumino_components as dlc
@@ -12,6 +13,14 @@ from components import ids, header, plot_canvas, sidebar
 from components.data_selection import data_modal, selected_files
 from components.help import help
 from utils.data_handler import DataHandler
+
+# Set up argument parser
+parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
+parser.add_argument('--show-header', type=bool, default=True, 
+                    help='Set to True to show header, False to hide it.')
+args = parser.parse_args()  # Parse the arguments
+
+show_header = args.show_header  # Use the CLI argument to set show_header
 
 # setting up the app
 external_stylesheets = [
@@ -42,25 +51,47 @@ print(data_files)
 print(bool(data_files))
 data_handler.preload_data(data_files)
 
-app.layout = html.Div([
-    header.render(app),
-    html.Div([
-        dlc.BoxPanel([
-            plot_canvas.render(bool(data_files)),
-        ], id='test', addToDom=True),
-        sidebar.render(),
-        data_modal.render(app),
-        help.render(),
+if show_header:
+    app_layout = [
+        header.render(app),
+        html.Div([
+            dlc.BoxPanel([
+                plot_canvas.render(bool(data_files)),
+            ], id='test', addToDom=True),
+            sidebar.render(),
+            data_modal.render(app),
+            help.render(),
 
-        # component to represent data change (hidden)
-        html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
-        html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
-        html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
-        html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+            # component to represent data change (hidden)
+            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
 
-    ], id=ids.CONTENT,
-    )
-])
+        ], id=ids.CONTENT,
+        )
+    ]
+else:
+    app_layout = [
+        html.Div([
+            dlc.BoxPanel([
+                plot_canvas.render(bool(data_files)),
+            ], id='test', addToDom=True),
+            sidebar.render(),
+            data_modal.render(app),
+            help.render(),
+
+            # component to represent data change (hidden)
+            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+
+        ], id=ids.CONTENT,
+        )
+    ]
+
+app.layout = html.Div(app_layout)
 
 
 def open_browser(port:int):
