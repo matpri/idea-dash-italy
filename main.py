@@ -16,12 +16,14 @@ from utils.data_handler import DataHandler
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
-parser.add_argument('--show-header', type=bool, default=True, 
-                    help='Set to True to show header, False to hide it.')
+parser.add_argument('--show-header', type=str, default='True',
+                    help='Set to "True" to show header, "False" to hide it.')
 args = parser.parse_args()  # Parse the arguments
 
-show_header = args.show_header  # Use the CLI argument to set show_header
-
+# Convert string to boolean
+show_header = args.show_header.lower() == 'true'
+print(f"Show header: {show_header}")  # Debugging statement
+print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
@@ -105,6 +107,8 @@ def open_browser(port:int):
 
 
 if __name__ == '__main__':
+    print("Starting the application...")  # Debugging statement
+    
     port = 8050  # or simply open on the default `8050` port
     Timer(1, open_browser, args=[port]).start()
     app.run_server(port=port)
