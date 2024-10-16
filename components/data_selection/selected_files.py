@@ -139,7 +139,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
         if fail:
             return dash.no_update, dash.no_update, dash.no_update, dash.no_update, [
                 dmc.Alert(
-                    f'Message', color='red', title='Error',
+                    message, color='red', title='Error',
                     withCloseButton=True
                 ) for message in messages
             ]
