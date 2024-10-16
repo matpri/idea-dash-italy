@@ -1,5 +1,7 @@
+import os
 import webbrowser
 from threading import Timer
+import argparse  # Import argparse for CLI argument parsing
 
 import dash
 import dash_lumino_components as dlc
@@ -12,6 +14,16 @@ from components.data_selection import data_modal, selected_files
 from components.help import help
 from utils.data_handler import DataHandler
 
+# Set up argument parser
+parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
+parser.add_argument('--show-header', type=str, default='True',
+                    help='Set to "True" to show header, "False" to hide it.')
+args = parser.parse_args()  # Parse the arguments
+
+# Convert string to boolean
+show_header = args.show_header.lower() == 'true'
+print(f"Show header: {show_header}")  # Debugging statement
+print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [
     'https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css',
@@ -19,6 +31,9 @@ external_stylesheets = [
 ]
 app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=external_stylesheets)
+
+# get all files in data folder that end either with csv or xlsx
+data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx')]
 
 # initialize data handler which will deal with all data related operations
 data_handler: DataHandler = DataHandler()
@@ -34,25 +49,51 @@ plot_handling.link(app)
 help_handling.link(app)
 selected_files.link(app)
 
-app.layout = html.Div([
-    header.render(app),
-    html.Div([
-        dlc.BoxPanel([
-            plot_canvas.render(),
-        ], id='test', addToDom=True),
-        sidebar.render(),
-        data_modal.render(app),
-        help.render(),
+print(data_files)
+print(bool(data_files))
+data_handler.preload_data(data_files)
 
-        # component to represent data change (hidden)
-        html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
-        html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
-        html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
-        html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+if show_header:
+    app_layout = [
+        header.render(app),
+        html.Div([
+            dlc.BoxPanel([
+                plot_canvas.render(bool(data_files)),
+            ], id='test', addToDom=True),
+            sidebar.render(),
+            data_modal.render(app),
+            help.render(),
 
-    ], id=ids.CONTENT,
-    )
-])
+            # component to represent data change (hidden)
+            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+
+        ], id=ids.CONTENT,
+        )
+    ]
+else:
+    app_layout = [
+        html.Div([
+            dlc.BoxPanel([
+                plot_canvas.render(bool(data_files)),
+            ], id='test', addToDom=True),
+            sidebar.render(),
+            data_modal.render(app),
+            help.render(),
+
+            # component to represent data change (hidden)
+            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+
+        ], id=ids.CONTENT,
+        )
+    ]
+
+app.layout = html.Div(app_layout)
 
 
 def open_browser(port:int):
@@ -66,6 +107,8 @@ def open_browser(port:int):
 
 
 if __name__ == '__main__':
+    print("Starting the application...")  # Debugging statement
+    
     port = 8050  # or simply open on the default `8050` port
     Timer(1, open_browser, args=[port]).start()
     app.run_server(port=port)

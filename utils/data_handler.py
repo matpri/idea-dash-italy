@@ -1,6 +1,7 @@
 import base64
 import io
 import json
+import os
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
@@ -189,6 +190,44 @@ class DataHandler:
         self.processed_data = {}
         self.viz = {}
         self.runs = pd.DataFrame()
+
+    def preload_data(self, data_files):
+        data_files = [file for file in data_files if file not in self.data.keys()]
+        fail = False
+        for file in data_files:
+            print('Preloading', file)
+            f_name, extension = os.path.splitext(file)
+            if extension == '.csv':
+                df = pd.read_csv(os.path.join('data', file))
+            elif extension == '.xlsx':
+                dfs = []
+                xls = pd.ExcelFile(os.path.join('data', file))
+                for sheet in xls.sheet_names:
+                    _df = xls.parse(sheet)
+                    # infer types of the column names
+                    _df.columns = _df.columns.astype(str)
+                    dfs.append(_df)
+                # Combine all DataFrames into one
+                df = pd.concat(dfs, ignore_index=True)
+            else:
+                fail = True
+                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                continue
+
+            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+            if not checked:
+                fail = True
+            else:
+                profiles = list(self.data[file]['visualizations'].keys())
+                colors = []
+                for p in profiles:
+                    colors.append(self.profiles[p].color)
+
+        if fail:
+            print(fail)
+
+        self.process_data()
+
 
 
     def select_run(self, profile, scenario, author,db):
@@ -404,42 +443,44 @@ class DataHandler:
             profile.link(app)
         generic_callback.link(app)
 
-    def check_content(self, filename, content, extension):
+    def check_content(self, filename, content, extension, encoded=True):
         if content is None:
             return
+        if encoded:
+            # decode the content string
+            content_type, content_string = content.split(',')
+            decoded = base64.b64decode(content_string)
 
-        # decode the content string
-        content_type, content_string = content.split(',')
-        decoded = base64.b64decode(content_string)
+            try:
+                if extension == 'xlsx':
+                    xls = pd.ExcelFile(io.BytesIO(decoded))
+                    # Get all sheet names
+                    sheet_names = xls.sheet_names
+                    # Read all sheets into a DataFrame list
+                    df_list = []
+                    for sheet in sheet_names:
+                        print(sheet)
+                        _df = xls.parse(sheet)
+                        # infer types of the column names
+                        _df.columns = _df.columns.astype(str)
+                        df_list.append(_df)
+                    # Combine all DataFrames into one
+                    df = pd.concat(df_list, ignore_index=True)
+                else:
+                    # Detect the encoding using chardet
+                    detected_encoding = chardet.detect(decoded)['encoding']
+                    print(f"Detected encoding: {detected_encoding}")
 
-        try:
-            if extension == 'xlsx':
-                xls = pd.ExcelFile(io.BytesIO(decoded))
-                # Get all sheet names
-                sheet_names = xls.sheet_names
-                # Read all sheets into a DataFrame list
-                df_list = []
-                for sheet in sheet_names:
-                    print(sheet)
-                    _df = xls.parse(sheet)
-                    # infer types of the column names
-                    _df.columns = _df.columns.astype(str)
-                    df_list.append(_df)
-                # Combine all DataFrames into one
-                df = pd.concat(df_list, ignore_index=True)
-            else:
-                # Detect the encoding using chardet
-                detected_encoding = chardet.detect(decoded)['encoding']
-                print(f"Detected encoding: {detected_encoding}")
-
-                # Use the detected encoding to decode the file content
-                df = pd.read_csv(io.StringIO(decoded.decode(detected_encoding)))
-        except pd.errors.EmptyDataError:
-            df = pd.DataFrame()
-        except UnicodeDecodeError as e:
-            print(f"Decoding error: {e}")
-            # Fallback to a common alternative encoding (ISO-8859-1)
-            df = pd.read_csv(io.StringIO(decoded.decode('ISO-8859-1')))
+                    # Use the detected encoding to decode the file content
+                    df = pd.read_csv(io.StringIO(decoded.decode(detected_encoding)))
+            except pd.errors.EmptyDataError:
+                df = pd.DataFrame()
+            except UnicodeDecodeError as e:
+                print(f"Decoding error: {e}")
+                # Fallback to a common alternative encoding (ISO-8859-1)
+                df = pd.read_csv(io.StringIO(decoded.decode('ISO-8859-1')))
+        else:
+            df = content
 
 
         # make all headers lowercase
@@ -465,18 +506,24 @@ class DataHandler:
                 counter += 1
             filename = f'{filename}_{counter}'
 
-        self.data[filename] = {}
-
-        self.data[filename]['content'] = df
-
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
 
         profile_options = model_mapping.get(model, None)
         if profile_options is None:
-            profile = create_generic_profile(df, model)
-            self.profiles[profile.name] = profile
-            profile_options = [profile.name]
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.name] = profile
+                profile_options = [profile.name]
+
+            else:
+                return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
+
+
+        self.data[filename] = {}
+
+        self.data[filename]['content'] = df
 
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
