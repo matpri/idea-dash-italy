@@ -27,11 +27,11 @@ def render(app):
                             variant='subtle',
                             id={'type': 'open-modal', 'index': 'help'}
                         ),
-                        # dmc.Button(
-                        #     'Contact',
-                        #     variant='subtle',
-                        #     id=ids.CONTACT_MENU
-                        # ),
+                        dmc.Button(
+                            'Save',
+                            variant='subtle',
+                            id=ids.SAVE_BUTTON
+                        ),
                     ], spacing=1)
                 ], height=HEIGHT, id=ids.HEADER
             ),

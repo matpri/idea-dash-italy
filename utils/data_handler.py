@@ -2,6 +2,7 @@ import base64
 import io
 import json
 import os
+import pickle
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
@@ -543,5 +544,27 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return True, "Data loaded successfully!", filename
+
+    def save(self, filename):
+        """
+        Save self.data, self.processed_data, self.processedto a file.
+        :param filename: The name of the file to save the data handler to.
+        :return:
+        """
+
+        # pickle self.data, self.processed_data, self.processed to a file
+        with open(filename, 'wb') as f:
+            pickle.dump([self.data, self.processed_data, self.processed], f)
+
+
+    def load(self, filename):
+        """
+        Load self.data, self.processed_data, self.processed from a file.
+        :param filename: The name of the file to load the data handler from.
+        :return:
+        """
+        with open(filename, 'rb') as f:
+            self.data, self.processed_data, self.processed = pickle.load(f)
+
 
 
