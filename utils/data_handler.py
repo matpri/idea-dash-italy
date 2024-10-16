@@ -452,12 +452,12 @@ class DataHandler:
                 if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
                     diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
                     print(f"Columns missing in {filename}", diff)
-                    return False, f"These Columns were expected: {diff}"
+                    return False, f"These Columns were expected: {diff}", filename
 
             else:
                 # make sure scenario is in the columns
                 if 'scenario' not in df.columns:
-                    return False, "Scenario column is missing from the data."
+                    return False, "Scenario column is missing from the data.", filename
 
         if filename in self.data:
             counter = 1
