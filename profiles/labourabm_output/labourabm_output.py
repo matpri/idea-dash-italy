@@ -9,6 +9,7 @@ from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 from profiles.labourabm_output import utils
 from profiles.labourabm_output.callbacks import (
     settings as settings_callbacks,
+    total_unemployment as total_unemployment_callbacks
 )
 
 from profiles.labourabm_output.processing_scripts import (
@@ -38,7 +39,7 @@ class labourabmOutput(BaseProfile):
         'Total Unemployment': {
             'process': total_unemployment_process.process,
             'viz': total_unemployment_viz.plot,
-            'callback': lambda x: print('Not Implemented'),
+            'callback': total_unemployment_callbacks.link,
             'check': total_unemployment_process.check,
         }
     }
