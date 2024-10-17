@@ -1,0 +1,18 @@
+# service.yaml
+apiVersion: v1
+kind: Service
+metadata:
+  name: data-visualization-service
+spec:
+  type: NodePort
+  selector:
+    app: data-visualization-app
+  ports:
+  - protocol: TCP
+    port: 80
+    targetPort: 8050 # Replace with the port your application listens on
+    nodePort: 31893 # Choose a node port within the range 30000-32767
+  sessionAffinity: ClientIP
+  sessionAffinityConfig:
+    clientIP:
+      timeoutSeconds: 600
