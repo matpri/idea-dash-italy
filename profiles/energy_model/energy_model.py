@@ -68,6 +68,7 @@ power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Out
 
 
 class energy_modelsOutput(BaseProfile):
+    display_name = 'Power System Models'
     name = 'Power System Models'
     db_name = 'energy_models'
     color = 'yellow 8'
@@ -311,7 +312,7 @@ class energy_modelsOutput(BaseProfile):
                 processed_data[viz_option].append(data)
 
         processed_data['Heatmap'] = processed_data['Overview'].copy()
-        results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
+        results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
         dfs = []
         for _, viz_option, df in results:
@@ -322,7 +323,7 @@ class energy_modelsOutput(BaseProfile):
         if len(dfs) > 0:
             full_df = pd.concat(dfs)
 
-            results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
+            results.extend([(self.display_name, 'Comparison', full_df), (self.display_name, 'Comparison Matrix', full_df)])
 
             return results
 

@@ -16,7 +16,8 @@ def data_processing_task(profile_name, viz, data, processing_func):
     return profile_name, viz, data_out
 
 class BaseProfile:
-    name = 'Base Profile'
+    display_name = 'Base Profile'
+    name = 'base'
     db_name = 'base'
     description = 'A Base profile without any visualizations to define model dashboards'
     viz_options = {}
@@ -42,7 +43,7 @@ class BaseProfile:
             if viz_option == 'Overview':
                 wants_overview = True
                 continue
-            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+            args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
         # if len(args) > 2:
         #     with mp.Pool(mp.cpu_count()) as pool:

@@ -27,7 +27,8 @@ from profiles.cef.visualization_scripts import (
 
 
 class PyPsaOutput(BaseProfile):
-    name = 'Canada Energy Futures'
+    display_name = 'Canada Energy Futures'
+    name = 'cef'
     db_name = 'cef'
     color = 'yellow 8'
     description = (

@@ -53,7 +53,8 @@ overview as overview_viz
 
 
 class silverOutput(BaseProfile):
-    name = 'SILVER Output'
+    display_name = 'SILVER Output'
+    name = 'silver'
     db_name = 'silver'
     color = 'silver'
     description = (
@@ -171,7 +172,7 @@ class silverOutput(BaseProfile):
         print('Base collective preprocess')
         args = []
         for viz_option, data in data_collection.items():
-            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+            args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
         processed_data = [data_processing_task(*arg) for arg in args]
 
         return processed_data
