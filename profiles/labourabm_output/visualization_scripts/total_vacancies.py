@@ -70,7 +70,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'labourabm-total_unemployment-scenario-multi-select',
+                'type': 'labourabm-total_vacancies-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -81,17 +81,17 @@ def plot(df, window_id):
             data=[{'label': occupation, 'value': occupation} for occupation in occupations],
             value=['Total'],
             id={
-                'type': 'labourabm-total_unemployment-occupation-multi-select',
+                'type': 'labourabm-total_vacancies-occupation-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
         ),
 
-        dmc.Button('Download Data', id={'type': 'labourabm-total_unemployment-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'labourabm-total_vacancies-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'labourabm-total_unemployment-download', 'index': window_id}),
+        dcc.Download(id={'type': 'labourabm-total_vacancies-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -100,7 +100,7 @@ def plot(df, window_id):
             'type': 'figure',
             'index': window_id,
             'profile': 'labourabm_output',
-            'viz': 'total_unemployment'
+            'viz': 'total_vacancies'
         },
         style={
             'width': '100%',

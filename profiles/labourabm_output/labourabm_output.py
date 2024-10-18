@@ -9,14 +9,20 @@ from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 from profiles.labourabm_output import utils
 from profiles.labourabm_output.callbacks import (
     settings as settings_callbacks,
-    total_unemployment as total_unemployment_callbacks
+    total_unemployment as total_unemployment_callbacks,
+    total_vacancies as total_vacancies_callbacks,
+    total_employment as total_employment_callbacks,
 )
 
 from profiles.labourabm_output.processing_scripts import (
-    total_unemployment as total_unemployment_process
+    total_unemployment as total_unemployment_process,
+    total_vacancies as total_vacancies_process,
+    total_employment as total_employment_process,
 )
 from profiles.labourabm_output.visualization_scripts import (
-    total_unemployment as total_unemployment_viz
+    total_unemployment as total_unemployment_viz,
+    total_vacancies as total_vacancies_viz,
+    total_employment as total_employment_viz,
 )
 
 
@@ -32,7 +38,9 @@ class labourabmOutput(BaseProfile):
         'It has been designed to be adaptable in different dimensions: temporal, spatial, technology representation and market design.')
 
     plot_order = [
-        'Total Unemployment'
+        'Total Unemployment',
+        'Total Vacancies',
+        'Total Employment'
     ]
 
     viz_options = {
@@ -41,6 +49,18 @@ class labourabmOutput(BaseProfile):
             'viz': total_unemployment_viz.plot,
             'callback': total_unemployment_callbacks.link,
             'check': total_unemployment_process.check,
+        },
+        'Total Vacancies': {
+            'process': total_vacancies_process.process,
+            'viz': total_vacancies_viz.plot,
+            'callback': total_vacancies_callbacks.link,
+            'check': total_vacancies_process.check,
+        },
+        'Total Employment': {
+            'process': total_employment_process.process,
+            'viz': total_employment_viz.plot,
+            'callback': total_employment_callbacks.link,
+            'check': total_employment_process.check,
         }
     }
 
