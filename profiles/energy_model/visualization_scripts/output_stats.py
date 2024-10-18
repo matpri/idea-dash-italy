@@ -17,8 +17,23 @@ def render_plot(df, *args, **kwargs):
     # Create a Plotly table
     db = df.copy()
     db = db[db.region == 'CAN']
+    min_days = db[db.variable == 'Min Dispatch']
+    max_days = db[db.variable == 'Max Dispatch']
+
+    min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['time']} for i, min_day in min_days.iterrows())
+    max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['time']} for i, max_day in max_days.iterrows())
+    min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
+    max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
+    db = db[db.variable != 'Min Dispatch']
+    db = db[db.variable != 'Max Dispatch']
+    db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+
     db = db[['scenario', 'variable', 'value']]
+
+
     df_pivot = db.pivot(index='variable', columns='scenario', values='value')
+
+
     # fill na with ''
     df_pivot = df_pivot.fillna('')
     # Create a Plotly Table

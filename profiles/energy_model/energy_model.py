@@ -1,10 +1,12 @@
 from collections import defaultdict
+from copyreg import dispatch_table
 from random import randint
 
 import dash_mantine_components as dmc
 import pandas as pd
 import yaml
 from dash import html, dcc
+from prompt_toolkit.layout import max_layout_dimensions
 
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
@@ -341,6 +343,40 @@ class energy_modelsOutput(BaseProfile):
                         data['time'] = pd.to_datetime(data['time'], format='%Y')
                         data = data[data['time'] == data['time'].max()]
                         output_stats.append(data)
+
+        min_days = []
+        max_days = []
+        for model, plot_type, df in data_collection:
+            if plot_type == 'Dispatch':
+                dispatch_data = df[(df.region == 'CAN') & (df.period == 2050)].copy()
+                dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
+                dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
+                if 'version' in dispatch_data.columns:
+                    dispatch_data['scenario'] = dispatch_data['scenario'] + '|' + dispatch_data['version']
+                    dispatch_data = dispatch_data.drop(columns=['version'])
+
+                # make date day-month-year
+                dispatch_data = dispatch_data.drop(columns=['period'])
+                dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
+                columns = dispatch_data.columns
+                columns = columns.drop('value').drop('variable').tolist()
+                dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
+
+
+                for scenario in dispatch_data['scenario'].unique():
+                    scen_dispatch_data = dispatch_data[dispatch_data['scenario'] == scenario]
+                    # find date where value is min and max
+                    min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
+                    min_day['variable'] = 'Min Dispatch'
+
+                    max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
+                    max_day['variable'] = 'Max Dispatch'
+
+                    min_days.append(min_day)
+                    max_days.append(max_day)
+
+        output_stats += min_days + max_days
+
         processed_data['Output Stats'] = output_stats
 
         results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
