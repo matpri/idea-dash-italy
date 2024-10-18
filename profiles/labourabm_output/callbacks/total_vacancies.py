@@ -56,7 +56,7 @@ def link(app):
                         (id['id']['type'] == 'labourabm-total_vacancies-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM Output']['Total Unemployment'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM Output']['Total Vacancies'].to_csv,
                                              "total_vacancies.csv")
             return _canvas, _data,
 
@@ -69,6 +69,6 @@ def link(app):
 
 
 
-        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Unemployment'], _scenarios[idx], _occupations[idx])
+        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Vacancies'], _scenarios[idx], _occupations[idx])
 
         return _canvas, [dash.no_update for _ in _data]
