@@ -12,17 +12,20 @@ from profiles.labourabm_output.callbacks import (
     total_unemployment as total_unemployment_callbacks,
     total_vacancies as total_vacancies_callbacks,
     total_employment as total_employment_callbacks,
+    total_demand as total_demand_callbacks,
 )
 
 from profiles.labourabm_output.processing_scripts import (
     total_unemployment as total_unemployment_process,
     total_vacancies as total_vacancies_process,
     total_employment as total_employment_process,
+    total_demand as total_demand_process,
 )
 from profiles.labourabm_output.visualization_scripts import (
     total_unemployment as total_unemployment_viz,
     total_vacancies as total_vacancies_viz,
     total_employment as total_employment_viz,
+    total_demand as total_demand_viz,
 )
 
 
@@ -40,7 +43,8 @@ class labourabmOutput(BaseProfile):
     plot_order = [
         'Total Unemployment',
         'Total Vacancies',
-        'Total Employment'
+        'Total Employment',
+        'Total Demand'
     ]
 
     viz_options = {
@@ -61,6 +65,12 @@ class labourabmOutput(BaseProfile):
             'viz': total_employment_viz.plot,
             'callback': total_employment_callbacks.link,
             'check': total_employment_process.check,
+        },
+        'Total Demand': {
+            'process': total_demand_process.process,
+            'viz': total_demand_viz.plot,
+            'callback': total_demand_callbacks.link,
+            'check': total_demand_process.check,
         }
     }
 
