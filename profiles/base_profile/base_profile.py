@@ -73,7 +73,7 @@ class BaseProfile:
 
             full_df = full_df[(full_df['region'] == 'CAN') | (full_df['region'] == 'AB+QC')]
             full_df = full_df.groupby(['scenario', 'variable', 'time','region']).sum(numeric_only=True).reset_index()
-            processed_data.append((self.name, 'Overview', full_df[['scenario', 'variable', 'time', 'value','region']]))
+            processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value','region']]))
 
         return processed_data
 
