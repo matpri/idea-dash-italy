@@ -358,8 +358,7 @@ class energy_modelsOutput(BaseProfile):
                 # make date day-month-year
                 dispatch_data = dispatch_data.drop(columns=['period'])
                 dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
-                columns = dispatch_data.columns
-                columns = columns.drop('value').drop('variable').tolist()
+                columns = ['scenario', 'time', 'variable', 'region']
                 dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
 
 
