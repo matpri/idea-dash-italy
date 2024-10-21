@@ -12,12 +12,18 @@ def link(app):
             'model': ALL,
             'name': ALL
         }, 'figure'),
+        Input({
+            'type': 'figure',
+            'index': MATCH,
+            'model': ALL,
+            'viz': ALL
+        }, 'figure'),
         State({'type': 'plot', 'index': MATCH}, 'figure'),
         prevent_initial_call=True,
     )(update_plot)
 
 
-def update_plot(_figs, _figs2, _plots):
+def update_plot(_figs, _figs2, _fig3, _plots):
     ctx = callback_context
 
     triggered_id = ctx.triggered_id

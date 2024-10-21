@@ -67,8 +67,8 @@ class GenericProfile:
             'viz': overview.create_overview_plot(name),
             'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
         }
-
-    def link(self, app):
+    @classmethod
+    def link(cls, app):
         generic_callback.link(app)
         overview_callback.link(app)
         settings.link(app)

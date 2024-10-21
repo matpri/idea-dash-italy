@@ -29,7 +29,7 @@ def plot_overview(df, title, x_label, y_label, name, unit):
 
         fig.update_yaxes(showgrid=True)
         if df.empty:
-            #print("No data available, since the results are all zero.")
+            # print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,
@@ -48,6 +48,7 @@ def plot_overview(df, title, x_label, y_label, name, unit):
     fig.layout.autosize = True
     return fig
 
+
 def create_overview_plot(model):
     def plot(df, window_id):
         '''
@@ -56,7 +57,7 @@ def create_overview_plot(model):
         :param window_id: window id to use when registering components to dash
         :return: html.Div([widgets]), dcc.Graph(plot)
         '''
-        #print('plotting overview')
+        # print('plotting overview')
         classes = df['variable'].unique().tolist()
 
         widget_layout = html.Div([
@@ -65,16 +66,19 @@ def create_overview_plot(model):
                 data=[{'label': plot, 'value': plot} for plot in classes],
                 value=classes[0],
                 id={
-                    'type': 'overview-plot-select',
+                    'type': 'plot-select',
                     'model': model,
-                    'index': window_id
+                    'index': window_id,
+                    'viz': 'overview'
                 },
             ),
-            dmc.Button('Download Data', id={'type': 'overview-download-button', 'index': window_id, 'model': model},
+            dmc.Button('Download Data', id={'type': 'download-button', 'index': window_id, 'model': model,
+                                            'viz': 'overview'},
                        variant='light',
                        # center the button
                        style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-            dcc.Download(id={'type': 'overview-download', 'index': window_id, 'model': model}),
+            dcc.Download(id={'type': 'download', 'index': window_id, 'model': model,
+                             'viz': 'overview'}),
         ])
 
         plot_layout = dcc.Graph(
@@ -83,7 +87,7 @@ def create_overview_plot(model):
                 'type': 'figure',
                 'index': window_id,
                 'model': model,
-                'name': 'overview'
+                'viz': 'overview'
             },
             style={
                 'width': '100%',

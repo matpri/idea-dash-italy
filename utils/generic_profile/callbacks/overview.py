@@ -5,38 +5,43 @@ from utils.generic_profile.visualization_scripts.overview import render_plot
 
 
 def link(app):
+    print('linking overview')
     @app.callback(
         Output({
             'type': 'figure',
             'index': ALL,
             'model': MATCH,
-            'name': 'overview'
+            'viz': 'overview'
         }, 'figure'),
         Output({
-            'type': 'overview-download',
+            'type': 'download',
             'index': ALL,
             'model': MATCH,
+            'viz': 'overview'
         }, 'data'),
         Input({
-            'type': 'overview-plot-select',
+            'type': 'plot-select',
             'index': ALL,
             'model': MATCH,
+            'viz': 'overview'
         }, 'value'),
         Input({
-            'type': 'overview-download-button',
+            'type': 'download-button',
             'index': ALL,
             'model': MATCH,
+            'viz': 'overview'
         }, 'n_clicks'),
         State({
             'type': 'figure',
             'index': ALL,
             'model': MATCH,
-            'name': 'overview'
+            'viz': 'overview'
         }, 'figure'),
         State({
-            'type': 'overview-download',
+            'type': 'download',
             'index': ALL,
             'model': MATCH,
+            'viz': 'overview'
         }, 'data'),
         prevent_initial_call=True
     )
@@ -48,11 +53,11 @@ def link(app):
         name = 'Overview'
         print(f'updating {name}, {model} plot')
 
-        if 'generic-download-button' in trigger_id['type']:
+        if 'download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'generic-download-button')):
+                        (id['id']['type'] == 'download-button')):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(
@@ -62,7 +67,7 @@ def link(app):
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'generic-plot-select')):
+                    (id['id']['type'] == 'plot-select')):
                 idx = i
                 break
 
