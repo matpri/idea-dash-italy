@@ -180,6 +180,10 @@ def process(selected):
         df = df.sort_values(by=['period'])
         times = df['period'].unique().tolist()
         times.sort()
+
+        #flip region and variable
+        df['region'], df['variable'] = df['variable'], df['region']
+
         # rename time to period
         # sort by region, variable, period
         df["region"] = df.region.apply(lambda x: x.split(".")[0])
