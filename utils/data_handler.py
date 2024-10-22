@@ -184,6 +184,10 @@ class DataHandler:
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
+        global model_mapping
+        for profile in self.profiles.values():
+            if profile.name not in model_mapping.keys():
+                model_mapping[profile.name] = [profile.display_name]
         self.data = {}
         self.processed = []
         self.processed_data = {}
@@ -433,7 +437,7 @@ class DataHandler:
                 obj = getattr(module, name)
                 if isinstance(obj, type) and obj.__module__ == module.__name__ and obj.__name__ != 'BaseProfile':
                     model = obj()
-                    found[model.name] = model
+                    found[model.display_name] = model
 
         return found
 
@@ -513,8 +517,8 @@ class DataHandler:
             # if df has columns model, scenario, unit, region, variable, value
             if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
                 profile = create_generic_profile(df, model)
-                self.profiles[profile.name] = profile
-                profile_options = [profile.name]
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
 
             else:
                 return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
@@ -533,8 +537,8 @@ class DataHandler:
             for viz_name, viz_dict in profile.viz_options.items():
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    visualizations[profile.name].append(viz_name)
-                    selected[profile.name].append(viz_name)
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected

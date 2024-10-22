@@ -57,7 +57,8 @@ from profiles.temoa_output.visualization_scripts import (
 
 
 class PypsaOutput(BaseProfile):
-    name = 'Sutubra-TEMOA Output'
+    display_name = 'Sutubra-TEMOA Output'
+    name = 'Sutubra-TEMOA'
     db_name = 'temoa'
     color = 'yellow 8'
     description = (

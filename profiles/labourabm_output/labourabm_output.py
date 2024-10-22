@@ -1,100 +1,93 @@
 from random import randint
 
 import dash_mantine_components as dmc
-import pandas as pd
 import yaml
 from dash import html, dcc
+import pandas as pd
 
 from profiles.base_profile.base_profile import BaseProfile, data_processing_task
-from profiles.cims_output import utils
-from profiles.cims_output.callbacks import (requested_quantities as requested_quantities_callbacks,
-                                            stock_lcc as stock_lcc_callbacks,
-                                            ghg as ghg_callbacks,
-                                            overview as overview_callbacks,
-                                            settings as settings_callbacks,
-                                            )
-from profiles.cims_output.processing_scripts import (
-    requested_quantities as requested_quantities_processing,
-    stock_lcc as stock_lcc_processing,
-    ghg as ghg_processing,
-    overview as overview_processing
+from profiles.labourabm_output import utils
+from profiles.labourabm_output.callbacks import (
+    settings as settings_callbacks,
+    total_unemployment as total_unemployment_callbacks,
+    total_vacancies as total_vacancies_callbacks,
+    total_employment as total_employment_callbacks,
+    total_demand as total_demand_callbacks,
 )
-from profiles.cims_output.visualization_scripts import (
-    requested_quantities as emissions_viz,
-    stock_lcc as stock_lcc_viz,
-    ghg as ghg_viz,
-    overview as overview_viz,
+
+from profiles.labourabm_output.processing_scripts import (
+    total_unemployment as total_unemployment_process,
+    total_vacancies as total_vacancies_process,
+    total_employment as total_employment_process,
+    total_demand as total_demand_process,
+)
+from profiles.labourabm_output.visualization_scripts import (
+    total_unemployment as total_unemployment_viz,
+    total_vacancies as total_vacancies_viz,
+    total_employment as total_employment_viz,
+    total_demand as total_demand_viz,
 )
 
 
-class PypsaOutput(BaseProfile):
-    display_name = 'CIMS Output'
-    db_name = 'cims'
-    color = 'yellow 8'
+class labourabmOutput(BaseProfile):
+    display_name = 'LabourABM Output'
+    name = 'LabourABM'
+
+    db_name = 'LabourABM'
+
+    color = 'red'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
-        'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
+        'The Strategic Integration of Large-capacity Variable Energy Resources (SILVER) tool is a generic electricity network optimization tool written in Python based on object-oriented programming. \n'
+        'It has been designed to be adaptable in different dimensions: temporal, spatial, technology representation and market design.')
 
     plot_order = [
-        'Overview',
-        'Requested Quantities',
-        'Stock LCC',
-        'GHG'
+        'Total Unemployment',
+        'Total Vacancies',
+        'Total Employment',
+        'Total Demand'
     ]
+
     viz_options = {
-        'Overview':
-            {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': overview_viz.plot,
-                'callback': overview_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-        'Requested Quantities':
-            {
-                'check': requested_quantities_processing.check,
-                'db_check': requested_quantities_processing.check,
-                'process': requested_quantities_processing.process,
-                'db_process': requested_quantities_processing.process,
-                'viz': emissions_viz.plot,
-                'callback': requested_quantities_callbacks.link,
-                'description': 'Emissions that are produced by the generation mix in the model.'
-            },
-        'Stock LCC':
-            {
-                'check': stock_lcc_processing.check,
-                'db_check': stock_lcc_processing.check,
-                'process': stock_lcc_processing.process,
-                'db_process': stock_lcc_processing.process,
-                'viz': stock_lcc_viz.plot,
-                'callback': stock_lcc_callbacks.link,
-                'description': 'The stock of technologies in the model.'
-            },
-        'GHG':
-            {
-                'check': ghg_processing.check,
-                'db_check': ghg_processing.check,
-                'process': ghg_processing.process,
-                'db_process': ghg_processing.process,
-                'viz': ghg_viz.plot,
-                'callback': ghg_callbacks.link,
-                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
-            }
+        'Total Unemployment': {
+            'process': total_unemployment_process.process,
+            'viz': total_unemployment_viz.plot,
+            'callback': total_unemployment_callbacks.link,
+            'check': total_unemployment_process.check,
+        },
+        'Total Vacancies': {
+            'process': total_vacancies_process.process,
+            'viz': total_vacancies_viz.plot,
+            'callback': total_vacancies_callbacks.link,
+            'check': total_vacancies_process.check,
+        },
+        'Total Employment': {
+            'process': total_employment_process.process,
+            'viz': total_employment_viz.plot,
+            'callback': total_employment_callbacks.link,
+            'check': total_employment_process.check,
+        },
+        'Total Demand': {
+            'process': total_demand_process.process,
+            'viz': total_demand_viz.plot,
+            'callback': total_demand_callbacks.link,
+            'check': total_demand_process.check,
+        }
     }
 
     def __init__(self):
         super().__init__()
-        self.technologies = yaml.load(open('./profiles/cims_output/technologies.yaml', 'r'), Loader=yaml.FullLoader)
-        self.plots = yaml.load(open('./profiles/cims_output/plots.yaml', 'r'), Loader=yaml.FullLoader)
+        self.technologies = yaml.load(open('./profiles/labourabm_output/technologies.yaml', 'r'),
+                                      Loader=yaml.FullLoader)
+        self.plots = yaml.load(open('./profiles/labourabm_output/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
         self.settings = self.render_settings()
 
     def link(self, app):
         settings_callbacks.link(app)
-        super().link(app)
+        for viz in self.viz_options:
+            self.viz_options[viz]['callback'](app)
 
+    # not sure if this function should be here
     def process_data(self, data_collection):
         print('Base collective preprocess')
         args = []
@@ -109,7 +102,7 @@ class PypsaOutput(BaseProfile):
             [
                 # upload for yaml
                 dcc.Upload(
-                    id='cims-settings-upload-yaml',
+                    id='labourabm-settings-upload-yaml',
                     children=html.Div([
                         'Drag and Drop or ',
                         html.A('Select YAML File')
@@ -127,16 +120,16 @@ class PypsaOutput(BaseProfile):
                     multiple=False
                 ),
 
-                html.Div(id='cims-settings-upload-yaml-output'),
+                html.Div(id='labourabm-settings-upload-yaml-output'),
                 dmc.Tabs([
                     dmc.TabsList([
-                        dmc.Tab('Technology Settings', id='cims-technologies', value='tech'),
-                        dmc.Tab('Plot Settings', id='cims-plot-settings', value='plot'),
+                        dmc.Tab('Technology Settings', id='labourabm-technologies', value='tech'),
+                        dmc.Tab('Plot Settings', id='labourabm-plot-settings-tab', value='plot'),
                     ]
                     ),
-                    dmc.TabsPanel(id='cims-technologies-settings', value='tech',
+                    dmc.TabsPanel(id='labourabm-technologies-settings', value='tech',
                                   children=self.render_technology_settings()),
-                    dmc.TabsPanel(id='cims-plot-settings-panel', value='plot',
+                    dmc.TabsPanel(id='labourabm-plot-settings', value='plot',
                                   children=self.render_plot_settings()),
                 ], value='tech')
             ]
@@ -149,7 +142,7 @@ class PypsaOutput(BaseProfile):
         layout = html.Div([
             html.Div(
                 dmc.Select(
-                    id='cims-technology-select',
+                    id='labourabm-technology-select',
                     data=[{'label': tech, 'value': tech} for tech in techs],
                     value=techs[0],
                 ),
@@ -165,7 +158,7 @@ class PypsaOutput(BaseProfile):
                 }
             ),
             html.Div(utils.tech_edit(techs[0]),
-                     id='cims-technology-settings-output'),
+                     id='labourabm-technology-settings-output'),
         ])
 
         return layout
@@ -175,7 +168,7 @@ class PypsaOutput(BaseProfile):
         layout = html.Div([
             html.Div(
                 dmc.Select(
-                    id='cims-plot-select',
+                    id='labourabm-plot-select',
                     data=[{'label': plot, 'value': plot} for plot in plots],
                     value=plots[0]
                 ),
@@ -191,7 +184,7 @@ class PypsaOutput(BaseProfile):
                 }
             ),
             html.Div(utils.plot_edit(plots[0]),
-                     id='cims-plot-settings-output'),
+                     id='labourabm-plot-settings-output'),
         ])
 
         return layout

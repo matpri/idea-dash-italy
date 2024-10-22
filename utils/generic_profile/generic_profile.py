@@ -25,7 +25,7 @@ def data_processing_task(profile_name, viz, data, processing_func):
 
 class GenericProfile:
     def __init__(self, name, classes, variables):
-        self.name = name
+        self.display_name = name
 
         self.technologies = {}
 
@@ -83,7 +83,7 @@ class GenericProfile:
         args = []
         for viz_option, data in data_collection.items():
             if viz_option != 'Overview':
-                args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+                args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
         processed_data = [data_processing_task(*arg) for arg in args]
 
@@ -119,7 +119,7 @@ class GenericProfile:
                 dmc.Select(
                     id={
                         'type': 'general-technology-settings-dropdown',
-                        'profile': self.name,
+                        'profile': self.display_name,
                     },
                     data=[{'label': tech, 'value': tech} for tech in techs],
                     value=techs[0],
@@ -135,10 +135,10 @@ class GenericProfile:
                     'marginTop': '1rem',
                 }
             ),
-            html.Div(utils.tech_edit(techs[0], self.name),
+            html.Div(utils.tech_edit(techs[0], self.display_name),
                      id={
                          'type': 'general-technology-settings-output',
-                         'profile': self.name,
+                         'profile': self.display_name,
                      }),
         ])
 

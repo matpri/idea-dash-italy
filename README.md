@@ -159,7 +159,7 @@ The folder and the file can have any name but inside the file you must define a 
    
    
    class CustomModel(BaseProfile):
-        name = 'Custom Model Profile'
+        display_nameCustom Model Profile'
         db_name = 'custom'
         description = 'This is a custom model profile' # Add a description for your profile, is shown on highlight in IDEA
         settings = html.Div(

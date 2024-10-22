@@ -57,9 +57,9 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
             if viz_name not in visualizations:
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    if visualizations.get(profile.name) is None:
-                        visualizations[profile.name] = []
-                    visualizations[profile.name].append(viz_name)
+                    if visualizations.get(profile.display_name) is None:
+                        visualizations[profile.display_name] = []
+                    visualizations[profile.display_name].append(viz_name)
     return visualizations
 
 
