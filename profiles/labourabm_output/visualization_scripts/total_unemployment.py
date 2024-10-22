@@ -6,7 +6,7 @@ from dash import html, dcc
 from profiles.labourabm_output import utils
 
 
-def render_plot(df, scenarios, occupations):
+def render_plot(df, scenarios, occupations, region):
     print('rendering plot', type)
     fig = go.Figure()
     fig.update_layout(
@@ -15,6 +15,7 @@ def render_plot(df, scenarios, occupations):
 
     try:
         df_scen = df.copy(deep=True)
+        df_scen = df_scen[df_scen['region'] == region]
         df_scen = df_scen[df_scen['scenario'].isin(scenarios) & df_scen['variable'].isin(occupations)]
 
         # Line plot for more than 10 time entries
@@ -64,6 +65,8 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     occupations = df['variable'].unique().tolist()
 
+    regions = df[df['scenario'] == scenarios[0]]['region'].unique().tolist()
+
     widget_layout = html.Div([
         dmc.MultiSelect(
             label='Scenarios',
@@ -87,6 +90,17 @@ def plot(df, window_id):
             style={'display': 'block'}
         ),
 
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in regions],
+            value=regions[0],
+            id={
+                'type': 'labourabm-total_unemployment-region-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+
         dmc.Button('Download Data', id={'type': 'labourabm-total_unemployment-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -95,7 +109,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(df, [scenarios[0]], ['Total']),
+        figure=render_plot(df, [scenarios[0]], ['Total'], regions[0]),
         id={
             'type': 'figure',
             'index': window_id,

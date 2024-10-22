@@ -12,7 +12,14 @@ def link(app):
             'profile': 'labourabm_output',
             'viz': 'total_employment'
         }, 'figure'),
-
+        Output({
+            'type': 'labourabm-total_employment-region-select',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'labourabm-total_employment-region-select',
+            'index': ALL
+        }, 'data'),
         Output({
             'type': 'labourabm-total_employment-download',
             'index': ALL
@@ -26,6 +33,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'labourabm-total_employment-region-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'labourabm-total_employment-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -35,7 +46,10 @@ def link(app):
             'profile': 'labourabm_output',
             'viz': 'total_employment'
         }, 'figure'),
-
+        State({
+            'type': 'labourabm-total_employment-region-select',
+            'index': ALL
+        }, 'data'),
         State({
             'type': 'labourabm-total_employment-download',
             'index': ALL
@@ -43,7 +57,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_total_employment(_scenarios, _occupations, _download, _canvas, _data):
+    def update_total_employment(_scenarios, _occupations, _region, _download, _canvas, _regions, _data):
         #print('updating total_employment plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -58,7 +72,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM Output']['Total Employment'].to_csv,
                                              "total_employment.csv")
-            return _canvas, _data,
+            return _canvas, _region, _regions, _data
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -67,8 +81,14 @@ def link(app):
                 idx = i
                 break
 
+        if 'labourabm-total_employment-scenario-multi-select' in trigger_id['type']:
+            data = data_handler.processed_data['LabourABM Output']['Total Employment']
+            _regions[idx] = data[data['scenario'].isin(_scenarios[idx])]['region'].unique().tolist()
+            if len(_regions[idx]) == 0:
+                _region[idx] = ''
+            else:
+                _region[idx] = _regions[idx][0]
 
+        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Employment'], _scenarios[idx], _occupations[idx], _region[idx])
 
-        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Employment'], _scenarios[idx], _occupations[idx])
-
-        return _canvas, [dash.no_update for _ in _data]
+        return _canvas, _region, _regions, [dash.no_update for _ in _data]
