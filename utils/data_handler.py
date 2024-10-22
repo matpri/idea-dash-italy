@@ -12,23 +12,7 @@ import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
-
-model_mapping = {
-    'silver' : ['SILVER Output'],
-    'copper': ['COPPER Output', 'Power System Models'],
-    'cef': ['Canada Energy Futures', 'Power System Models'],
-    'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
-    'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
-    'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
-    'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
-    'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models'],
-    'CIMS': ['CIMS Output']
-}
-
-exclude_from_comparisson = ['Power System Models', 'LabourABM Output', 'CIMS Output']
-
-
+from utils.constants import model_mapping, exclude_from_comparison
 
 def create_generic_profile(df, model):
     """
@@ -382,7 +366,7 @@ class DataHandler:
         variables = []
         for model, viz_option in self.processed_data.items():
             print('Processing', model)
-            if model in exclude_from_comparisson:
+            if model in exclude_from_comparison:
                 continue
             if model == 'Power System Models' or model == 'Generic Comparison':
                 continue
