@@ -20,7 +20,11 @@ parser.add_argument('--show-header', type=str, default='True',
                     help='Set to "True" to show header, "False" to hide it.')
 parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
+parser.add_argument('--dev', type=bool, default=False,
+                    help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
 args = parser.parse_args()  # Parse the arguments
+
+
 
 
 
@@ -66,7 +70,7 @@ data_handler.preload_data(data_files)
 if show_header:
     print("Rendering header...")  # Debugging statement
     app_layout = [
-        header.render(app),
+        header.render(app, args.dev),
         html.Div([
             dlc.BoxPanel([
                 plot_canvas.render(bool(data_files) or args.datahandler is not None),
