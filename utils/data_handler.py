@@ -26,6 +26,7 @@ model_mapping = {
     'CIMS': ['CIMS Output']
 }
 
+exclude_from_comparisson = ['Power System Models', 'LabourABM Output', 'CIMS Output']
 
 
 
@@ -380,6 +381,9 @@ class DataHandler:
         classes = []
         variables = []
         for model, viz_option in self.processed_data.items():
+            print('Processing', model)
+            if model in exclude_from_comparisson:
+                continue
             if model == 'Power System Models' or model == 'Generic Comparison':
                 continue
             for viz, viz_data in viz_option.items():
