@@ -26,6 +26,7 @@ def data_processing_task(profile_name, viz, data, processing_func):
 class GenericProfile:
     def __init__(self, name, classes, variables):
         self.display_name = name
+        self.name = name
 
         self.technologies = {}
 
@@ -108,7 +109,7 @@ class GenericProfile:
             dfs.append(df)
         full_df = pd.concat(dfs)
 
-        processed_data.append((self.name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+        processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
 
