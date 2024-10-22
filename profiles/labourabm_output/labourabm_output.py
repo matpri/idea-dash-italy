@@ -13,6 +13,7 @@ from profiles.labourabm_output.callbacks import (
     total_vacancies as total_vacancies_callbacks,
     total_employment as total_employment_callbacks,
     total_demand as total_demand_callbacks,
+    overview as overview_callbacks
 )
 
 from profiles.labourabm_output.processing_scripts import (
@@ -26,6 +27,7 @@ from profiles.labourabm_output.visualization_scripts import (
     total_vacancies as total_vacancies_viz,
     total_employment as total_employment_viz,
     total_demand as total_demand_viz,
+    overview as overview_viz
 )
 
 
@@ -41,13 +43,23 @@ class labourabmOutput(BaseProfile):
         'It has been designed to be adaptable in different dimensions: temporal, spatial, technology representation and market design.')
 
     plot_order = [
+        'Overview',
         'Total Unemployment',
         'Total Vacancies',
         'Total Employment',
         'Total Demand'
     ]
 
-    viz_options = {
+    viz_options = {'Overview':
+        {
+            'check': lambda x: True,
+            'db_check': lambda x: True,
+            'process': lambda x: x,
+            'db_process': lambda x: x,
+            'viz': overview_viz.plot,
+            'callback': overview_callbacks.link,
+            'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+        },
         'Total Unemployment': {
             'process': total_unemployment_process.process,
             'viz': total_unemployment_viz.plot,
@@ -90,10 +102,25 @@ class labourabmOutput(BaseProfile):
     # not sure if this function should be here
     def process_data(self, data_collection):
         print('Base collective preprocess')
+        wants_overview = False
         args = []
         for viz_option, data in data_collection.items():
+            if viz_option == 'Overview':
+                wants_overview = True
+                continue
             args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
         processed_data = [data_processing_task(*arg) for arg in args]
+        if wants_overview:
+            dfs = []
+            for _, viz_option, data in processed_data:
+                df = data.copy()
+                df['variable'] = viz_option
+                df = df.groupby(['scenario', 'time', 'region', 'variable']).sum().reset_index()
+                dfs.append(df)
+            full_df = pd.concat(dfs)
+            full_df['scenario'] = full_df['scenario'] + ' - ' + full_df['region']
+            processed_data.append(
+                (self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
 

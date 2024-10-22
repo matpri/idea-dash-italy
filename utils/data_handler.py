@@ -169,7 +169,6 @@ class DataHandler:
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
-        global model_mapping
         for profile in self.profiles.values():
             if profile.name not in model_mapping.keys():
                 model_mapping[profile.name] = [profile.display_name]
