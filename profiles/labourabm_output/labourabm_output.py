@@ -102,25 +102,20 @@ class labourabmOutput(BaseProfile):
     # not sure if this function should be here
     def process_data(self, data_collection):
         print('Base collective preprocess')
-        wants_overview = False
         args = []
         for viz_option, data in data_collection.items():
-            if viz_option == 'Overview':
-                wants_overview = True
-                continue
             args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
         processed_data = [data_processing_task(*arg) for arg in args]
-        if wants_overview:
-            dfs = []
-            for _, viz_option, data in processed_data:
-                df = data.copy()
-                df['variable'] = viz_option
-                df = df.groupby(['scenario', 'time', 'region', 'variable']).sum().reset_index()
-                dfs.append(df)
-            full_df = pd.concat(dfs)
-            full_df['scenario'] = full_df['scenario'] + ' - ' + full_df['region']
-            processed_data.append(
-                (self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+        dfs = []
+        for _, viz_option, data in processed_data:
+            df = data.copy()
+            df['variable'] = viz_option
+            df = df.groupby(['scenario', 'time', 'region', 'variable']).sum().reset_index()
+            dfs.append(df)
+        full_df = pd.concat(dfs)
+        full_df['scenario'] = full_df['scenario'] + ' - ' + full_df['region']
+        processed_data.append(
+            (self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
 
