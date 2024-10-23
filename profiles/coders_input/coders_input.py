@@ -28,7 +28,8 @@ vre as vre_viz,
 
 
 class CopperOutput(BaseProfile):
-    name = 'CODERS Input'
+    display_name = 'CODERS Input'
+    name = 'coders'
     color = 'yellow 8'
     description = (
         'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'

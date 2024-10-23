@@ -57,7 +57,8 @@ from profiles.pypsa_output.visualization_scripts import (
 
 
 class PypsaOutput(BaseProfile):
-    name = 'NRCan-PyPsa Output'
+    display_name = 'NRCan-PyPsa Output'
+    name = 'NRCan-PyPsa'
     db_name = 'pypsa'
     color = 'yellow 8'
     description = (

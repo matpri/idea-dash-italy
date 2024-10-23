@@ -28,7 +28,7 @@ from profiles.cims_output.visualization_scripts import (
 
 
 class PypsaOutput(BaseProfile):
-    name = 'CIMS Output'
+    display_name = 'CIMS Output'
     db_name = 'cims'
     color = 'yellow 8'
     description = (
@@ -99,7 +99,7 @@ class PypsaOutput(BaseProfile):
         print('Base collective preprocess')
         args = []
         for viz_option, data in data_collection.items():
-            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+            args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
         processed_data = [data_processing_task(*arg) for arg in args]
 
         return processed_data

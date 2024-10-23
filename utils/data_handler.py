@@ -13,23 +13,7 @@ import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
-from utils.generic_profile.callbacks import generic_callback
-
-model_mapping = {
-    'silver' : ['SILVER Output'],
-    'copper': ['COPPER Output', 'Power System Models'],
-    'cef': ['Canada Energy Futures', 'Power System Models'],
-    'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
-    'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
-    'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
-    'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
-    'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models'],
-    'CIMS': ['CIMS Output']
-}
-
-
-
+from utils.constants import model_mapping, exclude_from_comparison
 
 def create_generic_profile(df, model):
     """
@@ -186,6 +170,9 @@ class DataHandler:
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
+        for profile in self.profiles.values():
+            if profile.name not in model_mapping.keys():
+                model_mapping[profile.name] = [profile.display_name]
         self.data = {}
         self.processed = []
         self.processed_data = {}
@@ -308,21 +295,30 @@ class DataHandler:
 
         self.data[filename]['content'] = df
 
-        # Check if the data has visualizations it can be processed into
-        visualizations = {}
-        selected = {}
-        for profile_name, profile in self.profiles.items():
-            for viz_name, viz_dict in profile.viz_options.items():
-                if viz_name not in visualizations:
-                    check_func = viz_dict.get('check')
-                    if check_func(df):
-                        if visualizations.get(profile.name) is None:
-                            visualizations[profile.name] = []
-                        visualizations[profile.name].append(viz_name)
+        # make all headers lowercase
+        df.columns = df.columns.str.lower()
 
-                        if selected.get(profile.name) is None:
-                            selected[profile.name] = []
-                        selected[profile.name].append(viz_name)
+        model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+
+        profile_options = model_mapping.get(model, None)
+        if profile_options is None:
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
+
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
+        for profile_name, profile in profiles_to_check.items():
+            for viz_name, viz_dict in profile.viz_options.items():
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
@@ -378,6 +374,9 @@ class DataHandler:
         classes = []
         variables = []
         for model, viz_option in self.processed_data.items():
+            print('Processing', model)
+            if model in exclude_from_comparison:
+                continue
             if model == 'Power System Models' or model == 'Generic Comparison':
                 continue
             for viz, viz_data in viz_option.items():
@@ -435,14 +434,14 @@ class DataHandler:
                 obj = getattr(module, name)
                 if isinstance(obj, type) and obj.__module__ == module.__name__ and obj.__name__ != 'BaseProfile':
                     model = obj()
-                    found[model.name] = model
+                    found[model.display_name] = model
 
         return found
 
     def link(self, app):
         for profile in self.profiles.values():
             profile.link(app)
-        generic_callback.link(app)
+        GenericProfile.link(app)
 
     def check_content(self, filename, content, extension, encoded=True):
         if content is None:
@@ -515,8 +514,8 @@ class DataHandler:
             # if df has columns model, scenario, unit, region, variable, value
             if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
                 profile = create_generic_profile(df, model)
-                self.profiles[profile.name] = profile
-                profile_options = [profile.name]
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
 
             else:
                 return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
@@ -535,8 +534,8 @@ class DataHandler:
             for viz_name, viz_dict in profile.viz_options.items():
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    visualizations[profile.name].append(viz_name)
-                    selected[profile.name].append(viz_name)
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected

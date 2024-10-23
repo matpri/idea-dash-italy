@@ -19,7 +19,7 @@ def render(hide_welcome=True):
                 ),
                 id='welcome',
                 title='Welcome',
-                closable=True,
+                closable=False,
             )
         ], id=ids.PLOT_CANVAS)
         return layout
