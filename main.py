@@ -16,8 +16,8 @@ from utils.data_handler import DataHandler
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
-parser.add_argument('--show-header', type=str, default='True',
-                    help='Set to "True" to show header, "False" to hide it.')
+parser.add_argument('--static', type=str, default='False',
+                    help='Set to "True" to make page static, i.e. hide header and settings to only keep features that are handled client side, "False" to hide it.')
 parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
 parser.add_argument('--dev', type=bool, default=False,
@@ -29,8 +29,8 @@ args = parser.parse_args()  # Parse the arguments
 
 
 # Convert string to boolean
-show_header = args.show_header.lower() == 'true'
-print(f"Show header: {show_header}")  # Debugging statement
+static = args.static.lower() == 'true'
+print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [
@@ -67,15 +67,15 @@ print(data_files)
 print(bool(data_files))
 data_handler.preload_data(data_files)
 
-if show_header:
+if not static:
     print("Rendering header...")  # Debugging statement
     app_layout = [
-        header.render(app, args.dev),
+        header.render(app, static),
         html.Div([
             dlc.BoxPanel([
                 plot_canvas.render(bool(data_files) or args.datahandler is not None),
             ], id='test', addToDom=True),
-            sidebar.render(),
+            sidebar.render(static),
             data_modal.render(app),
             help.render(),
 
@@ -95,7 +95,7 @@ else:
             dlc.BoxPanel([
                 plot_canvas.render(bool(data_files) or args.datahandler is not None),
             ], id='test', addToDom=True),
-            sidebar.render(),
+            sidebar.render(static),
             data_modal.render(app),
             help.render(),
 
