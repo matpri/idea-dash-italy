@@ -52,8 +52,8 @@ class labourabmOutput(BaseProfile):
 
     viz_options = {'Overview':
         {
-            'check': lambda x: True,
-            'db_check': lambda x: True,
+            'check': lambda x: False,
+            'db_check': lambda x: False,
             'process': lambda x: x,
             'db_process': lambda x: x,
             'viz': overview_viz.plot,

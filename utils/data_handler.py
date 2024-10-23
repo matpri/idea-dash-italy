@@ -294,21 +294,30 @@ class DataHandler:
 
         self.data[filename]['content'] = df
 
-        # Check if the data has visualizations it can be processed into
-        visualizations = {}
-        selected = {}
-        for profile_name, profile in self.profiles.items():
-            for viz_name, viz_dict in profile.viz_options.items():
-                if viz_name not in visualizations:
-                    check_func = viz_dict.get('check')
-                    if check_func(df):
-                        if visualizations.get(profile.name) is None:
-                            visualizations[profile.name] = []
-                        visualizations[profile.name].append(viz_name)
+        # make all headers lowercase
+        df.columns = df.columns.str.lower()
 
-                        if selected.get(profile.name) is None:
-                            selected[profile.name] = []
-                        selected[profile.name].append(viz_name)
+        model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+
+        profile_options = model_mapping.get(model, None)
+        if profile_options is None:
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
+
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
+        for profile_name, profile in profiles_to_check.items():
+            for viz_name, viz_dict in profile.viz_options.items():
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
