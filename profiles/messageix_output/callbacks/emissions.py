@@ -199,8 +199,22 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
+                                           _aggregates[idx], _emissions_type[idx],
+                                           _scenarios[idx],
+                                           _regions[idx],
+                                           _years[idx], scenario=_scenario[idx])
+        elif _p_type[idx] == 'Map Plot':
+            _m_style[idx] = {'display': 'none'}
+            _r_style[idx] = {'display': 'none'}
+            _y_style[idx] = {'display': 'block'}
+            _pattern_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _text_style[idx] = {'display': 'none'}
+            if _aggregates[idx] is not None:
+                _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
                                            _aggregates[idx], _emissions_type[idx],
                                            _scenarios[idx],
                                            _regions[idx],
