@@ -346,36 +346,38 @@ class energy_modelsOutput(BaseProfile):
         min_days = []
         max_days = []
         for model, plot_type, df in data_collection:
-            if plot_type == 'Dispatch':
-                dispatch_data = df[(df.region == 'CAN') & (df.period == 2050)].copy()
-                dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
-                dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
-                if 'version' in dispatch_data.columns:
-                    dispatch_data['scenario'] = dispatch_data['scenario'] + '|' + dispatch_data['version']
-                    dispatch_data = dispatch_data.drop(columns=['version'])
+            if model in power_system_models:
+                if plot_type == 'Dispatch':
+                    dispatch_data = df[(df.region == 'CAN') & (df.period == 2050)].copy()
+                    dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
+                    dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
+                    if 'version' in dispatch_data.columns:
+                        dispatch_data['scenario'] = dispatch_data['scenario'] + '|' + dispatch_data['version']
+                        dispatch_data = dispatch_data.drop(columns=['version'])
 
-                # make date day-month-year
-                dispatch_data = dispatch_data.drop(columns=['period'])
-                dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
-                columns = ['scenario', 'time', 'variable', 'region']
-                dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
+                    # make date day-month-year
+                    dispatch_data = dispatch_data.drop(columns=['period'])
+                    dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
+                    columns = ['scenario', 'time', 'variable', 'region']
+                    dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
 
 
-                for scenario in dispatch_data['scenario'].unique():
-                    scen_dispatch_data = dispatch_data[dispatch_data['scenario'] == scenario]
-                    # find date where value is min and max
-                    min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
-                    min_day['variable'] = 'Min Dispatch'
+                    for scenario in dispatch_data['scenario'].unique():
+                        scen_dispatch_data = dispatch_data[dispatch_data['scenario'] == scenario]
+                        # find date where value is min and max
+                        min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
+                        min_day['variable'] = 'Min Dispatch'
 
-                    max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
-                    max_day['variable'] = 'Max Dispatch'
+                        max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
+                        max_day['variable'] = 'Max Dispatch'
 
-                    min_days.append(min_day)
-                    max_days.append(max_day)
+                        min_days.append(min_day)
+                        max_days.append(max_day)
 
         output_stats += min_days + max_days
 
-        processed_data['Output Stats'] = output_stats
+        if len(output_stats) > 0:
+            processed_data['Output Stats'] = output_stats
 
         results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
