@@ -402,8 +402,37 @@ class DataHandler:
             profile = GenericProfile('Generic Comparison', classes, variables)
             self.profiles['Generic Comparison'] = profile
             self.processed_data['Generic Comparison'] = {}
-            for viz, df in zip(classes, dfs):
+            for viz in classes:
                 self.processed_data['Generic Comparison'][viz] = pd.concat(dfs[viz])
+            overview_data = []
+            for viz in classes:
+                overview_dfs = []
+                for df in dfs[viz]:
+                    # if CAN in region, remove all other regions
+                    if 'region' in df.columns:
+                        if 'CAN' in df['region'].unique():
+                            df = df[df['region'] == 'CAN']
+                        elif 'National' in df['region'].unique():
+                            df = df[df['region'] == 'National']
+
+                    # if time is a Timestamp, convert to int only keeping the year
+                    if df['time'].dtype == 'datetime64[ns]':
+                        df['time'] = df['time'].dt.year
+
+                    overview_dfs.append(df)
+
+                data = pd.concat(overview_dfs)
+                data['variable'] = viz
+
+                data = data.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+
+                data['region'] = 'National'
+
+                overview_data.append(data)
+
+            full_df = pd.concat(overview_data)
+            self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
+
         print(self.processed_data)
 
 
