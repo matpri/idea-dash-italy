@@ -1,7 +1,8 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+    pie_chart, map_plot
 
 
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
@@ -18,6 +19,8 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
     elif type == 'Pie Chart':
         plot_info = plot_settings['Final Energy']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+    elif type == 'Map Plot':
+        return map_plot.plot_map(df, scenario, year)
     else:
         plot_info = plot_settings['Final Energy']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
@@ -81,7 +84,7 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
             value='By Year',
             id={
                 'type': 'messageix-final_energy-plot-select',

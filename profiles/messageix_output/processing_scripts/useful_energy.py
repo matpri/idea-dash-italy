@@ -62,12 +62,8 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Useful Energy|")]
-        # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
-        #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        formatted_df = format_df(df)
-        # formatted_df = aggregate_technologies(formatted_df)
-        canadian_total = calc_canadian(formatted_df)
-        full_data = pd.concat([formatted_df, canadian_total])
+        canadian_total = calc_canadian(df)
+        full_data = pd.concat([df, canadian_total])
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)
