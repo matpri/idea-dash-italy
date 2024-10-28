@@ -28,7 +28,7 @@ def link(app):
             'type': 'silver-uc_results-plot-select',
             'index': ALL
         }, 'value'),
-        
+
         Input({
             'type': 'silver-uc_results-scenario-multi-select',
             'index': ALL
@@ -78,7 +78,8 @@ def link(app):
                         (id['id']['type'] == 'silver-uc_results-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['UC Results'].to_csv, "uc_results.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['UC Results'].to_csv,
+                                             "uc_results.csv")
             return _canvas, _data, _s_style, _m_style
 
         idx = 0
@@ -94,11 +95,18 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['UC Results'],
-                                        _scenarios[idx], time_size=_ts[idx])
+                                       _scenarios[idx], time_size=_ts[idx])
+        elif _p_type[idx] == 'By Plant':
+            _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _canvas[idx] = render_plot('By Plant',
+                                       data_handler.processed_data['SILVER Output']['UC Results'],
+                                       _scenario[idx], time_size=_ts[idx])
 
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['UC Results'], _scenario[idx], time_size=_ts[idx])
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['UC Results'],
+                                       _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

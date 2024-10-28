@@ -3,8 +3,9 @@ from random import randint
 import dash_mantine_components as dmc
 import yaml
 from dash import html, dcc
+import pandas as pd
 
-from profiles.base_profile.base_profile import BaseProfile
+from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 from profiles.silver_output import utils
 from profiles.silver_output.callbacks import (
     settings as settings_callbacks,
@@ -16,6 +17,10 @@ from profiles.silver_output.callbacks import (
     price_opf as price_opf_callbacks,
 opf_curtailment as opf_curtailment_callbacks,
 uc_curtailment as uc_curtailment_callbacks,
+map_plots as map_plots_callbacks,
+opf_lineflow as opf_lineflow_callbacks,
+uc_lineflow as uc_lineflow_callbacks,
+overview as overview_callbacks
 )
 from profiles.silver_output.processing_scripts import (
     opf_costs as opf_costs_processing,
@@ -26,6 +31,10 @@ from profiles.silver_output.processing_scripts import (
     price_opf as price_opf_processing,
 opf_curtailment as opf_curtailment_processing,
 uc_curtailment as uc_curtailment_processing,
+map_plots as map_plots_processing,
+opf_lineflow as opf_lineflow_processing,
+uc_lineflow as uc_lineflow_processing,
+overview as overview_processing
 )
 from profiles.silver_output.visualization_scripts import (
     opf_costs as opf_costs_viz,
@@ -36,29 +45,48 @@ from profiles.silver_output.visualization_scripts import (
     price_opf as price_opf_viz,
 opf_curtailment as opf_curtailment_viz,
 uc_curtailment as uc_curtailment_viz,
+map_plots as map_plots_viz,
+opf_lineflow as opf_lineflow_viz,
+uc_lineflow as uc_lineflow_viz,
+overview as overview_viz
 )
 
 
 class silverOutput(BaseProfile):
-    name = 'SILVER Output'
+    display_name = 'SILVER Output'
+    name = 'silver'
     db_name = 'silver'
     color = 'silver'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (silver) framework is an electricity system planning model. \n'
-        'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
+        'The Strategic Integration of Large-capacity Variable Energy Resources (SILVER) tool is a generic electricity network optimization tool written in Python based on object-oriented programming. \n'
+        'It has been designed to be adaptable in different dimensions: temporal, spatial, technology representation and market design.')
 
     plot_order = [
+        'Overview',
         'OPF Costs',
         'OPF Results',
         'OPF Emissions',
         'OPF_VRE_Curtailment',
+        'OPF Line Flow',
         'UC Results',
         'UC Emissions',
         'UC_VRE_Curtailment',
+        'UC Line Flow',
         'Price OPF',
+        'Map Plots'
     ]
 
     viz_options = {
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
         'OPF Costs': {
             'process': opf_costs_processing.process,
             'viz': opf_costs_viz.plot,
@@ -83,6 +111,12 @@ class silverOutput(BaseProfile):
             'callback': opf_curtailment_callbacks.link,
             'check': opf_curtailment_processing.db_check,
         },
+        'OPF Line Flow': {
+            'process': opf_lineflow_processing.process,
+            'viz': opf_lineflow_viz.plot,
+            'callback': opf_lineflow_callbacks.link,
+            'check': opf_lineflow_processing.db_check,
+        },
         'UC Results': {
             'process': uc_results_processing.process,
             'viz': uc_results_viz.plot,
@@ -101,11 +135,23 @@ class silverOutput(BaseProfile):
             'callback': uc_curtailment_callbacks.link,
             'check': uc_curtailment_processing.db_check,
         },
+        'UC Line Flow': {
+            'process': uc_lineflow_processing.process,
+            'viz': uc_lineflow_viz.plot,
+            'callback': uc_lineflow_callbacks.link,
+            'check': uc_lineflow_processing.db_check,
+        },
         'Price OPF': {
             'process': price_opf_processing.process,
             'viz': price_opf_viz.plot,
             'callback': price_opf_callbacks.link,
             'check': price_opf_processing.check,
+        },
+        'Map Plots': {
+            'process': map_plots_processing.process,
+            'viz': map_plots_viz.plot,
+            'callback': map_plots_callbacks.link,
+            'check': map_plots_processing.check,
         }
     }
 
@@ -120,6 +166,17 @@ class silverOutput(BaseProfile):
         settings_callbacks.link(app)
         for viz in self.viz_options:
             self.viz_options[viz]['callback'](app)
+
+    #not sure if this function should be here
+    def process_data(self, data_collection):
+        print('Base collective preprocess')
+        args = []
+        for viz_option, data in data_collection.items():
+            args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
+        processed_data = [data_processing_task(*arg) for arg in args]
+
+        return processed_data
+
 
     def render_settings(self):
         layout = html.Div(

@@ -57,9 +57,9 @@ def check_content(content, found_profiles) -> Dict[str, List[str]]:
             if viz_name not in visualizations:
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    if visualizations.get(profile.name) is None:
-                        visualizations[profile.name] = []
-                    visualizations[profile.name].append(viz_name)
+                    if visualizations.get(profile.display_name) is None:
+                        visualizations[profile.display_name] = []
+                    visualizations[profile.display_name].append(viz_name)
     return visualizations
 
 
@@ -80,7 +80,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
         if n_clicks:
             for run in selected_runs:
                 model, scenario, author, db = run.split('|')
-                data_handler.select_run(model, scenario, author, db)
+                run = data_handler.select_run(model, scenario, author, db)
                 db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
                                            radius='xl', size='xs', compact=True,
                                            variant='light',
@@ -112,7 +112,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                         counter += 1
                     file = f'{file}-{counter}'
 
-                checked, message = data_handler.check_content(file, _contents[i], extension)
+                checked, message, file = data_handler.check_content(file, _contents[i], extension)
 
                 if not checked:
                     fail = True
@@ -139,7 +139,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
         if fail:
             return dash.no_update, dash.no_update, dash.no_update, dash.no_update, [
                 dmc.Alert(
-                    f'Message', color='red', title='Error',
+                    message, color='red', title='Error',
                     withCloseButton=True
                 ) for message in messages
             ]

@@ -41,6 +41,9 @@ def aggregate_db(db, scenario):
     """
     db.drop(columns=['model', "unit"], inplace=True, errors='ignore')
 
+    db['region'] = db['region'].astype(str)
+    db['variable'] = db['variable'].astype(str)
+
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
@@ -49,6 +52,10 @@ def aggregate_db(db, scenario):
 
     transmission_df = db[classes == 'Flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+    # flip region and variable
+    transmission_df['region'], transmission_df['variable'] = transmission_df['variable'], transmission_df['region']
+
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
     # aggregate df values by region, variable, time, hour
     transmission_df = transmission_df.groupby(["region", "variable", "time"]).sum().reset_index()

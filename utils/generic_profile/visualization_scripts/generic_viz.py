@@ -5,23 +5,26 @@ from utils.generic_profile.visualization_scripts.utils import bar_over_years, ba
     pie_chart
 
 
-def render_plot(type, name, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, ):
+def render_plot(type, name, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False,
+                pattern_list=None):
+    if pattern_list is None:
+        pattern_list = []
     print('rendering plot', type)
     unit = df['unit'].unique()[0]
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,
-                                   text_active=text_active)
+                                   text_active=text_active, pattern_list=pattern_list)
     elif type == 'Trend Over Years':
         return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
     elif type == 'Pie Chart':
-        return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, )
+        return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name)
     else:
         return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
                                      pattern_active=pattern_active,
-                                     text_active=text_active)
+                                     text_active=text_active, pattern_list=pattern_list)
 
-def create_generic_plots(model, name):
+def create_generic_plots(model, name, profile):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
@@ -138,9 +141,11 @@ def create_generic_plots(model, name):
                              'model': model, 'index': window_id}),
         ])
 
+        patterns = [profile.pattern_from_key(key) for key in [scenarios[0]]]
+
         plot_layout = dcc.Graph(
             figure=render_plot('By Year', name, df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                               years[0], scenarios[0]),
+                               years[0], scenarios[0], pattern_list=patterns),
             id={
                 'type': 'figure',
                 'index': window_id,

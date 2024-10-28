@@ -1,13 +1,17 @@
 from random import randint
 
 import dash_mantine_components as dmc
+import pandas as pd
 from dash import html
 
 from utils.generic_profile import utils
 from utils.generic_profile.callbacks import generic_callback, settings
 from utils.generic_profile.processing_scripts import generic_processing
 from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
+from utils.generic_profile.visualization_scripts import overview
+from utils.generic_profile.callbacks import overview as overview_callback
 
+plotly_pattern_list = ['', '/', 'x', '-', '|', '+', '.', '\\']
 
 def data_processing_task(profile_name, viz, data, processing_func):
     # try:
@@ -21,6 +25,7 @@ def data_processing_task(profile_name, viz, data, processing_func):
 
 class GenericProfile:
     def __init__(self, name, classes, variables):
+        self.display_name = name
         self.name = name
 
         self.technologies = {}
@@ -40,11 +45,13 @@ class GenericProfile:
 
         self.plot_order = classes
         self.plot_order.sort()
+        self.plot_order = ['Overview'] + self.plot_order
 
         self.viz_options = {}
+        self.pattern_dict = {}
 
         for class_name in classes:
-            plot = create_generic_plots(name, class_name)
+            plot = create_generic_plots(name, class_name, self)
             self.viz_options[class_name] = {
                 'check': generic_processing.create_check(class_name, name),
                 'db_check': generic_processing.create_check(class_name, name),
@@ -53,16 +60,56 @@ class GenericProfile:
                 'viz': plot,
             }
 
-    def link(self, app):
+        self.viz_options['Overview'] = {
+            'check': lambda x: True,
+            'db_check': lambda x: True,
+            'process': lambda x: x,
+            'db_process': lambda x: x,
+            'viz': overview.create_overview_plot(name),
+            'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+        }
+    @classmethod
+    def link(cls, app):
         generic_callback.link(app)
+        overview_callback.link(app)
         settings.link(app)
+
+
+    def pattern_from_key(self, key):
+        if key not in self.pattern_dict:
+            self.pattern_dict[key] = plotly_pattern_list[len(self.pattern_dict) % len(plotly_pattern_list)]
+        return self.pattern_dict[key]
 
     def process_data(self, data_collection):
         args = []
         for viz_option, data in data_collection.items():
-            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+            if viz_option != 'Overview':
+                args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
         processed_data = [data_processing_task(*arg) for arg in args]
+
+        dfs = []
+        for _, viz_option, data in processed_data:
+
+            df = data.copy()
+            df['variable'] = viz_option
+
+            # if CAN in region, remove all other regions
+            if 'region' in df.columns:
+                if 'CAN' in df['region'].unique():
+                    df = df[df['region'] == 'CAN']
+                elif 'Canada' in df['region'].unique():
+                    df = df[df['region'] == 'Canada']
+                elif 'National' in df['region'].unique():
+                    df = df[df['region'] == 'National']
+
+            df = df.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+            df['region'] = 'National'
+
+            dfs.append(df)
+        full_df = pd.concat(dfs)
+
+        processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
 
@@ -73,7 +120,7 @@ class GenericProfile:
                 dmc.Select(
                     id={
                         'type': 'general-technology-settings-dropdown',
-                        'profile': self.name,
+                        'profile': self.display_name,
                     },
                     data=[{'label': tech, 'value': tech} for tech in techs],
                     value=techs[0],
@@ -89,10 +136,10 @@ class GenericProfile:
                     'marginTop': '1rem',
                 }
             ),
-            html.Div(utils.tech_edit(techs[0], self.name),
+            html.Div(utils.tech_edit(techs[0], self.display_name),
                      id={
                          'type': 'general-technology-settings-output',
-                         'profile': self.name,
+                         'profile': self.display_name,
                      }),
         ])
 

@@ -61,6 +61,9 @@ def process(selected):
         prov_df = df[df.variable.str.startswith("New Capacity|")]
 
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+        prov_df = prov_df[~prov_df['variable'].str.contains("Retire")]
+
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         new_cap = process_newcap(prov_df, canada_df, scenario_name)

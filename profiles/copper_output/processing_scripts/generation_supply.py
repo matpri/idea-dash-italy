@@ -41,6 +41,8 @@ def aggregate_db(db, scenario):
     """
     # safely remove model and unit column if they exist
     db = db.drop(columns=['model', 'unit'], errors='ignore')
+    db['region'] = db['region'].astype(str)
+    db['variable'] = db['variable'].astype(str)
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
@@ -69,6 +71,10 @@ def aggregate_db(db, scenario):
 
     transmission_df = db[classes == 'Flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+    # flip region and variable
+    transmission_df['region'], transmission_df['variable'] = transmission_df['variable'], transmission_df['region']
+
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object

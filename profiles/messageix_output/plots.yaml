@@ -1,0 +1,236 @@
+Emissions:
+  name: Emissions
+  unit: MtCO2eq
+  By Year:
+    title: Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Trend Over Years:
+    title: Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Pie Chart:
+    title: Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Emissions by Region
+    x_label: Region
+    y_label: Emissions (MtCO2eq)
+Capacity:
+  name: Capacity
+  unit: MW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (MW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (MW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (MW)
+Capacity Additions:
+  name: Capacity Additions
+  unit: MW
+  By Year:
+    title: Capacity Additions by Year
+    x_label: Year
+    y_label: Capacity Additions (MW)
+  Trend Over Years:
+    title: Capacity Additions by Year
+    x_label: Year
+    y_label: Capacity Additions (MW)
+  Pie Chart:
+    title: Capacity Additions
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity Additions by Region
+    x_label: Region
+    y_label: Capacity Additions (MW)
+Capital Cost:
+  name: Capital Cost
+  unit: CAD
+  By Year:
+    title: Capital Cost by Year
+    x_label: Year
+    y_label: Capital Cost (CAD)
+  Trend Over Years:
+    title: Capital Cost by Year
+    x_label: Year
+    y_label: Capital Cost (CAD)
+  Pie Chart:
+    title: Capital Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Capital Cost by Region
+    x_label: Region
+    y_label: Capital Cost (CAD)
+Total Cost:
+  name: Total Cost
+  unit: CAD
+  By Year:
+    title: Total Cost by Year
+    x_label: Year
+    y_label: Total Cost (CAD)
+  Trend Over Years:
+    title: Total Cost by Year
+    x_label: Year
+    y_label: Total Cost (CAD)
+  Pie Chart:
+    title: Total Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Total Cost by Region
+    x_label: Region
+    y_label: Total Cost (CAD)
+Primary Energy:
+  name: Primary Energy
+  unit: MW
+  By Year:
+    title: Primary Energy by Year
+    x_label: Year
+    y_label: Primary Energy (MW)
+  Trend Over Years:
+    title: Primary Energy by Year
+    x_label: Year
+    y_label: Primary Energy (MW)
+  Pie Chart:
+    title: Primary Energy
+    x_label:
+    y_label:
+  By Region:
+    title: Primary Energy by Region
+    x_label: Region
+    y_label: Primary Energy (MW)
+Final Energy:
+  name: Final Energy
+  unit: MW
+  By Year:
+    title: Final Energy by Year
+    x_label: Year
+    y_label: Final Energy (MW)
+  Trend Over Years:
+    title: Final Energy by Year
+    x_label: Year
+    y_label: Final Energy (MW)
+  Pie Chart:
+    title: Final Energy
+    x_label:
+    y_label:
+  By Region:
+    title: Final Energy by Region
+    x_label: Region
+    y_label: Final Energy (MW)
+Secondary Energy:
+  name: Secondary Energy
+  unit: MW
+  By Year:
+    title: Secondary Energy by Year
+    x_label: Year
+    y_label: Secondary Energy (MW)
+  Trend Over Years:
+    title: Secondary Energy by Year
+    x_label: Year
+    y_label: Secondary Energy (MW)
+  Pie Chart:
+    title: Secondary Energy
+    x_label:
+    y_label:
+  By Region:
+    title: Secondary Energy by Region
+    x_label: Region
+    y_label: Secondary Energy (MW)
+Useful Energy:
+  name: Useful Energy
+  unit: MW
+  By Year:
+    title: Useful Energy by Year
+    x_label: Year
+    y_label: Useful Energy (MW)
+  Trend Over Years:
+    title: Useful Energy by Year
+    x_label: Year
+    y_label: Useful Energy (MW)
+  Pie Chart:
+    title: Useful Energy
+    x_label:
+    y_label:
+  By Region:
+    title: Useful Energy by Region
+    x_label: Region
+    y_label: Useful Energy (MW)
+Overview:
+  Capacity:
+    name: Capacity
+    unit: MW
+    title: Capacity Overview
+    x_label: Year
+    y_label: Capacity (MW)
+  Capacity Additions:
+    name: Capacity Additions
+    unit: MW
+    title: Capacity Additions Overview
+    x_label: Year
+    y_label: Capacity Additions (MW)
+  Capital Cost:
+    name: Capital Cost
+    unit: CAD
+    title: Capital Cost Overview
+    x_label: Year
+    y_label: Capital Cost (CAD)
+  Total Cost:
+    name: Total Cost
+    unit: CAD
+    title: Total Cost Overview
+    x_label: Year
+    y_label: Total Cost (CAD)
+  Primary Energy:
+    name: Primary Energy
+    unit: MW
+    title: Primary Energy Overview
+    x_label: Year
+    y_label: Primary Energy (MW)
+  Final Energy:
+    name: Final Energy
+    unit: MW
+    title: Final Energy Overview
+    x_label: Year
+    y_label: Final Energy (MW)
+  Secondary Energy:
+    name: Secondary Energy
+    unit: MW
+    title: Secondary Energy Overview
+    x_label: Year
+    y_label: Secondary Energy (MW)
+  Useful Energy:
+    name: Useful Energy
+    unit: MW
+    title: Useful Energy Overview
+    x_label: Year
+    y_label: Useful Energy (MW)
+  Emissions:
+    name: Emissions
+    unit: MtCO2eq
+    title: Emissions Overview
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+    
+    
+    
+
+
+
+
+
+
+

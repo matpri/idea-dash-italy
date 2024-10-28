@@ -57,7 +57,8 @@ from profiles.pithos_output.visualization_scripts import (
 
 
 class PyPsaOutput(BaseProfile):
-    name = 'HEC-PITHOS Output'
+    display_name ='HEC-PITHOS Output'
+    name = 'HEC-PITHOS'
     db_name = 'pithos'
     color = 'yellow 8'
     description = (

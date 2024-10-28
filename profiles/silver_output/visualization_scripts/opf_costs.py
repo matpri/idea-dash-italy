@@ -15,9 +15,7 @@ def render_plot(df, scenarios, time_size='hourly'):
     x_axis_label = plot_settings['OPF Costs']['Total']['x_label']
     y_axis_label = plot_settings['OPF Costs']['Total']['y_label']
 
-
     fig = go.Figure()
-    # add title
     fig.update_layout(
         title_text=title,
         xaxis_title=x_axis_label,
@@ -41,7 +39,6 @@ def render_plot(df, scenarios, time_size='hourly'):
             df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
 
         cols = df_scen.columns.tolist()
-        # remove value column
         cols.remove('value')
         df_scen = df_scen.groupby(cols).sum(numeric_only=True).reset_index()
 
@@ -49,33 +46,59 @@ def render_plot(df, scenarios, time_size='hourly'):
         can_opf_costs = can_supply[can_supply['value'] != 0]
         total = can_opf_costs.groupby(['time', 'scenario']).sum().reset_index()
 
-        # create stacked bar chart
-        for i, scen in enumerate(scenarios):
-            df_scen = total[total['scenario'].isin(scenarios)]
-            df_scen = df_scen.sort_values(by=['time'])
-            fig.add_trace(go.Scatter(
-                x=df_scen['time'],
-                y=df_scen['value'],
-                name=scen,
-                mode='lines' if len(df_scen['time']) > 1 else 'markers',
-                # set line color to respective tech color
-                line=dict(color=utils.get_color(scen)),
-                marker=dict(color=utils.get_color(scen)),
-            ))
-        fig.update_yaxes(showgrid=True)
-        fig.update_xaxes(
-            rangeslider_visible=True,
-            rangeselector=dict(
-                buttons=list([
-                    dict(count=1, label="1d", step="day", stepmode="backward"),
-                    dict(count=1, label="1m", step="month", stepmode="backward"),
-                    dict(count=6, label="6m", step="month", stepmode="backward"),
-                    dict(count=1, label="YTD", step="year", stepmode="todate"),
-                    dict(count=1, label="1y", step="year", stepmode="backward"),
-                    dict(step="all")
-                ])
+        unique_times = total['time'].nunique()
+
+        if unique_times == 1:
+            # Pie chart for single time entry
+            fig = go.Figure(data=[go.Pie(
+                labels=total['scenario'],
+                values=total['value'],
+                hole=.3,
+                hovertemplate='Scenario: %{label}<br>OPF Cost: %{value:.2f} ' + unit + '<br><extra></extra>'
+            )])
+            fig.update_layout(title_text=f"{title} - {total['time'].iloc[0]}")
+
+        elif 2 <= unique_times <= 10:
+            # Bar plot for 2-10 time entries
+            for scen in scenarios:
+                df_scen = total[total['scenario'] == scen].sort_values(by=['time'])
+                fig.add_trace(go.Bar(
+                    x=df_scen['time'],
+                    y=df_scen['value'],
+                    name=scen,
+                    marker_color=utils.get_color(scen),
+                    hovertemplate='Scenario: %{name}<br>Time: %{x}<br>OPF Cost: %{y:.2f} ' + unit + '<br><extra></extra>'
+                ))
+            fig.update_layout(barmode='group')
+
+        else:
+            # Line plot for more than 10 time entries
+            for scen in scenarios:
+                df_scen = total[total['scenario'] == scen].sort_values(by=['time'])
+                fig.add_trace(go.Scatter(
+                    x=df_scen['time'],
+                    y=df_scen['value'],
+                    name=scen,
+                    mode='lines',
+                    line=dict(color=utils.get_color(scen)),
+                    hovertemplate='Scenario: %{name}<br>Time: %{x}<br>OPF Cost: %{y:.2f} ' + unit + '<br><extra></extra>'
+                ))
+
+        if unique_times > 1:
+            fig.update_xaxes(
+                rangeslider_visible=True,
+                rangeselector=dict(
+                    buttons=list([
+                        dict(count=1, label="1d", step="day", stepmode="backward"),
+                        dict(count=1, label="1m", step="month", stepmode="backward"),
+                        dict(count=6, label="6m", step="month", stepmode="backward"),
+                        dict(count=1, label="YTD", step="year", stepmode="todate"),
+                        dict(count=1, label="1y", step="year", stepmode="backward"),
+                        dict(step="all")
+                    ])
+                )
             )
-        )
+
         if can_opf_costs.empty:
             print("No data available, since the results are all zero.")
             fig.add_annotation(
@@ -83,10 +106,7 @@ def render_plot(df, scenarios, time_size='hourly'):
                 y=0.5,
                 text="No data available, since the results are all zero.",
                 showarrow=False,
-                font=dict(
-                    size=16,
-                    color="black"
-                ),
+                font=dict(size=16, color="black"),
                 align="center",
                 valign="middle",
             )

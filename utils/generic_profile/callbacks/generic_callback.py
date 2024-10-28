@@ -205,6 +205,9 @@ def link(app):
                 break
 
         print('idx:', idx, 'plot type:', _p_type[idx])
+        profile = data_handler.profiles[model]
+        patterns = [profile.pattern_from_key(key) for key in _scenarios[idx]]
+        print('patterns:', patterns)
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
@@ -222,7 +225,7 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns)
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
@@ -238,7 +241,7 @@ def link(app):
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx], pattern_list=patterns)
 
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
@@ -254,7 +257,7 @@ def link(app):
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx], pattern_list=patterns)
 
         else:
             _m_style[idx] = {'display': 'block'}
@@ -271,7 +274,7 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns)
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in
                                              _data], _s_style, _m_style, _pattern_style, _text_style
