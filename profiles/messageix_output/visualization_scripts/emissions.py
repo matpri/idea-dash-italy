@@ -23,7 +23,6 @@ def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     elif type == 'Map Plot':
         return map_plot.plot_map(df, scenario, year)
-
     else:
         plot_info = plot_settings['Emissions']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
@@ -93,7 +92,7 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
             value='By Year',
             id={
                 'type': 'messageix-emissions-plot-select',
