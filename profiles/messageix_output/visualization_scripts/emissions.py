@@ -4,11 +4,12 @@ from dash import html, dcc
 from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart, map_plot
 
 
-def render_plot(type, df, aggregate, variable, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Emissions']['name']
     unit = plot_settings['Emissions']['unit']
+    df = db.copy()
     df['type'] = df['variable'].apply(lambda x: x.split('|')[1])
     df = df[df['type'].str.startswith(variable)]
     if type == 'By Year':

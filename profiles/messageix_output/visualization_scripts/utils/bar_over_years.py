@@ -74,10 +74,10 @@ def subset(df, region, scenarios, aggregate, season=None):
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.groups)
+        df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
         df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
     else:
-        df_scen['variable'] = df_scen["variable"].map(utils.names)
+        df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
