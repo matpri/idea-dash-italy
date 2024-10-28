@@ -6,7 +6,7 @@ This guide outlines the steps to add a custom model profile to our project. A mo
 processing and visualization functions for specific data sets. If you have your own data source or custom requirements,
 you can create a custom model profile to integrate it seamlessly.
 
-## Folder Structure
+### Folder Structure
 
 To keep your project organized, we recommend following this folder structure for adding your custom model profile:
 
@@ -34,7 +34,7 @@ This is optional, but what is necessary for IDEA to find your profile and seamle
 custom_model folder and the custom_model.py file.
 The folder and the file can have any name but inside the file you must define a class that is a subclass of BaseProfile
 
-## Steps to Add a Custom Model Profile
+### Steps to Add a Custom Model Profile
 
 1. **Create a New Folder:**
 
@@ -70,8 +70,9 @@ The folder and the file can have any name but inside the file you must define a 
    
    
    class CustomModel(BaseProfile):
-        name = 'Custom Model Profile'
-        db_name = 'custom'
+        display_name = 'Custom Model Profile' # Name of the profile as it will be displayed in IDEA
+        name = 'custom' # name of the profile in the model column of the IAMC data, used to identify the profile in the data
+        db_name = 'custom' # name of the profile in the database, used to identify the profile in the database  
         description = 'This is a custom model profile' # Add a description for your profile, is shown on highlight in IDEA
         settings = html.Div(
            [
@@ -120,8 +121,6 @@ The folder and the file can have any name but inside the file you must define a 
             """
     
             return layout
-    
-        
     
         
     ```
@@ -213,5 +212,4 @@ profile to the project, enabling you to work with your specific data sources and
          return figure
 
    ```
-   
    Repeat this for each visualization type.

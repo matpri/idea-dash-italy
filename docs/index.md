@@ -21,15 +21,13 @@ and understandable for stakeholders and the general public.
 For those interested in the previous version of IDEA, please refer to the [IDEA Panel repository](https://gitlab.com/sesit/idea).
 This updated version is based on Dash, a Python web application framework that enables the creation of interactive,
 web-based data visualizations. IDEA leverages Dash's capabilities to provide a user-friendly interface for exploring
-energy transition data, models, and scenarios. With Dash we were able to create a more seamless and modern user experience.
-Specifically, we added resizable and draggable windows, so users can create their own custom dashboards. Additionally, we allow users to hide the UI from the windows, so they can have a clean view of the plots for presentations.
+energy transition data, models, and scenarios. 
 
-But, due to technical limitations we had to remove compatibility with non-PYAM formatted data.
-If you are using non-PYAM formatted data, please refer to the [IDEA Panel repository](https://gitlab.com/sesit/idea) or use one of our provided converters to convert your data to PYAM format (e.g. [COPPER Converter](https://gitlab.com/sesit/copper-pyam)).
+The platform is tile-based, allowing users to add multiple tiles/windows to the page that they can manipulate to create a custom dashboard. Each tile features two layers of tabs at the top, enabling users to swap between models and plots within a model. All plots are interactable and can be updated using widgets to switch between representations, time periods, or regions. Users can also dynamically hide the widgets and tabs to display only the plots within the windows, so they can have a clean view of the plots for presentations. Additionally, editing features are available, allowing users to modify scenario names, technologies, and set colors and aggregation groups for technologies.
 
 If you are interested in seeing your model results in IDEA, please refer to the [Extending IDEA](extending-idea.md) section for instructions on how to add a new model profile or contact us for a possible collaboration.
 
-At the moment we have custom plots for our COPPER, SILVER, MESSAGE and CIMS model. Additionally, we have plots showcasing some of the data accessible through the CODERS database, commonly used for our energy models.
+At the moment, we have custom plots for our COPPER, SILVER, MESSAGE, LabourABM, and CIMS models and any results following the [IAMC format](iamc-format.md) can be visualized with generic plots. Additionally, we have plots showcasing some of the data accessible through the CODERS database, commonly used for our energy models.
 
 ## Sections
 - [Setup and Installation](setup-and-installation.md)

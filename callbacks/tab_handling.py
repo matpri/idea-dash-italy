@@ -6,6 +6,15 @@ from assets.styles import hide_button_style, view_button_style
 
 
 def link(app):
+    """
+    Link the tab handling callbacks to the Dash app.
+
+    This module manages the visibility and state of tabs in the Dash application.
+    It handles the toggling of tabs and updates the visualization tab content based on user interactions.
+
+    Parameters:
+    - app: The Dash application instance.
+    """
     @app.callback(
         Output({'type': 'collapse-tabs', 'index': dash.dependencies.ALL}, 'is_open'),
         Output({'type': 'hide-tab', 'index': dash.dependencies.ALL}, 'style'),
@@ -16,6 +25,17 @@ def link(app):
         prevent_initial_call=True,
     )
     def toggle_tab(n_hide, n_view, is_open):
+        """
+        Toggle the visibility of tabs based on user clicks.
+
+        Parameters:
+        - n_hide: Number of clicks on hide tabs.
+        - n_view: Number of clicks on view tabs.
+        - is_open: Current state of the tabs (open or closed).
+
+        Returns:
+        - Updated state of the tabs and their styles.
+        """
         print('toggling tab')
         ctx = dash.callback_context
         triggered_input = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -46,6 +66,16 @@ def link(app):
         prevent_initial_call=True,
     )
     def display_viz_tab(_tabs, _children):
+        """
+        Display the visualization tab based on the selected profile.
+
+        Parameters:
+        - _tabs: The currently selected tabs.
+        - _children: Current children of the visualization tab container.
+
+        Returns:
+        - Updated children of the visualization tab container.
+        """
         from main import data_handler
 
         profiles = data_handler.get_viz_options()
@@ -66,7 +96,6 @@ def link(app):
                 dmc.Tab(
                     dmc.Tooltip(
                         multiline=True,
-                        # width=220,
                         withArrow=True,
                         transition="fade",
                         transitionDuration=200,
@@ -105,6 +134,17 @@ def link(app):
         prevent_initial_call=True,
     )
     def update_drawer(_values, _children, _plots):
+        """
+        Update the drawer content based on the selected visualization tab.
+
+        Parameters:
+        - _values: Selected values from the visualization tabs.
+        - _children: Current children of the drawer content.
+        - _plots: Current hidden plots.
+
+        Returns:
+        - Updated children of the drawer content and hidden plots.
+        """
         from main import data_handler
         ctx = dash.callback_context
         if not ctx.triggered:
