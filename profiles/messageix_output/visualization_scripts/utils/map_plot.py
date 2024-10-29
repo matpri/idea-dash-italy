@@ -3,6 +3,8 @@ import geojson
 
 import plotly.graph_objects as go
 
+from profiles.messageix_output import utils
+
 region_mapping = {
     'Canada': 'Canada',
     'BritishColumbia': 'British Columbia',
@@ -20,10 +22,18 @@ region_mapping = {
     'Yukon': 'Yukon'
 }
 
-def plot_map(message_data, scenario, time):
+def plot_map(message_data, scenario, time, variable='All', aggregate=False):
 
 
     rep_data = message_data[(message_data['time'] == time) & (message_data['scenario'] == scenario)]
+
+    if aggregate:
+        rep_data['variable'] = rep_data['variable'].map(utils.groups).fillna(rep_data['variable'])
+    else:
+        rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
+
+    if variable != 'All':
+        rep_data = rep_data[rep_data['variable'] == variable]
 
 
     with open('./profiles/messageix_output/visualization_scripts/utils/ca.json', 'r') as f:
