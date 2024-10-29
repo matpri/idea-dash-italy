@@ -1,48 +1,41 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+import plotly.graph_objects as go
 
 
 def render_plot(df, scenario, region, year):
-    l = pd.DataFrame(list(df['source'].append(df['target']).unique()))
-    l.reset_index(level=0, inplace=True)
-    l.set_index(0, inplace=True)
+    csv = df[(df['scenario'] == scenario) & (df['region'] == region) & (df['time'] == year)].copy()
+    csv = csv.groupby(['source', 'target']).sum().reset_index()
 
-    # Assign integers to the strings in source column
-    s = pd.DataFrame(df['source'])
-    s.set_index('source', drop=True, inplace=True)
-    s.index.names = [0]
-    s['index'] = 'nan'
-    s.update(l)
-
-    # Assign integers to the strings in target column
-    t = pd.DataFrame(df['target'])
-    t.set_index('target', drop=True, inplace=True)
-    t.index.names = [0]
-    t['index'] = 'nan'
-    t.update(l)
-
-    # Create sankey diagram
+    # map source and target to integers adding a new column for label that is the source and target separated by a comma
+    nodes = []
+    for i, row in csv.iterrows():
+        if row['source'] not in nodes:
+            nodes.append(row['source'])
+        if row['target'] not in nodes:
+            nodes.append(row['target'])
+    csv['source_int'] = csv['source'].apply(lambda x: nodes.index(x))
+    csv['target_int'] = csv['target'].apply(lambda x: nodes.index(x))
     fig = go.Figure(data=[go.Sankey(
+        arrangement='snap',
         node=dict(
             pad=15,
-            thickness=10,
+            thickness=20,
             line=dict(color="black", width=0.5),
-            label=list(l.index),  # use the index of the labeled strings as integers
-            hovertemplate='%{label}: %{value} TWh<extra></extra>',
+            label=nodes,
             color="blue"
+
         ),
         link=dict(
-            source=list(s['index']),  # each integer corresponds to the index of the labeled strings
-            target=list(t['index']),  # each integer corresponds to the index of the labeled strings
-            value=list(df['Value']),
-            hovertemplate='"%{source.label}" to "%{target.label}": %{value} TWh<extra></extra>'
-        ))])
+            source=csv['source_int'].tolist(),
+            target=csv['target_int'].tolist(),
+            value=csv['value'].tolist(),
+        )
+    )])
 
-    fig.update_layout(title_text="%s_%s" % (region, year), font_size=10)
-    fig.show()
+    fig.update_layout(title_text="Sankey Diagram for Fuel Flow", font_size=10)
+    return fig
 
 def plot(df, window_id):
     '''
@@ -60,7 +53,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value= 'CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'messageix-capacity-region-select',
+            'type': 'messageix-sankey-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -72,7 +65,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'messageix-capacity-year-select',
+            'type': 'messageix-sankey-year-select',
             'index': window_id
         },
 
@@ -82,31 +75,22 @@ def plot(df, window_id):
 
     widget_layout = html.Div([
         dmc.Select(
-            label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
-            value='By Year',
-            id={
-                'type': 'messageix-capacity-plot-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
             label='Scenario',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'messageix-capacity-scenario-select',
+                'type': 'messageix-sankey-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'messageix-capacity-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'messageix-sankey-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'messageix-capacity-download', 'index': window_id}),
+        dcc.Download(id={'type': 'messageix-sankey-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -115,7 +99,7 @@ def plot(df, window_id):
             'type': 'figure',
             'index': window_id,
             'profile': 'messageix_output',
-            'viz': 'capacity'
+            'viz': 'sankey'
         },
         style={
             'width': '100%',

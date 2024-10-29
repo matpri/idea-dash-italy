@@ -7,17 +7,19 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.messageix_output import utils
 from profiles.messageix_output.callbacks import (emissions as emissions_callbacks,
-                                              capital_cost as capital_cost_callbacks,
-total_cost as total_cost_callbacks,
-capacity_additions as capacity_additions_callbacks,
-capacity as capacity_callbacks,
-primary_energy as primary_energy_callbacks,
-secondary_energy as secondary_energy_callbacks,
-final_energy as final_energy_callbacks,
-useful_energy as useful_energy_callbacks,
-                                              settings as settings_callbacks,
-overview as overview_callbacks
-                                              )
+                                                 capital_cost as capital_cost_callbacks,
+                                                 total_cost as total_cost_callbacks,
+                                                 capacity_additions as capacity_additions_callbacks,
+                                                 capacity as capacity_callbacks,
+                                                 primary_energy as primary_energy_callbacks,
+                                                 secondary_energy as secondary_energy_callbacks,
+                                                 final_energy as final_energy_callbacks,
+                                                 useful_energy as useful_energy_callbacks,
+                                                 settings as settings_callbacks,
+                                                 overview as overview_callbacks,
+                                                 sankey as sankey_callbacks
+
+                                                 )
 from profiles.messageix_output.processing_scripts import (
     emissions as emissions_processing,
     total_cost as total_cost_processing,
@@ -28,7 +30,8 @@ from profiles.messageix_output.processing_scripts import (
     secondary_energy as secondary_energy_processing,
     final_energy as final_energy_processing,
     useful_energy as useful_energy_processing,
-    overview as overview_processing
+    overview as overview_processing,
+    sankey as sankey_processing
 )
 from profiles.messageix_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -40,7 +43,8 @@ from profiles.messageix_output.visualization_scripts import (
     secondary_energy as secondary_energy_viz,
     final_energy as final_energy_viz,
     useful_energy as useful_energy_viz,
-    overview as overview_viz
+    overview as overview_viz,
+    sankey as sankey_viz
 )
 
 
@@ -63,6 +67,7 @@ class messageixOutput(BaseProfile):
         'Secondary Energy',
         'Final Energy',
         'Useful Energy',
+        'Sankey'
     ]
     viz_options = {
         'Overview':
@@ -165,11 +170,22 @@ class messageixOutput(BaseProfile):
                 'callback': useful_energy_callbacks.link,
                 'description': 'Useful energy in the energy system.'
             },
+        'Sankey':
+            {
+                'check': sankey_processing.check,
+                'db_check': sankey_processing.check,
+                'process': sankey_processing.process,
+                'db_process': sankey_processing.process,
+                'viz': sankey_viz.plot,
+                'callback': sankey_callbacks.link,
+                'description': 'Sankey diagram showing the flow of energy in the energy system.'
+            },
     }
 
     def __init__(self):
         super().__init__()
-        self.technologies = yaml.load(open('./profiles/messageix_output/technologies.yaml', 'r'), Loader=yaml.FullLoader)
+        self.technologies = yaml.load(open('./profiles/messageix_output/technologies.yaml', 'r'),
+                                      Loader=yaml.FullLoader)
         self.plots = yaml.load(open('./profiles/messageix_output/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
         self.settings = self.render_settings()

@@ -3453,3 +3453,8 @@ bio_ppl:
   group: Total Costs|biomass
   group_color: '#7aa923'
   name: bio_ppl
+Capacity|liq_h2:
+  color: '#f4b3f4'
+  group: Capacity|Oil
+  group_color: '#4094a5'
+  name: Capacity|liq_h2
