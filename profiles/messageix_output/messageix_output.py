@@ -67,7 +67,7 @@ class messageixOutput(BaseProfile):
         'Secondary Energy',
         'Final Energy',
         'Useful Energy',
-        'Sankey'
+        # 'Sankey'
     ]
     viz_options = {
         'Overview':
