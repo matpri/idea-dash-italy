@@ -22,6 +22,7 @@ parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
 parser.add_argument('--dev', type=bool, default=False,
                     help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
+parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
 args = parser.parse_args()  # Parse the arguments
 
 
@@ -66,6 +67,11 @@ save_datahandler.link(app)
 print(data_files)
 print(bool(data_files))
 data_handler.preload_data(data_files)
+if args.autosave != '':
+    print(f"Autosaving datahandler to {args.autosave}")
+    if not os.path.exists(args.autosave):
+        os.makedirs(args.autosave)
+    data_handler.save(args.autosave)
 
 if not static:
     print("Rendering header...")  # Debugging statement
