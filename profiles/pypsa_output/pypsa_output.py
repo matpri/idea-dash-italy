@@ -79,7 +79,7 @@ class PypsaOutput(BaseProfile):
         'Capacity Cost',
         'FOM Cost',
         'VOM Cost',
-        'Dispatch'
+        # 'Dispatch'
     ]
     viz_options = {
         'Overview':

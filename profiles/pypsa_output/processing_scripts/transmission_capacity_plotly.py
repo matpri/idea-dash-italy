@@ -17,11 +17,7 @@ def check(df):
     try:
         if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
-                test = df.copy()
-                test = test[test.variable.str.startswith("Total transmission capacity|")]
-                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
-                test = test[test.region != test.variable]
-                return test.value.sum() != 0
+                return True
         return False
     except Exception as e:
         print("capacity_transmission check", e)
@@ -179,8 +175,14 @@ def process(selected):
     for scenario_name, db in selected.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Total transmission capacity|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|to ")[1])
-        df = df.rename(columns={"time": "period"})
+        df = df.rename(columns={"time": "period", 'region':'line'})
+        df['region'], df['variable'] = df['line'].str.split('->').str[0], df['line'].str.split('->').str[1]
+        # drop where region == variable
+        df = df[df.region != df.variable]
+        reverse_df = df.copy()
+        reverse_df['region'], reverse_df['variable'] = df['variable'], df['region']
+        df = pd.concat([df, reverse_df])
+
         df = df.sort_values(by=['period'])
         times = df['period'].unique().tolist()
         times.sort()
@@ -192,26 +194,6 @@ def process(selected):
         df = df[df.region != df.variable]
         df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
 
-        # cum_ls = []
-        # for i in range(1, len(times)):
-        #     prev_times = times[:i]
-        #     new_built = df[(df['period'].isin(prev_times))]
-        #     columns = [*new_built.columns]
-        #     columns.remove('value')
-        #     new_built['period'] = times[i]
-        #     new_built = new_built.groupby(columns).sum().reset_index()
-        #     cum_ls.append(new_built)
-
-        # cum_df = pd.concat(cum_ls)
-        # df = pd.merge(df, cum_df, on=['region', 'variable', 'period', 'scenario'], how='outer')
-        # df = df.rename(columns={"value_x": "value", "value_y": "cumsum"})
-        # df['cumsum'] = df['cumsum'].fillna(0)
-        # df['value'] = df['value'].fillna(0)
-        # df['total'] = df['value'] + df['cumsum']
-        # if os.path.exists(os.path.join(folder, 'extant_transmission.csv')):
-        #     extant_df = extant_process(os.path.join(folder, 'extant_transmission.csv'))
-        #     extant_df = extant_df.rename(columns={"time": "period"})
-        #     df = pd.concat([df, extant_df], ignore_index=True)
 
         df['scenario'] = scenario_name
         df['period'] = df['period'].astype(int)

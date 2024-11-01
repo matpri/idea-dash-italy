@@ -156,14 +156,10 @@ def process(selected):
         trs = df.copy()
         trs = trs[trs.variable.str.startswith("Transmission flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
-        trs['time'] = pd.to_datetime(trs['time'])
         # all times - 1 hour delta
-        trs['period'] = trs['time'].dt.year
-        sub_transmission = trs[trs['period'] == trs['period'].min()]
-        unique_dates = sub_transmission['time'].dt.date.unique()
+        trs['period'] = trs['time']
 
         trs['value'] = trs['value'] / 1000
-        trs['value'] = trs['value'] * 365 / len(unique_dates)
         # drop time
         trs = trs.drop(columns=['time'])
         # group by region, variable, period
