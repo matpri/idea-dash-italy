@@ -16,7 +16,7 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             if df.variable.str.startswith("Operational|FO&M costs|").any():
                 return df[df.variable.str.startswith("Operational|FO&M costs|")]['value'].sum() != 0
         return False

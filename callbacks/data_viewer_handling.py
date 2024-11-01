@@ -11,7 +11,7 @@ profile_modules = {
     'SILVER Output': 'profiles.silver_output',
     'Canada Energy Futures': 'profiles.cef',
     'ECCC-NextGrid Output': 'profiles.nextgrid_output',
-    'NATEM-POWER Output': 'profiles.natem_output',
+    'NATEM Canada Output': 'profiles.natem_output',
     'ESMIA-PITHOS Output': 'profiles.pithos_output',
     'NRCAN-PyPsa Output': 'profiles.pypsa_output',
     'Power System Models': 'profiles.energy_model',

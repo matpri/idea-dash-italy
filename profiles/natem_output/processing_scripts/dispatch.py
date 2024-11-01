@@ -19,7 +19,7 @@ def check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             if df.variable.str.startswith("Dispatch|").any() or df.variable.str.startswith(
                     "Transmission flow|").any():
                 return True

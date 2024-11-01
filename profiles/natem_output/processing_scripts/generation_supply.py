@@ -18,7 +18,7 @@ def check(df):
     """
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
             if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True

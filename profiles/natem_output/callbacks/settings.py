@@ -30,7 +30,7 @@ def link(app):
         settings = yaml.load(decoded, Loader=yaml.FullLoader)
 
         from main import data_handler
-        data_handler.profiles['NATEM-POWER Output'].settings = settings
+        data_handler.profiles['NATEM Canada Output'].settings = settings
         return html.Div([
             html.Div('Settings Updated'),
             html.Div(f'Using {filename}'),
