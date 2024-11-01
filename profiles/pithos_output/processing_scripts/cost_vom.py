@@ -19,8 +19,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'HEC-PITHOS').any():
-            if df.variable.str.startswith("Operational|VO&M costs|").any():
-                return df[df.variable.str.startswith("Operational|VO&M costs|")]['value'].sum() != 0
+            if df.variable.str.startswith("VO&M costs|").any():
+                return df[df.variable.str.startswith("VO&M costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -99,8 +99,8 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Operational|VO&M costs|")]
-        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+        df = df[df.variable.str.startswith("VO&M costs|")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)
         df['scenario'] = scenario_name
