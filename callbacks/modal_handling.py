@@ -5,6 +5,16 @@ from components import ids
 
 
 def link(app):
+    """
+    Link the modal handling callbacks to the Dash app.
+
+    This module handles the opening, closing, and submission of modals
+    in the Dash application. It manages the state of multiple modals
+    and updates the relevant outputs based on user interactions.
+
+    Parameters:
+    - app: The Dash application instance.
+    """
     @app.callback(
         Output({'type': 'modal', 'index': dash.dependencies.ALL}, 'opened'),
         Output(ids.DATA_CHANGE, 'n_clicks'),
@@ -22,6 +32,27 @@ def link(app):
     def handle_modals(
             open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, _update_chips, scenario_names
     ):
+        """
+        Handle the opening, closing, and submission of modals.
+
+        This function is triggered by clicks on buttons that effect modals and updates
+        the state of the modals accordingly. It also processes data when
+        the submit button is clicked.
+        ids.DATA_CHANGE and ids.UPDATE_CHIPS are hidden buttons that we manually trigger to call callbacks when we want data is updated, e.g. to rerender plots
+
+        Parameters:
+        - open_clicks: List of clicks on open modal buttons.
+        - close_clicks: List of clicks on close modal buttons.
+        - submit_clicks: List of clicks on submit buttons.
+        - opened_modals: Current state of opened modals.
+        - selected_chips: Selected chips from the upload chip groups.
+        - n_clicks: Number of clicks on the data change button.
+        - _update_chips: Number of clicks on the update chips button.
+        - scenario_names: Names of the scenarios entered by the user.
+
+        Returns:
+        - A tuple containing the updated state of modals and click counts.
+        """
         print('handle_modals', open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, scenario_names)
         if not any([open_clicks, close_clicks, submit_clicks]):
             return dash.no_update, dash.no_update, dash.no_update

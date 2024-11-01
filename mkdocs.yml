@@ -1,0 +1,22 @@
+site_name: SESIT IDEA
+
+theme:
+  name: material
+
+plugins:
+  - search
+  - mkdocstrings:
+      default_handler: python
+      handlers:
+        python:
+          rendering:
+            show_root_toc_entry: false
+          selection:
+            selection_options_here: value
+
+nav:
+  - index.md
+  - "Setup and Installation": setup-and-installation.md
+  - "User Guide": user-guide.md
+  - "Extending IDEA Guide": extending-idea.md
+  - "IAMC Format": iamc-format.md

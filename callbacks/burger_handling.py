@@ -16,6 +16,11 @@ def link(app):
         prevent_initial_call=True,
     )
     def toggle_states(burgers_open, drawers_open):
+        """
+        This callback is used to toggle the state of the burger and drawer.
+        It is triggered by the burger or drawer being clicked in a tab, to hide or show the drawer/ burger.
+        """
+        
         # Gather information about the triggering action
         ctx = dash.callback_context
         if not ctx.triggered:
