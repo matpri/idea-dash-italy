@@ -13,20 +13,33 @@ def get_contrasting_font_color(rgb_color):
     brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
     return '#ffffff' if brightness < 128 else '#000000'
 
-def render_plot(df, *args, **kwargs):
+def render_plot(df, year):
     # Create a Plotly table
     db = df.copy()
-    db = db[db.region == 'CAN']
+    db = db[(db.region == 'CAN') & (db.time == year)]
     min_days = db[db.variable == 'Min Dispatch']
     max_days = db[db.variable == 'Max Dispatch']
 
-    min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['time']} for i, min_day in min_days.iterrows())
-    max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['time']} for i, max_day in max_days.iterrows())
+    min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for i, min_day in min_days.iterrows())
+    max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for i, max_day in max_days.iterrows())
     min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
     max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
+
+    # if multiple min/max dispatch dates, append the values together with a comma
+    min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+    max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+
+    # only keep the first value for min/max dispatch values if there are multiple
+    min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+    max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+
+
     db = db[db.variable != 'Min Dispatch']
     db = db[db.variable != 'Max Dispatch']
     db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+
+
+
 
     db = db[['scenario', 'variable', 'value']]
 
@@ -95,68 +108,19 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    classes = df['variable'].unique().tolist()
+    years = df['time'].unique().tolist()
 
-    scenarios = df['scenario'].unique().tolist()
-
-    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['ALL'] + base_scenarios
 
     widget_layout = html.Div([
         dmc.Select(
-            label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in classes],
-            value=classes[0],
+            label='Year',
+            data=[{'label': year, 'value': year} for year in years],
+            value=years[0],
             id={
-                'type': 'energy_model-output_stats-plot-select',
+                'type': 'energy_model-output_stats-year-select',
                 'index': window_id
             },
         ),
-        dmc.Select(
-            label='Group By',
-            value=0,
-            data=[
-                {'label': 'No Grouping', 'value': 0},
-                {'label': 'Group by Model', 'value': 1},
-                {'label': 'Group by Scenario', 'value': 2},
-                {'label': 'Group by Version', 'value': 3},
-            ],
-            id={
-                'type': 'energy_model-output_stats-groupby-toggle',
-                'index': window_id,
-            },
-        ),
-        dmc.Select(
-            label='Scenario Group',
-            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value='ALL',
-            id={
-                'type': 'energy_model-output_stats-scenario-group-select',
-                'index': window_id,
-            },
-            style={'display': 'block'}
-        ),
-        dmc.Select(
-            label='Region',
-            value='CAN',
-            data=[
-                {'label': 'CAN', 'value': 'CAN'},
-                {'label': 'AB+QC', 'value': 'AB+QC'},
-            ],
-            id={
-                'type': 'energy_model-output_stats-region-toggle',
-                'index': window_id,
-            },
-        ),
-        dmc.Switch(
-            label='Fill Area',
-            checked=True,
-            id={
-                'type': 'energy_model-output_stats-fill-switch',
-                'index': window_id,
-            },
-        ),
-
         dmc.Button('Download Data', id={'type': 'energy_model-output_stats-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -165,7 +129,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(df, False, False, False),
+        figure=render_plot(df, years[0]),
         id={
             'type': 'figure',
             'index': window_id,

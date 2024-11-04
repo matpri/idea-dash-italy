@@ -338,9 +338,9 @@ class energy_modelsOutput(BaseProfile):
                 for c in p_data.variable.unique():
                     if c in self.viz_options:
                         data = p_data[p_data.variable == c]
-                        # last year time step
-                        data['time'] = pd.to_datetime(data['time'], format='%Y')
-                        data = data[data['time'] == data['time'].max()]
+                        # if net new capacity make cumsum of value based on time column
+                        if 'Net New Capacity' in c or 'New Capacity' in c:
+                            data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
                         output_stats.append(data)
 
         min_days = []
@@ -348,7 +348,7 @@ class energy_modelsOutput(BaseProfile):
         for model, plot_type, df in data_collection:
             if model in power_system_models:
                 if plot_type == 'Dispatch':
-                    dispatch_data = df[(df.region == 'CAN') & (df.period == 2050)].copy()
+                    dispatch_data = df[(df.region == 'CAN')].copy()
                     dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
                     dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
                     if 'version' in dispatch_data.columns:
@@ -356,23 +356,28 @@ class energy_modelsOutput(BaseProfile):
                         dispatch_data = dispatch_data.drop(columns=['version'])
 
                     # make date day-month-year
-                    dispatch_data = dispatch_data.drop(columns=['period'])
                     dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
-                    columns = ['scenario', 'time', 'variable', 'region']
+                    columns = ['scenario', 'time', 'variable', 'region', 'period']
                     dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
 
+                    for year in dispatch_data['period'].unique():
+                        year_dispatch_data = dispatch_data[dispatch_data['period'] == year]
+                        for scenario in year_dispatch_data['scenario'].unique():
+                            scen_dispatch_data = year_dispatch_data[year_dispatch_data['scenario'] == scenario]
+                            # find date where value is min and max
+                            min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
+                            min_day['variable'] = 'Min Dispatch'
+                            min_day['date'] = min_day['time']
+                            min_day['time'] = year
 
-                    for scenario in dispatch_data['scenario'].unique():
-                        scen_dispatch_data = dispatch_data[dispatch_data['scenario'] == scenario]
-                        # find date where value is min and max
-                        min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
-                        min_day['variable'] = 'Min Dispatch'
 
-                        max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
-                        max_day['variable'] = 'Max Dispatch'
+                            max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
+                            max_day['variable'] = 'Max Dispatch'
+                            max_day['date'] = max_day['time']
+                            max_day['time'] = year
 
-                        min_days.append(min_day)
-                        max_days.append(max_day)
+                            min_days.append(min_day)
+                            max_days.append(max_day)
 
         output_stats += min_days + max_days
 

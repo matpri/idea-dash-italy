@@ -98,13 +98,13 @@ class GenericProfile:
             if 'region' in df.columns:
                 if 'CAN' in df['region'].unique():
                     df = df[df['region'] == 'CAN']
+                elif 'Canada' in df['region'].unique():
+                    df = df[df['region'] == 'Canada']
                 elif 'National' in df['region'].unique():
                     df = df[df['region'] == 'National']
 
             df = df.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-
             df['region'] = 'National'
-
 
             dfs.append(df)
         full_df = pd.concat(dfs)

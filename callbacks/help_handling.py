@@ -15,6 +15,24 @@ def link(app: dash.Dash):
         Input('help-scenario', 'n_clicks'),
     )
     def change_help_content(_home, _data, _plots, _windows, _settings, _scenario):
+        """
+        Update the help content based on the button clicked.
+
+        This function listens for clicks on various help-related buttons
+        and updates the displayed help content accordingly. If no button
+        has been clicked, it defaults to rendering the start help content.
+
+        Parameters:
+        - _home: Number of clicks on the home help button.
+        - _data: Number of clicks on the data help button.
+        - _plots: Number of clicks on the plots help button.
+        - _windows: Number of clicks on the windows help button.
+        - _settings: Number of clicks on the settings help button.
+        - _scenario: Number of clicks on the scenario help button.
+
+        Returns:
+        - The rendered help content corresponding to the clicked button.
+        """
         ctx = dash.callback_context
         if not ctx.triggered:
             return start.render()
