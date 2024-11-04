@@ -1662,3 +1662,33 @@ Diesel:
     group: Fossil fuel liquid
     group_color: '#ffaa33'
     name: Diesel
+Capacity:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capacity
+Capital:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capacity
+Operational:
+  color: '#000000'
+  group: Operational
+  group_color: '#40B0A6'
+  name: Operational
+Carbon_Tax:
+  color: '#000000'
+  group: Carbon Tax
+  group_color: '#DC267F'
+  name: Carbon Tax
+Fixed_OM:
+  color: '#000000'
+  group: Fixed O&M
+  group_color: '#E69F00'
+  name: Fixed O&M
+Variable_OM:
+    color: '#000000'
+    group: Variable O&M
+    group_color: '#D35FB7'
+    name: Variable O&M

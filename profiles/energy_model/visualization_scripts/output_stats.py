@@ -17,29 +17,28 @@ def render_plot(df, year):
     # Create a Plotly table
     db = df.copy()
     db = db[(db.region == 'CAN') & (db.time == year)]
-    min_days = db[db.variable == 'Min Dispatch']
-    max_days = db[db.variable == 'Max Dispatch']
 
-    min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for i, min_day in min_days.iterrows())
-    max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for i, max_day in max_days.iterrows())
-    min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
-    max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
+    if 'Min Dispatch' in db['variable'].unique() and 'Max Dispatch' in db['variable'].unique():
+        min_days = db[db.variable == 'Min Dispatch']
+        max_days = db[db.variable == 'Max Dispatch']
 
-    # if multiple min/max dispatch dates, append the values together with a comma
-    min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
-    max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+        min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for i, min_day in min_days.iterrows())
+        max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for i, max_day in max_days.iterrows())
+        min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
+        max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
 
-    # only keep the first value for min/max dispatch values if there are multiple
-    min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
-    max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+        # if multiple min/max dispatch dates, append the values together with a comma
+        min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+        max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
 
-
-    db = db[db.variable != 'Min Dispatch']
-    db = db[db.variable != 'Max Dispatch']
-    db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+        # only keep the first value for min/max dispatch values if there are multiple
+        min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+        max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
 
 
-
+        db = db[db.variable != 'Min Dispatch']
+        db = db[db.variable != 'Max Dispatch']
+        db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
 
     db = db[['scenario', 'variable', 'value']]
 

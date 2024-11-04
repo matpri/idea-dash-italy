@@ -162,6 +162,16 @@ def process(selected):
     for scenario, db in selected.items():
         df_processed = aggregate_db(db.copy(), scenario)
 
+        # Create a new 'date' column from 'time' and format it to 'day-month-year'
+        df_processed['date'] = df_processed['time'].dt.strftime('%d-%m-%Y')
+
+        # Filter out dates where the sum of all values is zero
+        non_zero_dates = df_processed.groupby(['date', 'region'])['value'].transform('sum') != 0
+        df_processed = df_processed[non_zero_dates]
+
+        # Drop the temporary 'date' column as it's no longer needed
+        df_processed.drop(columns=['date'], inplace=True)
+
         dfs.append(df_processed)
 
     full_data = pd.concat(dfs)

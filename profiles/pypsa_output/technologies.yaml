@@ -1591,3 +1591,40 @@ Variable_OM:
     group: Variable O&M
     group_color: '#D35FB7'
     name: Variable O&M
+
+Electricity|Coal|IGCC|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Electricity|Coal|IGCC|w/o CCS
+
+Electricity|Coal|Pulverized|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Electricity|Coal|Pulverized|w/o CCS
+
+Electricity|Biogas|w/o CCS:
+  color: '#000000'
+  group: Biomass
+  group_color: '#33a02c'
+  name: Electricity|Biogas|w/o CCS
+
+Electricity|Hydro|ROR:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Electricity|Hydro|ROR
+
+Electricity|Hydro|Storage:
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Electricity|Hydro|Storage
+
+Electricity|Load Shedding:
+  color: '#000000'
+  group: Load Shedding
+  group_color: '#000000'
+  name: Electricity|Load Shedding
+
