@@ -136,4 +136,4 @@ if __name__ == '__main__':
     
     port = 8050  # or simply open on the default `8050` port
     Timer(1, open_browser, args=[port]).start()
-    app.run_server(host="127.0.0.1", port=port)
+    app.run_server(host="0.0.0.0", port=port)
