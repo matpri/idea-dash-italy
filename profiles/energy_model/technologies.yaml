@@ -1907,6 +1907,16 @@ Electricity|Steam|Industrial:
   group_color: '#383838'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
+Electricity|Diesel|w/o CCS:
+  color: '#000000'
+  group: 'Fossil fuel liquid'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS'
 
+Assumed Negative Emissions:
+  color: '#000000'
+  group: 'Assumed Negative Emissions'
+  group_color: '#999999'
+  name: 'Assumed Negative Emissions'
 
 
