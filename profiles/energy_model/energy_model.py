@@ -66,8 +66,8 @@ from profiles.energy_model.visualization_scripts import (
     heatmap as heatmap_viz
 )
 
-power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM Canada Output', 'HEC-PITHOS Output',
-                       'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
 
 
 class energy_modelsOutput(BaseProfile):

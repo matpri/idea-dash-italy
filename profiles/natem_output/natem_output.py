@@ -57,7 +57,7 @@ from profiles.natem_output.visualization_scripts import (
 
 
 class NATEMOutput(BaseProfile):
-    display_name = 'NATEM Canada Output'
+    display_name = 'NATEM Canada'
     db_name = 'natem'
     color = 'yellow 8'
     description = (

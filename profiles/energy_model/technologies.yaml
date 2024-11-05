@@ -1578,7 +1578,7 @@ Operational:
   name: Operational
 Carbon_Tax:
   color: '#000000'
-  group: Carbon Tax
+  group: Carbon price
   group_color: '#DC267F'
   name: Carbon Tax
 Fixed_OM:
@@ -1591,6 +1591,61 @@ Variable_OM:
     group: Variable O&M
     group_color: '#D35FB7'
     name: Variable O&M
+
+VO&M costs:
+  color: '#000000'
+  group: VO&M costs
+  group_color: '#D35FB7'
+  name: VO&M costs
+FO&M costs:
+  color: '#000000'
+  group: FO&M costs
+  group_color: '#E69F00'
+  name: FO&M costs
+
+Variable O&M costs:
+  color: '#000000'
+  group: Variable O&M
+  group_color: '#D35FB7'
+  name: Variable O&M
+Fixed O&M costs:
+  color: '#000000'
+  group: Fixed O&M
+  group_color: '#E69F00'
+  name: Fixed O&M
+  
+Fuel costs:
+  color: '#000000'
+  group: Fuel costs
+  group_color: '#FF0000'
+  name: Fuel costs
+Fuel:
+  color: '#000000'
+  group: Fuel costs
+  group_color: '#FF0000'
+  name: Fuel
+
+Carbon Tax:
+  color: '#000000'
+  group: Carbon price
+  group_color: '#DC267F'
+  name: Carbon Tax
+Carbon:
+  color: '#000000'
+  group: Carbon price
+  group_color: '#DC267F'
+  name: Carbon
+Carbon price:
+  color: '#000000'
+  group: Carbon price
+  group_color: '#DC267F'
+  name: Carbon price
+
+Capital costs:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capital costs
 
 
 Fossil fuel gas CCS:
@@ -1851,5 +1906,7 @@ Electricity|Steam|Industrial:
   group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
   group_color: '#383838'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset'
+
+
 
 

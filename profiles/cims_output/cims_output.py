@@ -28,7 +28,7 @@ from profiles.cims_output.visualization_scripts import (
 
 
 class PypsaOutput(BaseProfile):
-    display_name = 'CIMS Output'
+    display_name = 'CIMS'
     db_name = 'cims'
     color = 'yellow 8'
     description = (

@@ -53,7 +53,7 @@ def link(app):
                         (id['id']['type'] == 'silver-opf_costs-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['OPF Costs'].to_csv, "opf_costs.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['OPF Costs'].to_csv, "opf_costs.csv")
             return _canvas, _data
 
         idx = 0
@@ -63,7 +63,7 @@ def link(app):
                 idx = i
                 break
 
-        _canvas[idx] = render_plot(data_handler.processed_data['SILVER Output']['OPF Costs'],
+        _canvas[idx] = render_plot(data_handler.processed_data['SILVER']['OPF Costs'],
                                    _scenarios[idx], time_size=_tstep[idx])
 
 

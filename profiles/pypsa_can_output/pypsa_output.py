@@ -57,7 +57,7 @@ from profiles.pypsa_can_output.visualization_scripts import (
 
 
 class PypsaOutput(BaseProfile):
-    display_name = 'PyPSA_CAN Output'
+    display_name = 'PyPSA_CAN'
     name = 'PyPSA_CAN'
     db_name = 'pypsa_can'
     color = 'yellow 8'

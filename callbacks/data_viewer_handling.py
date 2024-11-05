@@ -5,14 +5,14 @@ from components import ids
 
 # Mapping of profile names to their respective module paths
 profile_modules = {
-    'COPPER Output': 'profiles.copper_output',
+    'COPPER': 'profiles.copper_output',
     'COPPER Input': 'profiles.copper_input',
-    'SILVER Output': 'profiles.silver_output',
+    'SILVER': 'profiles.silver_output',
     'Canada Energy Futures': 'profiles.cef',
-    'ECCC-NextGrid Output': 'profiles.nextgrid_output',
-    'NATEM Canada Output': 'profiles.natem_output',
-    'ESMIA-PITHOS Output': 'profiles.pithos_output',
-    'NRCAN-PyPsa Output': 'profiles.pypsa_output',
+    'ECCC-NextGrid': 'profiles.nextgrid_output',
+    'NATEM Canada': 'profiles.natem_output',
+    'ESMIA-PITHOS': 'profiles.pithos_output',
+    'NRCAN-PyPsa': 'profiles.pypsa_output',
     'Power System Models': 'profiles.energy_model',
 }
 

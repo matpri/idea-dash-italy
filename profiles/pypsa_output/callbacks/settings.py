@@ -30,7 +30,7 @@ def link(app):
         settings = yaml.load(decoded, Loader=yaml.FullLoader)
 
         from main import data_handler
-        data_handler.profiles['NRCan-PyPsa Output'].settings = settings
+        data_handler.profiles['NRCan-PyPsa'].settings = settings
         return html.Div([
             html.Div('Settings Updated'),
             html.Div(f'Using {filename}'),

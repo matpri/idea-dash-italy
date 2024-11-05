@@ -53,7 +53,7 @@ overview as overview_viz
 
 
 class silverOutput(BaseProfile):
-    display_name = 'SILVER Output'
+    display_name = 'SILVER'
     name = 'silver'
     db_name = 'silver'
     color = 'silver'

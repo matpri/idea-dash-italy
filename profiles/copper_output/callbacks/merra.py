@@ -34,7 +34,7 @@ def link(app):
     def update_plot(variable, year, n_clicks):
         from main import data_handler
         #print("gen cap callback", variable)
-        df = data_handler.processed_data['COPPER Output']['VRE Capacity'].copy()
+        df = data_handler.processed_data['COPPER']['VRE Capacity'].copy()
 
         ctx = dash.callback_context
         if ctx.triggered:

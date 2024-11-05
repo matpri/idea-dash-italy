@@ -172,18 +172,18 @@ Capacity Cost:
   By Region:
     title: Capacity Cost by Region
     x_label: Region
-    y_label: Capacity Cost (Million $)
+    y_label: Capacity Cost (Billion $)
 FOM Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
     title: Fixed O&M Cost by Year
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   Trend Over Years:
     title: Fixed O&M Cost by Year
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   Pie Chart:
     title: Fixed O&M Cost
     x_label:
@@ -191,19 +191,19 @@ FOM Cost:
   By Region:
     title: Fixed O&M Cost by Region
     x_label: Region
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
 VOM Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
       title: Variable O&M Cost by Year
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 
   Trend Over Years:
       title: Variable O&M Cost by Year
       x_label: Year
-      y_label:  Variable O&M Cost (Million $)
+      y_label:  Variable O&M Cost (Billion $)
   Pie Chart:
       title: Variable O&M Cost
       x_label:
@@ -211,7 +211,7 @@ VOM Cost:
   By Region:
       title: Variable O&M Cost by Region
       x_label: Region
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 Dispatch:
   Dispatched Electricity:
     title: Dispatched Electricity by Year
@@ -272,16 +272,16 @@ Overview:
     y_label: Capacity Cost (Billion $)
   FOM Cost:
     name: Cost
-    unit: Million $
+    unit: Billion $
     title: Fixed O&M Cost
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   VOM Cost:
       name: Cost
-      unit: Million $
+      unit: Billion $
       title: Variable O&M Cost
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 Matrix:
   Capacity:
     name: Capacity
@@ -327,16 +327,16 @@ Matrix:
     y_label: Capacity Cost (Billion $)
   FOM Cost:
     name: Cost
-    unit: Million $
+    unit: Billion $
     title: Fixed O&M Cost
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   VOM Cost:
       name: Cost
-      unit: Million $
+      unit: Billion $
       title: Variable O&M Cost
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 Output Stats:
   Capacity:
     name: Capacity
@@ -388,16 +388,16 @@ Output Stats:
     y_label: Capacity Cost (Billion $)
   FOM Cost:
     name: Cost
-    unit: Million $
+    unit: Billion $
     title: Fixed O&M Cost
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   VOM Cost:
       name: Cost
-      unit: Million $
+      unit: Billion $
       title: Variable O&M Cost
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 
 
 

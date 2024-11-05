@@ -120,12 +120,12 @@ def link(app):
                         (id['id']['type'] == 'pypsa-dispatch-download-button')):
                     idx = i
                     break
-            download[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'].to_csv,
+            download[idx] = dcc.send_data_frame(data_handler.processed_data['NRCan-PyPsa']['Dispatch'].to_csv,
                                                 "dispatch.csv")
             return figure, region_data, region_value, year_data, year_value, day_data, day_value, download
 
         if 'pypsa-dispatch-scenario-multi-select' in trigger_id['type']:
-            df = data_handler.processed_data['NRCan-PyPsa Output']['Dispatch']
+            df = data_handler.processed_data['NRCan-PyPsa']['Dispatch']
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
@@ -152,7 +152,7 @@ def link(app):
             day_data[idx] = [{'label': i, 'value': i} for i in days]
             day_value[idx] = days[0]
 
-            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'],
+            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa']['Dispatch'],
                            aggregate_switch[idx], scenario_multi_select[idx], region_select[idx], year_select[idx],
                            day_select[
                                idx])
@@ -163,7 +163,7 @@ def link(app):
                     (id['id']['type'] == 'pypsa-dispatch-plot-select')):
                 idx = i
                 break
-        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa Output']['Dispatch'],
+        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['NRCan-PyPsa']['Dispatch'],
                                   aggregate_switch[idx], scenario_multi_select[idx], region_select[idx],
                                   year_select[idx],
                                   day_select[

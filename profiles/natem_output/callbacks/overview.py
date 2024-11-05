@@ -52,7 +52,7 @@ def link(app):
                         (id['id']['type'] == 'natem-overview-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NATEM Canada Output']['Overview'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NATEM Canada']['Overview'].to_csv,
                                              "overview.csv")
             return _canvas, _data,
 
@@ -65,6 +65,6 @@ def link(app):
 
         #print('idx:', idx, 'plot type:', _p_type[idx])
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['NATEM Canada Output']['Overview'])
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['NATEM Canada']['Overview'])
 
         return _canvas, [dash.no_update for _ in _data]

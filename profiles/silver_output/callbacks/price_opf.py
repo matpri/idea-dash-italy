@@ -78,7 +78,7 @@ def link(app):
                         (id['id']['type'] == 'silver-price_opf-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['Price OPF'].to_csv, "price_opf.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['Price OPF'].to_csv, "price_opf.csv")
             return _canvas, _data, _s_style, _m_style
 
         idx = 0
@@ -93,17 +93,17 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['Price OPF'],
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER']['Price OPF'],
                                        _scenarios[idx], time_size=_ts[idx])
         elif _p_type[idx] == 'By Plant':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Plant',
-                                       data_handler.processed_data['SILVER Output']['Price OPF'],
+                                       data_handler.processed_data['SILVER']['Price OPF'],
                                        _scenario[idx], time_size=_ts[idx])
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['Price OPF'], _scenario[idx], time_size=_ts[idx])
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER']['Price OPF'], _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

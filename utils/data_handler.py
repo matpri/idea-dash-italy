@@ -164,9 +164,9 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
-                     'NATEM Canada Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
-                     'Sutubra-TEMOA Output']
+    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+                     'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()

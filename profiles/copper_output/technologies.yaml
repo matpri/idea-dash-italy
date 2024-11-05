@@ -1244,63 +1244,66 @@ Electricity|Gas|CC|RNG|w/o CCS:
   group_color: '#383838'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
-'VO&M costs':
+
+
+VO&M costs:
   color: '#000000'
-  group: 'Variable O&M'
+  group: VO&M costs
   group_color: '#D35FB7'
-  name: 'VO&M costs'
-
-'Fixed O&M costs':
+  name: VO&M costs
+FO&M costs:
   color: '#000000'
-  group: 'Fixed O&M'
+  group: FO&M costs
   group_color: '#E69F00'
-  name: 'Fixed O&M costs'
+  name: FO&M costs
 
-'FO&M costs':
+Variable O&M costs:
   color: '#000000'
-  group: 'FO&M'
+  group: Variable O&M
+  group_color: '#D35FB7'
+  name: Variable O&M
+Fixed O&M costs:
+  color: '#000000'
+  group: Fixed O&M
   group_color: '#E69F00'
-  name: 'FO&M costs'
-
-'Carbon Tax':
+  name: Fixed O&M
+  
+Fuel costs:
   color: '#000000'
-  group: 'Carbon Tax'
+  group: Fuel costs
+  group_color: '#FF0000'
+  name: Fuel costs
+Fuel:
+  color: '#000000'
+  group: Fuel costs
+  group_color: '#FF0000'
+  name: Fuel
+
+Carbon Tax:
+  color: '#000000'
+  group: Carbon price
   group_color: '#DC267F'
-  name: 'Carbon Tax'
-
-'Carbon price':
+  name: Carbon Tax
+Carbon:
   color: '#000000'
-  group: 'Carbon Tax'
+  group: Carbon price
   group_color: '#DC267F'
-  name: 'Carbon price'
-
-'Fuel costs':
+  name: Carbon
+Carbon price:
   color: '#000000'
-  group: 'Fuel costs'
-  group_color: '#ff6b6b'
-  name: 'Fuel costs'
+  group: Carbon price
+  group_color: '#DC267F'
+  name: Carbon price
+
+Capital costs:
+  color: '#000000'
+  group: Capacity
+  group_color: '#785EF0'
+  name: Capital costs
+
 
 'Fuel price':
   color: '#000000'
   group: 'Fuel costs'
   group_color: '#ff6b6b'
   name: 'Fuel price'
-
-'Fuel':
-  color: '#000000'
-  group: 'Fuel costs'
-  group_color: '#ff6b6b'
-  name: 'Fuel'
-
-'Capital costs':
-  color: '#000000'
-  group: 'Capital costs'
-  group_color: '#1f78b4'
-  name: 'Capital costs'
-
-'Capacity':
-  color: '#000000'
-  group: 'Capital costs'
-  group_color: '#1f78b4'
-  name: 'Capacity'
-

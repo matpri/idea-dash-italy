@@ -70,7 +70,7 @@ def link(app):
                         (id['id']['type'] == 'labourabm-total_unemployment-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM Output']['Total Unemployment'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM']['Total Unemployment'].to_csv,
                                              "total_unemployment.csv")
             return _canvas, _region, _regions, _data
 
@@ -82,13 +82,13 @@ def link(app):
                 break
 
         if 'labourabm-total_unemployment-scenario-multi-select' in trigger_id['type']:
-            data = data_handler.processed_data['LabourABM Output']['Total Unemployment']
+            data = data_handler.processed_data['LabourABM']['Total Unemployment']
             _regions[idx] = data[data['scenario'].isin(_scenarios[idx])]['region'].unique().tolist()
             if len(_regions[idx]) == 0:
                 _region[idx] = ''
             else:
                 _region[idx] = _regions[idx][0]
 
-        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Unemployment'], _scenarios[idx], _occupations[idx], _region[idx])
+        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM']['Total Unemployment'], _scenarios[idx], _occupations[idx], _region[idx])
 
         return _canvas, _region, _regions, [dash.no_update for _ in _data]

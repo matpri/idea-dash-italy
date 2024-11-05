@@ -68,7 +68,7 @@ def link(app):
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Map Plot',
-                                       data_handler.processed_data['PyPSA_CAN Output']['Transmission Flow'],
+                                       data_handler.processed_data['PyPSA_CAN']['Transmission Flow'],
                                        _scenario[idx],
                                        _years[idx]
                                        )
@@ -76,7 +76,7 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Bar Plot',
-                                       data_handler.processed_data['PyPSA_CAN Output']['Transmission Flow'],
+                                       data_handler.processed_data['PyPSA_CAN']['Transmission Flow'],
                                        _scenarios[idx],
                                        _years[idx]
                                        )

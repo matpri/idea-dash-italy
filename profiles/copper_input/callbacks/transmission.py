@@ -60,7 +60,7 @@ def link(app):
                         (id['id']['type'] == 'copper_input-transmission-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Capacity'].to_csv,
                                              "transmission.csv")
             return _canvas, _data
 

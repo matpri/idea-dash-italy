@@ -60,7 +60,7 @@ from profiles.copper_output.visualization_scripts import (
 
 
 class CopperOutput(BaseProfile):
-    display_name = 'COPPER Output'
+    display_name = 'COPPER'
     name = 'copper'
     db_name = 'copper'
     color = 'yellow 8'

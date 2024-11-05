@@ -57,7 +57,7 @@ from profiles.nextgrid_output.visualization_scripts import (
 
 
 class NextGridOutput(BaseProfile):
-    display_name = 'ECCC-NextGrid Output'
+    display_name = 'ECCC-NextGrid'
     name = 'ECCC-NextGrid'
     db_name = 'nextgrid'
     color = 'yellow 8'
