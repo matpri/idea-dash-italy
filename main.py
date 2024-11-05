@@ -20,7 +20,7 @@ parser.add_argument('--static', type=str, default='False',
                     help='Set to "True" to make page static, i.e. hide header and settings to only keep features that are handled client side, "False" to hide it.')
 parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
-parser.add_argument('--dev', type=bool, default=False,
+parser.add_argument('--dev', type=str, default='False',
                     help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
 parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
 args = parser.parse_args()  # Parse the arguments
@@ -31,6 +31,7 @@ args = parser.parse_args()  # Parse the arguments
 
 # Convert string to boolean
 static = args.static.lower() == 'true'
+dev = args.dev.lower() == 'true'
 print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
@@ -69,14 +70,16 @@ print(bool(data_files))
 data_handler.preload_data(data_files)
 if args.autosave != '':
     print(f"Autosaving datahandler to {args.autosave}")
-    if not os.path.exists(args.autosave):
-        os.makedirs(args.autosave)
-    data_handler.save(args.autosave)
+    # Ensure the directory exists, but do not create a directory for a file path
+    autosave_dir = os.path.dirname(args.autosave)
+    if not os.path.exists(autosave_dir):
+        os.makedirs(autosave_dir)
+    data_handler.save(args.autosave)  # Save the datahandler to the specified file path
 
 if not static:
     print("Rendering header...")  # Debugging statement
     app_layout = [
-        header.render(app, static),
+        header.render(app, dev_view=dev),
         html.Div([
             dlc.BoxPanel([
                 plot_canvas.render(bool(data_files) or args.datahandler is not None),

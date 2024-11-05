@@ -268,6 +268,7 @@ def render_plot(type, df, scenarios, year):
     from profiles.energy_model.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
+    print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Flow']['Map Plot']
         return transmission_plot(df, scenarios, year, plot_info['title'])
@@ -289,6 +290,9 @@ def plot(df, window_id):
     '''
 
     scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
     # make all years int
@@ -320,6 +324,16 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'energy_model-transmissionflow-scenario-multi-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value=[base_scenarios[0]],
+            id={
+                'type': 'energy_model-transmissionflow-scenario-group-select',
                 'index': window_id,
             },
             style={'display': 'none'}
