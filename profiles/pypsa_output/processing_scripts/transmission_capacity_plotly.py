@@ -182,6 +182,7 @@ def process(selected):
         reverse_df = df.copy()
         reverse_df['region'], reverse_df['variable'] = df['variable'], df['region']
         df = pd.concat([df, reverse_df])
+        df['value'] /= 2
 
         df = df.sort_values(by=['period'])
         times = df['period'].unique().tolist()
