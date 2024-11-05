@@ -58,6 +58,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         print(title, 'plot:', e)
 
     fig.layout.autosize = True
+    fig.update_xaxes(tickangle=90)
     return fig
 
 
