@@ -8,7 +8,7 @@ import dash_lumino_components as dlc
 from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
-    plot_handling, help_handling
+    plot_handling, help_handling, save_datahandler
 from components import ids, header, plot_canvas, sidebar
 from components.data_selection import data_modal, selected_files
 from components.help import help
@@ -16,13 +16,22 @@ from utils.data_handler import DataHandler
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
-parser.add_argument('--show-header', type=str, default='True',
-                    help='Set to "True" to show header, "False" to hide it.')
+parser.add_argument('--static', type=str, default='False',
+                    help='Set to "True" to make page static, i.e. hide header and settings to only keep features that are handled client side, "False" to hide it.')
+parser.add_argument('--datahandler', type=str, default=None,
+                    help='Name of the datahandler file to load.')
+parser.add_argument('--dev', type=bool, default=False,
+                    help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
+parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
 args = parser.parse_args()  # Parse the arguments
 
+
+
+
+
 # Convert string to boolean
-show_header = args.show_header.lower() == 'true'
-print(f"Show header: {show_header}")  # Debugging statement
+static = args.static.lower() == 'true'
+print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [
@@ -37,6 +46,11 @@ data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith(
 
 # initialize data handler which will deal with all data related operations
 data_handler: DataHandler = DataHandler()
+if args.datahandler is not None:
+    print(f"Loading datahandler from {args.datahandler}")
+    data_handler = DataHandler()
+    data_handler.load(args.datahandler)
+    print(f"Datahandler loaded with {len(data_handler.data)} files.")
 
 # link profile callbacks to app
 data_handler.link(app)
@@ -48,19 +62,26 @@ data_viewer_handling.link(app)
 plot_handling.link(app)
 help_handling.link(app)
 selected_files.link(app)
+save_datahandler.link(app)
 
 print(data_files)
 print(bool(data_files))
 data_handler.preload_data(data_files)
+if args.autosave != '':
+    print(f"Autosaving datahandler to {args.autosave}")
+    if not os.path.exists(args.autosave):
+        os.makedirs(args.autosave)
+    data_handler.save(args.autosave)
 
-if show_header:
+if not static:
+    print("Rendering header...")  # Debugging statement
     app_layout = [
-        header.render(app),
+        header.render(app, static),
         html.Div([
             dlc.BoxPanel([
-                plot_canvas.render(bool(data_files)),
+                plot_canvas.render(bool(data_files) or args.datahandler is not None),
             ], id='test', addToDom=True),
-            sidebar.render(),
+            sidebar.render(static),
             data_modal.render(app),
             help.render(),
 
@@ -74,12 +95,13 @@ if show_header:
         )
     ]
 else:
+    print("Not rendering header...")
     app_layout = [
         html.Div([
             dlc.BoxPanel([
-                plot_canvas.render(bool(data_files)),
+                plot_canvas.render(bool(data_files) or args.datahandler is not None),
             ], id='test', addToDom=True),
-            sidebar.render(),
+            sidebar.render(static),
             data_modal.render(app),
             help.render(),
 
@@ -111,4 +133,4 @@ if __name__ == '__main__':
     
     port = 8050  # or simply open on the default `8050` port
     Timer(1, open_browser, args=[port]).start()
-    app.run_server(port=port)
+    app.run_server(host="0.0.0.0", port=port)

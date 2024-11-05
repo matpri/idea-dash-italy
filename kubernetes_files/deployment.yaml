@@ -1,0 +1,19 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: data-visualization-app
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: data-visualization-app
+  template:
+    metadata:
+      labels:
+        app: data-visualization-app
+    spec:
+      containers:
+      - name: app-container
+        image: nemba/idea-dash:v1.1 # Replace with your actual Docker image
+        ports:
+        - containerPort: 8050 # Replace with the port your application listens on

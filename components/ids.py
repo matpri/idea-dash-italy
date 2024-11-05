@@ -38,4 +38,6 @@ SETTINGS_CHANGE = 'settings-change'
 AFTER_CHANGE = 'after-change'
 DATA = 'data'
 
+SAVE_BUTTON = 'save-button'
+
 card_ids = []

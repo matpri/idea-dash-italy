@@ -12,16 +12,11 @@ from components.plot_window import window
 
 
 
-def render():
+def render(static):
     """
     :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
     """
-    layout = html.Div([
-        dmc.Aside(
-            id='sidebar',
-            className='my-aside',
-            children=[
-                dmc.Stack([
+    icons = [
                     dmc.ActionIcon(
                         DashIconify(icon='carbon:add'),
                         size='sm',
@@ -40,7 +35,10 @@ def render():
                         className='my-button',
                         style=button_style
                     ),
-                    dmc.ActionIcon(
+                ]
+
+    if not static:
+        icons.extend([ dmc.ActionIcon(
                         DashIconify(icon='carbon:settings'),
                         size='sm',
                         radius='xl',
@@ -57,12 +55,18 @@ def render():
                         className='my-button',
                         style=button_style,
                         id='data-viewer'
-                    ),
-                ])
+                    ),])
+
+    layout = html.Div([
+        dmc.Aside(
+            id='sidebar',
+            className='my-aside',
+            children=[
+                dmc.Stack(icons)
             ],
-            position={'top': '40%', 'left': 0},
+            position={'top': '40%', 'left': 0} if not static else {'top': '50%', 'left': 0},
             width={"base": 32},
-            height=144,
+            height=144 if not static else 72,
             fixed=True,
             zIndex=9999,
             # round the corners
