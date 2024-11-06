@@ -37,6 +37,15 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
                         marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
                         textposition='auto' if text_active else None, text=tech if text_active else None,
                         hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
+        total_data = df_scen.groupby(['region', 'scenario'])['value'].sum().reset_index()
+        x = []
+        x.append(total_data['region'].values)
+        x.append(total_data['scenario'].values)
+        fig.add_trace(go.Scatter(x=x, y=total_data["value"], name='Total', mode='markers', 
+                                 marker=dict(size=3, color='rgba(0, 0, 255, 0.6)'),  # Smaller size and softer blue color
+                                 hovertemplate='Total: %{y:.2f} '+f'{unit}'+'<br>Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br><extra></extra>'))
+        
+        
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
