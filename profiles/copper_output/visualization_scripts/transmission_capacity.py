@@ -310,7 +310,13 @@ def plot(df, window_id):
                 'type': 'copper-transmissioncapacity-year-select',
                 'index': window_id
             },
-        )
+        ),
+        dmc.Button('Download Data', id={'type': 'copper-transmissioncapacity-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                   style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'copper-transmissioncapacity-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(

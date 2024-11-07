@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State, ALL
+from dash import Output, Input, State, ALL, dcc
 
 from profiles.nextgrid_output.visualization_scripts.transmission_flow import render_plot
 
@@ -20,6 +20,10 @@ def link(app):
             'type': 'nextgrid-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'nextgrid-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         Input({
             'type': 'nextgrid-transmissionflow-plot-select',
             'index': ALL
@@ -37,6 +41,10 @@ def link(app):
             'type': 'nextgrid-transmissionflow-year-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'nextgrid-transmissionflow-download-button',
+            'index': ALL
+        }, 'n_clicks'),
         State({
             'type': 'figure',
             'index': ALL,
@@ -51,13 +59,29 @@ def link(app):
             'type': 'nextgrid-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'nextgrid-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         prevent_initial_call=True
     )
-    def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _canvas, _s_style, _m_style):
-        #print('updating transmissionflow plot')
+    def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _d_button, _canvas, _s_style, _m_style, _data):
+        # print('updating transmissionflow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+
+        if 'nextgrid-transmissionflow-download-button' in trigger_id['type']:
+            idx = 0
+            for i, id in enumerate(ctx.inputs_list[0]):
+                if ((id['id']['index'] == trigger_id['index']) and
+                        (id['id']['type'] == 'nextgrid-transmissionflow-download-button')):
+                    idx = i
+                    break
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['ECCC-NextGrid']['Transmission Flow'].to_csv,
+                                             "transmission_flow.csv")
+            return _canvas, _s_style, _m_style, _data
+
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if (id['id']['index'] == trigger_id['index']):

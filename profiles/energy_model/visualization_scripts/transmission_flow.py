@@ -346,7 +346,13 @@ def plot(df, window_id):
                 'type': 'energy_model-transmissionflow-year-select',
                 'index': window_id
             },
-        )
+        ),
+        dmc.Button('Download Data', id={'type': 'energy_model-transmissionflow-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'energy_model-transmissionflow-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(

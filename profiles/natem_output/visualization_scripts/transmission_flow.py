@@ -332,7 +332,12 @@ def plot(df, window_id):
                 'type': 'natem-transmissionflow-year-select',
                 'index': window_id
             },
-        )
+        ),
+        dmc.Button('Download Data', id={'type': 'natem-transmissionflow-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'natem-transmissionflow-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
