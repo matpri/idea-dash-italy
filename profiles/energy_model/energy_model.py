@@ -66,8 +66,8 @@ from profiles.energy_model.visualization_scripts import (
     heatmap as heatmap_viz
 )
 
-power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM Canada Output', 'HEC-PITHOS Output',
-                       'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
 
 
 class energy_modelsOutput(BaseProfile):
@@ -82,7 +82,7 @@ class energy_modelsOutput(BaseProfile):
     plot_order = [
         'Output Stats',
         'Overview',
-        'Heatmap',
+        # 'Heatmap',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -121,17 +121,17 @@ class energy_modelsOutput(BaseProfile):
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
             },
-        'Heatmap':
-            {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': heatmap_viz.plot,
-                'callback': heatmap_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
-
-            },
+        # 'Heatmap':
+        #     {
+        #         'check': overview_processing.check,
+        #         'db_check': overview_processing.check,
+        #         'process': overview_processing.process,
+        #         'db_process': overview_processing.process,
+        #         'viz': heatmap_viz.plot,
+        #         'callback': heatmap_callbacks.link,
+        #         'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+        #
+        #     },
         'Comparison':
             {
                 'check': matrix_processing.check,

@@ -2,6 +2,7 @@ import base64
 import io
 import json
 import os
+import pickle
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
@@ -163,9 +164,9 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
-                     'NATEM Canada Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
-                     'Sutubra-TEMOA Output']
+    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+                     'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -176,6 +177,7 @@ class DataHandler:
         self.processed = []
         self.processed_data = {}
         self.viz = {}
+        self.to_delete = []
         self.runs = pd.DataFrame()
 
     def preload_data(self, data_files):
@@ -326,12 +328,16 @@ class DataHandler:
 
         return filename
 
-    def process_data(self):
+    def process_data(self, reset=False):
         """
         Process the data that has been loaded into the data handler.
         :return:
         """
 
+        # Collect results
+        if reset:
+            self.processed_data = {}
+            self.processed = []
         # Collect data from all selected profiles
         data_collection = {}
         process_power_system = False
@@ -360,7 +366,7 @@ class DataHandler:
             if power_system_results is not None:
                 results.extend(power_system_results)
 
-        # Collect results
+
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -433,7 +439,7 @@ class DataHandler:
             full_df = pd.concat(overview_data)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
 
-        print(self.processed_data)
+        print("processed", self.processed_data)
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
@@ -571,5 +577,27 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return True, "Data loaded successfully!", filename
+
+    def save(self, filename):
+        """
+        Save self.data, self.processed_data, self.processedto a file.
+        :param filename: The name of the file to save the data handler to.
+        :return:
+        """
+
+        # pickle self.data, self.processed_data, self.processed to a file
+        with open(filename, 'wb') as f:
+            pickle.dump([self.data, self.processed_data, self.processed], f)
+
+
+    def load(self, filename):
+        """
+        Load self.data, self.processed_data, self.processed from a file.
+        :param filename: The name of the file to load the data handler from.
+        :return:
+        """
+        with open(filename, 'rb') as f:
+            self.data, self.processed_data, self.processed = pickle.load(f)
+
 
 
