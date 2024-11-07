@@ -18,7 +18,7 @@ def render():
             # add a trash button
             dmc.ActionIcon(DashIconify(icon="carbon:trash-can"),
                            size="lg", id='remove-data', variant='light', color='red',
-                           style={'marginLeft': 'auto', 'marginBottom': '10px'},
+                           style={'marginLeft': '4px', 'marginTop': '10px', 'marginBottom': '10px', 'alignSelf': 'flex-end'},  # Align to bottom
                            disabled=True),
         ], style={'display': 'flex', 'justifyContent': 'space-between',
                   'padding': '10px 0px 0px 0px'}),

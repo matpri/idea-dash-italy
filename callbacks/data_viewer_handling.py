@@ -42,12 +42,14 @@ def link(app):
     app.callback(
         Output('data-viewer-data-modal', 'opened'),
         Output(ids.AFTER_CHANGE, 'n_clicks', allow_duplicate=True),  # Allow duplicate output
+        Output('profile-select', 'data', allow_duplicate=True),
         Input('data-viewer', 'n_clicks'),
         Input('submit-data', 'n_clicks'),
         Input('cancel-data', 'n_clicks'),
         State('data-viewer-data-modal', 'opened'),
         State({'type': 'data-viewer-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
         State({'type': 'data-viewer-scenario-name', 'file': ALL}, 'value'),
+        State('profile-select', 'data'),
         prevent_initial_call=True,
     )(view_modal)
 
@@ -139,7 +141,7 @@ def update_chips(file, n_remove, n_click, data):
 
     return layout, False, dash.no_update, dash.no_update, data
 
-def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
+def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, data):
     """
     Manage the state of the data viewer modal and handle data submission.
 
@@ -157,11 +159,11 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
 
     # If no button was clicked, return the current state
     if not any([n_click, n_submit, n_cancel]):
-        return is_open, dash.no_update
+        return is_open, dash.no_update, data
 
     # Toggle modal state if the data viewer button was clicked
     if triggered_input == 'data-viewer':
-        return not is_open, dash.no_update
+        return not is_open, dash.no_update, data
 
     # Handle data submission
     if triggered_input == 'submit-data':
@@ -230,12 +232,13 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names):
         # Process the updated data
         data_handler.process_data(reset=False)
 
-        return not is_open, 1 if n_click is None else n_click + 1
+        return not is_open, 1 if n_click is None else n_click + 1, data
 
     # Handle cancel action
     if triggered_input == 'cancel-data':
         from main import data_handler
+        data = list(data_handler.data.keys())
 
         data_handler.to_delete = []
-        return not is_open, dash.no_update
-    return is_open, dash.no_update
+        return not is_open, dash.no_update, data
+    return is_open, dash.no_update, data
