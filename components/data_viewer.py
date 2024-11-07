@@ -1,18 +1,27 @@
 import dash_mantine_components as dmc
 from dash import html
+from dash_iconify import DashIconify
 
 
 def render():
     from main import data_handler
 
-    layout = dmc.Modal(
-        title=dmc.Select(
-            id='profile-select',
-            label='Select Results:',
-            data=list(data_handler.data.keys()),
-            value=None,
-            style={'marginBottom': '10px'}
-        ),
+    return dmc.Modal(
+        title=html.Div([
+            dmc.Select(
+                id='profile-select',
+                label='Select Results:',
+                data=list(data_handler.data.keys()),
+                value=None,
+                style={'marginBottom': '10px'}
+            ),
+            # add a trash button
+            dmc.ActionIcon(DashIconify(icon="carbon:trash-can"),
+                           size="lg", id='remove-data', variant='light', color='red',
+                           style={'marginLeft': 'auto', 'marginBottom': '10px'},
+                           disabled=True),
+        ], style={'display': 'flex', 'justifyContent': 'space-between',
+                  'padding': '10px 0px 0px 0px'}),
         opened=False,
         size='60%',
         id='data-viewer-data-modal',
@@ -33,5 +42,3 @@ def render():
         )
 
     )
-
-    return layout

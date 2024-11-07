@@ -177,6 +177,7 @@ class DataHandler:
         self.processed = []
         self.processed_data = {}
         self.viz = {}
+        self.to_delete = []
         self.runs = pd.DataFrame()
 
     def preload_data(self, data_files):
@@ -327,12 +328,16 @@ class DataHandler:
 
         return filename
 
-    def process_data(self):
+    def process_data(self, reset=False):
         """
         Process the data that has been loaded into the data handler.
         :return:
         """
 
+        # Collect results
+        if reset:
+            self.processed_data = {}
+            self.processed = []
         # Collect data from all selected profiles
         data_collection = {}
         process_power_system = False
@@ -361,7 +366,7 @@ class DataHandler:
             if power_system_results is not None:
                 results.extend(power_system_results)
 
-        # Collect results
+
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -434,7 +439,7 @@ class DataHandler:
             full_df = pd.concat(overview_data)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
 
-        print(self.processed_data)
+        print("processed", self.processed_data)
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):

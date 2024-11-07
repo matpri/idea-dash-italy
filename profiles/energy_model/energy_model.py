@@ -82,7 +82,7 @@ class energy_modelsOutput(BaseProfile):
     plot_order = [
         'Output Stats',
         'Overview',
-        'Heatmap',
+        # 'Heatmap',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -121,17 +121,17 @@ class energy_modelsOutput(BaseProfile):
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
             },
-        'Heatmap':
-            {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': heatmap_viz.plot,
-                'callback': heatmap_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
-
-            },
+        # 'Heatmap':
+        #     {
+        #         'check': overview_processing.check,
+        #         'db_check': overview_processing.check,
+        #         'process': overview_processing.process,
+        #         'db_process': overview_processing.process,
+        #         'viz': heatmap_viz.plot,
+        #         'callback': heatmap_callbacks.link,
+        #         'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+        #
+        #     },
         'Comparison':
             {
                 'check': matrix_processing.check,
