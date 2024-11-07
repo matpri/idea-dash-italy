@@ -84,7 +84,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Overview'].to_csv,
                                              "overview.csv")
-            return _canvas, _data,
+            return _canvas, _data, _fillswitch
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
