@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State, ALL
+from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.transmission_flow import render_plot
 
@@ -20,10 +20,14 @@ def link(app):
             'type': 'energy_model-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
-         Output({
+        Output({
             'type': 'energy_model-transmissionflow-scenario-group-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'energy_model-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         Input({
             'type': 'energy_model-transmissionflow-plot-select',
             'index': ALL
@@ -32,7 +36,7 @@ def link(app):
             'type': 'energy_model-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'value'),
-         Input({
+        Input({
             'type': 'energy_model-transmissionflow-scenario-group-select',
             'index': ALL
         }, 'value'),
@@ -45,6 +49,10 @@ def link(app):
             'type': 'energy_model-transmissionflow-year-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'energy_model-transmissionflow-download-button',
+            'index': ALL
+        }, 'n_clicks'),
         State({
             'type': 'figure',
             'index': ALL,
@@ -63,13 +71,28 @@ def link(app):
             'type': 'energy_model-transmissionflow-scenario-group-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'energy_model-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         prevent_initial_call=True
     )
-    def update_transmissionflow(_p_type, _scenarios, _scenario_group, _scenario, _years, _canvas, _s_style, _m_style, _g_style):
-        #print('updating transmissionflow plot')
+    def update_transmissionflow(_p_type, _scenarios, _scenario_group, _scenario, _years, _d_button, _canvas,
+                                    _s_style, _m_style, _g_style, _data):
+        # print('updating transmissionflow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+        if 'energy_model-transmissionflow-download-button' in trigger_id['type']:
+            idx = 0
+            for i, id in enumerate(ctx.inputs_list[0]):
+                if ((id['id']['index'] == trigger_id['index']) and
+                        (id['id']['type'] == 'energy_model-transmissionflow-download-button')):
+                    idx = i
+                    break
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Transmission Flow'].to_csv, "transmissionflow.csv")
+            return _canvas, _s_style, _m_style, _g_style, _data
+
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if (id['id']['index'] == trigger_id['index']):
@@ -86,14 +109,14 @@ def link(app):
                                        _years[idx]
                                        )
         elif _p_type[idx] == 'Bar Plot':
-            df = data_handler.processed_data['Power System Models']['Transmission Capacity']
+            df = data_handler.processed_data['Power System Models']['Transmission Flow']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':
                 scenarios = [scenario for scenario in unique_scenarios if
                              scenario.split('|')[1] == _scenario_group[idx]]
                 scens += scenarios
-                
+
             _g_style[idx] = {'display': 'block'}
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
@@ -103,4 +126,4 @@ def link(app):
                                        _years[idx]
                                        )
 
-        return _canvas, _s_style, _m_style, _g_style
+        return _canvas, _s_style, _m_style, _g_style, _data
