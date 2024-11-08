@@ -22,6 +22,8 @@ parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
 parser.add_argument('--dev', type=str, default='False',
                     help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
+parser.add_argument('--help_popup', type=str, default='False',
+                    help='Set to True to show help popup on startup.')
 parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
 args = parser.parse_args()  # Parse the arguments
 
@@ -32,6 +34,7 @@ args = parser.parse_args()  # Parse the arguments
 # Convert string to boolean
 static = args.static.lower() == 'true'
 dev = args.dev.lower() == 'true'
+help_popup = args.help_popup.lower() == 'true'
 print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
@@ -86,7 +89,7 @@ if not static:
             ], id='test', addToDom=True),
             sidebar.render(static),
             data_modal.render(app),
-            help.render(),
+            help.render(help_popup),
 
             # component to represent data change (hidden)
             html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
@@ -106,7 +109,7 @@ else:
             ], id='test', addToDom=True),
             sidebar.render(static),
             data_modal.render(app),
-            help.render(),
+            help.render(help_popup),
 
             # component to represent data change (hidden)
             html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
