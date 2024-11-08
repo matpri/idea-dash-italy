@@ -213,16 +213,47 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
                         mapped_model = profile.display_name
                         break
 
+            # Create a list of profiles to avoid modifying the dictionary during iteration
+            profiles_to_delete = []
             for profile, viz_options in selected.items():
                 for viz in viz_options:
+                    print(profile, viz)
                     processed_data = data_handler.processed_data[profile].get(viz)
 
                     if profile == 'Power System Models':
-                        # remove all entries with the scenario in it
+                        # Remove all entries with the scenario in it
                         processed_data = processed_data[processed_data.scenario != mapped_model + '|' + scenario]
                     else:
                         processed_data = processed_data[processed_data.scenario != scenario]
-                    data_handler.processed_data[profile][viz] = processed_data
+
+                    if not processed_data.empty:
+                        data_handler.processed_data[profile][viz] = processed_data
+                    else:
+                        del data_handler.processed_data[profile][viz]
+                
+                # Check if the processed data for the profile is empty and mark for deletion
+                if data_handler.processed_data[profile] == {}:
+                    profiles_to_delete.append(profile)
+
+            if mapped_model not in constants.exclude_from_comparison:
+                # Create a list of keys to avoid modifying the dictionary during iteration
+                keys_to_process = list(data_handler.processed_data['Generic Comparison'].keys())
+                for viz in keys_to_process:
+                    processed_data = data_handler.processed_data['Generic Comparison'][viz]
+                    processed_data = processed_data[processed_data.scenario != mapped_model + '|' + scenario]
+                    if not processed_data.empty:
+                        data_handler.processed_data['Generic Comparison'][viz] = processed_data
+                    else:
+                        del data_handler.processed_data['Generic Comparison'][viz]
+
+            if data_handler.processed_data['Generic Comparison'] == {}:
+                del data_handler.processed_data['Generic Comparison']
+
+            # Delete profiles that have empty processed data
+            for profile in profiles_to_delete:
+                del data_handler.processed_data[profile]
+
+
 
             del data_handler.data[file]
             data_handler.processed.remove(file)
@@ -230,7 +261,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
         data_handler.to_delete = []
 
         # Process the updated data
-        data_handler.process_data(reset=False)
+        data_handler.process_data(reset=True)
 
         return not is_open, 1 if n_click is None else n_click + 1, data
 

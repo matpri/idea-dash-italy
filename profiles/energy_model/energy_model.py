@@ -25,7 +25,6 @@ from profiles.energy_model.callbacks import (
     transmission_capacity as transmission_capacity_callbacks,
     transmission_flow as transmission_flow_callbacks,
     comparison as comparison_callbacks,
-    heatmap as heatmap_callbacks,
     settings as settings_callbacks
 
 )
@@ -63,7 +62,6 @@ from profiles.energy_model.visualization_scripts import (
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
     comparison as comparison_viz,
-    heatmap as heatmap_viz
 )
 
 power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
@@ -82,7 +80,6 @@ class energy_modelsOutput(BaseProfile):
     plot_order = [
         'Output Stats',
         'Overview',
-        # 'Heatmap',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -121,17 +118,7 @@ class energy_modelsOutput(BaseProfile):
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
             },
-        # 'Heatmap':
-        #     {
-        #         'check': overview_processing.check,
-        #         'db_check': overview_processing.check,
-        #         'process': overview_processing.process,
-        #         'db_process': overview_processing.process,
-        #         'viz': heatmap_viz.plot,
-        #         'callback': heatmap_callbacks.link,
-        #         'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
-        #
-        #     },
+
         'Comparison':
             {
                 'check': matrix_processing.check,
@@ -286,11 +273,8 @@ class energy_modelsOutput(BaseProfile):
 
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
-        make_heatmap = False
+
         for profile, viz_option, df in data_collection:
-            if viz_option == 'Heatmap':
-                make_heatmap = True
-                continue
             print(profile, viz_option)
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
@@ -328,8 +312,6 @@ class energy_modelsOutput(BaseProfile):
                 elif 'period' in data.columns:
                     data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
-        if make_heatmap:
-            processed_data['Heatmap'] = processed_data['Overview'].copy()
 
         output_stats = []
 
