@@ -8,9 +8,9 @@ import dash_lumino_components as dlc
 from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
-    plot_handling, help_handling, save_datahandler
+    plot_handling, help_handling, save_datahandler, selected_files, database_connection, data_modal as data_modal_callback
 from components import ids, header, plot_canvas, sidebar
-from components.data_selection import data_modal, selected_files
+from components.data_selection import data_modal
 from components.help import help
 from utils.data_handler import DataHandler
 
@@ -67,6 +67,8 @@ plot_handling.link(app)
 help_handling.link(app)
 selected_files.link(app)
 save_datahandler.link(app)
+database_connection.link(app)
+data_modal_callback.link(app)
 
 print(data_files)
 print(bool(data_files))

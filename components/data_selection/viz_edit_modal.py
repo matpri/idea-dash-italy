@@ -81,9 +81,3 @@ def render(file):
         ],
     )
     return layout
-
-
-def update_chips(values):
-    # Running a print statement for each chip group
-    for val in values:
-        print(val)

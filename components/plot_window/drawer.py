@@ -28,9 +28,6 @@ def render(card_id, viz_func):
                            id={'type': 'drawer-content', 'index': card_id},
                            style={
                                'height': 'calc(100% - 1rem)',
-                               'padding': '1rem',
-                               'marginTop': '1rem',
-                               'borderRadius': '10px',
                                'background': 'rgba(255,255,255,0.4)',
                                'backdropFilter': 'blur(20px)',
                                'zIndex': 999,
