@@ -25,6 +25,14 @@ def link(app):
             'type': 'energy_model-output_stats-download-button',
             'index': ALL
         }, 'n_clicks'),
+        Input({
+            'type': 'energy_model-output_stats-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'energy_model-output_stats-scenario-group-select',
+            'index': ALL
+        }, 'value'),
         State({
             'type': ids.FIGURE,
             'index': ALL,
@@ -39,7 +47,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_output_stats(_years, _download, _canvas, _data):
+    def update_output_stats(_years, _download, _scenarios, _scenario_group, _canvas, _data):
         #print('updating output_stats plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -64,9 +72,15 @@ def link(app):
                 break
 
         df = data_handler.processed_data['Power System Models']['Output Stats']
+        if _scenario_group[idx] != 'ALL':
+            df = df[df['scenario'].str.contains(_scenario_group[idx])]
+            scenarios = df['scenario'].unique().tolist()
+
+            _scenarios[idx] = list(set(_scenarios[idx] + scenarios))
 
 
-        _canvas[idx] = render_plot(df, _years[idx])
+
+        _canvas[idx] = render_plot(df, _years[idx], _scenarios[idx])
 
 
         return _canvas, [dash.no_update for _ in _data]
