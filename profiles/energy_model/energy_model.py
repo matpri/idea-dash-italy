@@ -115,7 +115,7 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': output_stats_viz.plot,
                 'callback': output_stats_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+                'description': 'Output statistics of the model.'
 
             },
 
