@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot, region_plot
 
 
@@ -83,7 +83,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('Total', df, [scenarios[0]]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'silver_output',
             'viz': 'uc_emissions'

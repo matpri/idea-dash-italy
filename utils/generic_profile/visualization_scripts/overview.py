@@ -2,6 +2,8 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
 
+from components import ids
+
 
 def render_plot(type, df):
     df = df[df.variable == type].copy()
@@ -84,7 +86,7 @@ def create_overview_plot(model):
         plot_layout = dcc.Graph(
             figure=render_plot(classes[0], df),
             id={
-                'type': 'figure',
+                'type': ids.FIGURE,
                 'index': window_id,
                 'model': model,
                 'viz': 'overview'

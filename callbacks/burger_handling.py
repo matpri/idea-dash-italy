@@ -6,12 +6,12 @@ from components import ids
 def link(app):
     @app.callback(
         [
-            Output({'type': 'drawer', 'index': dash.dependencies.ALL}, 'is_open'),
-            Output({'type': 'burger', 'index': dash.dependencies.ALL}, 'opened')
+            Output({'type': ids.DRAWER, 'index': dash.dependencies.ALL}, 'is_open'),
+            Output({'type': ids.BURGER, 'index': dash.dependencies.ALL}, 'opened')
         ],
         [
-            Input({'type': 'burger', 'index': dash.dependencies.ALL}, 'opened'),
-            Input({'type': 'drawer', 'index': dash.dependencies.ALL}, 'is_open')
+            Input({'type': ids.BURGER, 'index': dash.dependencies.ALL}, 'opened'),
+            Input({'type': ids.DRAWER, 'index': dash.dependencies.ALL}, 'is_open')
         ],
         prevent_initial_call=True,
     )
@@ -29,8 +29,8 @@ def link(app):
         trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]   # using split as alternative to eval
 
         # Handle the scenario where drawer's state changes
-        if 'drawer' in trigger_id:
+        if ids.DRAWER in trigger_id:
             return drawers_open, drawers_open
         # Handle the scenario where burger's state changes
-        elif 'burger' in trigger_id:
+        elif ids.BURGER in trigger_id:
             return burgers_open, burgers_open

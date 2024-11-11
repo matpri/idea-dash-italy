@@ -1,5 +1,6 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
+from components import ids
 
 from profiles.natem_output.visualization_scripts.dispatch import render_plot, date_mapper
 
@@ -7,7 +8,7 @@ from profiles.natem_output.visualization_scripts.dispatch import render_plot, da
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'dispatch'
@@ -93,7 +94,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'dispatch'

@@ -17,12 +17,12 @@ def render(app, dev_view=False):
         dmc.Button(
             'Load Data',
             variant='subtle',
-            id={'type': 'open-modal', 'index': 'data'}
+            id={'type': ids.OPEN_MODAL, 'index': 'data'}
         ),
         dmc.Button(
             'Help',
             variant='subtle',
-            id={'type': 'open-modal', 'index': 'help'}
+            id={'type': ids.OPEN_MODAL, 'index': 'help'}
         ),
     ]
 

@@ -20,8 +20,8 @@ def link(app):
         Output(ids.DATABASE_INPUT, "children"),
         Output(ids.DATABASE_INPUT, "style"),
         Output(ids.DB_CONNECTED, "style"),
-        Output('db-checkboxes', 'children'),
-        Output('db-checkboxes', 'style'),
+        Output( ids.DB_CHECKBOXES, 'children'),
+        Output( ids.DB_CHECKBOXES, 'style'),
         Output(ids.MODEL_SELECT, 'data'),
         Output(ids.SCENARIO_SELECT, 'data'),
         Output(ids.AUTHOR_SELECT, 'data'),
@@ -33,7 +33,7 @@ def link(app):
     )(connect_to_database)
 
     app.callback(
-        Output('db-selector', 'children'),
+        Output( ids.DB_SELECTOR, 'children'),
         Input(ids.MODEL_SELECT, 'value'),
         Input(ids.SCENARIO_SELECT, 'value'),
         Input(ids.AUTHOR_SELECT, 'value'),
@@ -177,7 +177,7 @@ def get_runs(model, scenario, author, db):
 
     layout = [
         dmc.CheckboxGroup(
-            id='db-checkboxes',
+            id= ids.DB_CHECKBOXES,
             label='Select runs',
             orientation='vertical',
             value=[],

@@ -6,6 +6,7 @@ from plotly.subplots import make_subplots
 import plotly.express as px
 import pandas as pd
 from dash import html, dcc
+from components import ids
 import matplotlib.pyplot as plt
 
 from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot
@@ -253,7 +254,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(classes[0], df, scenarios[0], selected_time, time_step),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'silver_output',
             'viz': 'map_plots'

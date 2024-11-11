@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.silver_output import utils
 
 
@@ -160,7 +160,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df, [scenarios[0]], 'hourly'),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'silver_output',
             'viz': 'opf_costs'

@@ -11,13 +11,13 @@ def link(app):
         Output(ids.DATA_SELECTED, 'children'),
         Output(ids.DB_SELECTED, 'children'),
         Output(ids.DATA_SELECTED_VIEW, 'value'),
-        Output('profile-select', 'data'),
-        Output('data-loading-notification', 'children'),
+        Output(ids.PROFILE_SELECT, 'data'),
+        Output(ids.DATA_LOADING_NOTIFICATION, 'children'),
         Input(ids.DATA_UPLOAD, 'contents'),
         Input(ids.DB_LOAD_BUTTON, 'n_clicks'),
         Input(ids.UPDATE_CHIPS, 'n_clicks'),
         State(ids.DATA_UPLOAD, 'filename'),
-        State('db-checkboxes', 'value'),
+        State( ids.DB_CHECKBOXES, 'value'),
         State(ids.DATA_SELECTED, 'children'),
         State(ids.DB_SELECTED, 'children'),
         prevent_initial_call=True,
@@ -42,7 +42,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
             for run in selected_runs:
                 model, scenario, author, db = run.split('|')
                 run = data_handler.select_run(model, scenario, author, db)
-                db_views.append(dmc.Button(run, id={'type': 'open-modal', 'index': f'selected-{run}'},
+                db_views.append(dmc.Button(run, id={'type': ids.OPEN_MODAL, 'index': f'selected-{run}'},
                                            radius='xl', size='xs', compact=True,
                                            variant='light',
                                            leftIcon=DashIconify(icon='carbon:edit', width=10),
@@ -85,7 +85,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                     for p in profiles:
                         colors.append(data_handler.profiles[p].color)
                     # IDs are dictionaries now, to handle them use the MATCH and ALL special keywords
-                    views.append(dmc.Button(file, id={'type': 'open-modal', 'index': f'selected-{file}'},
+                    views.append(dmc.Button(file, id={'type': ids.OPEN_MODAL, 'index': f'selected-{file}'},
                                             radius='xl', size='xs', compact=True,
                                             variant='light',
                                             color=colors[0] if len(colors) == 1 else 'gray',

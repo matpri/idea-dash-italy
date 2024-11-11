@@ -2,6 +2,8 @@ import dash_mantine_components as dmc
 from dash import html
 from dash_iconify import DashIconify
 
+from components import ids
+
 
 def render():
     from main import data_handler
@@ -9,7 +11,7 @@ def render():
     return dmc.Modal(
         title=html.Div([
             dmc.Select(
-                id='profile-select',
+                id=ids.PROFILE_SELECT,
                 label='Select Results:',
                 data=list(data_handler.data.keys()),
                 value=None,

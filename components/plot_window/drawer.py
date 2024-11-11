@@ -3,6 +3,7 @@ import dash_mantine_components as dmc
 from dash import html
 
 from assets.styles import glass_style
+from components import ids
 
 drawer_style = glass_style.copy()
 drawer_style['height'] = '100%'
@@ -19,7 +20,7 @@ def render(card_id, viz_func):
     - A tuple containing the burger button and the collapse component.
     """
     return dmc.Burger(
-        id={'type': 'burger', 'index': card_id},
+        id={'type': ids.BURGER, 'index': card_id},
         opened=True,
         size='sm'
     ), dbc.Collapse(
@@ -42,7 +43,7 @@ def render(card_id, viz_func):
         ,
         is_open=True,
         dimension="width",
-        id={'type': 'drawer', 'index': card_id},
+        id={'type': ids.DRAWER, 'index': card_id},
         style={
             'width': '20%',
             'height': '100%',

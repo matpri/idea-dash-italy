@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.energy_model import utils
 
 
@@ -151,7 +151,7 @@ def plot(df, window_id):
         figure=render_plot(classes[0], df, df['scenario'].unique().tolist()[0], df['scenario'].unique().tolist()[0],
                             True, 'CAN' if 'CAN' in regions else regions[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'comparison'

@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
@@ -130,7 +130,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df, years[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'output_stats'

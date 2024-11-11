@@ -1,13 +1,14 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
+from components import ids
 from profiles.pithos_output.visualization_scripts.dispatch import render_plot, date_mapper
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pithos_output',
             'viz': 'dispatch'
@@ -93,7 +94,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pithos_output',
             'viz': 'dispatch'

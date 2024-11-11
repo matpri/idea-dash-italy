@@ -1,7 +1,8 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
+import plotly.graph_objects as go
 from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
@@ -112,7 +113,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df, scenarios[0], regions[0], years[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'messageix_output',
             'viz': 'capacity'

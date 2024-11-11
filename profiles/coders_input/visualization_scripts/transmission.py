@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import geojson
 from dash import html, dcc
-
+from components import ids
 import plotly.express as px
 import pandas as pd
 import plotly.graph_objects as go
@@ -99,7 +99,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'coders_input',
             'viz': 'transmission'

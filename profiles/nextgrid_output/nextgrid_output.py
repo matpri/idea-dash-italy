@@ -3,7 +3,7 @@ from random import randint
 import dash_mantine_components as dmc
 import yaml
 from dash import html, dcc
-
+from components import ids
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.nextgrid_output import utils
 from profiles.nextgrid_output.callbacks import (emissions as emissions_callbacks,

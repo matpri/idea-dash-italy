@@ -2,13 +2,14 @@ import dash_mantine_components as dmc
 from dash import html
 from dash_iconify import DashIconify
 
+from components import ids
 from components.help import start
 
 
 def render(help_popup):
     return dmc.Modal(
         title='Help',
-        id={'type': 'modal', 'index': 'help'},
+        id={'type': ids.MODAL, 'index': 'help'},
         zIndex=10000,
         size='75%',
         closeOnClickOutside=True,

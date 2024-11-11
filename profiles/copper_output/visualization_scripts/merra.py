@@ -4,7 +4,7 @@ import dash_mantine_components as dmc
 import plotly.graph_objects as go
 import shapely
 from dash import html, dcc
-
+from components import ids
 
 def vre_plot(grid, variable, year):
     '''
@@ -76,7 +76,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=vre_plot(df, variables[0], years[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'copper_output',
             'viz': 'vre'

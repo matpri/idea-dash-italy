@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 patterns = ['solid', 'dot', 'dash', 'longdash', 'dashdot', 'longdashdot']
 colors = ['rgba(31, 119, 180, 0.3)', 'rgba(255, 127, 14, 0.3)', 'rgba(44, 160, 44, 0.3)', 'rgba(214, 39, 40, 0.3)',
           'rgba(148, 103, 189, 0.3)', 'rgba(140, 86, 75, 0.3)', 'rgba(227, 119, 194, 0.3)', 'rgba(127, 127, 127, 0.3)',]
@@ -283,7 +283,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(classes[0], df, False, False, False),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'overview'

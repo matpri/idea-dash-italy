@@ -29,12 +29,12 @@ def link(app):
         Output('view-data-div', 'children'),
         Output('remove-data', 'disabled'),
         Output(ids.AFTER_CHANGE, 'n_clicks'),
-        Output('profile-select', 'value', allow_duplicate=True),
-        Output('profile-select', 'data', allow_duplicate=True),
-        Input('profile-select', 'value'),
+        Output(ids.PROFILE_SELECT, 'value', allow_duplicate=True),
+        Output(ids.PROFILE_SELECT, 'data', allow_duplicate=True),
+        Input(ids.PROFILE_SELECT, 'value'),
         Input('remove-data', 'n_clicks'),
         State(ids.AFTER_CHANGE, 'n_clicks'),
-        State('profile-select', 'data'),
+        State(ids.PROFILE_SELECT, 'data'),
         prevent_initial_call=True,
     )(update_chips)
 
@@ -42,14 +42,14 @@ def link(app):
     app.callback(
         Output('data-viewer-data-modal', 'opened'),
         Output(ids.AFTER_CHANGE, 'n_clicks', allow_duplicate=True),  # Allow duplicate output
-        Output('profile-select', 'data', allow_duplicate=True),
+        Output(ids.PROFILE_SELECT, 'data', allow_duplicate=True),
         Input('data-viewer', 'n_clicks'),
         Input('submit-data', 'n_clicks'),
         Input('cancel-data', 'n_clicks'),
         State('data-viewer-data-modal', 'opened'),
         State({'type': 'data-viewer-chip-group', 'file': ALL, 'profile': ALL}, 'value'),
         State({'type': 'data-viewer-scenario-name', 'file': ALL}, 'value'),
-        State('profile-select', 'data'),
+        State(ids.PROFILE_SELECT, 'data'),
         prevent_initial_call=True,
     )(view_modal)
 
