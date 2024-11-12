@@ -22,6 +22,12 @@ def link(app):
             'viz': 'output_stats'
         }, 'data'),
         Input({
+            'type': 'plot-select',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'output_stats'
+        }, 'value'),
+        Input({
             'type': 'year-select',
             'index': ALL,
             'model': MATCH,
@@ -53,7 +59,7 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_years, _scenarios, _download, _canvas, _data):
+    def update_gencap_cost(_p_type, _years, _scenarios, _download, _canvas, _data):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -80,8 +86,10 @@ def link(app):
 
         print('idx:', idx, 'plot type:', _years[idx])
         _canvas[idx] = render_plot(
+            _p_type[idx],
             data_handler.processed_data[model][name],
-            _years[idx], _scenarios[idx]
+            _years[idx], _scenarios[idx],
+            model
         )
 
         return _canvas, [dash.no_update for _ in

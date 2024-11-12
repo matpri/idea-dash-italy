@@ -437,6 +437,7 @@ class DataHandler:
                 overview_data.append(data)
 
             full_df = pd.concat(overview_data)
+            full_df['time'] = full_df['time'].astype(int)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
             self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
 

@@ -119,6 +119,7 @@ class GenericProfile:
 
             dfs.append(df)
         full_df = pd.concat(dfs)
+        full_df['time'] = full_df['time'].astype(int)
 
         processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
         processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region']]))

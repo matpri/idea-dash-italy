@@ -4,6 +4,8 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
+
+from utils.generic_profile import utils
 from components import ids
 
 
@@ -15,95 +17,135 @@ def get_contrasting_font_color(rgb_color):
     return '#ffffff' if brightness < 128 else '#000000'
 
 
-def render_plot(df, year, scenarios):
+def render_plot(p_type, df, year, scenarios, model):
     # Create a Plotly table
     db = df.copy()
     db = db[(db.region == 'National') & (db.time == year) & (db.scenario.isin(scenarios))]
+
     if not db.empty:
 
-        if 'Min Dispatch' in db['variable'].unique() and 'Max Dispatch' in db['variable'].unique():
-            min_days = db[db.variable == 'Min Dispatch']
-            max_days = db[db.variable == 'Max Dispatch']
+        if p_type == 'Table':
+            if 'Min Dispatch' in db['variable'].unique() and 'Max Dispatch' in db['variable'].unique():
+                min_days = db[db.variable == 'Min Dispatch']
+                max_days = db[db.variable == 'Max Dispatch']
 
-            min_date = pd.DataFrame(
-                {'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for
-                i, min_day in min_days.iterrows())
-            max_date = pd.DataFrame(
-                {'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for
-                i, max_day in max_days.iterrows())
-            min_dispatch = pd.DataFrame(
-                {'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for
-                i, min_day in min_days.iterrows())
-            max_dispatch = pd.DataFrame(
-                {'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for
-                i, max_day in max_days.iterrows())
+                min_date = pd.DataFrame(
+                    {'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for
+                    i, min_day in min_days.iterrows())
+                max_date = pd.DataFrame(
+                    {'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for
+                    i, max_day in max_days.iterrows())
+                min_dispatch = pd.DataFrame(
+                    {'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for
+                    i, min_day in min_days.iterrows())
+                max_dispatch = pd.DataFrame(
+                    {'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for
+                    i, max_day in max_days.iterrows())
 
-            # if multiple min/max dispatch dates, append the values together with a comma
-            min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
-            max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+                # if multiple min/max dispatch dates, append the values together with a comma
+                min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(
+                    lambda x: ', '.join(x)).reset_index()
+                max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(
+                    lambda x: ', '.join(x)).reset_index()
 
-            # only keep the first value for min/max dispatch values if there are multiple
-            min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
-            max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+                # only keep the first value for min/max dispatch values if there are multiple
+                min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+                max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
 
-            db = db[db.variable != 'Min Dispatch']
-            db = db[db.variable != 'Max Dispatch']
-            db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+                db = db[db.variable != 'Min Dispatch']
+                db = db[db.variable != 'Max Dispatch']
+                db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
 
-        db = db[['scenario', 'variable', 'value']]
+            db = db[['scenario', 'variable', 'value']]
 
-        df_pivot = db.pivot(index='variable', columns='scenario', values='value')
+            df_pivot = db.pivot(index='variable', columns='scenario', values='value')
 
-        # fill na with ''
-        df_pivot = df_pivot.fillna('')
-        # Create a Plotly Table
-        header_values = [''] + list(df_pivot.columns)
-        cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
+            # fill na with ''
+            df_pivot = df_pivot.fillna('')
+            # Create a Plotly Table
+            header_values = [''] + list(df_pivot.columns)
+            cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
-        min_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
-        max_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
+            min_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+            max_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
 
-        def normalize(value):
-            if isinstance(value, (int, float)):
-                return (value - min_value) / (max_value - min_value)
-            return None
+            def normalize(value):
+                if isinstance(value, (int, float)):
+                    return (value - min_value) / (max_value - min_value)
+                return None
 
-        colors = []
+            colors = []
 
-        for col in df_pivot.columns:
-            normalized_data = [normalize(val) for val in df_pivot[col]]
-            colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
-                                     0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in
-                                 normalized_data])]
+            for col in df_pivot.columns:
+                normalized_data = [normalize(val) for val in df_pivot[col]]
+                colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
+                                         0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value
+                                     in
+                                     normalized_data])]
 
-        colors_by_row = [['#ffffff', '#e5eeec'] * (
+            colors_by_row = [['#ffffff', '#e5eeec'] * (
                     len(df_pivot.index) // 2)] + colors  # Determine font colors based on the background color
-        font_colors = [['#000000'] * len(df_pivot.index)]
-        for column in colors:
-            font_colors.append([get_contrasting_font_color(color) for color in column])
-        # Calculate the width for each column
-        column_width = []
-        column_width.append(max(df_pivot.index.str.len()) * 8)
-        for col in df_pivot.columns:
-            column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+            font_colors = [['#000000'] * len(df_pivot.index)]
+            for column in colors:
+                font_colors.append([get_contrasting_font_color(color) for color in column])
+            # Calculate the width for each column
+            column_width = []
+            column_width.append(max(df_pivot.index.str.len()) * 8)
+            for col in df_pivot.columns:
+                column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
 
-        print(column_width)
+            print(column_width)
 
-        # Create Plotly table
-        fig = go.Figure(data=[go.Table(
-            columnorder=[i + 1 for i in range(len(df_pivot.columns) + 1)],
-            columnwidth=column_width,
-            header=dict(values=header_values,
-                        fill_color=['#ffffff', '#248ce6', '#248ce6'],
-                        font=dict(color='white'),
-                        align='center'),
-            cells=dict(values=cell_values,
-                       fill_color=colors_by_row,
-                       line_color=colors_by_row,
-                       font=dict(color=font_colors),
+            # Create Plotly table
+            fig = go.Figure(data=[go.Table(
+                columnorder=[i + 1 for i in range(len(df_pivot.columns) + 1)],
+                columnwidth=column_width,
+                header=dict(values=header_values,
+                            fill_color=['#ffffff', '#248ce6', '#248ce6'],
+                            font=dict(color='white'),
+                            align='center'),
+                cells=dict(values=cell_values,
+                           fill_color=colors_by_row,
+                           line_color=colors_by_row,
+                           font=dict(color=font_colors),
 
-                       align='left'))
-        ])
+                           align='left'))
+            ])
+        else:
+            db = db[['scenario', 'variable', 'value']]
+            # only keep where value is a number
+            db = db[db['value'].apply(lambda x: isinstance(x, (int, float)))]
+
+            if model == 'Generic Comparison':
+                db['model'], db['scenario'] = db['scenario'].apply(lambda x: x.split('|')[0]), db['scenario'].apply(
+                    lambda x: '|'.join(x.split('|')[1:]))
+
+            colors = {scen: utils.get_color(scen) for scen in db['scenario'].unique()}
+            # create a scatter plot
+            fig = go.Figure()
+            for scenario in db['scenario'].unique():
+                scenario_data = db[db['scenario'] == scenario]
+                fig.add_trace(
+                    go.Scatter(
+                        x=scenario_data['variable'],
+                        y=scenario_data['value'],
+                        mode='markers',
+                        name=scenario,
+                        marker=dict(
+                            color=colors[scenario],
+                            size=10,
+                        ),
+                    )
+                )
+            fig.update_layout(
+                xaxis_title='Variable',
+                yaxis_title='Value',
+                title=f'Output Stats for {model} in {year}',
+                # make white background
+                template="simple_white"
+            )
+
+
     else:
         fig = go.Figure()
         # print("No data available, since the results are all zero.")
@@ -132,9 +174,22 @@ def create_plot(model):
         :return: html.Div([widgets]), dcc.Graph(plot)
         '''
         years = df['time'].unique().tolist()
+        # sort years
+        years.sort()
         scenarios = df['scenario'].unique().tolist()
 
         widget_layout = html.Div([
+            dmc.Select(
+                label='Plot Type',
+                data=[{'label': p_type, 'value': p_type} for p_type in ['Table', 'Scatter']],
+                value='Table',
+                id={
+                    'type': 'plot-select',
+                    'index': window_id,
+                    'model': model,
+                    'viz': 'output_stats'
+                },
+            ),
             dmc.Select(
                 label='Year',
                 data=[{'label': year, 'value': year} for year in years],
@@ -167,7 +222,7 @@ def create_plot(model):
         ])
 
         plot_layout = dcc.Graph(
-            figure=render_plot(df, years[0], ['']),
+            figure=render_plot('Table', df, years[0], [''], model),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,
