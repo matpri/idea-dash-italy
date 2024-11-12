@@ -170,7 +170,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Secondary Energy'].to_csv, "secondary_energy.csv")
-            return _canvas, _r_style, _y_style, _v_style, _v_data, _data, _s_style, _m_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, _data, _s_style, _m_style, _pattern_style, _text_style
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and

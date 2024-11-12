@@ -6,7 +6,6 @@ import plotly.graph_objects as go
 from profiles.messageix_output import utils
 
 region_mapping = {
-    'Canada': 'Canada',
     'BritishColumbia': 'British Columbia',
     'Alberta': 'Alberta',
     'Saskatchewan': 'Saskatchewan',
@@ -41,9 +40,13 @@ def plot_map(message_data, scenario, time, variable='All', aggregate=False):
 
     rep_data = rep_data.groupby('region').sum().reset_index()
 
-    rep_data['region'] = rep_data['region'].map(region_mapping).fillna(rep_data['region'])
+    rep_data['region'] = rep_data['region'].map(region_mapping)
+    # drop rows where region is not in region_mapping
+    rep_data = rep_data[rep_data['region'].notnull()]
+    # drop scenario column
+    rep_data = rep_data.drop(columns=['scenario'])
 
-    print(rep_data)
+    print(rep_data[['region', 'value']])
 
 
 
