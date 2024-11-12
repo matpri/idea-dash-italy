@@ -1,6 +1,7 @@
 from random import randint
 
 import dash_mantine_components as dmc
+import pandas as pd
 import yaml
 from dash import html, dcc
 
@@ -276,9 +277,12 @@ class PypsaOutput(BaseProfile):
 
         # Process overview and output statistics if requested
         if wants_overview or wants_output_stats:
+            overview_scenarios = set(data_collection.get('Overview', {}).keys())
+            output_stats_scenarios = set(data_collection.get('Output Stats', {}).keys())
+
             dfs = []
             for _, viz_option, data in processed_data:
-                if viz_option in ['Dispatch', 'Transmission Flow', 'Transmission Capacity']:
+                if viz_option in {'Dispatch', 'Transmission Flow', 'Transmission Capacity'}:
                     if wants_output_stats and viz_option == 'Dispatch':
                         # Process dispatch data for output statistics
                         dispatch_data = self._prepare_dispatch_data(data)
@@ -293,24 +297,25 @@ class PypsaOutput(BaseProfile):
                 dfs.append(filtered_data)
 
             # Combine all dataframes into a single dataframe
-            full_df = pd.concat(dfs)
+            full_df = pd.concat(dfs, ignore_index=True)
 
             # Aggregate data for Alberta and Quebec
             full_df = self._aggregate_ab_qc(full_df)
 
             # Append overview data to processed data
+            overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
             processed_data.append(
-                (self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+                (self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
             # If output statistics are requested, append them as well
             if wants_output_stats:
                 if output_stats_data:
-                    stats_df = pd.concat(output_stats_data, ignore_index=True)
-                    stats_df = pd.concat([stats_df, full_df], ignore_index=True)
+                    stats_df = pd.concat(output_stats_data + [full_df], ignore_index=True)
                 else:
                     stats_df = full_df
                 stats_df['time'] = stats_df['time'].astype(int)
-                processed_data.append((self.display_name, 'Output Stats', stats_df))
+                output_stats_df = stats_df[stats_df['scenario'].isin(output_stats_scenarios)]
+                processed_data.append((self.display_name, 'Output Stats', output_stats_df))
 
         return processed_data
 
