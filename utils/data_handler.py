@@ -385,7 +385,7 @@ class DataHandler:
             if model == 'Power System Models' or model == 'Generic Comparison':
                 continue
             for viz, viz_data in viz_option.items():
-                if viz == 'Overview':
+                if viz == 'Overview' or viz == 'Output Stats':
                     continue
                 columns = viz_data.columns.tolist()
                 # check if column of viz_data contains 'variable', 'value', 'region', 'time', 'scenario'
@@ -438,6 +438,7 @@ class DataHandler:
 
             full_df = pd.concat(overview_data)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
 
         print("processed", self.processed_data)
 
