@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.silver_output.visualization_scripts.opf_costs import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'opf_costs'
@@ -29,7 +29,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'opf_costs'

@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.messageix_output.visualization_scripts.final_energy import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'messageix_output',
             'viz': 'final_energy'
@@ -97,7 +97,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'messageix_output',
             'viz': 'final_energy'

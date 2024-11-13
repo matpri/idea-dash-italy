@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
 from profiles.temoa_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 regions_list = [
@@ -139,7 +139,7 @@ def plot(df, window_id):
         figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'temoa_output',
             'viz': 'supply'

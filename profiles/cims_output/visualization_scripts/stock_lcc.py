@@ -2,7 +2,7 @@ import math
 
 import dash_mantine_components as dmc
 from dash import html, dcc
-
+from components import ids
 from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart
 
@@ -190,7 +190,7 @@ def plot(df, window_id):
                            years[0], scenarios[0], sector=sectors[0], service=services[0],
                            parameter=stock_parameters[0], plot_name=stock_parameters[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'cims_output',
             'viz': 'stock_lcc'

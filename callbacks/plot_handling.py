@@ -1,24 +1,24 @@
 from dash import Input, Output, State, ALL, callback_context, MATCH
-
+from components import ids
 
 def link(app):
     app.callback(
-        Output({'type': 'plot', 'index': MATCH}, 'figure'),
-        Input({'type': 'figure', 'index': MATCH,
+        Output({'type': ids.PLOT, 'index': MATCH}, 'figure'),
+        Input({'type': ids.FIGURE, 'index': MATCH,
                'profile': ALL, 'viz': ALL}, 'figure'),
         Input({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'model': ALL,
             'name': ALL
         }, 'figure'),
         Input({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'model': ALL,
             'viz': ALL
         }, 'figure'),
-        State({'type': 'plot', 'index': MATCH}, 'figure'),
+        State({'type': ids.PLOT, 'index': MATCH}, 'figure'),
         prevent_initial_call=True,
     )(update_plot)
 

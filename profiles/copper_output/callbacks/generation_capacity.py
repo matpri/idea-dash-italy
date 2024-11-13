@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.copper_output.visualization_scripts.generation_capacity import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_output',
             'viz': 'gencap'
@@ -97,7 +98,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_output',
             'viz': 'gencap'

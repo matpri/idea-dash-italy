@@ -9,7 +9,7 @@ from components.data_selection import database_connection, local_files, selected
 def render(app):
     layout = dmc.Modal(
         title='Load Data',
-        id={'type': 'modal', 'index': 'data'},
+        id={'type': ids.MODAL, 'index': 'data'},
         zIndex=10000,
         size='75%',
         closeOnClickOutside=True,
@@ -25,7 +25,7 @@ def render(app):
                         ], style={'width': '80%', 'display': 'flex', 'justifyContent': 'space-between'}),
                     ]),
 
-                    html.Div([local_files.render(app), database_connection.render(app)], id=ids.DATA_LOADING_CONTENT,
+                    html.Div([local_files.render(app), database_connection.render()], id=ids.DATA_LOADING_CONTENT,
                              style={'display': 'flex', 'flexFlow': 'column', 'alignItems': 'center', 'width': '100%'}),
                 ],
                     style={'width': '100%', 'display': 'flex', 'justifyContent': 'center',
@@ -63,30 +63,15 @@ def render(app):
             ),
             dmc.Space(h=20),
             dmc.Group([
-                dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': 'data'}),
+                dmc.Button('Submit', id={'type': ids.MODAL_SUBMIT_BUTTON, 'index': 'data'}),
                 dmc.Button('Cancel', color='red', variant='outline',
-                           id={'type': 'modal-close-button', 'index': 'data'}, ),
+                           id={'type': ids.MODAL_CLOSE_BUTTON, 'index': 'data'}, ),
             ], position='right'),]
         ),
     )
 
-    app.callback(
-        Output(ids.LOCAL_FILE_BUTTON, "variant"),
-        Output(ids.DATABASE_BUTTON, "variant"),
-        Output(ids.DATA_LOCAL_INPUT, "style"),
-        Output(ids.DATABASE_VIEW, "style"),
-        Input(ids.LOCAL_FILE_BUTTON, "n_clicks"),
-        Input(ids.DATABASE_BUTTON, "n_clicks"),
-        prevent_initial_call=True,
-    )(toggle_button)
+
 
     return layout
 
 
-def toggle_button(local, db):
-    ctx = dash.callback_context
-    triggered_input = ctx.triggered[0]['prop_id'].split('.')[0]
-    if triggered_input == ids.LOCAL_FILE_BUTTON:
-        return "gradient", "outline", {"width": "60%", 'display': 'block'}, {"width": "80%", 'display': 'none'}
-    else:
-        return "outline", "gradient", {"width": "60%", 'display': 'none'}, {"width": "80%", 'display': 'block'}

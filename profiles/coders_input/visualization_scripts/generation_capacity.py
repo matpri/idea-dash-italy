@@ -3,7 +3,7 @@ import geojson
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.coders_input import utils
 
 
@@ -120,7 +120,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df, True),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'coders_input',
             'viz': 'gencap'

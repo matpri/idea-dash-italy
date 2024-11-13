@@ -1,6 +1,9 @@
 import dash_mantine_components as dmc
 from dash import html
 
+from components import ids
+
+
 def render():
     from main import data_handler
     data = []
@@ -36,7 +39,7 @@ def render():
     layout = html.Div(
         [
             dmc.CheckboxGroup(
-                id='db-checkboxes',
+                id= ids.DB_CHECKBOXES,
                 label='Select runs',
                 orientation='vertical',
                 value=[],
@@ -49,7 +52,7 @@ def render():
                 ]
             ),
         ],
-        id='db-selector',
+        id= ids.DB_SELECTOR,
         style={
             "height": "310px",
             "width": "100%",

@@ -2,13 +2,14 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from profiles.copper_output.visualization_scripts.merra import vre_plot
+from components import ids
 
 
 def link(app):
     #print("gen cap link")
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'copper_output',
             'viz': 'vre'

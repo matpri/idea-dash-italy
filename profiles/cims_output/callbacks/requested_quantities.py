@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, MATCH, dcc
 
 from profiles.cims_output.visualization_scripts.requested_quantities import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
             'viz': 'requested_quantities'
@@ -125,7 +126,7 @@ def link(app):
             'index': MATCH
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
             'viz': 'requested_quantities'

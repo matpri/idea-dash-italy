@@ -40,4 +40,24 @@ DATA = 'data'
 
 SAVE_BUTTON = 'save-button'
 
+DRAWER = 'drawer'
+BURGER = 'burger'
+
+MODAL_SUBMIT_BUTTON = 'modal-submit-button'
+MODAL_CLOSE_BUTTON = 'modal-close-button'
+OPEN_MODAL = 'open_modal'
+MODAL = 'modal'
+
+UPLOAD_CHIP_GROUP = 'upload-chip-group'
+UPLOAD_SCENARIO_NAME = 'upload-scenario-name'
+
+DB_CHECKBOXES = 'db-checkboxes'
+DB_SELECTOR = 'db-selector'
+
+PLOT = 'plot'
+FIGURE = 'figure'
+
+PROFILE_SELECT = 'profile-select'
+DATA_LOADING_NOTIFICATION = 'data-loading-notification'
+
 card_ids = []

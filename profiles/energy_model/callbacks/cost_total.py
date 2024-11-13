@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.cost_total import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'total_cost'
@@ -105,7 +106,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'total_cost'

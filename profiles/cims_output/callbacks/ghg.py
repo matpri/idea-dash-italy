@@ -2,6 +2,7 @@ import dash
 from dash import Output, Input, State, MATCH, dcc
 
 from profiles.cims_output.visualization_scripts.ghg import render_plot
+from components import ids
 
 emissions_mapping = {
     'Net Emissions': ['total_cumul_net_emissions',
@@ -17,7 +18,7 @@ emissions_mapping = {
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
             'viz': 'ghg'
@@ -127,7 +128,7 @@ def link(app):
             'index': MATCH
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
             'viz': 'ghg'

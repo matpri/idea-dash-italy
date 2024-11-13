@@ -1,5 +1,6 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
+from components import ids
 import plotly.graph_objects as go
 
 
@@ -102,7 +103,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot( df, scenarios, variables[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'copper_input',
             'viz': 'gentype'

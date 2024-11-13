@@ -2,7 +2,7 @@ import math
 
 import dash_mantine_components as dmc
 from dash import html, dcc
-
+from components import ids
 from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart
 
@@ -213,7 +213,7 @@ def plot(df, window_id):
                            emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
                            plot_name='Net Emissions'),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'cims_output',
             'viz': 'ghg'

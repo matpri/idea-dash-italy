@@ -1,6 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
+from components import ids
 from utils.generic_profile.visualization_scripts.overview import render_plot
 
 
@@ -8,7 +9,7 @@ def link(app):
     print('linking overview')
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'model': MATCH,
             'viz': 'overview'
@@ -32,7 +33,7 @@ def link(app):
             'viz': 'overview'
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'model': MATCH,
             'viz': 'overview'

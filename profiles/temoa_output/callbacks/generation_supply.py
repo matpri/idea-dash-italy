@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.temoa_output.visualization_scripts.generation_supply import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'temoa_output',
             'viz': 'supply'
@@ -97,7 +97,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'temoa_output',
             'viz': 'supply'
@@ -145,8 +145,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Sutubra-TEMOA']['Supply'].to_csv, "supply.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style
-
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and

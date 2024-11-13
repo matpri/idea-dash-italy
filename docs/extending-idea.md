@@ -172,7 +172,7 @@ The folder and the file can have any name but inside the file you must define a 
       widgets = html.Div('Custom Widgets')
       dcc.Graph(
          id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'copper_output',
             'viz': 'cost_fom'

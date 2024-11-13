@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.copper_output.visualization_scripts.dispatch import render_plot, date_mapper
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_output',
             'viz': 'dispatch'
@@ -93,7 +94,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_output',
             'viz': 'dispatch'

@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.natem_output.visualization_scripts.cost_fom import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'fom_cost'
@@ -97,7 +97,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'fom_cost'
@@ -145,7 +145,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['NATEM Canada']['FOM Cost'].to_csv, "fom_cost.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):

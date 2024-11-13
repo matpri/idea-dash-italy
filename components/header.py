@@ -6,7 +6,7 @@ from components import ids
 HEIGHT = 40
 
 
-def render(app, dev_view=False):
+def render(app):
     buttons = [
         # logo from ./assets/logo.png
         dcc.Link(
@@ -17,23 +17,14 @@ def render(app, dev_view=False):
         dmc.Button(
             'Load Data',
             variant='subtle',
-            id={'type': 'open-modal', 'index': 'data'}
+            id={'type': ids.OPEN_MODAL, 'index': 'data'}
         ),
         dmc.Button(
             'Help',
             variant='subtle',
-            id={'type': 'open-modal', 'index': 'help'}
+            id={'type': ids.OPEN_MODAL, 'index': 'help'}
         ),
     ]
-
-    if dev_view:
-        buttons.append(
-            dmc.Button(
-                'Save',
-                variant='subtle',
-                id=ids.SAVE_BUTTON
-            )
-        )
     layout = html.Div(
         children=[
             dmc.Header(
