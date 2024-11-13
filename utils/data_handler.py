@@ -176,6 +176,7 @@ class DataHandler:
         self.data = {}
         self.processed = []
         self.processed_data = {}
+        self.pkls = {}
         self.viz = {}
         self.to_delete = []
         self.runs = pd.DataFrame()
@@ -198,6 +199,8 @@ class DataHandler:
                     dfs.append(_df)
                 # Combine all DataFrames into one
                 df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.pkl':
+                self.pkls[f_name] = os.path.join('data', file)
             else:
                 fail = True
                 print(f'{file}: File type not supported, only .csv and .xlsx are supported')
@@ -333,11 +336,14 @@ class DataHandler:
         Process the data that has been loaded into the data handler.
         :return:
         """
-
         # Collect results
         if reset:
             self.processed_data = {}
             self.processed = []
+
+        for pkl in self.pkls.values():
+            self.load(pkl)
+
         # Collect data from all selected profiles
         data_collection = {}
         process_power_system = False
@@ -580,26 +586,50 @@ class DataHandler:
 
         return True, "Data loaded successfully!", filename
 
-    def save(self, filename):
+    def save(self, filename, temporary):
         """
         Save self.data, self.processed_data, self.processedto a file.
         :param filename: The name of the file to save the data handler to.
+        :param temporary: Whether the file is temporary or not.
+        :return: The file path if not temporary, else the bytes of the pickle.
+        """
+
+        if temporary:
+            return pickle.dumps([self.data, self.processed_data, self.processed])
+        else:
+            with open(filename, 'wb') as f:
+                pickle.dump([self.data, self.processed_data, self.processed], f)
+            return filename
+
+
+    def load(self, filename_or_bytes):
+        """
+        Load self.data, self.processed_data, self.processed from a file or encoded bytes.
+        :param filename_or_bytes: The name of the file to load the data handler from or encoded bytes.
         :return:
         """
+        if isinstance(filename_or_bytes, str):
+            with open(filename_or_bytes, 'rb') as f:
+                loaded_data, loaded_processed_data, loaded_processed = pickle.load(f)
+        else:
+            loaded_data, loaded_processed_data, loaded_processed = pickle.loads(filename_or_bytes)
 
-        # pickle self.data, self.processed_data, self.processed to a file
-        with open(filename, 'wb') as f:
-            pickle.dump([self.data, self.processed_data, self.processed], f)
+        # Safely update self.data
+        for key, value in loaded_data.items():
+            if key in self.data:
+                self.data[key].update(value)
+            else:
+                self.data[key] = value
 
+        # Safely update self.processed_data
+        for key, value in loaded_processed_data.items():
+            if key in self.processed_data:
+                self.processed_data[key].update(value)
+            else:
+                self.processed_data[key] = value
 
-    def load(self, filename):
-        """
-        Load self.data, self.processed_data, self.processed from a file.
-        :param filename: The name of the file to load the data handler from.
-        :return:
-        """
-        with open(filename, 'rb') as f:
-            self.data, self.processed_data, self.processed = pickle.load(f)
+        # Safely update self.processed
+        self.processed.extend(x for x in loaded_processed if x not in self.processed)
 
 
 

@@ -2,6 +2,7 @@ import dash
 import dash_mantine_components as dmc
 from dash import html, Output, Input, State
 from dash_iconify import DashIconify
+import base64
 
 from components import ids
 from components.data_selection import viz_edit_modal
@@ -65,8 +66,14 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
     if filenames is not None:
         for i, filename in enumerate(filenames):
             file, extension = filename.split('.')
+            if extension == 'pkl':
+                data_handler.pkls[file] = base64.b64decode(_contents[i].split(',')[1])
+                views.append(dmc.Button(file, id={'type': 'pkl', 'index': f'selected-{file}'},
+                                        radius='xl', size='xs', compact=True,
+                                        variant='light',
+                                        style={'margin': '2px'}))
 
-            if extension == 'csv' or extension == 'xlsx':
+            elif extension == 'csv' or extension == 'xlsx':
                 if file in selected_data.keys():
                     counter = 1
                     while f'{file}-{counter}' in selected_data.keys():

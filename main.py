@@ -20,8 +20,6 @@ parser.add_argument('--static', type=str, default='False',
                     help='Set to "True" to make page static, i.e. hide header and settings to only keep features that are handled client side, "False" to hide it.')
 parser.add_argument('--datahandler', type=str, default=None,
                     help='Name of the datahandler file to load.')
-parser.add_argument('--dev', type=str, default='False',
-                    help='Set to True to run in development mode, extra adhoc features like saving datahandler to pkl')
 parser.add_argument('--help_popup', type=str, default='False',
                     help='Set to True to show help popup on startup.')
 parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
@@ -33,7 +31,6 @@ args = parser.parse_args()  # Parse the arguments
 
 # Convert string to boolean
 static = args.static.lower() == 'true'
-dev = args.dev.lower() == 'true'
 help_popup = args.help_popup.lower() == 'true'
 print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
@@ -84,7 +81,7 @@ if args.autosave != '':
 if not static:
     print("Rendering header...")  # Debugging statement
     app_layout = [
-        header.render(app, dev_view=dev),
+        header.render(app),
         html.Div([
             dlc.BoxPanel([
                 plot_canvas.render(bool(data_files) or args.datahandler is not None),

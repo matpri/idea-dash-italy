@@ -3,7 +3,7 @@ from functools import partial
 import dash
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
-from dash import Output, Input, State, html
+from dash import Output, Input, State, html, dcc
 from dash_iconify import DashIconify
 from assets.styles import button_style
 
@@ -55,7 +55,18 @@ def render(static):
                         className='my-button',
                         style=button_style,
                         id='data-viewer'
-                    ),])
+                    ),
+                    dmc.ActionIcon(
+                        DashIconify(icon='carbon:save'),
+                        size='sm',
+                        radius='xl',
+                        variant='outline',
+                        className='my-button',
+                        style=button_style,
+                        id=ids.SAVE_BUTTON
+                    ),
+            dcc.Download(id='download-datahandler'),
+        ])
 
     layout = html.Div([
         dmc.Aside(
@@ -66,7 +77,7 @@ def render(static):
             ],
             position={'top': '40%', 'left': 0} if not static else {'top': '50%', 'left': 0},
             width={"base": 32},
-            height=144 if not static else 72,
+            height=184 if not static else 72,
             fixed=True,
             zIndex=9999,
             # round the corners
