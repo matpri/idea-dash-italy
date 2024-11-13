@@ -19,11 +19,6 @@ def render(app):
             variant='subtle',
             id={'type': ids.OPEN_MODAL, 'index': 'data'}
         ),
-        dmc.Button(
-            'Help',
-            variant='subtle',
-            id={'type': ids.OPEN_MODAL, 'index': 'help'}
-        ),
     ]
     layout = html.Div(
         children=[

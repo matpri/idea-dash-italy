@@ -7,9 +7,8 @@ from dash import Output, Input, State, html, dcc
 from dash_iconify import DashIconify
 from assets.styles import button_style
 
-from components import data_viewer, settings,ids
+from components import data_viewer, settings, ids
 from components.plot_window import window
-
 
 
 def render(static):
@@ -17,54 +16,63 @@ def render(static):
     :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
     """
     icons = [
-                    dmc.ActionIcon(
-                        DashIconify(icon='carbon:add'),
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        id='add-card',
-                        className='my-button',
-                        style=button_style
-                    ),
-                    dmc.ActionIcon(
-                        DashIconify(icon='carbon:trash-can'),
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        id='trash-button',
-                        className='my-button',
-                        style=button_style
-                    ),
-                ]
+        dmc.ActionIcon(
+            DashIconify(icon='carbon:help'),
+            size='sm',
+            radius='xl',
+            variant='outline',
+            id={'type': ids.OPEN_MODAL, 'index': 'help'},
+            className='my-button',
+            style=button_style
+        ),
+        dmc.ActionIcon(
+            DashIconify(icon='carbon:add'),
+            size='sm',
+            radius='xl',
+            variant='outline',
+            id='add-card',
+            className='my-button',
+            style=button_style
+        ),
+        dmc.ActionIcon(
+            DashIconify(icon='carbon:trash-can'),
+            size='sm',
+            radius='xl',
+            variant='outline',
+            id='trash-button',
+            className='my-button',
+            style=button_style
+        ),
+    ]
 
     if not static:
-        icons.extend([ dmc.ActionIcon(
-                        DashIconify(icon='carbon:settings'),
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        id='settings',
-                        className='my-button',
-                        style=button_style
-                    ),
-                    dmc.ActionIcon(
-                        DashIconify(icon='carbon:db2-database'),
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        className='my-button',
-                        style=button_style,
-                        id='data-viewer'
-                    ),
-                    dmc.ActionIcon(
-                        DashIconify(icon='carbon:save'),
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        className='my-button',
-                        style=button_style,
-                        id=ids.SAVE_BUTTON
-                    ),
+        icons.extend([dmc.ActionIcon(
+            DashIconify(icon='carbon:settings'),
+            size='sm',
+            radius='xl',
+            variant='outline',
+            id='settings',
+            className='my-button',
+            style=button_style
+        ),
+            dmc.ActionIcon(
+                DashIconify(icon='carbon:db2-database'),
+                size='sm',
+                radius='xl',
+                variant='outline',
+                className='my-button',
+                style=button_style,
+                id='data-viewer'
+            ),
+            dmc.ActionIcon(
+                DashIconify(icon='carbon:save'),
+                size='sm',
+                radius='xl',
+                variant='outline',
+                className='my-button',
+                style=button_style,
+                id=ids.SAVE_BUTTON
+            ),
             dcc.Download(id='download-datahandler'),
         ])
 
@@ -77,7 +85,7 @@ def render(static):
             ],
             position={'top': '40%', 'left': 0} if not static else {'top': '50%', 'left': 0},
             width={"base": 32},
-            height=184 if not static else 72,
+            height=220 if not static else 110,
             fixed=True,
             zIndex=9999,
             # round the corners
