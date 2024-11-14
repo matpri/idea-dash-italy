@@ -169,6 +169,206 @@ Useful Energy:
     title: Useful Energy by Region
     x_label: Region
     y_label: Useful Energy (Pj/yr)
+Carbon Sequestration:
+  name: Carbon Sequestration
+  unit: MtCO2eq/yr
+  By Year:
+    title: Carbon Sequestration by Year
+    x_label: Year
+    y_label: Carbon Sequestration (MtCO2eq/yr)
+  By Region:
+    title: Carbon Sequestration by Region
+    x_label: Region
+    y_label: Carbon Sequestration (MtCO2eq/yr)
+  Pie Chart:
+    title: Carbon Sequestration
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Carbon Sequestration by Year
+    x_label: Year
+    y_label: Carbon Sequestration (MtCO2eq/yr)
+
+Consumption:
+  name: Consumption
+  unit: billion US$2010/yr
+  By Year:
+    title: Consumption by Year
+    x_label: Year
+    y_label: Consumption (billion US$2010/yr)
+  By Region:
+    title: Consumption by Region
+    x_label: Region
+    y_label: Consumption (billion US$2010/yr)
+  Pie Chart:
+    title: Consumption
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Consumption by Year
+    x_label: Year
+    y_label: Consumption (billion US$2010/yr)
+
+Cost:
+  name: Cost
+  unit: billion US$2010/yr
+  By Year:
+    title: Cost by Year
+    x_label: Year
+    y_label: Cost (billion US$2010/yr)
+  By Region:
+    title: Cost by Region
+    x_label: Region
+    y_label: Cost (billion US$2010/yr)
+  Pie Chart:
+    title: Cost
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Cost by Year
+    x_label: Year
+    y_label: Cost (billion US$2010/yr)
+
+Cumulative Capacity:
+  name: Cumulative Capacity
+  unit: GW
+  By Year:
+    title: Cumulative Capacity by Year
+    x_label: Year
+    y_label: Cumulative Capacity (GW)
+  By Region:
+    title: Cumulative Capacity by Region
+    x_label: Region
+    y_label: Cumulative Capacity (GW)
+  Pie Chart:
+    title: Cumulative Capacity
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Cumulative Capacity by Year
+    x_label: Year
+    y_label: Cumulative Capacity (GW)
+
+Efficiency:
+  name: Efficiency
+  unit: '%'
+  By Year:
+    title: Efficiency by Year
+    x_label: Year
+    y_label: Efficiency (%)
+  By Region:
+    title: Efficiency by Region
+    x_label: Region
+    y_label: Efficiency (%)
+  Pie Chart:
+    title: Efficiency
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Efficiency by Year
+    x_label: Year
+    y_label: Efficiency (%)
+
+Investment:
+  name: Investment
+  unit: billion US$2010/yr
+  By Year:
+    title: Investment by Year
+    x_label: Year
+    y_label: Investment (billion US$2010/yr)
+  By Region:
+    title: Investment by Region
+    x_label: Region
+    y_label: Investment (billion US$2010/yr)
+  Pie Chart:
+    title: Investment
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Investment by Year
+    x_label: Year
+    y_label: Investment (billion US$2010/yr)
+
+Lifetime:
+  name: Lifetime
+  unit: years
+  By Year:
+    title: Lifetime by Year
+    x_label: Year
+    y_label: Lifetime (years)
+  By Region:
+    title: Lifetime by Region
+    x_label: Region
+    y_label: Lifetime (years)
+  Pie Chart:
+    title: Lifetime
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Lifetime by Year
+    x_label: Year
+    y_label: Lifetime (years)
+  
+OM Cost:
+  name: OM Cost
+  unit: US$2010/kW/yr
+  By Year:
+    title: OM Cost by Year
+    x_label: Year
+    y_label: OM Cost (US$2010/kW/yr)
+  By Region:
+    title: OM Cost by Region
+    x_label: Region
+    y_label: OM Cost (US$2010/kW/yr)
+  Pie Chart:
+    title: OM Cost
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: OM Cost by Year
+    x_label: Year
+    y_label: OM Cost (US$2010/kW/yr)
+
+Primary Energy (substitution method):
+  name: Primary Energy (substitution method)
+  unit: Pj/yr
+  By Year:
+    title: Primary Energy (substitution method) by Year
+    x_label: Year
+    y_label: Primary Energy (substitution method) (Pj/yr)
+  By Region:
+    title: Primary Energy (substitution method) by Region
+    x_label: Region
+    y_label: Primary Energy (substitution method) (Pj/yr)
+  Pie Chart:
+    title: Primary Energy (substitution method)
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Primary Energy (substitution method) by Year
+    x_label: Year
+    y_label: Primary Energy (substitution method) (Pj/yr)
+
+Resource:
+  name: Resource
+  unit: Pj/yr
+  By Year:
+    title: Resource by Year
+    x_label: Year
+    y_label: Resource (Pj/yr)
+  By Region:
+    title: Resource by Region
+    x_label: Region
+    y_label: Resource (Pj/yr)
+  Pie Chart:
+    title: Resource
+    x_label:
+    y_label:
+  Trend Over Years:
+    title: Resource by Year
+    x_label: Year
+    y_label: Resource (Pj/yr)
+
 Overview:
   Capacity:
     name: Capacity
@@ -224,9 +424,66 @@ Overview:
     title: Emissions Overview
     x_label: Year
     y_label: Emissions (MtCO2eq)
-    
-    
-    
+  Carbon Sequestration:
+    name: Carbon Sequestration
+    unit: MtCO2eq/yr
+    title: Carbon Sequestration Overview
+    x_label: Year
+    y_label: Carbon Sequestration (MtCO2eq/yr)
+  Consumption:
+    name: Consumption
+    unit: billion US$2010/yr
+    title: Consumption Overview
+    x_label: Year
+    y_label: Consumption (billion US$2010/yr)
+  Cost:
+    name: Cost
+    unit: billion US$2010/yr
+    title: Cost Overview
+    x_label: Year
+    y_label: Cost (billion US$2010/yr)
+  Cumulative Capacity:
+    name: Cumulative Capacity
+    unit: GW
+    title: Cumulative Capacity Overview
+    x_label: Year
+    y_label: Cumulative Capacity (GW)
+  Efficiency:
+    name: Efficiency
+    unit: '%'
+    title: Efficiency Overview
+    x_label: Year
+    y_label: Efficiency (%)
+  Investment:
+    name: Investment
+    unit: billion US$2010/yr
+    title: Investment Overview
+    x_label: Year
+    y_label: Investment (billion US$2010/yr)
+  Lifetime:
+    name: Lifetime
+    unit: years
+    title: Lifetime Overview
+    x_label: Year
+    y_label: Lifetime (years)
+  OM Cost:
+    name: OM Cost
+    unit: US$2010/kW/yr
+    title: OM Cost Overview
+    x_label: Year
+    y_label: OM Cost (US$2010/kW/yr)
+  Primary Energy (substitution method):
+    name: Primary Energy (substitution method)
+    unit: Pj/yr
+    title: Primary Energy (substitution method) Overview
+    x_label: Year
+    y_label: Primary Energy (substitution method) (Pj/yr)
+  Resource:
+    name: Resource
+    unit: Pj/yr
+    title: Resource Overview
+    x_label: Year
+    y_label: Resource (Pj/yr)
 
 
 

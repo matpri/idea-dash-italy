@@ -17,8 +17,14 @@ from profiles.messageix_output.callbacks import (emissions as emissions_callback
                                                  useful_energy as useful_energy_callbacks,
                                                  settings as settings_callbacks,
                                                  overview as overview_callbacks,
-                                                 sankey as sankey_callbacks
-
+                                                 sankey as sankey_callbacks,
+                                                 carbon_sequestration as carbon_sequestration_callbacks,
+                                                 consumption as consumption_callbacks,
+                                                 investment as investment_callbacks,
+                                                 lifetime as lifetime_callbacks,
+                                                 om_cost as om_cost_callbacks,
+                                                 primary_energy_sub as primary_energy_substitution_callbacks,
+                                                 resource as resource_callbacks,
                                                  )
 from profiles.messageix_output.processing_scripts import (
     emissions as emissions_processing,
@@ -31,7 +37,14 @@ from profiles.messageix_output.processing_scripts import (
     final_energy as final_energy_processing,
     useful_energy as useful_energy_processing,
     overview as overview_processing,
-    sankey as sankey_processing
+    sankey as sankey_processing,
+    carbon_sequestration as carbon_sequestration_processing,
+    consumption as consumption_processing,
+    investment as investment_processing,
+    lifetime as lifetime_processing,
+    om_cost as om_cost_processing,
+    primary_energy_sub as primary_energy_substitution_processing,
+    resource as resource_processing
 )
 from profiles.messageix_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -44,7 +57,14 @@ from profiles.messageix_output.visualization_scripts import (
     final_energy as final_energy_viz,
     useful_energy as useful_energy_viz,
     overview as overview_viz,
-    sankey as sankey_viz
+    sankey as sankey_viz,
+    carbon_sequestration as carbon_sequestration_viz,
+    consumption as consumption_viz,
+    investment as investment_viz,
+    lifetime as lifetime_viz,
+    om_cost as om_cost_viz,
+    primary_energy_sub as primary_energy_substitution_viz,
+    resource as resource_viz
 )
 
 
@@ -58,15 +78,12 @@ class messageixOutput(BaseProfile):
 
     plot_order = [
         'Overview',
-        'Emissions',
-        'Capacity',
-        'Capacity Additions',
-        'Capital Cost',
-        'Total Cost',
-        'Primary Energy',
-        'Secondary Energy',
-        'Final Energy',
-        'Useful Energy',
+        'Capacity Additions', 'Capacity', 'Capital Cost',
+        'Carbon Sequestration', 'Consumption', 'Cost',
+        'Cumulative Capacity', 'Efficiency', 'Final Energy', 'Investment',
+        'Lifetime', 'OM Cost', 'Primary Energy',
+        'Primary Energy (substitution method)', 'Resource',
+        'Secondary Energy', 'Useful Energy'
         # 'Sankey'
     ]
     viz_options = {
@@ -180,6 +197,76 @@ class messageixOutput(BaseProfile):
                 'callback': sankey_callbacks.link,
                 'description': 'Sankey diagram showing the flow of energy in the energy system.'
             },
+        'Carbon Sequestration':
+            {
+                'check': carbon_sequestration_processing.check,
+                'db_check': carbon_sequestration_processing.check,
+                'process': carbon_sequestration_processing.process,
+                'db_process': carbon_sequestration_processing.process,
+                'viz': carbon_sequestration_viz.plot,
+                'callback': carbon_sequestration_callbacks.link,
+                'description': 'Carbon sequestration in the energy system.'
+            },
+        'Consumption':
+            {
+                'check': consumption_processing.check,
+                'db_check': consumption_processing.check,
+                'process': consumption_processing.process,
+                'db_process': consumption_processing.process,
+                'viz': consumption_viz.plot,
+                'callback': consumption_callbacks.link,
+                'description': 'Consumption in the energy system.'
+            },
+        'Investment':
+            {
+                'check': investment_processing.check,
+                'db_check': investment_processing.check,
+                'process': investment_processing.process,
+                'db_process': investment_processing.process,
+                'viz': investment_viz.plot,
+                'callback': investment_callbacks.link,
+                'description': 'Investment in the energy system.'
+            },
+        'Lifetime':
+            {
+                'check': lifetime_processing.check,
+                'db_check': lifetime_processing.check,
+                'process': lifetime_processing.process,
+                'db_process': lifetime_processing.process,
+                'viz': lifetime_viz.plot,
+                'callback': lifetime_callbacks.link,
+                'description': 'Lifetime of the energy system.'
+            },
+        'OM Cost':
+            {
+                'check': om_cost_processing.check,
+                'db_check': om_cost_processing.check,
+                'process': om_cost_processing.process,
+                'db_process': om_cost_processing.process,
+                'viz': om_cost_viz.plot,
+                'callback': om_cost_callbacks.link,
+                'description': 'OM cost of the energy system.'
+            },
+        'Primary Energy (substitution method)':
+            {
+                'check': primary_energy_substitution_processing.check,
+                'db_check': primary_energy_substitution_processing.check,
+                'process': primary_energy_substitution_processing.process,
+                'db_process': primary_energy_substitution_processing.process,
+                'viz': primary_energy_substitution_viz.plot,
+                'callback': primary_energy_substitution_callbacks.link,
+                'description': 'Primary energy in the energy system (substitution method).'
+            },
+        'Resource':
+            {
+                'check': resource_processing.check,
+                'db_check': resource_processing.check,
+                'process': resource_processing.process,
+                'db_process': resource_processing.process,
+                'viz': resource_viz.plot,
+                'callback': resource_callbacks.link,
+                'description': 'Resource in the energy system.'
+            }
     }
 
     def __init__(self):
