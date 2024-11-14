@@ -588,7 +588,7 @@ class DataHandler:
 
         return True, "Data loaded successfully!", filename
 
-    def save(self, filename, temporary):
+    def save(self, filename, temporary=False):
         """
         Save self.data, self.processed_data, self.processedto a file.
         :param filename: The name of the file to save the data handler to.

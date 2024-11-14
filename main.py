@@ -74,7 +74,7 @@ if args.autosave != '':
     print(f"Autosaving datahandler to {args.autosave}")
     # Ensure the directory exists, but do not create a directory for a file path
     autosave_dir = os.path.dirname(args.autosave)
-    if not os.path.exists(autosave_dir):
+    if autosave_dir != '' and not os.path.exists(autosave_dir):
         os.makedirs(autosave_dir)
     data_handler.save(args.autosave)  # Save the datahandler to the specified file path
 
