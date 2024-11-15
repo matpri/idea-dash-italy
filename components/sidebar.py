@@ -18,81 +18,132 @@ def render(static):
     :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
     """
     icons = [
-        dmc.ActionIcon(
-            DashIconify(icon='carbon:help'),
-            size='m',
-            radius='xl',
-            variant='outline',
-            id={'type': ids.OPEN_MODAL, 'index': 'help'},
-            className='my-button',
-            style=button_style
+        dmc.Tooltip(
+            label="Help",
+            position="right",
+            offset=3,
+            children=[
+                dmc.ActionIcon(
+                    DashIconify(icon='carbon:help'),
+                    size='lg',
+                    radius='xl',
+                    variant='outline',
+                    id={'type': ids.OPEN_MODAL, 'index': 'help'},
+                    className='my-button',
+                    style=button_style
+                )
+            ]
         ),
-        dmc.ActionIcon(
-            DashIconify(icon='carbon:add'),
-            size='m',
-            radius='xl',
-            variant='outline',
-            id='add-card',
-            className='my-button',
-            style=button_style
+        dmc.Tooltip(
+            label="Add Card",
+            position="right",
+            offset=3,
+            children=[
+                dmc.ActionIcon(
+                    DashIconify(icon='carbon:add'),
+                    size='lg',
+                    radius='xl',
+                    variant='outline',
+                    id='add-card',
+                    className='my-button',
+                    style=button_style
+                )
+            ]
         ),
-        dmc.ActionIcon(
-            DashIconify(icon='carbon:trash-can'),
-            size='m',
-            radius='xl',
-            variant='outline',
-            id='trash-button',
-            className='my-button',
-            style=button_style
+        dmc.Tooltip(
+            label="Clear Cards",
+            position="right",
+            offset=3,
+            children=[
+                dmc.ActionIcon(
+                    DashIconify(icon='carbon:trash-can'),
+                    size='lg',
+                    radius='xl',
+                    variant='outline',
+                    id='trash-button',
+                    className='my-button',
+                    style=button_style
+                )
+            ]
         ),
     ]
 
     if not static:
-        icons.extend([dmc.ActionIcon(
-            DashIconify(icon='carbon:settings'),
-            size='m',
-            radius='xl',
-            variant='outline',
-            id='settings',
-            className='my-button',
-            style=button_style
-        ),
-            dmc.ActionIcon(
-                DashIconify(icon='carbon:db2-database'),
-                size='m',
-                radius='xl',
-                variant='outline',
-                className='my-button',
-                style=button_style,
-                id='data-viewer'
+        icons.extend([
+            dmc.Tooltip(
+                label="Plot Settings",
+                position="right",
+                offset=3,
+                children=[
+                    dmc.ActionIcon(
+                        DashIconify(icon='carbon:settings'),
+                        size='lg',
+                        radius='xl',
+                        variant='outline',
+                        id='settings',
+                        className='my-button',
+                        style=button_style
+                    )
+                ]
             ),
-            dmc.ActionIcon(
-                DashIconify(icon='carbon:save'),
-                size='m',
-                radius='xl',
-                variant='outline',
-                className='my-button',
-                style=button_style,
-                id=ids.SAVE_BUTTON
+            dmc.Tooltip(
+                label="Scenario Settings",
+                position="right",
+                offset=3,
+                children=[
+                    dmc.ActionIcon(
+                        DashIconify(icon='carbon:db2-database'),
+                        size='lg',
+                        radius='xl',
+                        variant='outline',
+                        className='my-button',
+                        style=button_style,
+                        id='data-viewer'
+                    )
+                ]
+            ),
+            dmc.Tooltip(
+                label="Save Current State",
+                position="right",
+                offset=3,
+                children=[
+                    dmc.ActionIcon(
+                        DashIconify(icon='carbon:save'),
+                        size='lg',
+                        radius='xl',
+                        variant='outline',
+                        className='my-button',
+                        style=button_style,
+                        id=ids.SAVE_BUTTON
+                    )
+                ]
             ),
             dcc.Download(id='download-datahandler'),
         ])
 
         icons = [
-                    dcc.Link(
-                        html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT),
-                        href='/',
-                        style={'margin': '0 auto', 'padding-bottom': '0', 'margin-bottom': '0'}
-                    ),
+            dcc.Link(
+                html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT),
+                href='/',
+                style={'margin': '0 auto', 'padding-bottom': '0', 'margin-bottom': '0'}
+            ),
+            dmc.Tooltip(
+                label="Upload Data",
+                position="right",
+                offset=3,
+                children=[
                     dmc.ActionIcon(
                         DashIconify(icon='carbon:upload'),
-                        size='m',
+                        size='lg',
                         radius='xl',
                         variant='outline',
                         className='my-button',
                         style=button_style,
                         id={'type': ids.OPEN_MODAL, 'index': 'data'}
-                    )] + icons
+                    )
+                ]
+            )
+        ] + icons
 
     layout = html.Div([
         dbc.Collapse([
@@ -153,30 +204,44 @@ def render(static):
             id='collapse-sidebar-container',
             className='my-aside',
             children=[
-                dmc.ActionIcon(
-                    DashIconify(icon='carbon:chevron-left'),
-                    size='m',
-                    radius='xl',
-                    variant='outline',
-                    id='collapse-sidebar',
-                    className='my-button',
-                    style=button_style
+                dmc.Tooltip(
+                    label="Collapse Sidebar",
+                    position="right",
+                    offset=3,
+                    children=[
+                        dmc.ActionIcon(
+                            DashIconify(icon='carbon:chevron-left'),
+                            size='lg',
+                            radius='xl',
+                            variant='outline',
+                            id='collapse-sidebar',
+                            className='my-button',
+                            style=button_style
+                        )
+                    ]
                 ),
-                dmc.ActionIcon(
-                    DashIconify(icon='carbon:chevron-right'),
-                    size='m',
-                    radius='xl',
-                    variant='outline',
-                    id='view-sidebar',
-                    className='my-button',
-                    style=hide_button_style
+                dmc.Tooltip(
+                    label="Expand Sidebar",
+                    position="right",
+                    offset=3,
+                    children=[
+                        dmc.ActionIcon(
+                            DashIconify(icon='carbon:chevron-right'),
+                            size='lg',
+                            radius='xl',
+                            variant='outline',
+                            id='view-sidebar',
+                            className='my-button',
+                            style=hide_button_style
+                        )
+                    ]
                 ),
             ],
             position={'top': '50%', 'left': '48px'},  # Centered vertically
             width={"base": 48},
             height=36,
             fixed=True,
-            zIndex=9999,
+            zIndex=9998,
             style={
                 'background': 'transparent',
                 'display': 'flex',
