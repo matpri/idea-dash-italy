@@ -95,15 +95,15 @@ Total Cost:
     y_label: Total Cost 
 Primary Energy:
   name: Primary Energy
-  unit: Pj/yr
+  unit: PJ/yr
   By Year:
     title: Primary Energy by Year
     x_label: Year
-    y_label: Primary Energy (Pj/yr)
+    y_label: Primary Energy (PJ/yr)
   Trend Over Years:
     title: Primary Energy by Year
     x_label: Year
-    y_label: Primary Energy (Pj/yr)
+    y_label: Primary Energy (PJ/yr)
   Pie Chart:
     title: Primary Energy
     x_label:
@@ -111,18 +111,18 @@ Primary Energy:
   By Region:
     title: Primary Energy by Region
     x_label: Region
-    y_label: Primary Energy (Pj/yr)
+    y_label: Primary Energy (PJ/yr)
 Final Energy:
   name: Final Energy
-  unit: Pj/yr
+  unit: PJ/yr
   By Year:
     title: Final Energy by Year
     x_label: Year
-    y_label: Final Energy (Pj/yr)
+    y_label: Final Energy (PJ/yr)
   Trend Over Years:
     title: Final Energy by Year
     x_label: Year
-    y_label: Final Energy (Pj/yr)
+    y_label: Final Energy (PJ/yr)
   Pie Chart:
     title: Final Energy
     x_label:
@@ -130,18 +130,18 @@ Final Energy:
   By Region:
     title: Final Energy by Region
     x_label: Region
-    y_label: Final Energy (Pj/yr)
+    y_label: Final Energy (PJ/yr)
 Secondary Energy:
   name: Secondary Energy
   unit: Pj/yr
   By Year:
     title: Secondary Energy by Year
     x_label: Year
-    y_label: Secondary Energy (Pj/yr)
+    y_label: Secondary Energy (PJ/yr)
   Trend Over Years:
     title: Secondary Energy by Year
     x_label: Year
-    y_label: Secondary Energy (Pj/yr)
+    y_label: Secondary Energy (PJ/yr)
   Pie Chart:
     title: Secondary Energy
     x_label:
@@ -149,18 +149,18 @@ Secondary Energy:
   By Region:
     title: Secondary Energy by Region
     x_label: Region
-    y_label: Secondary Energy (Pj/yr)
+    y_label: Secondary Energy (PJ/yr)
 Useful Energy:
   name: Useful Energy
-  unit: Pj/yr
+  unit: PJ/yr
   By Year:
     title: Useful Energy by Year
     x_label: Year
-    y_label: Useful Energy (Pj/yr)
+    y_label: Useful Energy (PJ/yr)
   Trend Over Years:
     title: Useful Energy by Year
     x_label: Year
-    y_label: Useful Energy (Pj/yr)
+    y_label: Useful Energy (PJ/yr)
   Pie Chart:
     title: Useful Energy
     x_label:
@@ -168,7 +168,7 @@ Useful Energy:
   By Region:
     title: Useful Energy by Region
     x_label: Region
-    y_label: Useful Energy (Pj/yr)
+    y_label: Useful Energy (PJ/yr)
 Carbon Sequestration:
   name: Carbon Sequestration
   unit: MtCO2eq/yr
@@ -331,15 +331,15 @@ OM Cost:
 
 Primary Energy (substitution method):
   name: Primary Energy (substitution method)
-  unit: Pj/yr
+  unit: PJ/yr
   By Year:
     title: Primary Energy (substitution method) by Year
     x_label: Year
-    y_label: Primary Energy (substitution method) (Pj/yr)
+    y_label: Primary Energy (substitution method) (PJ/yr)
   By Region:
     title: Primary Energy (substitution method) by Region
     x_label: Region
-    y_label: Primary Energy (substitution method) (Pj/yr)
+    y_label: Primary Energy (substitution method) (PJ/yr)
   Pie Chart:
     title: Primary Energy (substitution method)
     x_label:
@@ -347,19 +347,19 @@ Primary Energy (substitution method):
   Trend Over Years:
     title: Primary Energy (substitution method) by Year
     x_label: Year
-    y_label: Primary Energy (substitution method) (Pj/yr)
+    y_label: Primary Energy (substitution method) (PJ/yr)
 
 Resource:
   name: Resource
-  unit: Pj/yr
+  unit: PJ/yr
   By Year:
     title: Resource by Year
     x_label: Year
-    y_label: Resource (Pj/yr)
+    y_label: Resource (PJ/yr)
   By Region:
     title: Resource by Region
     x_label: Region
-    y_label: Resource (Pj/yr)
+    y_label: Resource (PJ/yr)
   Pie Chart:
     title: Resource
     x_label:
@@ -367,7 +367,7 @@ Resource:
   Trend Over Years:
     title: Resource by Year
     x_label: Year
-    y_label: Resource (Pj/yr)
+    y_label: Resource (PJ/yr)
 
 Overview:
   Capacity:
@@ -396,28 +396,28 @@ Overview:
     y_label: Total Cost 
   Primary Energy:
     name: Primary Energy
-    unit: Pj/yr
+    unit: PJ/yr
     title: Primary Energy Overview
     x_label: Year
-    y_label: Primary Energy (Pj/yr)
+    y_label: Primary Energy (PJ/yr)
   Final Energy:
     name: Final Energy
-    unit: Pj/yr
+    unit: PJ/yr
     title: Final Energy Overview
     x_label: Year
-    y_label: Final Energy (Pj/yr)
+    y_label: Final Energy (PJ/yr)
   Secondary Energy:
     name: Secondary Energy
-    unit: Pj/yr
+    unit: PJ/yr
     title: Secondary Energy Overview
     x_label: Year
-    y_label: Secondary Energy (Pj/yr)
+    y_label: Secondary Energy (PJ/yr)
   Useful Energy:
     name: Useful Energy
-    unit: Pj/yr
+    unit: PJ/yr
     title: Useful Energy Overview
     x_label: Year
-    y_label: Useful Energy (Pj/yr)
+    y_label: Useful Energy (PJ/yr)
   Emissions:
     name: Emissions
     unit: MtCO2eq
@@ -474,13 +474,13 @@ Overview:
     y_label: OM Cost (US$2010/kW/yr)
   Primary Energy (substitution method):
     name: Primary Energy (substitution method)
-    unit: Pj/yr
+    unit: PJ/yr
     title: Primary Energy (substitution method) Overview
     x_label: Year
-    y_label: Primary Energy (substitution method) (Pj/yr)
+    y_label: Primary Energy (substitution method) (PJ/yr)
   Resource:
     name: Resource
-    unit: Pj/yr
+    unit: PJ/yr
     title: Resource Overview
     x_label: Year
     y_label: Resource (Pj/yr)
