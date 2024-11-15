@@ -151,7 +151,7 @@ class GenericProfile:
                                 class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 366 * counts['value'].values[0]
                             else:
                                 class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 365 * counts['value'].values[0]
-                    elif freq < pd.Timedelta('W'):
+                    elif freq < pd.Timedelta('1W'):
                         class_df['time'] = class_df['time'].dt.floor('W')
                         time_counts = class_df['time'].dt.year.copy().reset_index()
                         time_counts['value'] = 1
@@ -163,7 +163,7 @@ class GenericProfile:
                         for year in time_counts['time'].unique():
                             counts = time_counts[time_counts['time'] == year]
                             class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 52 * counts['value'].values[0]
-                    elif freq < pd.Timedelta('M'):
+                    elif freq < pd.Timedelta(days=30):
                         class_df['time'] = class_df['time'].dt.floor('M')
                         time_counts = class_df['time'].dt.year.copy().reset_index()
                         time_counts['value'] = 1
@@ -176,7 +176,7 @@ class GenericProfile:
                             counts = time_counts[time_counts['time'] == year]
                             class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 12 * counts['value'].values[0]
                     else:
-                        class_df['time'] = class_df['time'].dt.floor('Y')
+                        class_df['time'] = class_df['time'].dt.to_period('Y').dt.to_timestamp()
                         class_df = class_df.groupby(['scenario', 'variable', 'region', 'time']).sum().reset_index()
                 cls_df.append(class_df)
 
