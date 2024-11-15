@@ -94,6 +94,7 @@ class GenericProfile:
     def process_data(self, data_collection):
         args = []
         for viz_option, data in data_collection.items():
+            # convert string to datetime
             if viz_option != 'Overview' and viz_option != 'Output Stats':
                 args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
@@ -119,8 +120,72 @@ class GenericProfile:
 
             dfs.append(df)
         full_df = pd.concat(dfs)
-        full_df['time'] = full_df['time'].astype(int)
 
+        def scale_time_data(df):
+            """
+            Scales the 'time' data in the DataFrame to ensure it represents complete periods.
+            This function only processes the 'time' column if it is a datetime object.
+            If 'time' is a datetime object, it checks the frequency and scales accordingly.
+            """
+            classes = df['variable'].unique()
+            cls_df = []
+            for class_name in classes:
+                class_df = df[df['variable'] == class_name].copy()
+                if class_df['time'].apply(lambda x: isinstance(x, pd.Timestamp)).all():
+                    freq = class_df['time'].diff().mean()
+                    if freq < pd.Timedelta('1D'):
+                        class_df['time'] = class_df['time'].dt.floor('D')
+                        # count the number of unique times for each year
+                        time_counts = class_df['time'].dt.year.copy().reset_index()
+
+                        time_counts['value'] = 1
+                        time_counts = time_counts.groupby('time').sum().reset_index()
+                        class_df['time'] = class_df['time'].dt.year
+
+                        # group by year and scenario and the sum of the values
+                        class_df = class_df.groupby(['scenario', 'variable', 'region', 'time']).sum().reset_index()
+                        # we should scale the values by the number of unique times in each year
+                        for year in time_counts['time'].unique():
+                            counts = time_counts[time_counts['time'] == year]
+                            if year % 4 == 0:
+                                class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 366 * counts['value'].values[0]
+                            else:
+                                class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 365 * counts['value'].values[0]
+                    elif freq < pd.Timedelta('W'):
+                        class_df['time'] = class_df['time'].dt.floor('W')
+                        time_counts = class_df['time'].dt.year.copy().reset_index()
+                        time_counts['value'] = 1
+                        time_counts = time_counts.groupby('time').sum().reset_index()
+                        class_df['time'] = class_df['time'].dt.year
+
+                        class_df = class_df.groupby(['scenario', 'variable', 'region', 'time']).sum().reset_index()
+
+                        for year in time_counts['time'].unique():
+                            counts = time_counts[time_counts['time'] == year]
+                            class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 52 * counts['value'].values[0]
+                    elif freq < pd.Timedelta('M'):
+                        class_df['time'] = class_df['time'].dt.floor('M')
+                        time_counts = class_df['time'].dt.year.copy().reset_index()
+                        time_counts['value'] = 1
+                        time_counts = time_counts.groupby('time').sum().reset_index()
+                        class_df['time'] = class_df['time'].dt.year
+
+                        class_df = class_df.groupby(['scenario', 'variable', 'region', 'time']).sum().reset_index()
+
+                        for year in time_counts['time'].unique():
+                            counts = time_counts[time_counts['time'] == year]
+                            class_df.loc[class_df['time'] == year, 'value'] = class_df.loc[class_df['time'] == year, 'value'] / 12 * counts['value'].values[0]
+                    else:
+                        class_df['time'] = class_df['time'].dt.floor('Y')
+                        class_df = class_df.groupby(['scenario', 'variable', 'region', 'time']).sum().reset_index()
+                cls_df.append(class_df)
+
+            df = pd.concat(cls_df)
+            df['time'] = df['time'].astype(str)
+            return df
+
+        # Apply the scaling function only to the relevant datetime rows
+        full_df = scale_time_data(full_df)
         processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
         processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 

@@ -31,6 +31,8 @@ def create_process(name):
             df = db.copy()
             df = df[df.variable.str.startswith(f"{name}|")]
             df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+            if 'time' in df.columns and df['time'].dtype == object:
+                df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
             df['scenario'] = scenario_name
             dfs.append(df)
