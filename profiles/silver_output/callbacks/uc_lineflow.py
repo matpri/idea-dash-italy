@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.silver_output.visualization_scripts.uc_lineflow import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'uc_line_flow'
@@ -46,7 +46,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'uc_line_flow'
@@ -78,7 +78,7 @@ def link(app):
                         (id['id']['type'] == 'silver-uc_line_flow-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['UC Line Flow'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['UC Line Flow'].to_csv,
                                              "uc_line_flow.csv")
             return _canvas, _data, _s_style, _m_style
 
@@ -94,14 +94,14 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['UC Line Flow'],
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER']['UC Line Flow'],
                                        _scenarios[idx], time_size=_ts[idx])
 
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Line',
-                                       data_handler.processed_data['SILVER Output']['UC Line Flow'],
+                                       data_handler.processed_data['SILVER']['UC Line Flow'],
                                        _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

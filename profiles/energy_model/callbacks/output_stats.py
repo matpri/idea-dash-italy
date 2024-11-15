@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.output_stats import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'output_stats'
@@ -17,42 +17,24 @@ def link(app):
             'type': 'energy_model-output_stats-download',
             'index': ALL
         }, 'data'),
-        Output({
-            'type': 'energy_model-output_stats-fill-switch',
-            'index': ALL
-        }, 'style'),
         Input({
-            'type': 'energy_model-output_stats-plot-select',
+            'type': 'energy_model-output_stats-year-select',
             'index': ALL
         }, 'value'),
-        Input({
-            'type': 'energy_model-output_stats-groupby-toggle',
-            'index': ALL
-        }, 'value'),
-        Input(
-            {
-                'type': 'energy_model-output_stats-region-toggle',
-                'index': ALL
-            }, 'value'
-        ),
-        Input(
-            {
-                'type': 'energy_model-output_stats-fill-switch',
-                'index': ALL,
-            }, 'checked'
-
-        ),
-        Input({
-            'type': 'energy_model-output_stats-scenario-group-select',
-            'index': ALL
-        }, 'value'),
-
         Input({
             'type': 'energy_model-output_stats-download-button',
             'index': ALL
         }, 'n_clicks'),
+        Input({
+            'type': 'energy_model-output_stats-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'energy_model-output_stats-scenario-group-select',
+            'index': ALL
+        }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'output_stats'
@@ -62,14 +44,10 @@ def link(app):
             'type': 'energy_model-output_stats-download',
             'index': ALL
         }, 'data'),
-        State({
-            'type': 'energy_model-output_stats-fill-switch',
-            'index': ALL
-        }, 'style'),
 
         prevent_initial_call=True
     )
-    def update_output_stats(_p_type, _groupby, _region, _fill, _scenarios, _download, _canvas, _data, _fillswitch):
+    def update_output_stats(_years, _download, _scenarios, _scenario_group, _canvas, _data):
         #print('updating output_stats plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -84,7 +62,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Output Stats'].to_csv,
                                              "output_stats.csv")
-            return _canvas, _data,
+            return _canvas, _data
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -93,20 +71,16 @@ def link(app):
                 idx = i
                 break
 
-        #print('idx:', idx, 'plot type:', _p_type[idx])
-        _groupby_model = _groupby[idx] == 1
-        _groupby_scenario = _groupby[idx] == 2
-        _groupby_version = _groupby[idx] == 3
-
         df = data_handler.processed_data['Power System Models']['Output Stats']
-        if _scenarios[idx] != 'ALL':
-            df = df[df['scenario'].str.contains(_scenarios[idx])]
+        if _scenario_group[idx] != 'ALL':
+            df = df[df['scenario'].str.contains(_scenario_group[idx])]
+            scenarios = df['scenario'].unique().tolist()
 
-        _canvas[idx] = render_plot(df,
-                                   _groupby_model, _groupby_scenario, _groupby_version, _region[idx]=='CAN', _fill[idx])
+            _scenarios[idx] = list(set(_scenarios[idx] + scenarios))
 
-        _fillswitch[idx] = {'display': 'none'}
-        if _groupby[idx] > 0:
-            _fillswitch[idx] = {'display': 'block'}
 
-        return _canvas, [dash.no_update for _ in _data], _fillswitch
+
+        _canvas[idx] = render_plot(df, _years[idx], _scenarios[idx])
+
+
+        return _canvas, [dash.no_update for _ in _data]

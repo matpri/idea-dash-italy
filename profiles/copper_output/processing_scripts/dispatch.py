@@ -64,9 +64,9 @@ def aggregate_db(db, scenario):
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
     # create a dataframe where the region and variable are swapped and the value is -1* the value
     transmission_df_swap = transmission_df.copy()
-    transmission_df_swap["region"] = transmission_df["variable"]
-    transmission_df_swap["variable"] = transmission_df["region"]
-    transmission_df_swap["value"] = -1 * transmission_df["value"]
+    # transmission_df_swap["region"] = transmission_df["variable"]
+    # transmission_df_swap["variable"] = transmission_df["region"]
+    # transmission_df_swap["value"] = -1 * transmission_df["value"]
 
     transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
     transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])

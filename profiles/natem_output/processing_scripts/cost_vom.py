@@ -18,7 +18,7 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             if df.variable.str.startswith("Operational|VO&M costs|").any():
                 return df[df.variable.str.startswith("Operational|VO&M costs|")]['value'].sum() != 0
         return False
@@ -101,6 +101,9 @@ def process(data):
         df = db.copy()
         df = df[df.variable.str.startswith("Operational|VO&M costs|")]
         df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+
+        # replace all variables that start with To with Transmission
+        df['variable'] = df['variable'].apply(lambda x: 'Transmission' if x.startswith('To') else x)
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)
         df['scenario'] = scenario_name

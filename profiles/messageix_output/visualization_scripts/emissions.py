@@ -1,6 +1,6 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
-
+from components import ids
 from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart, map_plot
 
 
@@ -148,7 +148,7 @@ def plot(df, window_id):
         figure=render_plot('By Year', df, True, emissions_type[0], [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'messageix_output',
             'viz': 'emissions'

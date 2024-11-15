@@ -1,6 +1,7 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 
+from components import ids
 from utils.generic_profile.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart
 
@@ -147,7 +148,7 @@ def create_generic_plots(model, name, profile):
             figure=render_plot('By Year', name, df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                                years[0], scenarios[0], pattern_list=patterns),
             id={
-                'type': 'figure',
+                'type': ids.FIGURE,
                 'index': window_id,
                 'model': model,
                 'name': name

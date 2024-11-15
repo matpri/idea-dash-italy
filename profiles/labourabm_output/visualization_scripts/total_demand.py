@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.labourabm_output import utils
 
 
@@ -111,7 +111,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df, [scenarios[0]], ['Total'], regions[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'labourabm_output',
             'viz': 'total_demand'

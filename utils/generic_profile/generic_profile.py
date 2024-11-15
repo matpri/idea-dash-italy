@@ -8,8 +8,8 @@ from utils.generic_profile import utils
 from utils.generic_profile.callbacks import generic_callback, settings
 from utils.generic_profile.processing_scripts import generic_processing
 from utils.generic_profile.visualization_scripts.generic_viz import create_generic_plots
-from utils.generic_profile.visualization_scripts import overview
-from utils.generic_profile.callbacks import overview as overview_callback
+from utils.generic_profile.visualization_scripts import overview, output_stats
+from utils.generic_profile.callbacks import overview as overview_callback, output_stats as output_stats_callback
 
 plotly_pattern_list = ['', '/', 'x', '-', '|', '+', '.', '\\']
 
@@ -45,7 +45,7 @@ class GenericProfile:
 
         self.plot_order = classes
         self.plot_order.sort()
-        self.plot_order = ['Overview'] + self.plot_order
+        self.plot_order = ['Output Stats', 'Overview'] + self.plot_order
 
         self.viz_options = {}
         self.pattern_dict = {}
@@ -68,10 +68,21 @@ class GenericProfile:
             'viz': overview.create_overview_plot(name),
             'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
         }
+
+        self.viz_options['Output Stats'] = {
+            'check': lambda x: True,
+            'db_check': lambda x: True,
+            'process': lambda x: x,
+            'db_process': lambda x: x,
+            'viz': output_stats.create_plot(name),
+            'description': 'Table of output statistics for each scenario.'
+        }
+
     @classmethod
     def link(cls, app):
         generic_callback.link(app)
         overview_callback.link(app)
+        output_stats_callback.link(app)
         settings.link(app)
 
 
@@ -83,7 +94,7 @@ class GenericProfile:
     def process_data(self, data_collection):
         args = []
         for viz_option, data in data_collection.items():
-            if viz_option != 'Overview':
+            if viz_option != 'Overview' and viz_option != 'Output Stats':
                 args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
         processed_data = [data_processing_task(*arg) for arg in args]
@@ -108,8 +119,10 @@ class GenericProfile:
 
             dfs.append(df)
         full_df = pd.concat(dfs)
+        full_df['time'] = full_df['time'].astype(int)
 
         processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+        processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
 

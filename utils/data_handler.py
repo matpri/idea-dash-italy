@@ -2,6 +2,7 @@ import base64
 import io
 import json
 import os
+import pickle
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
@@ -163,9 +164,9 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
-                     'NATEM-POWER Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
-                     'Sutubra-TEMOA Output']
+    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+                     'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -175,7 +176,9 @@ class DataHandler:
         self.data = {}
         self.processed = []
         self.processed_data = {}
+        self.pkls = {}
         self.viz = {}
+        self.to_delete = []
         self.runs = pd.DataFrame()
 
     def preload_data(self, data_files):
@@ -196,6 +199,8 @@ class DataHandler:
                     dfs.append(_df)
                 # Combine all DataFrames into one
                 df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.pkl':
+                self.pkls[f_name] = os.path.join('data', file)
             else:
                 fail = True
                 print(f'{file}: File type not supported, only .csv and .xlsx are supported')
@@ -326,11 +331,18 @@ class DataHandler:
 
         return filename
 
-    def process_data(self):
+    def process_data(self, reset=False):
         """
         Process the data that has been loaded into the data handler.
         :return:
         """
+        # Collect results
+        if reset:
+            self.processed_data = {}
+            self.processed = []
+
+        for pkl in self.pkls.values():
+            self.load(pkl)
 
         # Collect data from all selected profiles
         data_collection = {}
@@ -360,7 +372,7 @@ class DataHandler:
             if power_system_results is not None:
                 results.extend(power_system_results)
 
-        # Collect results
+
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -379,7 +391,7 @@ class DataHandler:
             if model == 'Power System Models' or model == 'Generic Comparison':
                 continue
             for viz, viz_data in viz_option.items():
-                if viz == 'Overview':
+                if viz == 'Overview' or viz == 'Output Stats':
                     continue
                 columns = viz_data.columns.tolist()
                 # check if column of viz_data contains 'variable', 'value', 'region', 'time', 'scenario'
@@ -431,9 +443,11 @@ class DataHandler:
                 overview_data.append(data)
 
             full_df = pd.concat(overview_data)
+            full_df['time'] = full_df['time'].astype(int)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
 
-        print(self.processed_data)
+        print("processed", self.processed_data)
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
@@ -571,5 +585,51 @@ class DataHandler:
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return True, "Data loaded successfully!", filename
+
+    def save(self, filename, temporary):
+        """
+        Save self.data, self.processed_data, self.processedto a file.
+        :param filename: The name of the file to save the data handler to.
+        :param temporary: Whether the file is temporary or not.
+        :return: The file path if not temporary, else the bytes of the pickle.
+        """
+
+        if temporary:
+            return pickle.dumps([self.data, self.processed_data, self.processed])
+        else:
+            with open(filename, 'wb') as f:
+                pickle.dump([self.data, self.processed_data, self.processed], f)
+            return filename
+
+
+    def load(self, filename_or_bytes):
+        """
+        Load self.data, self.processed_data, self.processed from a file or encoded bytes.
+        :param filename_or_bytes: The name of the file to load the data handler from or encoded bytes.
+        :return:
+        """
+        if isinstance(filename_or_bytes, str):
+            with open(filename_or_bytes, 'rb') as f:
+                loaded_data, loaded_processed_data, loaded_processed = pickle.load(f)
+        else:
+            loaded_data, loaded_processed_data, loaded_processed = pickle.loads(filename_or_bytes)
+
+        # Safely update self.data
+        for key, value in loaded_data.items():
+            if key in self.data:
+                self.data[key].update(value)
+            else:
+                self.data[key] = value
+
+        # Safely update self.processed_data
+        for key, value in loaded_processed_data.items():
+            if key in self.processed_data:
+                self.processed_data[key].update(value)
+            else:
+                self.processed_data[key] = value
+
+        # Safely update self.processed
+        self.processed.extend(x for x in loaded_processed if x not in self.processed)
+
 
 

@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.silver_output.visualization_scripts.opf_emissions import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'opf_emissions'
@@ -46,7 +46,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'opf_emissions'
@@ -78,7 +78,7 @@ def link(app):
                         (id['id']['type'] == 'silver-opf_emissions-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['OPF Emissions'].to_csv, "opf_emissions.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['OPF Emissions'].to_csv, "opf_emissions.csv")
             return _canvas, _data, _s_style, _m_style
 
         idx = 0
@@ -93,17 +93,17 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER Output']['OPF Emissions'],
+            _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER']['OPF Emissions'],
                                        _scenarios[idx], time_size=_ts[idx])
         elif _p_type[idx] == 'By Plant':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Plant',
-                                       data_handler.processed_data['SILVER Output']['OPF Emissions'],
+                                       data_handler.processed_data['SILVER']['OPF Emissions'],
                                        _scenario[idx], time_size=_ts[idx])
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER Output']['OPF Emissions'], _scenario[idx], time_size=_ts[idx])
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER']['OPF Emissions'], _scenario[idx], time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], _s_style, _m_style

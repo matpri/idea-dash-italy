@@ -18,9 +18,9 @@ def check(df):
     """
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Generation').any() or (classes == 'Transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,15 +45,13 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Dispatch']
+    supply_df = db[classes == 'Generation']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
-    supply_df['time'] = pd.to_datetime(supply_df['time'])
+    # supply_df['time'] = pd.to_datetime(supply_df['time'])
 
     # all times - 1 hour delta
-    supply_df['period'] = supply_df['time'].dt.year
-    sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
-    unique_dates = sub_supply['time'].dt.date.unique()
+    supply_df['period'] = supply_df['time']
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
@@ -61,7 +59,7 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
+    supply_df['value'] = supply_df['value']
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
@@ -69,13 +67,13 @@ def aggregate_db(db, scenario):
     transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     # replace to with ''
-    transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
+    transmission_df['variable'] = transmission_df['variable'].str.replace('To ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
-    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
-    transmission_df['period'] = transmission_df['time'].dt.year
+    # transmission_df['time'] = pd.to_datetime(transmission_df['time'])
+    # transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
+    transmission_df['period'] = transmission_df['time']
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
 
@@ -116,8 +114,6 @@ def aggregate_db(db, scenario):
     transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
-    # expand value to an entire year by multiplying by 365/12
-    transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
 
 
     # only keep the periods that are in the supply_df

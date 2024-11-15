@@ -2,6 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
+from components import ids
 from plotly.subplots import make_subplots
 
 from profiles.energy_model import utils
@@ -186,7 +187,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(classes[0], df, [], True, 'CAN' if 'CAN' in regions else regions[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'matrix'

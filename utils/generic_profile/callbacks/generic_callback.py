@@ -1,13 +1,14 @@
 import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
+from components import ids
 from utils.generic_profile.visualization_scripts.generic_viz import render_plot
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'model':MATCH,
             'name': MATCH
@@ -133,7 +134,7 @@ def link(app):
             'name': MATCH
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'model': MATCH,
             'name': MATCH

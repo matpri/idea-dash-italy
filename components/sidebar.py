@@ -3,7 +3,7 @@ from functools import partial
 import dash
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
-from dash import Output, Input, State, html
+from dash import Output, Input, State, html, dcc
 from dash_iconify import DashIconify
 from assets.styles import button_style
 
@@ -12,16 +12,11 @@ from components.plot_window import window
 
 
 
-def render():
+def render(static):
     """
     :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
     """
-    layout = html.Div([
-        dmc.Aside(
-            id='sidebar',
-            className='my-aside',
-            children=[
-                dmc.Stack([
+    icons = [
                     dmc.ActionIcon(
                         DashIconify(icon='carbon:add'),
                         size='sm',
@@ -40,7 +35,10 @@ def render():
                         className='my-button',
                         style=button_style
                     ),
-                    dmc.ActionIcon(
+                ]
+
+    if not static:
+        icons.extend([ dmc.ActionIcon(
                         DashIconify(icon='carbon:settings'),
                         size='sm',
                         radius='xl',
@@ -58,11 +56,28 @@ def render():
                         style=button_style,
                         id='data-viewer'
                     ),
-                ])
+                    dmc.ActionIcon(
+                        DashIconify(icon='carbon:save'),
+                        size='sm',
+                        radius='xl',
+                        variant='outline',
+                        className='my-button',
+                        style=button_style,
+                        id=ids.SAVE_BUTTON
+                    ),
+            dcc.Download(id='download-datahandler'),
+        ])
+
+    layout = html.Div([
+        dmc.Aside(
+            id='sidebar',
+            className='my-aside',
+            children=[
+                dmc.Stack(icons)
             ],
-            position={'top': '40%', 'left': 0},
+            position={'top': '40%', 'left': 0} if not static else {'top': '50%', 'left': 0},
             width={"base": 32},
-            height=144,
+            height=184 if not static else 72,
             fixed=True,
             zIndex=9999,
             # round the corners

@@ -1,27 +1,58 @@
 import dash
-from dash import html, Input, Output, State
+from dash import Input, Output, State
 
 from components import ids
 
 
 def link(app):
+    """
+    Link the modal handling callbacks to the Dash app.
+
+    This module handles the opening, closing, and submission of modals
+    in the Dash application. It manages the state of multiple modals
+    and updates the relevant outputs based on user interactions.
+
+    Parameters:
+    - app: The Dash application instance.
+    """
     @app.callback(
-        Output({'type': 'modal', 'index': dash.dependencies.ALL}, 'opened'),
+        Output({'type': ids.MODAL, 'index': dash.dependencies.ALL}, 'opened'),
         Output(ids.DATA_CHANGE, 'n_clicks'),
         Output(ids.UPDATE_CHIPS, 'n_clicks'),
-        Input({'type': 'open-modal', 'index': dash.dependencies.ALL}, 'n_clicks'),
-        Input({'type': 'modal-close-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
-        Input({'type': 'modal-submit-button', 'index': dash.dependencies.ALL}, 'n_clicks'),
-        State({'type': 'modal', 'index': dash.dependencies.ALL}, 'opened'),
-        State({'type': 'upload-chip-group', 'file': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
+        Input({'type': ids.OPEN_MODAL, 'index': dash.dependencies.ALL}, 'n_clicks'),
+        Input({'type': ids.MODAL_CLOSE_BUTTON, 'index': dash.dependencies.ALL}, 'n_clicks'),
+        Input({'type': ids.MODAL_SUBMIT_BUTTON, 'index': dash.dependencies.ALL}, 'n_clicks'),
+        State({'type': ids.MODAL, 'index': dash.dependencies.ALL}, 'opened'),
+        State({'type': ids.UPLOAD_CHIP_GROUP, 'file': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
         State(ids.DATA_CHANGE, 'n_clicks'),
         State(ids.UPDATE_CHIPS, 'n_clicks'),
-        State({'type': 'upload-scenario-name', 'file': dash.dependencies.ALL}, 'value'),
+        State({'type':  ids.UPLOAD_SCENARIO_NAME, 'file': dash.dependencies.ALL}, 'value'),
         prevent_initial_call=True,
     )
     def handle_modals(
             open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, _update_chips, scenario_names
     ):
+        """
+        Handle the opening, closing, and submission of modals.
+
+        This function is triggered by clicks on buttons that effect modals and updates
+        the state of the modals accordingly. It also processes data when
+        the submit button is clicked.
+        ids.DATA_CHANGE and ids.UPDATE_CHIPS are hidden buttons that we manually trigger to call callbacks when we want data is updated, e.g. to rerender plots
+
+        Parameters:
+        - open_clicks: List of clicks on open modal buttons.
+        - close_clicks: List of clicks on close modal buttons.
+        - submit_clicks: List of clicks on submit buttons.
+        - opened_modals: Current state of opened modals.
+        - selected_chips: Selected chips from the upload chip groups.
+        - n_clicks: Number of clicks on the data change button.
+        - _update_chips: Number of clicks on the update chips button.
+        - scenario_names: Names of the scenarios entered by the user.
+
+        Returns:
+        - A tuple containing the updated state of modals and click counts.
+        """
         print('handle_modals', open_clicks, close_clicks, submit_clicks, opened_modals, selected_chips, n_clicks, scenario_names)
         if not any([open_clicks, close_clicks, submit_clicks]):
             return dash.no_update, dash.no_update, dash.no_update
@@ -35,7 +66,7 @@ def link(app):
         output = [False] * len(ctx.outputs_list[0])
 
         # set flag based on button type
-        open_flag = triggered_input['type'] == 'open-modal'
+        open_flag = triggered_input['type'] == ids.OPEN_MODAL
         if triggered_input['type'] in ['modal-close-button', 'modal-submit-button']:
             print(f"{'Submitting data' if triggered_input['type'] == 'modal-submit-button' else 'Closing data modal'}")
 

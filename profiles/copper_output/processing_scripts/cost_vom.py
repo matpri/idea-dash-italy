@@ -87,6 +87,6 @@ def process(data):
         formatted_df['scenario'] = scenario_name
         dfs.append(formatted_df)
     full_df = pd.concat(dfs)
-    full_df['unit'] = '$ Millions'
-    full_df['value'] = full_df['value'].div(1e6)
+    full_df['unit'] = '$ Billions'
+    full_df['value'] = full_df['value'].div(1e9)
     return full_df

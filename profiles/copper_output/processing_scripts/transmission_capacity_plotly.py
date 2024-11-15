@@ -192,6 +192,9 @@ def process(selected):
         df = df[df.region != df.variable]
         df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
 
+        # flip variable and region
+        df['region'], df['variable'] = df['variable'], df['region']
+
         # cum_ls = []
         # for i in range(1, len(times)):
         #     prev_times = times[:i]
@@ -215,7 +218,7 @@ def process(selected):
 
         df['scenario'] = scenario_name
         df['period'] = df['period'].astype(int)
-        df = df.groupby(["region", "variable", "period", 'scenario', ]).sum(numeric_only=True).reset_index()
+        df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         df['value'] = df['value'] / 1000
         # df['total'] = df['total'] / 1000
         # df['cumsum'] = df['cumsum'] / 1000

@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 
 def render_plot(type, df):
     #print('rendering plot', type)
@@ -83,7 +83,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(classes[0], df),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'cims_output',
             'viz': 'overview'

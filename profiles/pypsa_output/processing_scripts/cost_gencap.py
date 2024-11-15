@@ -1,3 +1,5 @@
+from idlelib.pyparse import trans
+
 import pandas as pd
 import os
 
@@ -19,8 +21,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'NRCan-PyPsa').any():
-            if df.variable.str.startswith("Capital|Capital costs|").any():
-                return df[df.variable.str.startswith("Capital|Capital costs|")]['value'].sum() != 0
+            if df.variable.str.startswith("Capital costs|").any():
+                return df[df.variable.str.startswith("Capital costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -99,12 +101,34 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Capital|Capital costs|")]
-        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+        df = df[df.variable.str.startswith("Capital costs|")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+        # rename Electricity|DC to Transmission in variable column
+        df['variable'] = df['variable'].replace('Electricity|DC', 'Transmission')
+
+        can = df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
+
+        # Add a row with "Region" as "CAN"
+        can = can.assign(region='CAN')
+
+        trans_cost = df[df.variable == 'Transmission'].copy()
+        df = df[df.variable != 'Transmission']
+        t2 = trans_cost.copy()
+
+        trans_cost['region'] = trans_cost['region'].str.split('->').str[0]
+        t2['region'] = t2['region'].str.split('->').str[1]
+
+        df = pd.concat([df, trans_cost, t2, can], ignore_index=True)
+
         formatted_df = format_df(df)
-        df = calculate_fom(formatted_df)
-        df['scenario'] = scenario_name
-        dfs.append(df)
+
+        formatted_df['variable'] = formatted_df['variable'].map(utils.cost_tech).fillna(formatted_df['variable'])
+        formatted_df.sort_values(by=["region", "time", 'variable'])
+        formatted_df = formatted_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
+
+        formatted_df['scenario'] = scenario_name
+        dfs.append(formatted_df)
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
     full_df['value'] = full_df['value'].div(1e9)

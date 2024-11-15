@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
@@ -268,6 +268,7 @@ def render_plot(type, df, scenarios, year):
     from profiles.energy_model.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
+    print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Flow']['Map Plot']
         return transmission_plot(df, scenarios, year, plot_info['title'])
@@ -289,6 +290,9 @@ def plot(df, window_id):
     '''
 
     scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
     # make all years int
@@ -325,6 +329,16 @@ def plot(df, window_id):
             style={'display': 'none'}
         ),
         dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value=[base_scenarios[0]],
+            id={
+                'type': 'energy_model-transmissionflow-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
             label='Year',
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
@@ -332,13 +346,19 @@ def plot(df, window_id):
                 'type': 'energy_model-transmissionflow-year-select',
                 'index': window_id
             },
-        )
+        ),
+        dmc.Button('Download Data', id={'type': 'energy_model-transmissionflow-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'energy_model-transmissionflow-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(
         figure=render_plot('Map Plot', df, scenarios[0], years[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'transmission_flow'

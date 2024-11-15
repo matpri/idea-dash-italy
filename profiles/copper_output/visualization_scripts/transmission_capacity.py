@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
@@ -310,13 +310,19 @@ def plot(df, window_id):
                 'type': 'copper-transmissioncapacity-year-select',
                 'index': window_id
             },
-        )
+        ),
+        dmc.Button('Download Data', id={'type': 'copper-transmissioncapacity-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                   style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'copper-transmissioncapacity-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(
         figure=render_plot('Map Plot', df, scenarios[0], years[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'copper_output',
             'viz': 'transmission_capacity'

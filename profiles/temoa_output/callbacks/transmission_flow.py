@@ -1,13 +1,13 @@
 import dash
-from dash import Output, Input, State, ALL
+from dash import Output, Input, State, ALL, dcc
 
 from profiles.temoa_output.visualization_scripts.transmission_flow import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'temoa_output',
             'viz': 'transmission_flow'
@@ -20,6 +20,10 @@ def link(app):
             'type': 'temoa-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'temoa-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         Input({
             'type': 'temoa-transmissionflow-plot-select',
             'index': ALL
@@ -37,8 +41,12 @@ def link(app):
             'type': 'temoa-transmissionflow-year-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'temoa-transmissionflow-download-button',
+            'index': ALL
+        }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'temoa_output',
             'viz': 'transmission_flow'
@@ -51,13 +59,29 @@ def link(app):
             'type': 'temoa-transmissionflow-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'temoa-transmissionflow-download',
+            'index': ALL
+        }, 'data'),
         prevent_initial_call=True
     )
-    def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _canvas, _s_style, _m_style):
-        #print('updating transmissionflow plot')
+    def update_transmissionflow(_p_type, _scenarios, _scenario, _years, _d_button, _canvas, _s_style, _m_style, _data):
+        # print('updating transmissionflow plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+
+        if 'temoa-transmissionflow-download-button' in trigger_id['type']:
+            idx = 0
+            for i, id in enumerate(ctx.inputs_list[0]):
+                if ((id['id']['index'] == trigger_id['index']) and
+                        (id['id']['type'] == 'temoa-transmissionflow-download-button')):
+                    idx = i
+                    break
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'].to_csv,
+                                             "transmission_flow.csv")
+            return _canvas, _s_style, _m_style, _data
+
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if (id['id']['index'] == trigger_id['index']):
@@ -68,7 +92,7 @@ def link(app):
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Map Plot',
-                                       data_handler.processed_data['Sutubra-TEMOA Output']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
                                        _scenario[idx],
                                        _years[idx]
                                        )
@@ -76,7 +100,7 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Bar Plot',
-                                       data_handler.processed_data['Sutubra-TEMOA Output']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
                                        _scenarios[idx],
                                        _years[idx]
                                        )

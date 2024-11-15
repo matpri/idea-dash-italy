@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL
 
 from profiles.copper_input.visualization_scripts.us_demand import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_input',
             'viz': 'us_demand'
@@ -41,7 +42,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_input',
             'viz': 'us_demand'

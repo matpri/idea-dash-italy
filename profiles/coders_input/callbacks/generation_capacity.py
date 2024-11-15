@@ -2,13 +2,14 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from profiles.coders_input.visualization_scripts.generation_capacity import render_plot
+from components import ids
 
 
 def link(app):
     #print("gen cap link")
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'coders_input',
             'viz': 'gencap'

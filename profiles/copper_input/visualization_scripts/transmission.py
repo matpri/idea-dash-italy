@@ -1,6 +1,6 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
-
+from components import ids
 from profiles.copper_input.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
@@ -72,7 +72,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('Capacity', df, years[0],[scenarios[0]]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'copper_input',
             'viz': 'transmission'

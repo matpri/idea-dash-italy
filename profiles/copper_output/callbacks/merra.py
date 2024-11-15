@@ -2,13 +2,14 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from profiles.copper_output.visualization_scripts.merra import vre_plot
+from components import ids
 
 
 def link(app):
     #print("gen cap link")
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'copper_output',
             'viz': 'vre'
@@ -34,7 +35,7 @@ def link(app):
     def update_plot(variable, year, n_clicks):
         from main import data_handler
         #print("gen cap callback", variable)
-        df = data_handler.processed_data['COPPER Output']['VRE Capacity'].copy()
+        df = data_handler.processed_data['COPPER']['VRE Capacity'].copy()
 
         ctx = dash.callback_context
         if ctx.triggered:

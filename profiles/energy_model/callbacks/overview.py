@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.overview import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'overview'
@@ -52,7 +52,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'overview'
@@ -84,7 +84,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Overview'].to_csv,
                                              "overview.csv")
-            return _canvas, _data,
+            return _canvas, _data, _fillswitch
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):

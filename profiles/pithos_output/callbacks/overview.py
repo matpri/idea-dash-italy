@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.pithos_output.visualization_scripts.overview import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pithos_output',
             'viz': 'overview'
@@ -26,7 +26,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pithos_output',
             'viz': 'overview'
@@ -52,7 +52,7 @@ def link(app):
                         (id['id']['type'] == 'pithos-overview-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['HEC-PITHOS Output']['Overview'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['HEC-PITHOS']['Overview'].to_csv,
                                              "overview.csv")
             return _canvas, _data,
 
@@ -65,6 +65,6 @@ def link(app):
 
         #print('idx:', idx, 'plot type:', _p_type[idx])
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['HEC-PITHOS Output']['Overview'])
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['HEC-PITHOS']['Overview'])
 
         return _canvas, [dash.no_update for _ in _data]

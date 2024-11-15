@@ -1,13 +1,14 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
+from components import ids
 from profiles.pypsa_can_output.visualization_scripts.dispatch import render_plot, date_mapper
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pypsa_can_output',
             'viz': 'dispatch'
@@ -93,7 +94,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'pypsa_can_output',
             'viz': 'dispatch'
@@ -120,12 +121,12 @@ def link(app):
                         (id['id']['type'] == 'pypsa_can-dispatch-download-button')):
                     idx = i
                     break
-            download[idx] = dcc.send_data_frame(data_handler.processed_data['PyPSA_CAN Output']['Dispatch'].to_csv,
+            download[idx] = dcc.send_data_frame(data_handler.processed_data['PyPSA_CAN']['Dispatch'].to_csv,
                                                 "dispatch.csv")
             return figure, region_data, region_value, year_data, year_value, day_data, day_value, download
 
         if 'pypsa_can-dispatch-scenario-multi-select' in trigger_id['type']:
-            df = data_handler.processed_data['PyPSA_CAN Output']['Dispatch']
+            df = data_handler.processed_data['PyPSA_CAN']['Dispatch']
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
@@ -152,7 +153,7 @@ def link(app):
             day_data[idx] = [{'label': i, 'value': i} for i in days]
             day_value[idx] = days[0]
 
-            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['PyPSA_CAN Output']['Dispatch'],
+            figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['PyPSA_CAN']['Dispatch'],
                            aggregate_switch[idx], scenario_multi_select[idx], region_select[idx], year_select[idx],
                            day_select[
                                idx])
@@ -163,7 +164,7 @@ def link(app):
                     (id['id']['type'] == 'pypsa_can-dispatch-plot-select')):
                 idx = i
                 break
-        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['PyPSA_CAN Output']['Dispatch'],
+        figure[idx] = render_plot(plot_select[idx], data_handler.processed_data['PyPSA_CAN']['Dispatch'],
                                   aggregate_switch[idx], scenario_multi_select[idx], region_select[idx],
                                   year_select[idx],
                                   day_select[

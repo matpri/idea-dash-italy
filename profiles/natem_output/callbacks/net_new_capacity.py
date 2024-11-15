@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.natem_output.visualization_scripts.generation_capacity import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'netnew_capacity'
@@ -97,7 +97,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'natem_output',
             'viz': 'netnew_capacity'
@@ -144,8 +144,8 @@ def link(app):
                         (id['id']['type'] == 'natem-netnew_capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NATEM-POWER Output']['Net New Capacity'].to_csv, "netnew_capacity.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['NATEM Canada']['Net New Capacity'].to_csv, "netnew_capacity.csv")
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -165,7 +165,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NATEM-POWER Output']['Net New Capacity'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['NATEM Canada']['Net New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -180,7 +180,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NATEM-POWER Output']['Net New Capacity'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['NATEM Canada']['Net New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -193,7 +193,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NATEM-POWER Output']['Net New Capacity'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['NATEM Canada']['Net New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -207,7 +207,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NATEM-POWER Output']['Net New Capacity'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['NATEM Canada']['Net New Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],

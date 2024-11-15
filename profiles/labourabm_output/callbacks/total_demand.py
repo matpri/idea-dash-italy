@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.labourabm_output.visualization_scripts.total_demand import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'labourabm_output',
             'viz': 'total_demand'
@@ -41,7 +41,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'labourabm_output',
             'viz': 'total_demand'
@@ -70,7 +70,7 @@ def link(app):
                         (id['id']['type'] == 'labourabm-total_demand-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM Output']['Total Demand'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM']['Total Demand'].to_csv,
                                              "total_demand.csv")
             return _canvas, _region, _regions, _data
 
@@ -82,13 +82,13 @@ def link(app):
                 break
 
         if 'labourabm-total_demand-scenario-multi-select' in trigger_id['type']:
-            data = data_handler.processed_data['LabourABM Output']['Total Demand']
+            data = data_handler.processed_data['LabourABM']['Total Demand']
             _regions[idx] = data[data['scenario'].isin(_scenarios[idx])]['region'].unique().tolist()
             if len(_regions[idx]) == 0:
                 _region[idx] = ''
             else:
                 _region[idx] = _regions[idx][0]
 
-        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM Output']['Total Demand'], _scenarios[idx], _occupations[idx], _region[idx])
+        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM']['Total Demand'], _scenarios[idx], _occupations[idx], _region[idx])
 
         return _canvas, _region, _regions, [dash.no_update for _ in _data]

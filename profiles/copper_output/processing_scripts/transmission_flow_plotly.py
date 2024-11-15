@@ -174,6 +174,8 @@ def process(selected):
         trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
+        # flip variable and region
+        df['region'], df['variable'] = df['variable'], df['region']
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)

@@ -25,7 +25,6 @@ from profiles.energy_model.callbacks import (
     transmission_capacity as transmission_capacity_callbacks,
     transmission_flow as transmission_flow_callbacks,
     comparison as comparison_callbacks,
-    heatmap as heatmap_callbacks,
     settings as settings_callbacks
 
 )
@@ -63,11 +62,10 @@ from profiles.energy_model.visualization_scripts import (
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
     comparison as comparison_viz,
-    heatmap as heatmap_viz
 )
 
-power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Output', 'HEC-PITHOS Output',
-                       'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
 
 
 class energy_modelsOutput(BaseProfile):
@@ -82,7 +80,6 @@ class energy_modelsOutput(BaseProfile):
     plot_order = [
         'Output Stats',
         'Overview',
-        'Heatmap',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -118,20 +115,10 @@ class energy_modelsOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': output_stats_viz.plot,
                 'callback': output_stats_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+                'description': 'Output statistics of the model.'
 
             },
-        'Heatmap':
-            {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': heatmap_viz.plot,
-                'callback': heatmap_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
 
-            },
         'Comparison':
             {
                 'check': matrix_processing.check,
@@ -286,11 +273,8 @@ class energy_modelsOutput(BaseProfile):
 
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
-        make_heatmap = False
+
         for profile, viz_option, df in data_collection:
-            if viz_option == 'Heatmap':
-                make_heatmap = True
-                continue
             print(profile, viz_option)
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
@@ -328,8 +312,6 @@ class energy_modelsOutput(BaseProfile):
                 elif 'period' in data.columns:
                     data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
-        if make_heatmap:
-            processed_data['Heatmap'] = processed_data['Overview'].copy()
 
         output_stats = []
 
@@ -338,9 +320,9 @@ class energy_modelsOutput(BaseProfile):
                 for c in p_data.variable.unique():
                     if c in self.viz_options:
                         data = p_data[p_data.variable == c]
-                        # last year time step
-                        data['time'] = pd.to_datetime(data['time'], format='%Y')
-                        data = data[data['time'] == data['time'].max()]
+                        # if net new capacity make cumsum of value based on time column
+                        if 'Net New Capacity' in c or 'New Capacity' in c:
+                            data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
                         output_stats.append(data)
 
         min_days = []
@@ -348,7 +330,7 @@ class energy_modelsOutput(BaseProfile):
         for model, plot_type, df in data_collection:
             if model in power_system_models:
                 if plot_type == 'Dispatch':
-                    dispatch_data = df[(df.region == 'CAN') & (df.period == 2050)].copy()
+                    dispatch_data = df[(df.region == 'CAN')].copy()
                     dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
                     dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
                     if 'version' in dispatch_data.columns:
@@ -356,23 +338,28 @@ class energy_modelsOutput(BaseProfile):
                         dispatch_data = dispatch_data.drop(columns=['version'])
 
                     # make date day-month-year
-                    dispatch_data = dispatch_data.drop(columns=['period'])
                     dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
-                    columns = ['scenario', 'time', 'variable', 'region']
+                    columns = ['scenario', 'time', 'variable', 'region', 'period']
                     dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
 
+                    for year in dispatch_data['period'].unique():
+                        year_dispatch_data = dispatch_data[dispatch_data['period'] == year]
+                        for scenario in year_dispatch_data['scenario'].unique():
+                            scen_dispatch_data = year_dispatch_data[year_dispatch_data['scenario'] == scenario]
+                            # find date where value is min and max
+                            min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
+                            min_day['variable'] = 'Min Dispatch'
+                            min_day['date'] = min_day['time']
+                            min_day['time'] = year
 
-                    for scenario in dispatch_data['scenario'].unique():
-                        scen_dispatch_data = dispatch_data[dispatch_data['scenario'] == scenario]
-                        # find date where value is min and max
-                        min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
-                        min_day['variable'] = 'Min Dispatch'
 
-                        max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
-                        max_day['variable'] = 'Max Dispatch'
+                            max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
+                            max_day['variable'] = 'Max Dispatch'
+                            max_day['date'] = max_day['time']
+                            max_day['time'] = year
 
-                        min_days.append(min_day)
-                        max_days.append(max_day)
+                            min_days.append(min_day)
+                            max_days.append(max_day)
 
         output_stats += min_days + max_days
 

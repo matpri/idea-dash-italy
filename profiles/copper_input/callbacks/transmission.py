@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.copper_input.visualization_scripts.transmission import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_input',
             'viz': 'transmission'
@@ -35,7 +36,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'copper_input',
             'viz': 'transmission'}, 'figure'),
@@ -60,7 +61,7 @@ def link(app):
                         (id['id']['type'] == 'copper_input-transmission-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER Output']['Capacity'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Capacity'].to_csv,
                                              "transmission.csv")
             return _canvas, _data
 

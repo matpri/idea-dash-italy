@@ -4,7 +4,7 @@ import pandas as pd
 import plotly.express as px
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
@@ -13,77 +13,105 @@ def get_contrasting_font_color(rgb_color):
     brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
     return '#ffffff' if brightness < 128 else '#000000'
 
-def render_plot(df, *args, **kwargs):
+def render_plot(df, year, scenarios):
     # Create a Plotly table
     db = df.copy()
-    db = db[db.region == 'CAN']
-    min_days = db[db.variable == 'Min Dispatch']
-    max_days = db[db.variable == 'Max Dispatch']
+    db = db[(db.region == 'CAN') & (db.time == year) & (db.scenario.isin(scenarios))]
+    if not db.empty:
 
-    min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['time']} for i, min_day in min_days.iterrows())
-    max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['time']} for i, max_day in max_days.iterrows())
-    min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
-    max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
-    db = db[db.variable != 'Min Dispatch']
-    db = db[db.variable != 'Max Dispatch']
-    db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+        if 'Min Dispatch' in db['variable'].unique() and 'Max Dispatch' in db['variable'].unique():
+            min_days = db[db.variable == 'Min Dispatch']
+            max_days = db[db.variable == 'Max Dispatch']
 
-    db = db[['scenario', 'variable', 'value']]
+            min_date = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Day', 'value': min_day['date']} for i, min_day in min_days.iterrows())
+            max_date = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Day', 'value': max_day['date']} for i, max_day in max_days.iterrows())
+            min_dispatch = pd.DataFrame({'scenario': min_day['scenario'], 'variable': 'Min Dispatch Value', 'value': min_day['value']} for i, min_day in min_days.iterrows())
+            max_dispatch = pd.DataFrame({'scenario': max_day['scenario'], 'variable': 'Max Dispatch Value', 'value': max_day['value']} for i, max_day in max_days.iterrows())
 
+            # if multiple min/max dispatch dates, append the values together with a comma
+            min_date = min_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
+            max_date = max_date.groupby(['scenario', 'variable'])['value'].apply(lambda x: ', '.join(x)).reset_index()
 
-    df_pivot = db.pivot(index='variable', columns='scenario', values='value')
-
-
-    # fill na with ''
-    df_pivot = df_pivot.fillna('')
-    # Create a Plotly Table
-    header_values = [''] + list(df_pivot.columns)
-    cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
-
-    min_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
-    max_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
-
-    def normalize(value):
-        if isinstance(value, (int, float)):
-            return (value - min_value) / (max_value - min_value)
-        return None
-
-    colors = []
-
-    for col in df_pivot.columns:
-        normalized_data = [normalize(val) for val in df_pivot[col]]
-        colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in normalized_data])]
+            # only keep the first value for min/max dispatch values if there are multiple
+            min_dispatch = min_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
+            max_dispatch = max_dispatch.groupby(['scenario', 'variable'])['value'].first().reset_index()
 
 
-    colors_by_row = [['#ffffff', '#e5eeec' ] * (len(df_pivot.index) //2)] + colors# Determine font colors based on the background color
-    font_colors = [['#000000'] * len(df_pivot.index)]
-    for column in colors:
-        font_colors.append([get_contrasting_font_color(color) for color in column])
-    # Calculate the width for each column
-    column_width = []
-    column_width.append(max(df_pivot.index.str.len()) * 8)
-    for col in df_pivot.columns:
-        column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+            db = db[db.variable != 'Min Dispatch']
+            db = db[db.variable != 'Max Dispatch']
+            db = pd.concat([db, min_date, max_date, min_dispatch, max_dispatch])
+
+        db = db[['scenario', 'variable', 'value']]
 
 
-    print(column_width)
+        df_pivot = db.pivot(index='variable', columns='scenario', values='value')
 
 
-    # Create Plotly table
-    fig = go.Figure(data=[go.Table(
-        columnorder = [i+1 for i in range(len(df_pivot.columns) + 1)],
-        columnwidth=column_width,
-        header=dict(values=header_values,
-                    fill_color=['#ffffff', '#248ce6', '#248ce6'],
-                    font=dict(color='white'),
-                    align='center'),
-        cells=dict(values=cell_values,
-                   fill_color=colors_by_row,
-                   line_color= colors_by_row,
-                   font=dict(color=font_colors),
+        # fill na with ''
+        df_pivot = df_pivot.fillna('')
+        # Create a Plotly Table
+        header_values = [''] + list(df_pivot.columns)
+        cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
-                   align='left'))
-    ])
+        min_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+        max_value = df['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
+
+        def normalize(value):
+            if isinstance(value, (int, float)):
+                return (value - min_value) / (max_value - min_value)
+            return None
+
+        colors = []
+
+        for col in df_pivot.columns:
+            normalized_data = [normalize(val) for val in df_pivot[col]]
+            colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in normalized_data])]
+
+
+        colors_by_row = [['#ffffff', '#e5eeec' ] * (len(df_pivot.index) //2)] + colors# Determine font colors based on the background color
+        font_colors = [['#000000'] * len(df_pivot.index)]
+        for column in colors:
+            font_colors.append([get_contrasting_font_color(color) for color in column])
+        # Calculate the width for each column
+        column_width = []
+        column_width.append(max(df_pivot.index.str.len()) * 8)
+        for col in df_pivot.columns:
+            column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+
+
+        print(column_width)
+
+
+        # Create Plotly table
+        fig = go.Figure(data=[go.Table(
+            columnorder = [i+1 for i in range(len(df_pivot.columns) + 1)],
+            columnwidth=column_width,
+            header=dict(values=header_values,
+                        fill_color=['#ffffff', '#248ce6', '#248ce6'],
+                        font=dict(color='white'),
+                        align='center'),
+            cells=dict(values=cell_values,
+                       fill_color=colors_by_row,
+                       line_color= colors_by_row,
+                       font=dict(color=font_colors),
+
+                       align='left'))
+        ])
+    else:
+        fig = go.Figure()
+        # print("No data available, since the results are all zero.")
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, since the results are all zero.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
 
     return fig
 
@@ -95,35 +123,30 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    classes = df['variable'].unique().tolist()
-
+    years = df['time'].unique().tolist()
     scenarios = df['scenario'].unique().tolist()
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
     base_scenarios = ['ALL'] + base_scenarios
 
+
     widget_layout = html.Div([
         dmc.Select(
-            label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in classes],
-            value=classes[0],
+            label='Year',
+            data=[{'label': year, 'value': year} for year in years],
+            value=years[0],
             id={
-                'type': 'energy_model-output_stats-plot-select',
+                'type': 'energy_model-output_stats-year-select',
                 'index': window_id
             },
         ),
-        dmc.Select(
-            label='Group By',
-            value=0,
-            data=[
-                {'label': 'No Grouping', 'value': 0},
-                {'label': 'Group by Model', 'value': 1},
-                {'label': 'Group by Scenario', 'value': 2},
-                {'label': 'Group by Version', 'value': 3},
-            ],
+        dmc.MultiSelect(
+            label='Scenario',
+            value=[''],
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             id={
-                'type': 'energy_model-output_stats-groupby-toggle',
-                'index': window_id,
+                'type': 'energy_model-output_stats-scenario-select',
+                'index': window_id
             },
         ),
         dmc.Select(
@@ -136,27 +159,6 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
-        dmc.Select(
-            label='Region',
-            value='CAN',
-            data=[
-                {'label': 'CAN', 'value': 'CAN'},
-                {'label': 'AB+QC', 'value': 'AB+QC'},
-            ],
-            id={
-                'type': 'energy_model-output_stats-region-toggle',
-                'index': window_id,
-            },
-        ),
-        dmc.Switch(
-            label='Fill Area',
-            checked=True,
-            id={
-                'type': 'energy_model-output_stats-fill-switch',
-                'index': window_id,
-            },
-        ),
-
         dmc.Button('Download Data', id={'type': 'energy_model-output_stats-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -165,9 +167,9 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(df, False, False, False),
+        figure=render_plot(df, years[0], ['']),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'energy_model',
             'viz': 'output_stats'

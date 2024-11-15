@@ -32,7 +32,7 @@ from profiles.labourabm_output.visualization_scripts import (
 
 
 class labourabmOutput(BaseProfile):
-    display_name = 'LabourABM Output'
+    display_name = 'LabourABM'
     name = 'LabourABM'
 
     db_name = 'LabourABM'
