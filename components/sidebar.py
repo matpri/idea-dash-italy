@@ -17,8 +17,9 @@ def render(static):
     """
     :return: Rendering the sidebar containing the add window, clear windows, settings, and data viewer buttons.
     """
-    icons = [
-        dmc.Tooltip(
+    icons = []
+    if not static:
+        icons = [dmc.Tooltip(
             label="Save Current State",
             position="right",
             offset=3,
@@ -34,8 +35,9 @@ def render(static):
                 )
             ]
         ),
-        dcc.Download(id='download-datahandler'),
-        html.Hr(style={'margin': '0px 0'}),
+            dcc.Download(id='download-datahandler'),
+            html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'})]
+    icons = icons + [
         dmc.Tooltip(
             label="Add Card",
             position="right",
@@ -72,7 +74,7 @@ def render(static):
 
     if not static:
         icons.extend([
-            html.Hr(style={'margin': '0px 0'}),
+            html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'}),
             # Group 3: Plot and Scenario Settings
             dmc.Tooltip(
                 label="Plot Settings",
@@ -111,33 +113,26 @@ def render(static):
 
         ])
 
-        icons = ([
-                     dcc.Link(
-                         html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT, width=HEIGHT),
-                         href='/',
-                         style={'padding': '0', 'margin': '0 auto', 'display': 'block'}
-                     ),
-                     html.Hr(style={'margin': '0px 0'}),
-                     dmc.Tooltip(
-                         label="Upload Data",
-                         position="right",
-                         offset=3,
-                         children=[
-                             dmc.ActionIcon(
-                                 DashIconify(icon='carbon:upload'),
-                                 size='lg',
-                                 radius='xl',
-                                 variant='outline',
-                                 className='my-button',
-                                 style=button_style,
-                                 id={'type': ids.OPEN_MODAL, 'index': 'data'}
-                             )
-                         ]
-                     )
+        icons = ([dmc.Tooltip(
+            label="Upload Data",
+            position="right",
+            offset=3,
+            children=[
+                dmc.ActionIcon(
+                    DashIconify(icon='carbon:upload'),
+                    size='lg',
+                    radius='xl',
+                    variant='outline',
+                    className='my-button',
+                    style=button_style,
+                    id={'type': ids.OPEN_MODAL, 'index': 'data'}
+                )
+            ]
+        )
                  ]
                  + icons
                  + [
-                     html.Hr(style={'margin': '0px 0'}),
+                     html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'}),
                      dmc.Tooltip(
                          label="Help",
                          position="right",
@@ -154,6 +149,21 @@ def render(static):
                              )
                          ]
                      ), ])
+    icons = [dmc.Tooltip(
+        label="IDEA Repository",
+        position="right",
+        offset=3,
+        children=[
+            dcc.Link(
+                html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT,
+                         width=HEIGHT),
+                href='https://gitlab.com/sesit/idea-dash',
+                target='_blank',
+                style={'padding': '0', 'margin': '0 auto', 'display': 'block'}
+            )
+        ]
+    ),
+                html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'})] + icons
 
     layout = html.Div([
         dbc.Collapse([
@@ -161,11 +171,12 @@ def render(static):
                 id='sidebar',
                 className='my-aside',
                 children=[
-                    dmc.Stack(icons, align="center")
+                    html.Div(icons, style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center',
+                                           'gap': '4px'}),
                 ],
-                position={'top': '20%', 'left': 0} if not static else {'top': '50%', 'left': 0},
+                position={'top': '25%', 'left': 0} if not static else {'top': '42%', 'left': 0},
                 width={"base": 62},
-                height=520 if not static else 110,
+                height=432 if not static else 164,
                 fixed=True,
                 zIndex=9999,
                 style={

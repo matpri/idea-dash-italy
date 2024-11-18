@@ -5,7 +5,8 @@ button_style = {
     'border': '1px solid rgba(255,255,255, 0.3)',
     '-webkit-backdrop-filter': 'blur(5px)',
     # size
-    'height': '38px',
+    'height': '42px',
+    'width': '42px',
     # padding
     'padding': '2px 2px',
 }
