@@ -9,7 +9,7 @@ from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
     plot_handling, help_handling, save_datahandler, selected_files, database_connection, data_modal as data_modal_callback
-from components import ids, header, plot_canvas, sidebar
+from components import ids, plot_canvas, sidebar
 from components.data_selection import data_modal
 from components.help import help
 from utils.data_handler import DataHandler
@@ -32,7 +32,6 @@ args = parser.parse_args()  # Parse the arguments
 # Convert string to boolean
 static = args.static.lower() == 'true'
 help_popup = args.help_popup.lower() == 'true'
-print(f"Show header: {static}")  # Debugging statement
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [
@@ -74,51 +73,28 @@ if args.autosave != '':
     print(f"Autosaving datahandler to {args.autosave}")
     # Ensure the directory exists, but do not create a directory for a file path
     autosave_dir = os.path.dirname(args.autosave)
-    if not os.path.exists(autosave_dir):
+    if autosave_dir != '' and not os.path.exists(autosave_dir):
         os.makedirs(autosave_dir)
     data_handler.save(args.autosave)  # Save the datahandler to the specified file path
 
-if not static:
-    print("Rendering header...")  # Debugging statement
-    app_layout = [
-        header.render(app),
-        html.Div([
-            dlc.BoxPanel([
-                plot_canvas.render(bool(data_files) or args.datahandler is not None),
-            ], id='test', addToDom=True),
-            sidebar.render(static),
-            data_modal.render(app),
-            help.render(help_popup),
+app_layout = [
+    html.Div([
+        dlc.BoxPanel([
+            plot_canvas.render(bool(data_files) or args.datahandler is not None, static),
+        ], id='test', addToDom=True),
+        sidebar.render(static),
+        data_modal.render(app),
+        help.render(help_popup),
 
-            # component to represent data change (hidden)
-            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
-            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
-            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
-            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+        # component to represent data change (hidden)
+        html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+        html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+        html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+        html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
 
-        ], id=ids.CONTENT,
-        )
-    ]
-else:
-    print("Not rendering header...")
-    app_layout = [
-        html.Div([
-            dlc.BoxPanel([
-                plot_canvas.render(bool(data_files) or args.datahandler is not None),
-            ], id='test', addToDom=True),
-            sidebar.render(static),
-            data_modal.render(app),
-            help.render(help_popup),
-
-            # component to represent data change (hidden)
-            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
-            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
-            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
-            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
-
-        ], id=ids.CONTENT,
-        )
-    ]
+    ], id=ids.CONTENT,
+    )
+]
 
 app.layout = html.Div(app_layout)
 

@@ -1,7 +1,9 @@
 import dash
 from dash import Output, Input, State, html
 import dash_mantine_components as dmc
+from dash_iconify import DashIconify
 
+from assets.styles import view_button_style, hide_button_style
 from components import ids
 from components.plot_window import window, tabs
 
@@ -76,6 +78,25 @@ def link(app):
         State(ids.SETTINGS_CHANGE, 'n_clicks'),
         prevent_initial_call=True,
     )(update_windows)
+
+    # Callback to handle sidebar collapse/expand
+    app.callback(
+        Output('sidebar-collapse', 'is_open'),
+        Output('collapse-sidebar-container', 'position', allow_duplicate=True),
+        Input('collapse-sidebar', 'n_clicks'),
+        Input('view-sidebar', 'n_clicks'),
+        State('sidebar-collapse', 'is_open'),
+        prevent_initial_call=True
+    )(toggle_sidebar)
+
+    app.callback(
+        Output('collapse-sidebar', 'style'),
+        Output('view-sidebar', 'style'),
+        Output('collapse-sidebar-container', 'position', allow_duplicate=True),
+        Input('sidebar-collapse', 'is_open'),
+        prevent_initial_call=True
+    )(toggle_button)
+
 
 
 def update_windows(is_open, n_clicks):
@@ -182,3 +203,18 @@ def show_settings_modal(n_clicks, is_open, _children):
     if n_clicks:
         return not is_open, _children
     return is_open, _children
+
+
+
+def toggle_sidebar(n_hide, n_view, is_open):
+    print('toggle_sidebar')
+    if is_open:
+        return False, dash.no_update
+    else:
+        return True, {'top': '50%', 'left': '62px'}
+
+def toggle_button(is_open):
+    if is_open:
+        return view_button_style, hide_button_style, dash.no_update
+    else:
+        return hide_button_style, view_button_style, {'top': '50%', 'left': '0px'}

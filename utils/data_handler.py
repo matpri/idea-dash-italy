@@ -458,6 +458,8 @@ class DataHandler:
         Get the visualizations that are available for each profile.
         :return:
         """
+        self.validate_profiles_present()
+
         viz = {}
         for model, viz_options in self.processed_data.items():
             for viz_name in viz_options.keys():
@@ -586,7 +588,7 @@ class DataHandler:
 
         return True, "Data loaded successfully!", filename
 
-    def save(self, filename, temporary):
+    def save(self, filename, temporary=False):
         """
         Save self.data, self.processed_data, self.processedto a file.
         :param filename: The name of the file to save the data handler to.
@@ -630,6 +632,24 @@ class DataHandler:
 
         # Safely update self.processed
         self.processed.extend(x for x in loaded_processed if x not in self.processed)
+
+
+    def validate_profiles_present(self):
+        # if a profile in the keys of loaded_processed_data is not in self.profiles, add it using the generic profile logic
+        for profile in self.processed_data.keys():
+            if profile not in self.profiles:
+                classes = list(self.processed_data[profile].keys())
+                variables = []
+                for cls in classes:
+                    variables += self.processed_data[profile][cls].variable.unique().tolist()
+
+                # make variables unique
+                variables = list(set(variables))
+                profile = GenericProfile(profile, classes, variables)
+
+                self.profiles[profile.display_name] = profile
+
+
 
 
 

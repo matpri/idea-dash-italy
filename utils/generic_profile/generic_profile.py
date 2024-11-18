@@ -94,6 +94,7 @@ class GenericProfile:
     def process_data(self, data_collection):
         args = []
         for viz_option, data in data_collection.items():
+            # convert string to datetime
             if viz_option != 'Overview' and viz_option != 'Output Stats':
                 args.append((self.display_name, viz_option, data, self.viz_options[viz_option]['process']))
 
@@ -119,7 +120,7 @@ class GenericProfile:
 
             dfs.append(df)
         full_df = pd.concat(dfs)
-        full_df['time'] = full_df['time'].astype(int)
+
 
         processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
         processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region']]))

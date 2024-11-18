@@ -4,6 +4,11 @@ button_style = {
     'box-shadow': '0 4 30px 0 rgba(0, 0, 0, 0.1)',
     'border': '1px solid rgba(255,255,255, 0.3)',
     '-webkit-backdrop-filter': 'blur(5px)',
+    # size
+    'height': '42px',
+    'width': '42px',
+    # padding
+    'padding': '2px 2px',
 }
 glass_style = {
     'background': 'rgba(47,146,231,0.2)',
