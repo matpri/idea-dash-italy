@@ -23,7 +23,11 @@ glass_style = {
 hide_button_style = button_style.copy()
 hide_button_style['display'] = 'none'
 hide_button_style['align-items'] = 'center'
+del hide_button_style['width']
+del hide_button_style['height']
 
 view_button_style = button_style.copy()
 view_button_style['display'] = 'block'
 view_button_style['align-items'] = 'center'
+del view_button_style['width']
+del view_button_style['height']

@@ -5,7 +5,7 @@ import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
 from dash import Output, Input, State, html, dcc
 from dash_iconify import DashIconify
-from assets.styles import button_style, hide_button_style
+from assets.styles import button_style, hide_button_style, view_button_style
 
 from components import data_viewer, settings, ids
 from components.plot_window import window
@@ -236,7 +236,7 @@ def render(static):
                             variant='outline',
                             id='collapse-sidebar',
                             className='my-button',
-                            style=button_style
+                            style=view_button_style
                         )
                     ]
                 ),
