@@ -176,7 +176,7 @@ def render(static):
                 ],
                 position={'top': '27%', 'left': 0} if not static else {'top': '42%', 'left': 0},
                 width={"base": 62},
-                height=432 if not static else 212,
+                height=432 if not static else 224,
                 fixed=True,
                 zIndex=9999,
                 style={
