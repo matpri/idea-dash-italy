@@ -5,12 +5,12 @@ from components import ids
 from components.plot_window import window
 
 
-def render(hide_welcome=True):
+def render(hide_welcome=True, static=False):
     if not hide_welcome:
         layout = dlc.DockPanel([
             dlc.Widget(
                 html.Img(
-                    src='assets/welcome.png',
+                    src='assets/welcome_static.png' if static else 'assets/welcome.png',
                     style={'width': '100%', 'height': '100%',
                            'object-fit': 'cover',
                            'object-position': 'center',

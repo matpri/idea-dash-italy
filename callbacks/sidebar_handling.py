@@ -211,7 +211,7 @@ def toggle_sidebar(n_hide, n_view, is_open):
     if is_open:
         return False, dash.no_update
     else:
-        return True, {'top': '50%', 'left': '48px'}
+        return True, {'top': '50%', 'left': '62px'}
 
 def toggle_button(is_open):
     if is_open:
