@@ -80,7 +80,7 @@ if args.autosave != '':
 app_layout = [
     html.Div([
         dlc.BoxPanel([
-            plot_canvas.render(bool(data_files) or args.datahandler is not None),
+            plot_canvas.render(bool(data_files) or args.datahandler is not None, static),
         ], id='test', addToDom=True),
         sidebar.render(static),
         data_modal.render(app),

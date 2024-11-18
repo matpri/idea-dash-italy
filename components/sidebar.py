@@ -131,7 +131,22 @@ def render(static):
         )
                  ]
                  + icons
-                 + [
+                 )
+    icons = [dmc.Tooltip(
+        label="IDEA Repository",
+        position="right",
+        offset=3,
+        children=[
+            dcc.Link(
+                html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT,
+                         width=HEIGHT),
+                href='https://gitlab.com/sesit/idea-dash',
+                target='_blank',
+                style={'padding': '0', 'margin': '0 auto', 'display': 'block'}
+            )
+        ]
+    ),
+                html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'})] + icons + [
                      html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'}),
                      dmc.Tooltip(
                          label="Help",
@@ -148,22 +163,7 @@ def render(static):
                                  style=button_style
                              )
                          ]
-                     ), ])
-    icons = [dmc.Tooltip(
-        label="IDEA Repository",
-        position="right",
-        offset=3,
-        children=[
-            dcc.Link(
-                html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT,
-                         width=HEIGHT),
-                href='https://gitlab.com/sesit/idea-dash',
-                target='_blank',
-                style={'padding': '0', 'margin': '0 auto', 'display': 'block'}
-            )
-        ]
-    ),
-                html.Div(html.Hr(style={'margin': '4px 0'}), style={'width': '100%'})] + icons
+                     ), ]
 
     layout = html.Div([
         dbc.Collapse([
@@ -174,9 +174,9 @@ def render(static):
                     html.Div(icons, style={'display': 'flex', 'flexDirection': 'column', 'alignItems': 'center',
                                            'gap': '4px'}),
                 ],
-                position={'top': '25%', 'left': 0} if not static else {'top': '42%', 'left': 0},
+                position={'top': '27%', 'left': 0} if not static else {'top': '42%', 'left': 0},
                 width={"base": 62},
-                height=432 if not static else 164,
+                height=432 if not static else 212,
                 fixed=True,
                 zIndex=9999,
                 style={
@@ -257,7 +257,7 @@ def render(static):
                     ]
                 ),
             ],
-            position={'top': '50%', 'left': '48px'},
+            position={'top': '50%', 'left': '62px'},
             width={"base": 48},
             height=36,
             fixed=True,
