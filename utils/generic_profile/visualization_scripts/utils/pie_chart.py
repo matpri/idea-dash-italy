@@ -48,8 +48,10 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
 def subset(df, region, year, scenario, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
-    df_scen['time'] = pd.to_datetime(df_scen['time'])
-    df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+
+    if not pd.api.types.is_numeric_dtype(df['time']):
+        df_scen['time'] = pd.to_datetime(df_scen['time'])
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
 
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]

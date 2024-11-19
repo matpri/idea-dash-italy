@@ -32,17 +32,20 @@ def create_generic_plots(model, name, profile):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
-        years = pd.to_datetime(df['time']).dt.strftime('%Y').unique().tolist()
-
-        # set a boolean that shows that there are unique days in a single year
-        dates = pd.to_datetime(df['time'])
-        # find dates that are not in the same year
-        unique_dates = dates.dt.year.unique()
-        trend_one_year = False
-        for year in unique_dates:
-            if len(dates[dates.dt.year == year].dt.dayofyear.unique()) > 1:
-                trend_one_year = True
-                break
+        if pd.api.types.is_numeric_dtype(df['time']):
+            years = df['time'].unique().tolist()
+            trend_one_year = False
+        else:
+            years = pd.to_datetime(df['time']).dt.strftime('%Y').unique().tolist()
+            # set a boolean that shows that there are unique days in a single year
+            dates = pd.to_datetime(df['time'])
+            # find dates that are not in the same year
+            unique_dates = dates.dt.year.unique()
+            trend_one_year = False
+            for year in unique_dates:
+                if len(dates[dates.dt.year == year].dt.dayofyear.unique()) > 1:
+                    trend_one_year = True
+                    break
 
 
         by_year_widgets = dmc.Select(

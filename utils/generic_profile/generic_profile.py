@@ -114,7 +114,9 @@ class GenericProfile:
                     df = df[df['region'] == 'Canada']
                 elif 'National' in df['region'].unique():
                     df = df[df['region'] == 'National']
-
+            # if time is a Timestamp, convert to int only keeping the year
+            if df['time'].dtype == 'datetime64[ns]':
+                df['time'] = df['time'].dt.year
             df = df.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
             df['region'] = 'National'
 
