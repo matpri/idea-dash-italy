@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -15,7 +15,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     )
 
     try:
-        df_scen = subset(df, region, scenario, aggregate, season)
+        df_scen = subset(df, region, year, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
 
         for i, tech in enumerate(techs):
@@ -53,25 +53,12 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     return fig
 
 
-def subset(df, region, scenario, aggregate, season=None):
+def subset(df, region, year, scenario, aggregate, season=None):
     df_scen = df.copy(deep=True)
-    df_scen['time'] = pd.to_datetime(df_scen['time'])
-    df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+    df_scen['year'] = pd.to_datetime(df_scen['time'])
+    df_scen['year'] = df_scen['year'].dt.strftime('%Y')
 
-
-    # Remove the years where all entries in the value column are 0
-    value_sum_per_year = df_scen.groupby('time')['value'].sum()
-    years_with_non_zero_values = value_sum_per_year[value_sum_per_year != 0].index
-    df_scen = df_scen[df_scen['time'].isin(years_with_non_zero_values)]
-    years = df_scen['time'].unique().tolist()
-
-    if season is not None:
-        df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
-    else:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
+    df_scen = df_scen[df_scen['year'] == year]
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
@@ -84,21 +71,6 @@ def subset(df, region, scenario, aggregate, season=None):
 
     df_scen = df_scen[df_scen['value'] != 0]
 
-
     df_scen = df_scen.fillna(0)
-    year_pad = []
-    for var in df_scen.variable.unique():
-        for scen in df_scen.scenario.unique():
-            for year in years:
-                if not df_scen[
-                    (df_scen['variable'] == var) & (df_scen['scenario'] == scen) & (
-                            df_scen['time'] == year)].empty:
-                    continue
-                else:
-                    year_pad.append(
-                        {'variable': var, 'region': region, 'time': year, 'scenario': scen, 'value': 0, 'total': 0},
-                    )
-    year_pad_df = pd.DataFrame(year_pad)
-    df_scen = pd.concat([df_scen, year_pad_df])
     df_scen = df_scen.sort_values(by=['time', 'variable'], key=lambda x: x.map(utils.custom_sort_key))
     return df_scen

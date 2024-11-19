@@ -1,9 +1,10 @@
 import dash_mantine_components as dmc
+import pandas as pd
 from dash import html, dcc
 
 from components import ids
 from utils.generic_profile.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
-    pie_chart
+    pie_chart, trend_over_year
 
 
 def render_plot(type, name, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False,
@@ -18,6 +19,8 @@ def render_plot(type, name, df, aggregate, scenarios, region, year, scenario, pa
                                    text_active=text_active, pattern_list=pattern_list)
     elif type == 'Trend Over Years':
         return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
+    elif type == 'Trend in one Years':
+        return trend_over_year.plot(df, scenario, region, year, aggregate, name, "Year", name, name, unit)
     elif type == 'Pie Chart':
         return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name)
     else:
@@ -29,7 +32,18 @@ def create_generic_plots(model, name, profile):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
-        years = df['time'].unique().tolist()
+        years = pd.to_datetime(df['time']).dt.strftime('%Y').unique().tolist()
+
+        # set a boolean that shows that there are unique days in a single year
+        dates = pd.to_datetime(df['time'])
+        # find dates that are not in the same year
+        unique_dates = dates.dt.year.unique()
+        trend_one_year = False
+        for year in unique_dates:
+            if len(dates[dates.dt.year == year].dt.dayofyear.unique()) > 1:
+                trend_one_year = True
+                break
+
 
         by_year_widgets = dmc.Select(
             label='Region',
@@ -83,11 +97,14 @@ def create_generic_plots(model, name, profile):
             style={'display': 'block'}
         )
 
+        plot_options = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
+        if trend_one_year:
+            plot_options.append('Trend in one Years')
         widget_layout = html.Div([
             dmc.Select(
                 label='Plot Options',
-                data=[{'label': plot, 'value': plot} for plot in
-                      ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+                data=[{'label': plot, 'value': plot} for plot in plot_options
+                      ],
                 value='By Year',
                 id={
                     'type': 'generic-plot-select',
