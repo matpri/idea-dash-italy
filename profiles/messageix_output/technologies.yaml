@@ -1,710 +1,1330 @@
+Capacity Additions|Electricity|Biomass|w/ CCS:
+  color: '#7d4f0e'
+  group: Capacity Additions|Electricity|Biomass
+  group_color: '#e3d057'
+  name: Capacity Additions|Electricity|Biomass|w/ CCS
+Capacity Additions|Electricity|Biomass|w/o CCS:
+  color: '#0633d8'
+  group: Capacity Additions|Electricity|Biomass
+  group_color: '#e3d057'
+  name: Capacity Additions|Electricity|Biomass|w/o CCS
+Capacity Additions|Electricity|Coal|w/ CCS:
+  color: '#1be74a'
+  group: Capacity Additions|Electricity|Coal
+  group_color: '#22df9e'
+  name: Capacity Additions|Electricity|Coal|w/ CCS
+Capacity Additions|Electricity|Coal|w/o CCS:
+  color: '#8edd52'
+  group: Capacity Additions|Electricity|Coal
+  group_color: '#22df9e'
+  name: Capacity Additions|Electricity|Coal|w/o CCS
+Capacity Additions|Electricity|Gas|w/ CCS:
+  color: '#35ede3'
+  group: Capacity Additions|Electricity|Gas
+  group_color: '#c09e89'
+  name: Capacity Additions|Electricity|Gas|w/ CCS
+Capacity Additions|Electricity|Gas|w/o CCS:
+  color: '#81ccde'
+  group: Capacity Additions|Electricity|Gas
+  group_color: '#c09e89'
+  name: Capacity Additions|Electricity|Gas|w/o CCS
+Capacity Additions|Electricity|Hydro|1:
+  color: '#54fd87'
+  group: Capacity Additions|Electricity|Hydro
+  group_color: '#f9aae0'
+  name: Capacity Additions|Electricity|Hydro|1
+Capacity Additions|Electricity|Hydro|2:
+  color: '#fa3e45'
+  group: Capacity Additions|Electricity|Hydro
+  group_color: '#f9aae0'
+  name: Capacity Additions|Electricity|Hydro|2
+Capacity Additions|Electricity|Nuclear|1:
+  color: '#dc4cfb'
+  group: Capacity Additions|Electricity|Nuclear
+  group_color: '#82df75'
+  name: Capacity Additions|Electricity|Nuclear|1
+Capacity Additions|Electricity|Nuclear|2:
+  color: '#0851e0'
+  group: Capacity Additions|Electricity|Nuclear
+  group_color: '#82df75'
+  name: Capacity Additions|Electricity|Nuclear|2
+Capacity Additions|Electricity|Oil|w/ CCS:
+  color: '#6a742a'
+  group: Capacity Additions|Electricity|Oil
+  group_color: '#5243bb'
+  name: Capacity Additions|Electricity|Oil|w/ CCS
+Capacity Additions|Electricity|Oil|w/o CCS:
+  color: '#bec57a'
+  group: Capacity Additions|Electricity|Oil
+  group_color: '#5243bb'
+  name: Capacity Additions|Electricity|Oil|w/o CCS
+Capacity Additions|Electricity|Solar|CSP:
+  color: '#fafb73'
+  group: Capacity Additions|Electricity|Solar
+  group_color: '#2893fc'
+  name: Capacity Additions|Electricity|Solar|CSP
+Capacity Additions|Electricity|Solar|PV:
+  color: '#d8a95f'
+  group: Capacity Additions|Electricity|Solar
+  group_color: '#2893fc'
+  name: Capacity Additions|Electricity|Solar|PV
 Capacity Additions|Electricity|Storage:
-  color: '#ebcf91'
+  color: '#00c271'
   group: Capacity Additions|Electricity|Storage Capacity
-  group_color: '#7c96bb'
+  group_color: '#f7f3a0'
   name: Capacity Additions|Electricity|Storage
+Capacity Additions|Electricity|Wind|Offshore:
+  color: '#86b6f2'
+  group: Capacity Additions|Electricity|Wind
+  group_color: '#1b4070'
+  name: Capacity Additions|Electricity|Wind|Offshore
+Capacity Additions|Electricity|Wind|Onshore:
+  color: '#5e125d'
+  group: Capacity Additions|Electricity|Wind
+  group_color: '#1b4070'
+  name: Capacity Additions|Electricity|Wind|Onshore
+Capacity Additions|Gases|Biomass:
+  color: '#9053d3'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Gases|Biomass
+Capacity Additions|Gases|Coal:
+  color: '#821556'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Gases|Coal
+Capacity Additions|Gases|Coal|w/o CCS:
+  color: '#7b9857'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Gases|Coal|w/o CCS
+Capacity Additions|Hydrogen|Biomass:
+  color: '#16a4e1'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Biomass
+Capacity Additions|Hydrogen|Biomass|w/ CCS:
+  color: '#d54dff'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Biomass|w/ CCS
+Capacity Additions|Hydrogen|Biomass|w/o CCS:
+  color: '#8330ff'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Biomass|w/o CCS
+Capacity Additions|Hydrogen|Coal:
+  color: '#d6a337'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Coal
+Capacity Additions|Hydrogen|Coal|w/ CCS:
+  color: '#554883'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Coal|w/ CCS
+Capacity Additions|Hydrogen|Coal|w/o CCS:
+  color: '#326684'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Coal|w/o CCS
+Capacity Additions|Hydrogen|Electricity:
+  color: '#1fed0d'
+  group: Capacity Additions|Gases
+  group_color: '#6a8f23'
+  name: Capacity Additions|Hydrogen|Electricity
+Capacity Additions|Hydrogen|Gas|w/ CCS:
+  color: '#346dd0'
+  group: Capacity Additions|Hydrogen|Gas
+  group_color: '#7189ea'
+  name: Capacity Additions|Hydrogen|Gas|w/ CCS
+Capacity Additions|Hydrogen|Gas|w/o CCS:
+  color: '#831544'
+  group: Capacity Additions|Hydrogen|Gas
+  group_color: '#7189ea'
+  name: Capacity Additions|Hydrogen|Gas|w/o CCS
+Capacity Additions|Liquids|Biomass:
+  color: '#f47cab'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Biomass
+Capacity Additions|Liquids|Biomass|w/ CCS:
+  color: '#52909a'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Biomass|w/ CCS
+Capacity Additions|Liquids|Biomass|w/o CCS:
+  color: '#c640da'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Biomass|w/o CCS
+Capacity Additions|Liquids|Coal:
+  color: '#07cefe'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Coal
+Capacity Additions|Liquids|Coal|w/ CCS:
+  color: '#3b7525'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Coal|w/ CCS
+Capacity Additions|Liquids|Coal|w/o CCS:
+  color: '#769fa7'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Coal|w/o CCS
+Capacity Additions|Liquids|Gas:
+  color: '#e7758e'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Gas
+Capacity Additions|Liquids|Gas|w/ CCS:
+  color: '#17b3f8'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Gas|w/ CCS
+Capacity Additions|Liquids|Gas|w/o CCS:
+  color: '#2ee19b'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Gas|w/o CCS
+Capacity Additions|Liquids|Oil:
+  color: '#72c11a'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Oil
+Capacity Additions|Liquids|Oil|w/o CCS:
+  color: '#8b329e'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Capacity Additions|Liquids|Oil|w/o CCS
+Capacity|Electricity|Biomass|w/ CCS:
+  color: '#787632'
+  group: Capacity|Electricity|Biomass
+  group_color: '#0d6b02'
+  name: Capacity|Electricity|Biomass|w/ CCS
+Capacity|Electricity|Biomass|w/o CCS:
+  color: '#ebe1a2'
+  group: Capacity|Electricity|Biomass
+  group_color: '#0d6b02'
+  name: Capacity|Electricity|Biomass|w/o CCS
+Capacity|Electricity|Coal|w/ CCS:
+  color: '#946ddd'
+  group: Capacity|Electricity|Coal
+  group_color: '#665166'
+  name: Capacity|Electricity|Coal|w/ CCS
+Capacity|Electricity|Coal|w/o CCS:
+  color: '#fd50b4'
+  group: Capacity|Electricity|Coal
+  group_color: '#665166'
+  name: Capacity|Electricity|Coal|w/o CCS
+Capacity|Electricity|Gas|w/ CCS:
+  color: '#5b5ba2'
+  group: Capacity|Electricity|Gas
+  group_color: '#095a84'
+  name: Capacity|Electricity|Gas|w/ CCS
+Capacity|Electricity|Gas|w/o CCS:
+  color: '#5c9ded'
+  group: Capacity|Electricity|Gas
+  group_color: '#095a84'
+  name: Capacity|Electricity|Gas|w/o CCS
+Capacity|Electricity|Hydro|1:
+  color: '#aae2f4'
+  group: Capacity|Electricity|Hydro
+  group_color: '#e93dea'
+  name: Capacity|Electricity|Hydro|1
+Capacity|Electricity|Hydro|2:
+  color: '#b2f40f'
+  group: Capacity|Electricity|Hydro
+  group_color: '#e93dea'
+  name: Capacity|Electricity|Hydro|2
+Capacity|Electricity|Nuclear|1:
+  color: '#a57317'
+  group: Capacity|Electricity|Nuclear
+  group_color: '#6c6c3d'
+  name: Capacity|Electricity|Nuclear|1
+Capacity|Electricity|Nuclear|2:
+  color: '#a130bb'
+  group: Capacity|Electricity|Nuclear
+  group_color: '#6c6c3d'
+  name: Capacity|Electricity|Nuclear|2
+Capacity|Electricity|Oil|w/ CCS:
+  color: '#ee5014'
+  group: Capacity|Electricity|Oil
+  group_color: '#52b6d4'
+  name: Capacity|Electricity|Oil|w/ CCS
+Capacity|Electricity|Oil|w/o CCS:
+  color: '#e05d5f'
+  group: Capacity|Electricity|Oil
+  group_color: '#52b6d4'
+  name: Capacity|Electricity|Oil|w/o CCS
+Capacity|Electricity|Solar|CSP:
+  color: '#35ee24'
+  group: Capacity|Electricity|Solar
+  group_color: '#669c71'
+  name: Capacity|Electricity|Solar|CSP
+Capacity|Electricity|Solar|PV:
+  color: '#f120b3'
+  group: Capacity|Electricity|Solar
+  group_color: '#669c71'
+  name: Capacity|Electricity|Solar|PV
+Capacity|Electricity|Wind|Offshore:
+  color: '#b82a12'
+  group: Capacity|Electricity|Wind
+  group_color: '#bda7c9'
+  name: Capacity|Electricity|Wind|Offshore
+Capacity|Electricity|Wind|Onshore:
+  color: '#f57acb'
+  group: Capacity|Electricity|Wind
+  group_color: '#bda7c9'
+  name: Capacity|Electricity|Wind|Onshore
+Capacity|Gases|Biomass:
+  color: '#6b3f16'
+  group: Capacity|Gases
+  group_color: '#27a57e'
+  name: Capacity|Gases|Biomass
+Capacity|Gases|Coal:
+  color: '#3c19cc'
+  group: Capacity|Gases
+  group_color: '#27a57e'
+  name: Capacity|Gases|Coal
+Capacity|Hydrogen|Biomass|w/ CCS:
+  color: '#926943'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Biomass|w/ CCS
+Capacity|Hydrogen|Biomass|w/o CCS:
+  color: '#1b5fdb'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Biomass|w/o CCS
+Capacity|Hydrogen|Coal|w/ CCS:
+  color: '#f57325'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Coal|w/ CCS
+Capacity|Hydrogen|Coal|w/o CCS:
+  color: '#cf6790'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Coal|w/o CCS
+Capacity|Hydrogen|Electricity:
+  color: '#27faae'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Electricity
+Capacity|Hydrogen|Gas|w/ CCS:
+  color: '#dde6f7'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Gas|w/ CCS
+Capacity|Hydrogen|Gas|w/o CCS:
+  color: '#90833c'
+  group: Capacity|Hydrogen
+  group_color: '#8ac311'
+  name: Capacity|Hydrogen|Gas|w/o CCS
+Capacity|Liquids|Biomass:
+  color: '#208f90'
+  group: Capacity|Liquids
+  group_color: '#2de8b2'
+  name: Capacity|Liquids|Biomass
+Capacity|Liquids|Biomass|w/ CCS:
+  color: '#dd4fa9'
+  group: Capacity|Liquids
+  group_color: '#2de8b2'
+  name: Capacity|Liquids|Biomass|w/ CCS
+Capacity|Liquids|Biomass|w/o CCS:
+  color: '#f924f1'
+  group: Capacity|Liquids
+  group_color: '#2de8b2'
+  name: Capacity|Liquids|Biomass|w/o CCS
+Capacity|Liquids|Coal|w/ CCS:
+  color: '#140dc9'
+  group: Capacity|Liquids|Coal
+  group_color: '#047cbe'
+  name: Capacity|Liquids|Coal|w/ CCS
+Capacity|Liquids|Coal|w/o CCS:
+  color: '#223119'
+  group: Capacity|Liquids|Coal
+  group_color: '#047cbe'
+  name: Capacity|Liquids|Coal|w/o CCS
+Capacity|Liquids|Gas|w/ CCS:
+  color: '#27ebc0'
+  group: Capacity|Liquids|Gas
+  group_color: '#124b0d'
+  name: Capacity|Liquids|Gas|w/ CCS
+Capacity|Liquids|Gas|w/o CCS:
+  color: '#7f38ab'
+  group: Capacity|Liquids|Gas
+  group_color: '#124b0d'
+  name: Capacity|Liquids|Gas|w/o CCS
+Capacity|Liquids|Oil|w/o CCS:
+  color: '#b7b159'
+  group: Capacity|Liquids|Oil
+  group_color: '#9d4aee'
+  name: Capacity|Liquids|Oil|w/o CCS
 Carbon Sequestration|CCS|Biomass|Energy|Supply:
-  color: '#f55281'
+  color: '#3d4c53'
   group: Carbon Sequestration|CCS|Biomass
-  group_color: '#98756b'
+  group_color: '#b88090'
   name: Carbon Sequestration|CCS|Biomass|Energy|Supply
 Carbon Sequestration|CCS|Biomass|Energy|Supply|Electricity:
-  color: '#fe6fb1'
+  color: '#833078'
   group: Carbon Sequestration|CCS|Biomass
-  group_color: '#98756b'
+  group_color: '#b88090'
   name: Carbon Sequestration|CCS|Biomass|Energy|Supply|Electricity
 Carbon Sequestration|CCS|Biomass|Energy|Supply|Hydrogen:
-  color: '#f76aa1'
+  color: '#e1d282'
   group: Carbon Sequestration|CCS|Biomass
-  group_color: '#98756b'
+  group_color: '#b88090'
   name: Carbon Sequestration|CCS|Biomass|Energy|Supply|Hydrogen
 Carbon Sequestration|CCS|Biomass|Energy|Supply|Liquids:
-  color: '#c24155'
+  color: '#1600b6'
   group: Carbon Sequestration|CCS|Biomass
-  group_color: '#98756b'
+  group_color: '#b88090'
   name: Carbon Sequestration|CCS|Biomass|Energy|Supply|Liquids
 Carbon Sequestration|CCS|Fossil|Energy|Supply|Electricity:
-  color: '#e995e2'
+  color: '#56bb74'
   group: Carbon Sequestration|CCS|Fossil
-  group_color: '#fa059c'
+  group_color: '#ac8a88'
   name: Carbon Sequestration|CCS|Fossil|Energy|Supply|Electricity
 Carbon Sequestration|CCS|Fossil|Energy|Supply|Hydrogen:
-  color: '#b77fee'
+  color: '#22338f'
   group: Carbon Sequestration|CCS|Fossil
-  group_color: '#fa059c'
+  group_color: '#ac8a88'
   name: Carbon Sequestration|CCS|Fossil|Energy|Supply|Hydrogen
 Carbon Sequestration|CCS|Fossil|Energy|Supply|Liquids:
-  color: '#5c2d18'
+  color: '#c0fe3b'
   group: Carbon Sequestration|CCS|Fossil
-  group_color: '#fa059c'
+  group_color: '#ac8a88'
   name: Carbon Sequestration|CCS|Fossil|Energy|Supply|Liquids
-"Carbon Sequestration|CCS|Fossil|Energy|Supply\xDF":
-  color: '#70aa98'
-  group: Carbon Sequestration|CCS|Fossil
-  group_color: '#fa059c'
-  name: "Carbon Sequestration|CCS|Fossil|Energy|Supply\xDF"
-Carbon Sequestration|CCS|Industrial Processes:
-  color: '#485258'
-  group: Carbon Sequestration|CCS|Industrial Processes
-  group_color: '#d0c842'
-  name: Carbon Sequestration|CCS|Industrial Processes
+Cumulative Capacity|Electricity:
+  color: '#0166bc'
+  group: Capacity Additions|Liquids
+  group_color: '#a30cd2'
+  name: Cumulative Capacity|Electricity
 Emissions|CO2|Energy|Demand|Commercial:
-  color: '#16ec01'
+  color: '#d66a8b'
   group: Emissions|CO2|Energy|Demand
-  group_color: '#245c46'
+  group_color: '#4cfb29'
   name: Emissions|CO2|Energy|Demand|Commercial
 Emissions|CO2|Energy|Demand|Industry:
-  color: '#f4f3af'
+  color: '#8f0559'
   group: Emissions|CO2|Energy|Demand
-  group_color: '#245c46'
+  group_color: '#4cfb29'
   name: Emissions|CO2|Energy|Demand|Industry
 Emissions|CO2|Energy|Demand|Other Sector:
-  color: '#79dd03'
+  color: '#baaa6b'
   group: Emissions|CO2|Energy|Demand
-  group_color: '#245c46'
+  group_color: '#4cfb29'
   name: Emissions|CO2|Energy|Demand|Other Sector
 Emissions|CO2|Energy|Demand|Residential:
-  color: '#3b618c'
+  color: '#680d0b'
   group: Emissions|CO2|Energy|Demand
-  group_color: '#245c46'
+  group_color: '#4cfb29'
   name: Emissions|CO2|Energy|Demand|Residential
 Emissions|CO2|Energy|Demand|Transportation:
-  color: '#7f4064'
+  color: '#5ffb2e'
   group: Emissions|CO2|Energy|Demand
-  group_color: '#245c46'
+  group_color: '#4cfb29'
   name: Emissions|CO2|Energy|Demand|Transportation
 Emissions|CO2|Energy|Supply|Electricity:
-  color: '#7fbe65'
+  color: '#ddfaf1'
   group: Emissions|CO2|Energy|Supply|Electricity and Heat
-  group_color: '#7f66db'
+  group_color: '#12372d'
   name: Emissions|CO2|Energy|Supply|Electricity
 Emissions|CO2|Energy|Supply|Gases|Biomass|Combustion:
-  color: '#a13718'
+  color: '#32c253'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Biomass|Combustion
 Emissions|CO2|Energy|Supply|Gases|Biomass|Fugitive:
-  color: '#539b10'
+  color: '#48482a'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Biomass|Fugitive
 Emissions|CO2|Energy|Supply|Gases|Coal|Combustion:
-  color: '#14e568'
+  color: '#84565c'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Coal|Combustion
 Emissions|CO2|Energy|Supply|Gases|Coal|Fugitive:
-  color: '#13f10d'
+  color: '#73d350'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Coal|Fugitive
 Emissions|CO2|Energy|Supply|Gases|Extraction|Combustion:
-  color: '#caa496'
+  color: '#9521b9'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Extraction|Combustion
 Emissions|CO2|Energy|Supply|Gases|Extraction|Fugitive:
-  color: '#b1c39e'
+  color: '#199f57'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Extraction|Fugitive
 Emissions|CO2|Energy|Supply|Gases|Hydrogen|Combustion:
-  color: '#e9bb3a'
+  color: '#3dfb9b'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Hydrogen|Combustion
 Emissions|CO2|Energy|Supply|Gases|Hydrogen|Fugitive:
-  color: '#12134c'
+  color: '#088ea6'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Hydrogen|Fugitive
 Emissions|CO2|Energy|Supply|Gases|Natural Gas|Combustion:
-  color: '#f5cab9'
+  color: '#cd4185'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Natural Gas|Combustion
 Emissions|CO2|Energy|Supply|Gases|Natural Gas|Fugitive:
-  color: '#fd340c'
+  color: '#e8df6d'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Natural Gas|Fugitive
 Emissions|CO2|Energy|Supply|Gases|Transportation|Combustion:
-  color: '#c1240a'
+  color: '#75a218'
   group: Emissions|CO2|Energy|Supply|Gases|Combustion
-  group_color: '#255380'
+  group_color: '#ae3adf'
   name: Emissions|CO2|Energy|Supply|Gases|Transportation|Combustion
 Emissions|CO2|Energy|Supply|Gases|Transportation|Fugitive:
-  color: '#d503ec'
+  color: '#3db1ce'
   group: Emissions|CO2|Energy|Supply|Gases|Fugitive
-  group_color: '#a5e5af'
+  group_color: '#5f8b96'
   name: Emissions|CO2|Energy|Supply|Gases|Transportation|Fugitive
 Emissions|CO2|Energy|Supply|Heat:
-  color: '#95463a'
+  color: '#3d1d2e'
   group: Emissions|CO2|Energy|Supply|Electricity and Heat
-  group_color: '#7f66db'
+  group_color: '#12372d'
   name: Emissions|CO2|Energy|Supply|Heat
 Emissions|CO2|Energy|Supply|Liquids|Biomass|Combustion:
-  color: '#008920'
+  color: '#5557f7'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Biomass|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Biomass|Fugitive:
-  color: '#156231'
+  color: '#023ae0'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Biomass|Fugitive
 Emissions|CO2|Energy|Supply|Liquids|Coal|Combustion:
-  color: '#93fb9b'
+  color: '#8901c3'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Coal|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Coal|Fugitive:
-  color: '#44cfcf'
+  color: '#0315fe'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Coal|Fugitive
 Emissions|CO2|Energy|Supply|Liquids|Extraction|Combustion:
-  color: '#873125'
+  color: '#0e2b4b'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Extraction|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Extraction|Fugitive:
-  color: '#6cfd2b'
+  color: '#a1aa64'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Extraction|Fugitive
 Emissions|CO2|Energy|Supply|Liquids|Natural Gas|Combustion:
-  color: '#15596d'
+  color: '#507de2'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Natural Gas|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Natural Gas|Fugitive:
-  color: '#711eaa'
+  color: '#ffcf56'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Natural Gas|Fugitive
 Emissions|CO2|Energy|Supply|Liquids|Oil|Combustion:
-  color: '#2fed85'
+  color: '#9aa7dc'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Oil|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Oil|Fugitive:
-  color: '#e0ee41'
+  color: '#c4e435'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Oil|Fugitive
 Emissions|CO2|Energy|Supply|Liquids|Transportation|Combustion:
-  color: '#045323'
+  color: '#0c9883'
   group: Emissions|CO2|Energy|Supply|Liquids|Combustion
-  group_color: '#e3c383'
+  group_color: '#884884'
   name: Emissions|CO2|Energy|Supply|Liquids|Transportation|Combustion
 Emissions|CO2|Energy|Supply|Liquids|Transportation|Fugitive:
-  color: '#e33c61'
+  color: '#b6c771'
   group: Emissions|CO2|Energy|Supply|Liquids|Fugitive
-  group_color: '#a092cb'
+  group_color: '#cda901'
   name: Emissions|CO2|Energy|Supply|Liquids|Transportation|Fugitive
 Emissions|CO2|Energy|Supply|Solids|Biomass|Combustion:
-  color: '#d77c4d'
+  color: '#076a83'
   group: Emissions|CO2|Energy|Supply|Solids|Combustion
-  group_color: '#b9e318'
+  group_color: '#f3fcb8'
   name: Emissions|CO2|Energy|Supply|Solids|Biomass|Combustion
 Emissions|CO2|Energy|Supply|Solids|Biomass|Fugitive:
-  color: '#19a728'
+  color: '#009db1'
   group: Emissions|CO2|Energy|Supply|Solids|Fugitive
-  group_color: '#86e100'
+  group_color: '#9c810e'
   name: Emissions|CO2|Energy|Supply|Solids|Biomass|Fugitive
 Emissions|CO2|Energy|Supply|Solids|Coal|Combustion:
-  color: '#fbe7e3'
+  color: '#c90240'
   group: Emissions|CO2|Energy|Supply|Solids|Combustion
-  group_color: '#b9e318'
+  group_color: '#f3fcb8'
   name: Emissions|CO2|Energy|Supply|Solids|Coal|Combustion
 Emissions|CO2|Energy|Supply|Solids|Coal|Fugitive:
-  color: '#44f0bd'
+  color: '#3e4181'
   group: Emissions|CO2|Energy|Supply|Solids|Fugitive
-  group_color: '#86e100'
+  group_color: '#9c810e'
   name: Emissions|CO2|Energy|Supply|Solids|Coal|Fugitive
 Emissions|CO2|Energy|Supply|Solids|Extraction|Combustion:
-  color: '#fa1ae8'
+  color: '#24c25d'
   group: Emissions|CO2|Energy|Supply|Solids|Combustion
-  group_color: '#b9e318'
+  group_color: '#f3fcb8'
   name: Emissions|CO2|Energy|Supply|Solids|Extraction|Combustion
 Emissions|CO2|Energy|Supply|Solids|Extraction|Fugitive:
-  color: '#bc0a24'
+  color: '#5a6807'
   group: Emissions|CO2|Energy|Supply|Solids|Fugitive
-  group_color: '#86e100'
+  group_color: '#9c810e'
   name: Emissions|CO2|Energy|Supply|Solids|Extraction|Fugitive
 Emissions|CO2|Energy|Supply|Solids|Transportation|Combustion:
-  color: '#bc646d'
+  color: '#0c6625'
   group: Emissions|CO2|Energy|Supply|Solids|Combustion
-  group_color: '#b9e318'
+  group_color: '#f3fcb8'
   name: Emissions|CO2|Energy|Supply|Solids|Transportation|Combustion
 Emissions|CO2|Energy|Supply|Solids|Transportation|Fugitive:
-  color: '#e2f989'
+  color: '#fab19a'
   group: Emissions|CO2|Energy|Supply|Solids|Fugitive
-  group_color: '#86e100'
+  group_color: '#9c810e'
   name: Emissions|CO2|Energy|Supply|Solids|Transportation|Fugitive
 Emissions|HFC|Total:
-  color: '#3766d3'
+  color: '#7ccf65'
   group: Emissions|HFC
-  group_color: '#1484dd'
+  group_color: '#1ba67b'
   name: Emissions|HFC|Total
 Final Energy|Industry|Electricity:
-  color: '#ff7adf'
+  color: '#b7abf3'
   group: Final Energy|Electricity
-  group_color: '#c43e8e'
+  group_color: '#3ae46a'
   name: Final Energy|Industry|Electricity
 Final Energy|Industry|Gases:
-  color: '#8642d8'
+  color: '#fdf45e'
   group: Final Energy|Gases
-  group_color: '#9b639e'
+  group_color: '#39fff3'
   name: Final Energy|Industry|Gases
 Final Energy|Industry|Heat:
-  color: '#5efd45'
+  color: '#dfb3ea'
   group: Final Energy|Heat
-  group_color: '#049986'
+  group_color: '#f45751'
   name: Final Energy|Industry|Heat
 Final Energy|Industry|Hydrogen:
-  color: '#c3366b'
+  color: '#d0ab1d'
   group: Final Energy|Hydrogen
-  group_color: '#ed8343'
+  group_color: '#9592df'
   name: Final Energy|Industry|Hydrogen
 Final Energy|Industry|Liquids|Biomass:
-  color: '#025f10'
+  color: '#b969cc'
   group: Final Energy|Liquids|Biomass
-  group_color: '#76af5e'
+  group_color: '#389add'
   name: Final Energy|Industry|Liquids|Biomass
 Final Energy|Industry|Liquids|Coal:
-  color: '#cdc905'
+  color: '#383c85'
   group: Final Energy|Liquids|Coal
-  group_color: '#daba38'
+  group_color: '#34df1a'
   name: Final Energy|Industry|Liquids|Coal
 Final Energy|Industry|Liquids|Gas:
-  color: '#9b139f'
+  color: '#f05b80'
   group: Final Energy|Liquids|Gas
-  group_color: '#779ab7'
+  group_color: '#c1c579'
   name: Final Energy|Industry|Liquids|Gas
 Final Energy|Industry|Liquids|Oil:
-  color: '#e40a8b'
+  color: '#0b0442'
   group: Final Energy|Liquids|Oil
-  group_color: '#8ce2d1'
+  group_color: '#0288ac'
   name: Final Energy|Industry|Liquids|Oil
 Final Energy|Industry|Other:
-  color: '#d5a1b2'
+  color: '#83f9e9'
   group: Final Energy|Solar
-  group_color: '#947db1'
+  group_color: '#d81016'
   name: Final Energy|Industry|Other
 Final Energy|Industry|Solids|Biomass:
-  color: '#58df46'
+  color: '#682240'
   group: Final Energy|Solids|Biomass
-  group_color: '#533ab2'
+  group_color: '#9c7256'
   name: Final Energy|Industry|Solids|Biomass
 Final Energy|Industry|Solids|Coal:
-  color: '#28eff3'
+  color: '#3c4987'
   group: Final Energy|Solids|Coal
-  group_color: '#d3bfc6'
+  group_color: '#7604c2'
   name: Final Energy|Industry|Solids|Coal
+Final Energy|Non-Energy Use|Biomass:
+  color: '#991e42'
+  group: Final Energy|Non-Energy Use
+  group_color: '#48b822'
+  name: Final Energy|Non-Energy Use|Biomass
+Final Energy|Non-Energy Use|Coal:
+  color: '#fbd21b'
+  group: Final Energy|Non-Energy Use
+  group_color: '#48b822'
+  name: Final Energy|Non-Energy Use|Coal
+Final Energy|Non-Energy Use|Gas:
+  color: '#84386d'
+  group: Final Energy|Non-Energy Use
+  group_color: '#48b822'
+  name: Final Energy|Non-Energy Use|Gas
+Final Energy|Non-Energy Use|Oil:
+  color: '#9758ae'
+  group: Final Energy|Non-Energy Use
+  group_color: '#48b822'
+  name: Final Energy|Non-Energy Use|Oil
 Final Energy|Residential and Commercial|Electricity:
-  color: '#c4ce11'
+  color: '#ca7e1e'
   group: Final Energy|Electricity
-  group_color: '#c43e8e'
+  group_color: '#3ae46a'
   name: Final Energy|Residential and Commercial|Electricity
 Final Energy|Residential and Commercial|Gases:
-  color: '#7cb1de'
+  color: '#dd7e8e'
   group: Final Energy|Gases
-  group_color: '#9b639e'
+  group_color: '#39fff3'
   name: Final Energy|Residential and Commercial|Gases
 Final Energy|Residential and Commercial|Heat:
-  color: '#9537d8'
+  color: '#4fc68a'
   group: Final Energy|Heat
-  group_color: '#049986'
+  group_color: '#f45751'
   name: Final Energy|Residential and Commercial|Heat
 Final Energy|Residential and Commercial|Hydrogen:
-  color: '#15b66b'
+  color: '#0355ef'
   group: Final Energy|Hydrogen
-  group_color: '#ed8343'
+  group_color: '#9592df'
   name: Final Energy|Residential and Commercial|Hydrogen
 Final Energy|Residential and Commercial|Liquids|Biomass:
-  color: '#05d9d3'
+  color: '#da0777'
   group: Final Energy|Liquids|Biomass
-  group_color: '#76af5e'
+  group_color: '#389add'
   name: Final Energy|Residential and Commercial|Liquids|Biomass
 Final Energy|Residential and Commercial|Liquids|Coal:
-  color: '#ec9f95'
+  color: '#c7dec1'
   group: Final Energy|Liquids|Coal
-  group_color: '#daba38'
+  group_color: '#34df1a'
   name: Final Energy|Residential and Commercial|Liquids|Coal
 Final Energy|Residential and Commercial|Liquids|Gas:
-  color: '#59a2ad'
+  color: '#220c4f'
   group: Final Energy|Liquids|Gas
-  group_color: '#779ab7'
+  group_color: '#c1c579'
   name: Final Energy|Residential and Commercial|Liquids|Gas
 Final Energy|Residential and Commercial|Liquids|Oil:
-  color: '#0090ac'
+  color: '#813269'
   group: Final Energy|Liquids|Oil
-  group_color: '#8ce2d1'
+  group_color: '#0288ac'
   name: Final Energy|Residential and Commercial|Liquids|Oil
 Final Energy|Residential and Commercial|Other:
-  color: '#cf81b2'
+  color: '#1ed995'
   group: Final Energy|Solar
-  group_color: '#947db1'
+  group_color: '#d81016'
   name: Final Energy|Residential and Commercial|Other
 Final Energy|Residential and Commercial|Solids|Biomass:
-  color: '#ae9200'
+  color: '#a4fc72'
   group: Final Energy|Solids|Biomass
-  group_color: '#533ab2'
+  group_color: '#9c7256'
   name: Final Energy|Residential and Commercial|Solids|Biomass
-Final Energy|Residential and Commercial|Solids|Biomass|Traditional:
-  color: '#f2eb14'
-  group: Final Energy|Solids|Biomass|Traditional
-  group_color: '#1cbca1'
-  name: Final Energy|Residential and Commercial|Solids|Biomass|Traditional
 Final Energy|Residential and Commercial|Solids|Coal:
-  color: '#f519d5'
+  color: '#2e3645'
   group: Final Energy|Solids|Coal
-  group_color: '#d3bfc6'
+  group_color: '#7604c2'
   name: Final Energy|Residential and Commercial|Solids|Coal
-Final Energy|Solids|Biomass:
-  color: '#fdece0'
-  group: Final Energy|Solids
-  group_color: '#8612da'
-  name: Final Energy|Solids|Biomass
-Final Energy|Solids|Coal:
-  color: '#b9b65c'
-  group: Final Energy|Solids
-  group_color: '#8612da'
-  name: Final Energy|Solids|Coal
 Final Energy|Transportation|Electricity:
-  color: '#567ba8'
+  color: '#60f512'
   group: Final Energy|Electricity
-  group_color: '#c43e8e'
+  group_color: '#3ae46a'
   name: Final Energy|Transportation|Electricity
 Final Energy|Transportation|Gases:
-  color: '#81947c'
+  color: '#980251'
   group: Final Energy|Gases
-  group_color: '#9b639e'
+  group_color: '#39fff3'
   name: Final Energy|Transportation|Gases
 Final Energy|Transportation|Hydrogen:
-  color: '#2f3ade'
+  color: '#a3ab79'
   group: Final Energy|Hydrogen
-  group_color: '#ed8343'
+  group_color: '#9592df'
   name: Final Energy|Transportation|Hydrogen
 Final Energy|Transportation|Liquids|Biomass:
-  color: '#2891dd'
+  color: '#254625'
   group: Final Energy|Liquids|Biomass
-  group_color: '#76af5e'
+  group_color: '#389add'
   name: Final Energy|Transportation|Liquids|Biomass
 Final Energy|Transportation|Liquids|Coal:
-  color: '#c0032b'
+  color: '#e0d638'
   group: Final Energy|Liquids|Coal
-  group_color: '#daba38'
+  group_color: '#34df1a'
   name: Final Energy|Transportation|Liquids|Coal
 Final Energy|Transportation|Liquids|Gas:
-  color: '#bfa7c4'
+  color: '#9dc504'
   group: Final Energy|Liquids|Gas
-  group_color: '#779ab7'
+  group_color: '#c1c579'
   name: Final Energy|Transportation|Liquids|Gas
 Final Energy|Transportation|Liquids|Oil:
-  color: '#45bf81'
+  color: '#825d24'
   group: Final Energy|Liquids|Oil
-  group_color: '#8ce2d1'
+  group_color: '#0288ac'
   name: Final Energy|Transportation|Liquids|Oil
 Final Energy|Transportation|Other:
-  color: '#822f60'
+  color: '#f97399'
   group: Final Energy|Solids|Coal
-  group_color: '#d3bfc6'
+  group_color: '#7604c2'
   name: Final Energy|Transportation|Other
 GDP|Consumption:
-  color: '#383e35'
+  color: '#fce060'
   group: Consumption
-  group_color: '#d06850'
+  group_color: '#d6acb1'
   name: GDP|Consumption
+Investment|Energy Supply|Electricity|Biomass:
+  color: '#48d085'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Biomass
+Investment|Energy Supply|Electricity|Biomass|w/ CCS:
+  color: '#723095'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Biomass|w/ CCS
+Investment|Energy Supply|Electricity|Biomass|w/o CCS:
+  color: '#223895'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Biomass|w/o CCS
 Investment|Energy Supply|Electricity|Coal:
-  color: '#193ddb'
-  group: Investment|Energy Supply|Electricity|Fossil
-  group_color: '#6cafd1'
+  color: '#4d6b62'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Coal
+Investment|Energy Supply|Electricity|Coal|w/ CCS:
+  color: '#d34ea0'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Coal|w/ CCS
+Investment|Energy Supply|Electricity|Coal|w/o CCS:
+  color: '#f6dfdc'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Coal|w/o CCS
+Investment|Energy Supply|Electricity|Electricity Storage:
+  color: '#a08157'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Electricity Storage
+Investment|Energy Supply|Electricity|Fossil:
+  color: '#f282b4'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Fossil
 Investment|Energy Supply|Electricity|Gas:
-  color: '#4f2bc5'
-  group: Investment|Energy Supply|Electricity|Fossil
-  group_color: '#6cafd1'
+  color: '#5c585b'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Gas
+Investment|Energy Supply|Electricity|Gas|w/ CCS:
+  color: '#ef77b0'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Gas|w/ CCS
+Investment|Energy Supply|Electricity|Gas|w/o CCS:
+  color: '#eb8ed6'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Gas|w/o CCS
 Investment|Energy Supply|Electricity|Geothermal:
-  color: '#c8f57a'
-  group: Investment|Energy Supply|Electricity|Non-fossil
-  group_color: '#31d210'
+  color: '#f6c4df'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Geothermal
 Investment|Energy Supply|Electricity|Hydro:
-  color: '#df2030'
-  group: Investment|Energy Supply|Electricity|Non-fossil
-  group_color: '#31d210'
+  color: '#e2df0c'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Hydro
+Investment|Energy Supply|Electricity|Non-fossil:
+  color: '#8a20b5'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Non-fossil
 Investment|Energy Supply|Electricity|Nuclear:
-  color: '#3de92e'
-  group: Investment|Energy Supply|Electricity|Non-fossil
-  group_color: '#31d210'
+  color: '#ba9513'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Nuclear
 Investment|Energy Supply|Electricity|Oil:
-  color: '#ad167e'
-  group: Investment|Energy Supply|Electricity|Fossil
-  group_color: '#6cafd1'
+  color: '#c229a7'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Oil
+Investment|Energy Supply|Electricity|Oil|w/o CCS:
+  color: '#4e284e'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Oil|w/o CCS
+Investment|Energy Supply|Electricity|Other:
+  color: '#e0cff4'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Other
 Investment|Energy Supply|Electricity|Solar:
-  color: '#890b6f'
-  group: Investment|Energy Supply|Electricity|Non-fossil
-  group_color: '#31d210'
+  color: '#65a2a0'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Solar
+Investment|Energy Supply|Electricity|Solar|CSP:
+  color: '#8d0ffa'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Solar|CSP
+Investment|Energy Supply|Electricity|Solar|PV:
+  color: '#4f8bb0'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Solar|PV
+Investment|Energy Supply|Electricity|Transmission and Distribution:
+  color: '#be1aa3'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Transmission and Distribution
 Investment|Energy Supply|Electricity|Wind:
-  color: '#e5ae2f'
-  group: Investment|Energy Supply|Electricity|Non-fossil
-  group_color: '#31d210'
+  color: '#aa95ba'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
   name: Investment|Energy Supply|Electricity|Wind
+Investment|Energy Supply|Electricity|Wind|Offshore:
+  color: '#7fdf55'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Wind|Offshore
+Investment|Energy Supply|Electricity|Wind|Onshore:
+  color: '#d4888c'
+  group: Investment|Energy Supply|Electricity
+  group_color: '#9435f9'
+  name: Investment|Energy Supply|Electricity|Wind|Onshore
 Investment|Energy Supply|Extraction|Coal:
-  color: '#dfb0f5'
-  group: Investment|Energy Supply|Extraction|Fossil
-  group_color: '#f9ab87'
+  color: '#f098e5'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
   name: Investment|Energy Supply|Extraction|Coal
+Investment|Energy Supply|Extraction|Fossil:
+  color: '#09bdc6'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Fossil
 Investment|Energy Supply|Extraction|Gas:
-  color: '#ffc170'
-  group: Investment|Energy Supply|Extraction|Fossil
-  group_color: '#f9ab87'
+  color: '#f391ba'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
   name: Investment|Energy Supply|Extraction|Gas
+Investment|Energy Supply|Extraction|Gas|Conventional:
+  color: '#704333'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Gas|Conventional
+Investment|Energy Supply|Extraction|Gas|Unconventional:
+  color: '#3a070b'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Gas|Unconventional
 Investment|Energy Supply|Extraction|Oil:
-  color: '#c7f445'
-  group: Investment|Energy Supply|Extraction|Fossil
-  group_color: '#f9ab87'
+  color: '#6dc676'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
   name: Investment|Energy Supply|Extraction|Oil
-Land Cover|Total:
-  color: '#78970a'
-  group: Land Cover
-  group_color: '#c38cae'
-  name: Land Cover|Total
+Investment|Energy Supply|Extraction|Oil|Conventional:
+  color: '#72ad7f'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Oil|Conventional
+Investment|Energy Supply|Extraction|Oil|Unconventional:
+  color: '#92b8fe'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Oil|Unconventional
+Investment|Energy Supply|Extraction|Uranium:
+  color: '#8eeaa9'
+  group: Investment|Energy Supply|Extraction
+  group_color: '#2a3412'
+  name: Investment|Energy Supply|Extraction|Uranium
+Investment|Energy Supply|Hydrogen|Fossil:
+  color: '#7e7983'
+  group: Investment|Energy Supply|Hydrogen
+  group_color: '#949349'
+  name: Investment|Energy Supply|Hydrogen|Fossil
+Investment|Energy Supply|Hydrogen|Other:
+  color: '#724940'
+  group: Investment|Energy Supply|Hydrogen
+  group_color: '#949349'
+  name: Investment|Energy Supply|Hydrogen|Other
+Investment|Energy Supply|Hydrogen|Renewable:
+  color: '#03d875'
+  group: Investment|Energy Supply|Hydrogen
+  group_color: '#949349'
+  name: Investment|Energy Supply|Hydrogen|Renewable
+Investment|Energy Supply|Liquids|Biomass:
+  color: '#0ea87b'
+  group: Investment|Energy Supply|Liquids
+  group_color: '#6cc558'
+  name: Investment|Energy Supply|Liquids|Biomass
+Investment|Energy Supply|Liquids|Coal and Gas:
+  color: '#328dbf'
+  group: Investment|Energy Supply|Liquids
+  group_color: '#6cc558'
+  name: Investment|Energy Supply|Liquids|Coal and Gas
+Investment|Energy Supply|Liquids|Oil:
+  color: '#4dfdcd'
+  group: Investment|Energy Supply|Liquids
+  group_color: '#6cc558'
+  name: Investment|Energy Supply|Liquids|Oil
+Investment|Energy Supply|Other|Gases|Other:
+  color: '#851568'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Gases|Other
+Investment|Energy Supply|Other|Gases|Production:
+  color: '#ad3426'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Gases|Production
+Investment|Energy Supply|Other|Gases|Transmission and Distribution:
+  color: '#4abc5d'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Gases|Transmission and Distribution
+Investment|Energy Supply|Other|Liquids|Oil|Other:
+  color: '#aa66df'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Liquids|Oil|Other
+Investment|Energy Supply|Other|Liquids|Oil|Transmission and Distribution:
+  color: '#6b99ab'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Liquids|Oil|Transmission and Distribution
+Investment|Energy Supply|Other|Other:
+  color: '#d9bbe0'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Other
+Investment|Energy Supply|Other|Solids|Biomass|Transmission and Distribution:
+  color: '#8b56b8'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Solids|Biomass|Transmission and Distribution
+Investment|Energy Supply|Other|Solids|Coal|Other:
+  color: '#a8dfdb'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Solids|Coal|Other
+Investment|Energy Supply|Other|Solids|Coal|Transmission and Distribution:
+  color: '#515892'
+  group: Investment|Energy Supply|Other
+  group_color: '#ce8bbc'
+  name: Investment|Energy Supply|Other|Solids|Coal|Transmission and Distribution
 Population|Total:
-  color: '#9e9991'
+  color: '#fb3b0a'
   group: Population
-  group_color: '#976aa9'
+  group_color: '#b2b763'
   name: Population|Total
 Primary Energy|Biomass|w/ CCS:
-  color: '#bc13c9'
+  color: '#ee143f'
   group: Primary Energy|Biomass
-  group_color: '#6366e8'
+  group_color: '#359e89'
   name: Primary Energy|Biomass|w/ CCS
 Primary Energy|Biomass|w/o CCS:
-  color: '#2b7ade'
+  color: '#91649a'
   group: Primary Energy|Biomass
-  group_color: '#6366e8'
+  group_color: '#359e89'
   name: Primary Energy|Biomass|w/o CCS
 Primary Energy|Coal|w/ CCS:
-  color: '#b5d89f'
+  color: '#31a08d'
   group: Primary Energy|Coal
-  group_color: '#ed9a4f'
+  group_color: '#5ed0cf'
   name: Primary Energy|Coal|w/ CCS
 Primary Energy|Coal|w/o CCS:
-  color: '#4e4431'
+  color: '#6b82fc'
   group: Primary Energy|Coal
-  group_color: '#ed9a4f'
+  group_color: '#5ed0cf'
   name: Primary Energy|Coal|w/o CCS
 Primary Energy|Gas|w/ CCS:
-  color: '#eddf3e'
+  color: '#c70220'
   group: Primary Energy|Gas
-  group_color: '#a1dbb5'
+  group_color: '#e60335'
   name: Primary Energy|Gas|w/ CCS
 Primary Energy|Gas|w/o CCS:
-  color: '#d94f7b'
+  color: '#5646c1'
   group: Primary Energy|Gas
-  group_color: '#a1dbb5'
+  group_color: '#e60335'
   name: Primary Energy|Gas|w/o CCS
 Primary Energy|Geothermal:
-  color: '#92ad4a'
+  color: '#505a47'
   group: Primary Energy|Non-Biomass Renewables
-  group_color: '#5218f0'
+  group_color: '#686dce'
   name: Primary Energy|Geothermal
 Primary Energy|Hydro:
-  color: '#06df3e'
+  color: '#f53f7f'
   group: Primary Energy|Non-Biomass Renewables
-  group_color: '#5218f0'
+  group_color: '#686dce'
   name: Primary Energy|Hydro
 Primary Energy|Ocean:
-  color: '#d7d2c2'
+  color: '#a95513'
   group: Primary Energy|Non-Biomass Renewables
-  group_color: '#5218f0'
+  group_color: '#686dce'
   name: Primary Energy|Ocean
 Primary Energy|Oil|w/ CCS:
-  color: '#3358c2'
+  color: '#ebb52e'
   group: Primary Energy|Oil
-  group_color: '#0a880e'
+  group_color: '#97861a'
   name: Primary Energy|Oil|w/ CCS
 Primary Energy|Oil|w/o CCS:
-  color: '#096ef9'
+  color: '#2cf5c3'
   group: Primary Energy|Oil
-  group_color: '#0a880e'
+  group_color: '#97861a'
   name: Primary Energy|Oil|w/o CCS
 Primary Energy|Solar:
-  color: '#bee5f6'
+  color: '#ca2bd4'
   group: Primary Energy|Non-Biomass Renewables
-  group_color: '#5218f0'
+  group_color: '#686dce'
   name: Primary Energy|Solar
 Primary Energy|Wind:
-  color: '#a03bee'
+  color: '#5e24e2'
   group: Primary Energy|Non-Biomass Renewables
-  group_color: '#5218f0'
+  group_color: '#686dce'
   name: Primary Energy|Wind
 Resource|Extraction|Coal:
-  color: '#c4794f'
+  color: '#20144b'
   group: Resource|Extraction
-  group_color: '#87a8f0'
+  group_color: '#8a9639'
   name: Resource|Extraction|Coal
 Resource|Extraction|Gas:
-  color: '#e7f1cc'
+  color: '#0dcfe6'
   group: Resource|Extraction
-  group_color: '#87a8f0'
+  group_color: '#8a9639'
   name: Resource|Extraction|Gas
 Resource|Extraction|Gas|Conventional:
-  color: '#aca8b0'
+  color: '#93dba8'
   group: Resource|Extraction|Gas
-  group_color: '#adcd0e'
+  group_color: '#ace831'
   name: Resource|Extraction|Gas|Conventional
 Resource|Extraction|Gas|Unconventional:
-  color: '#9ffc32'
+  color: '#7a98f3'
   group: Resource|Extraction|Gas
-  group_color: '#adcd0e'
+  group_color: '#ace831'
   name: Resource|Extraction|Gas|Unconventional
 Resource|Extraction|Oil:
-  color: '#5b72dc'
+  color: '#521d37'
   group: Resource|Extraction
-  group_color: '#87a8f0'
+  group_color: '#8a9639'
   name: Resource|Extraction|Oil
 Resource|Extraction|Oil|Conventional:
-  color: '#b0ef43'
+  color: '#9b3d7e'
   group: Resource|Extraction|Oil
-  group_color: '#0a7651'
+  group_color: '#0ee2bc'
   name: Resource|Extraction|Oil|Conventional
 Resource|Extraction|Oil|Unconventional:
-  color: '#d73d44'
+  color: '#2e56af'
   group: Resource|Extraction|Oil
-  group_color: '#0a7651'
+  group_color: '#0ee2bc'
   name: Resource|Extraction|Oil|Unconventional
 Secondary Energy|Electricity|Coal|w/ CCS:
-  color: '#3a923c'
+  color: '#4437bb'
   group: Secondary Energy|Electricity|Fossil|w/ CCS
-  group_color: '#731808'
+  group_color: '#a4278e'
   name: Secondary Energy|Electricity|Coal|w/ CCS
 Secondary Energy|Electricity|Coal|w/o CCS:
-  color: '#bfb12f'
+  color: '#120b5f'
   group: Secondary Energy|Electricity|Fossil|w/o CCS
-  group_color: '#821e97'
+  group_color: '#065bc1'
   name: Secondary Energy|Electricity|Coal|w/o CCS
 Secondary Energy|Electricity|Gas|w/ CCS:
-  color: '#696ef3'
+  color: '#84c251'
   group: Secondary Energy|Electricity|Fossil|w/ CCS
-  group_color: '#731808'
+  group_color: '#a4278e'
   name: Secondary Energy|Electricity|Gas|w/ CCS
 Secondary Energy|Electricity|Gas|w/o CCS:
-  color: '#52c2bb'
+  color: '#1ce6aa'
   group: Secondary Energy|Electricity|Fossil|w/o CCS
-  group_color: '#821e97'
+  group_color: '#065bc1'
   name: Secondary Energy|Electricity|Gas|w/o CCS
 Secondary Energy|Electricity|Geothermal:
-  color: '#2305a4'
+  color: '#88c571'
   group: Secondary Energy|Electricity|Non-Biomass Renewables
-  group_color: '#318ebd'
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Geothermal
 Secondary Energy|Electricity|Hydro:
-  color: '#ff9706'
+  color: '#a71d9a'
   group: Secondary Energy|Electricity|Non-Biomass Renewables
-  group_color: '#318ebd'
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Hydro
 Secondary Energy|Electricity|Ocean:
-  color: '#ca6f7b'
+  color: '#5d98bd'
   group: Secondary Energy|Electricity|Non-Biomass Renewables
-  group_color: '#318ebd'
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Ocean
 Secondary Energy|Electricity|Oil|w/ CCS:
-  color: '#978f1c'
+  color: '#d8ed3e'
   group: Secondary Energy|Electricity|Fossil|w/ CCS
-  group_color: '#731808'
+  group_color: '#a4278e'
   name: Secondary Energy|Electricity|Oil|w/ CCS
 Secondary Energy|Electricity|Oil|w/o CCS:
-  color: '#65fa0c'
+  color: '#043c6c'
   group: Secondary Energy|Electricity|Fossil|w/o CCS
-  group_color: '#821e97'
+  group_color: '#065bc1'
   name: Secondary Energy|Electricity|Oil|w/o CCS
-Secondary Energy|Electricity|Solar:
-  color: '#6207d8'
-  group: Secondary Energy|Electricity|Non-Biomass Renewables
-  group_color: '#318ebd'
-  name: Secondary Energy|Electricity|Solar
 Secondary Energy|Electricity|Solar|CSP:
-  color: '#828ae9'
-  group: Secondary Energy|Electricity|Solar
-  group_color: '#4a0c78'
+  color: '#0e5271'
+  group: Secondary Energy|Electricity|Non-Biomass Renewables
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Solar|CSP
 Secondary Energy|Electricity|Solar|PV:
-  color: '#acc64a'
-  group: Secondary Energy|Electricity|Solar
-  group_color: '#4a0c78'
-  name: Secondary Energy|Electricity|Solar|PV
-Secondary Energy|Electricity|Wind:
-  color: '#df7428'
+  color: '#dcc2b2'
   group: Secondary Energy|Electricity|Non-Biomass Renewables
-  group_color: '#318ebd'
-  name: Secondary Energy|Electricity|Wind
+  group_color: '#56c880'
+  name: Secondary Energy|Electricity|Solar|PV
 Secondary Energy|Electricity|Wind|Offshore:
-  color: '#594c0a'
-  group: Secondary Energy|Electricity|Wind
-  group_color: '#d5e804'
+  color: '#6fca21'
+  group: Secondary Energy|Electricity|Non-Biomass Renewables
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Wind|Offshore
 Secondary Energy|Electricity|Wind|Onshore:
-  color: '#a4f159'
-  group: Secondary Energy|Electricity|Wind
-  group_color: '#d5e804'
+  color: '#64ed51'
+  group: Secondary Energy|Electricity|Non-Biomass Renewables
+  group_color: '#56c880'
   name: Secondary Energy|Electricity|Wind|Onshore
+Secondary Energy|Gases|Biomass:
+  color: '#6b3ac7'
+  group: Secondary Energy|Gases
+  group_color: '#f75c0d'
+  name: Secondary Energy|Gases|Biomass
+Secondary Energy|Gases|Coal:
+  color: '#cfe1d7'
+  group: Secondary Energy|Gases
+  group_color: '#f75c0d'
+  name: Secondary Energy|Gases|Coal
+Secondary Energy|Gases|Natural Gas:
+  color: '#3f312c'
+  group: Secondary Energy|Gases
+  group_color: '#f75c0d'
+  name: Secondary Energy|Gases|Natural Gas
+Secondary Energy|Gases|Other:
+  color: '#0dd8e1'
+  group: Secondary Energy|Gases
+  group_color: '#f75c0d'
+  name: Secondary Energy|Gases|Other
+Secondary Energy|Heat|Biomass:
+  color: '#b61225'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Biomass
+Secondary Energy|Heat|Coal:
+  color: '#fa0b61'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Coal
+Secondary Energy|Heat|Gas:
+  color: '#9bf671'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Gas
+Secondary Energy|Heat|Geothermal:
+  color: '#1a617b'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Geothermal
+Secondary Energy|Heat|Oil:
+  color: '#11c29b'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Oil
+Secondary Energy|Heat|Other:
+  color: '#6e4ce4'
+  group: Secondary Energy|Heat
+  group_color: '#b645da'
+  name: Secondary Energy|Heat|Other
+Secondary Energy|Hydrogen|Biomass|w/ CCS:
+  color: '#542d3b'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
+  name: Secondary Energy|Hydrogen|Biomass|w/ CCS
+Secondary Energy|Hydrogen|Biomass|w/o CCS:
+  color: '#57a4ff'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
+  name: Secondary Energy|Hydrogen|Biomass|w/o CCS
 Secondary Energy|Hydrogen|Coal|w/ CCS:
-  color: '#eac462'
-  group: Secondary Energy|Hydrogen|Fossil|w/ CCS
-  group_color: '#6290a2'
+  color: '#146c8e'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
   name: Secondary Energy|Hydrogen|Coal|w/ CCS
 Secondary Energy|Hydrogen|Coal|w/o CCS:
-  color: '#e676ff'
-  group: Secondary Energy|Hydrogen|Fossil|w/o CCS
-  group_color: '#17a30d'
+  color: '#d945bf'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
   name: Secondary Energy|Hydrogen|Coal|w/o CCS
+Secondary Energy|Hydrogen|Electricity:
+  color: '#cf2c4d'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
+  name: Secondary Energy|Hydrogen|Electricity
+Secondary Energy|Hydrogen|Fossil|w/ CCS:
+  color: '#1ed735'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
+  name: Secondary Energy|Hydrogen|Fossil|w/ CCS
+Secondary Energy|Hydrogen|Fossil|w/o CCS:
+  color: '#2a0fe2'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
+  name: Secondary Energy|Hydrogen|Fossil|w/o CCS
 Secondary Energy|Hydrogen|Gas|w/ CCS:
-  color: '#135182'
-  group: Secondary Energy|Hydrogen|Fossil|w/ CCS
-  group_color: '#6290a2'
+  color: '#9068b1'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
   name: Secondary Energy|Hydrogen|Gas|w/ CCS
 Secondary Energy|Hydrogen|Gas|w/o CCS:
-  color: '#b6542d'
-  group: Secondary Energy|Hydrogen|Fossil|w/o CCS
-  group_color: '#17a30d'
+  color: '#d5b9d3'
+  group: Secondary Energy|Hydrogen
+  group_color: '#212c6f'
   name: Secondary Energy|Hydrogen|Gas|w/o CCS
-Secondary Energy|Hydrogen|Oil:
-  color: '#d531c6'
-  group: Secondary Energy|Hydrogen|Fossil|w/o CCS
-  group_color: '#17a30d'
-  name: Secondary Energy|Hydrogen|Oil
+Secondary Energy|Liquids|Biomass|w/ CCS:
+  color: '#9fad97'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
+  name: Secondary Energy|Liquids|Biomass|w/ CCS
+Secondary Energy|Liquids|Biomass|w/o CCS:
+  color: '#a119f2'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
+  name: Secondary Energy|Liquids|Biomass|w/o CCS
 Secondary Energy|Liquids|Coal|w/ CCS:
-  color: '#10e3ee'
-  group: Secondary Energy|Liquids|Fossil|w/ CCS
-  group_color: '#0e2be2'
+  color: '#8dfa8f'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
   name: Secondary Energy|Liquids|Coal|w/ CCS
 Secondary Energy|Liquids|Coal|w/o CCS:
-  color: '#3b80a6'
-  group: Secondary Energy|Liquids|Fossil|w/o CCS
-  group_color: '#6e7147'
+  color: '#9ece55'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
   name: Secondary Energy|Liquids|Coal|w/o CCS
 Secondary Energy|Liquids|Gas|w/ CCS:
-  color: '#b5032a'
-  group: Secondary Energy|Liquids|Fossil|w/ CCS
-  group_color: '#0e2be2'
+  color: '#182559'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
   name: Secondary Energy|Liquids|Gas|w/ CCS
 Secondary Energy|Liquids|Gas|w/o CCS:
-  color: '#329862'
-  group: Secondary Energy|Liquids|Fossil|w/o CCS
-  group_color: '#6e7147'
+  color: '#19b834'
+  group: Secondary Energy|Liquids
+  group_color: '#2e9f09'
   name: Secondary Energy|Liquids|Gas|w/o CCS
-Secondary Energy|Liquids|Oil:
-  color: '#f93496'
-  group: Secondary Energy|Liquids|Fossil|w/o CCS
-  group_color: '#6e7147'
-  name: Secondary Energy|Liquids|Oil
+Secondary Energy|Solids|Biomass:
+  color: '#b23528'
+  group: Secondary Energy|Solids
+  group_color: '#2b5410'
+  name: Secondary Energy|Solids|Biomass
+Secondary Energy|Solids|Coal:
+  color: '#f9083e'
+  group: Secondary Energy|Solids
+  group_color: '#2b5410'
+  name: Secondary Energy|Solids|Coal
