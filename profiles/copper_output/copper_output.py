@@ -23,7 +23,8 @@ from profiles.copper_output.callbacks import (emissions as emissions_callbacks,
                                               dispatch as dispatch_callbacks,
                                               merra as merra_callbacks,
                                               overview as overview_callbacks,
-                                              output_stats as output_stats_callbacks
+                                              output_stats as output_stats_callbacks,
+                                              inputs as inputs_callbacks
                                               )
 from profiles.copper_output.processing_scripts import (
     emissions as emissions_processing,
@@ -41,6 +42,7 @@ from profiles.copper_output.processing_scripts import (
     dispatch as dispatch_processing,
     merra as merra_processing,
     overview as overview_processing,
+    inputs as inputs_processing
 )
 from profiles.copper_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -58,8 +60,10 @@ from profiles.copper_output.visualization_scripts import (
     dispatch as dispatch_viz,
     merra as merra_viz,
     overview as overview_viz,
-    output_stats as output_stats_viz
+    output_stats as output_stats_viz,
+    inputs as inputs_viz
 )
+
 
 def data_processing_task(profile_name, viz, data, processing_func):
     data_out = processing_func(data)
@@ -76,6 +80,7 @@ class CopperOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
+        'Inputs',
         'Output Stats',
         'Overview',
         'Emissions',
@@ -256,6 +261,16 @@ class CopperOutput(BaseProfile):
                 'viz': output_stats_viz.plot,
                 'callback': output_stats_callbacks.link,
                 'description': 'Output statistics of the model.'
+            },
+        'Inputs':
+            {
+                'check': inputs_processing.check,
+                'db_check': inputs_processing.check,
+                'process': inputs_processing.process,
+                'db_process': inputs_processing.process,
+                'viz': inputs_viz.plot,
+                'callback': inputs_callbacks.link,
+                'description': 'Input data for the model.'
             }
     }
 
@@ -298,7 +313,7 @@ class CopperOutput(BaseProfile):
 
             dfs = []
             for _, viz_option, data in processed_data:
-                if viz_option in {'Dispatch', 'Transmission Flow', 'Transmission Capacity'}:
+                if viz_option in {'Dispatch', 'Transmission Flow', 'Transmission Capacity', 'Inputs'}:
                     if wants_output_stats and viz_option == 'Dispatch':
                         # Process dispatch data for output statistics
                         dispatch_data = self._prepare_dispatch_data(data)
@@ -320,7 +335,8 @@ class CopperOutput(BaseProfile):
 
             # Append overview data to processed data
             overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
-            processed_data.append((self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region']]))
+            processed_data.append(
+                (self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
             # If output statistics are requested, append them as well
             if wants_output_stats:
@@ -384,7 +400,6 @@ class CopperOutput(BaseProfile):
         day_data.columns = day_data.iloc[0]
         day_data = day_data.iloc[1:]
         return day_data
-
 
     def link(self, app):
         settings_callbacks.link(app)

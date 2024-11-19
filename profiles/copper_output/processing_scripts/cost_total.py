@@ -16,13 +16,12 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'copper').any():
-            if df.variable.str.contains("Carbon Costs|").any() or df.variable.str.contains(
-                    "Capital Costs|").any() or df.variable.str.contains(
-                "Fixed O&M Costs|").any() or df.variable.str.contains(
-                "Variable O&M Costs|").any() or df.variable.str.contains("Fuel Costs|").any():
-                return df[df.variable.str.contains("Carbon Costs|") | df.variable.str.contains(
-                    "Capital Costs|") | df.variable.str.contains("Fixed O&M Costs|") | df.variable.str.contains(
-                    "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]['value'].sum() > 0
+            if not df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
+            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
+            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")].empty:
+                return df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
+            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
+            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")]['value'].sum() > 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -205,9 +204,9 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("Carbon Costs|") | df.variable.str.contains(
-            "Capital Costs|") | df.variable.str.contains("Fixed O&M Costs|") | df.variable.str.contains(
-            "Variable O&M Costs|") | df.variable.str.contains("Fuel Costs|")]
+        df = df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
+            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
+            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")]
         formatted_df = format_df(df)
         gen_cap = calculate_generation_capacity(formatted_df)
         fom = calculate_fom(formatted_df)
