@@ -21,7 +21,7 @@ region_mapping = {
     'Yukon': 'Yukon'
 }
 
-def plot_map(message_data, scenario, time, variable='All', aggregate=False):
+def plot_map(message_data, scenario, time, title, name, unit, variable='All', aggregate=False,):
 
 
     rep_data = message_data[(message_data['time'] == time) & (message_data['scenario'] == scenario)]
@@ -58,11 +58,12 @@ def plot_map(message_data, scenario, time, variable='All', aggregate=False):
         z=rep_data['value'],  # Assuming 'value' is the column with the data to plot
         featureidkey="properties.name",  # Key to match the GeoJSON features
         colorscale='Viridis',  # Color scale for the choropleth
+        hovertemplate='%{location}: %{z}' + f'({unit})',  # Hover template
     ))
 
     # Update geos and layout
     fig.update_geos(fitbounds="locations", visible=False, projection_type="orthographic")
-    fig.update_layout(title=f'{time}')
+    fig.update_layout(title=f'{title} - ({unit})')
 
     # Show the figure
     return fig

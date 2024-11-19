@@ -17,6 +17,10 @@ Emissions:
     title: Emissions by Region
     x_label: Region
     y_label: Emissions (MtCO2eq)
+  Map:
+    title: Emissions Map
+    x_label:
+    y_label:
 Capacity:
   name: Capacity
   unit: GW/yr
@@ -36,6 +40,10 @@ Capacity:
     title: Capacity by Region
     x_label: Region
     y_label: Capacity (GW/yr)
+  Map:
+    title: Capacity Map
+    x_label:
+    y_label:
 Capacity Additions:
   name: Capacity Additions
   unit: GW/yr
@@ -55,6 +63,10 @@ Capacity Additions:
     title: Capacity Additions by Region
     x_label: Region
     y_label: Capacity Additions (GW/yr)
+  Map:
+    title: Capacity Additions Map
+    x_label:
+    y_label:
 Capital Cost:
   name: Capital Cost
   unit: US$2010/kW
@@ -74,6 +86,10 @@ Capital Cost:
     title: Capital Cost by Region
     x_label: Region
     y_label: Capital Cost 
+  Map:
+    title: Capital Cost Map
+    x_label:
+    y_label:
 Total Cost:
   name: Total Cost
   unit: US$2010
@@ -93,6 +109,10 @@ Total Cost:
     title: Total Cost by Region
     x_label: Region
     y_label: Total Cost 
+  Map:
+    title: Total Cost Map
+    x_label:
+    y_label:
 Primary Energy:
   name: Primary Energy
   unit: PJ/yr
@@ -112,6 +132,10 @@ Primary Energy:
     title: Primary Energy by Region
     x_label: Region
     y_label: Primary Energy (PJ/yr)
+  Map:
+    title: Primary Energy Map
+    x_label:
+    y_label:
 Final Energy:
   name: Final Energy
   unit: PJ/yr
@@ -131,6 +155,10 @@ Final Energy:
     title: Final Energy by Region
     x_label: Region
     y_label: Final Energy (PJ/yr)
+  Map:
+    title: Final Energy Map
+    x_label:
+    y_label:
 Secondary Energy:
   name: Secondary Energy
   unit: Pj/yr
@@ -150,6 +178,10 @@ Secondary Energy:
     title: Secondary Energy by Region
     x_label: Region
     y_label: Secondary Energy (PJ/yr)
+  Map:
+    title: Secondary Energy Map
+    x_label:
+    y_label:
 Useful Energy:
   name: Useful Energy
   unit: PJ/yr
@@ -169,6 +201,10 @@ Useful Energy:
     title: Useful Energy by Region
     x_label: Region
     y_label: Useful Energy (PJ/yr)
+  Map:
+    title: Useful Energy Map
+    x_label:
+    y_label:
 Carbon Sequestration:
   name: Carbon Sequestration
   unit: MtCO2eq/yr
@@ -180,6 +216,10 @@ Carbon Sequestration:
     title: Carbon Sequestration by Region
     x_label: Region
     y_label: Carbon Sequestration (MtCO2eq/yr)
+  Map:
+    title: Carbon Sequestration Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Carbon Sequestration
     x_label:
@@ -200,6 +240,10 @@ Consumption:
     title: Consumption by Region
     x_label: Region
     y_label: Consumption (billion US$2010/yr)
+  Map:
+    title: Consumption Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Consumption
     x_label:
@@ -220,6 +264,10 @@ Cost:
     title: Cost by Region
     x_label: Region
     y_label: Cost (billion US$2010/yr)
+  Map:
+    title: Cost Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Cost
     x_label:
@@ -240,6 +288,10 @@ Cumulative Capacity:
     title: Cumulative Capacity by Region
     x_label: Region
     y_label: Cumulative Capacity (GW)
+  Map:
+    title: Cumulative Capacity Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Cumulative Capacity
     x_label:
@@ -260,6 +312,10 @@ Efficiency:
     title: Efficiency by Region
     x_label: Region
     y_label: Efficiency (%)
+  Map:
+    title: Efficiency Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Efficiency
     x_label:
@@ -280,6 +336,10 @@ Investment:
     title: Investment by Region
     x_label: Region
     y_label: Investment (billion US$2010/yr)
+  Map:
+    title: Investment Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Investment
     x_label:
@@ -300,6 +360,10 @@ Lifetime:
     title: Lifetime by Region
     x_label: Region
     y_label: Lifetime (years)
+  Map:
+    title: Lifetime Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Lifetime
     x_label:
@@ -320,6 +384,10 @@ OM Cost:
     title: OM Cost by Region
     x_label: Region
     y_label: OM Cost (US$2010/kW/yr)
+  Map:
+    title: OM Cost Map
+    x_label:
+    y_label:
   Pie Chart:
     title: OM Cost
     x_label:
@@ -340,6 +408,10 @@ Primary Energy (substitution method):
     title: Primary Energy (substitution method) by Region
     x_label: Region
     y_label: Primary Energy (substitution method) (PJ/yr)
+  Map:
+    title: Primary Energy (substitution method) Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Primary Energy (substitution method)
     x_label:
@@ -360,6 +432,10 @@ Resource:
     title: Resource by Region
     x_label: Region
     y_label: Resource (PJ/yr)
+  Map:
+    title: Resource Map
+    x_label:
+    y_label:
   Pie Chart:
     title: Resource
     x_label:

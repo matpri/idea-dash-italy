@@ -77,7 +77,7 @@ class messageixOutput(BaseProfile):
         'MESSAGEix is a versatile, dynamic, model framework for energy-engineering-economy-environment (E4) systems research.')
 
     plot_order = [
-        'Overview', 'Emissions'
+        'Overview', 'Emissions',
         'Capacity Additions', 'Capacity', 'Capital Cost',
         'Carbon Sequestration', 'Consumption', 'Cost',
         'Cumulative Capacity', 'Efficiency', 'Final Energy', 'Investment',
