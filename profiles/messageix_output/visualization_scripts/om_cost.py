@@ -104,7 +104,7 @@ def plot(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
-            value='By Year',
+            value='Trend Over Years',
             id={
                 'type': 'messageix-om_cost-plot-select',
                 'index': window_id
@@ -148,7 +148,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('Trend Over Years', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
             'type': 'figure',

@@ -51,7 +51,7 @@ def calc_canadian(df):
         DataFrame: Formatted data with extracted information.
     """
     # Group by period and technology and sum the values
-    canadian_total = df.groupby(["time", "variable"]).sum(numeric_only=True).reset_index()
+    canadian_total = df.groupby(["time", "variable"]).mean(numeric_only=True).reset_index()
     canadian_total["region"] = "CAN"
     return canadian_total
 
