@@ -9,11 +9,14 @@ import plotly.express as px
 import geopandas as gpd
 from dash import html, dcc
 from components import ids
+from profiles.copper_output import utils
 from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
     pie_chart
 
 
-def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None, e_p_type=None, e_year=None, e_region=None, e_scenarios=None):
+def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
+                e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
+                _demand_scenario=None, _demand_time_step=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -29,6 +32,8 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
         return render_extant_transmission(t_p_type, data, t_scenarios, t_year)
     elif p_type == 'Extant Capacity':
         return plot_capacity(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios[0])
+    elif p_type == 'Demand':
+        return render_demand(data, _demand_scenario, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
 
     else:
         return go.Figure()
@@ -356,7 +361,73 @@ def render_extant_transmission(p_type, df, scenarios, year):
         df['variable'] = 'Capacity'
         return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
+def render_demand(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
+    # turn date range into a readable format
 
+    fig = go.Figure()
+    # add title
+    fig.update_layout(
+        title_text=title,
+        xaxis_title=x_axis_label,
+        yaxis_title=y_axis_label,
+        template='simple_white',
+    )
+    df_scen = df.copy(deep=True)
+    df_scen = df_scen[df_scen['scenario'] == scenario]
+
+    df_scen['time'] = pd.to_datetime(df_scen['time'])
+    # groupby time based on time_size
+    if time_size == 'daily':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
+    elif time_size == 'monthly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
+    elif time_size == 'yearly':
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+    else:
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
+
+    cols = df_scen.columns.tolist()
+    # remove value column
+    cols.remove('value')
+    df_scen = df_scen.groupby(['time', 'region']).sum(numeric_only=True).reset_index()
+
+    regions = df_scen.region.unique().tolist()
+
+
+    # Create a stacked area chart (original behavior)
+    for region in regions:
+        df_tech = df_scen[df_scen['region'] == region]
+        df_tech = df_tech.sort_values(by=['time'])
+        fig.add_trace(go.Scatter(
+            x=df_tech['time'],
+            y=df_tech['value'],
+            name=region,
+            mode='lines',
+            line=dict(color=utils.get_color(region)),
+            stackgroup='one',
+            hovertemplate=f'<b>{region}</b><br><br>' +
+                          f'Scenario: {scenario} <br>' +
+                          'Time: %{x}<br>' +
+                          f'Demand: %{{y:.2f}} {y_axis_label}<br>' +
+                          '<extra></extra>'
+        ))
+    fig.update_yaxes(showgrid=True)
+    fig.update_xaxes(
+        rangeslider_visible=True,
+        rangeselector=dict(
+            buttons=list([
+                dict(count=1, label="1d", step="day", stepmode="backward"),
+                dict(count=1, label="1m", step="month", stepmode="backward"),
+                dict(count=6, label="6m", step="month", stepmode="backward"),
+                dict(count=1, label="YTD", step="year", stepmode="todate"),
+                dict(count=1, label="1y", step="year", stepmode="backward"),
+                dict(step="all")
+            ])
+        )
+    )
+
+    fig.layout.autosize = True
+    return fig
 
 def plot(df, window_id):
     '''
@@ -367,6 +438,37 @@ def plot(df, window_id):
     '''
     # print('plotting inputs')
     classes = df['variable'].apply(lambda x: x.split('|')[0]).unique()
+
+    demand_scenarios = []
+    if 'Demand' in classes:
+        demand_scenarios = df[df['variable'].str.startswith('Demand')]['scenario'].unique()
+
+    demand_widget_layout = html.Div([
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in demand_scenarios],
+            value=demand_scenarios[0] if demand_scenarios else '',
+            id={
+                'type': 'copper-inputs-demand-scenario-select',
+                'index': window_id,
+            },
+        ),
+        dmc.Select(
+            label='Timestep',
+            data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
+            value='hourly',
+            id={
+                'type': 'copper-inputs-demand-time_step-select',
+                'index': window_id,
+            },
+        ),
+        ],
+        id={
+            'type': 'copper-inputs-demand-widget',
+            'index': window_id
+        },
+        style={'display': 'block'},)
+
     print(classes)
     seasons = []
     vre_variables = []
@@ -537,9 +639,7 @@ def plot(df, window_id):
         vre_widget_layout,
         transmission_widget_layout,
         extant_capacity_widget_layout,
-
-
-
+        demand_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
