@@ -13,13 +13,28 @@ def link(app):
             'profile': 'copper_output',
             'viz': 'inputs'
         }, 'figure'),
-
         Output({
             'type': 'copper-inputs-download',
             'index': ALL
         }, 'data'),
+        Output({
+            'type': 'copper-inputs-season-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper-inputs-vre-variable-select',
+            'index': ALL
+        }, 'style'),
         Input({
             'type': 'copper-inputs-plot-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-season-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-vre-variable-select',
             'index': ALL
         }, 'value'),
         Input({
@@ -32,15 +47,22 @@ def link(app):
             'profile': 'copper_output',
             'viz': 'inputs'
         }, 'figure'),
-
         State({
             'type': 'copper-inputs-download',
             'index': ALL
         }, 'data'),
+        State({
+            'type': 'copper-inputs-season-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-inputs-vre-variable-select',
+            'index': ALL
+        }, 'style'),
 
         prevent_initial_call=True
     )
-    def update_inputs(_p_type, _download, _canvas, _data):
+    def update_inputs(_p_type, _season, _vre_variable, _download, _canvas, _data, _season_style, _vre_variable_style):
         #print('updating inputs plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -55,7 +77,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Inputs'].to_csv,
                                              "inputs.csv")
-            return _canvas, _data,
+            return _canvas, _data, _season_style, _vre_variable_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -66,6 +88,10 @@ def link(app):
 
         #print('idx:', idx, 'plot type:', _p_type[idx])
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'])
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'], _vre_variable[idx], _season[idx])
 
-        return _canvas, [dash.no_update for _ in _data]
+        if 'Vre Capacity Factors' in _p_type[idx]:
+            _season_style[idx] = {'display': 'block'}
+            _vre_variable_style[idx] = {'display': 'block'}
+
+        return _canvas, [dash.no_update for _ in _data], _season_style, _vre_variable_style
