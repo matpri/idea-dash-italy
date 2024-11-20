@@ -9,10 +9,11 @@ import plotly.express as px
 import geopandas as gpd
 from dash import html, dcc
 from components import ids
-from profiles.copper_output.visualization_scripts.utils import bar_over_regions
+from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
+    pie_chart
 
 
-def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, year=None, t_scenarios=None):
+def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None, e_p_type=None, e_year=None, e_region=None, e_scenarios=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -25,9 +26,31 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, year=
         unit = '%'
         return plot_vre(data, vre_variable, season, title, x_label, y_label, name, unit)
     elif p_type == 'Extant Transmission':
-        return render_extant_transmission(t_p_type, data, t_scenarios, year)
+        return render_extant_transmission(t_p_type, data, t_scenarios, t_year)
+    elif p_type == 'Extant Capacity':
+        return plot_capacity(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios[0])
+
     else:
         return go.Figure()
+
+def plot_capacity(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+    from profiles.copper_output.utils import plot_settings
+    #print('rendering plot', type)
+    name = plot_settings['Capacity']['name']
+    unit = plot_settings['Capacity']['unit']
+    if type == 'By Year':
+        plot_info = plot_settings['Capacity']['By Year']
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+    elif type == 'Trend Over Years':
+        plot_info = plot_settings['Capacity']['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    elif type == 'Pie Chart':
+        plot_info = plot_settings['Capacity']['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+    else:
+        plot_info = plot_settings['Capacity']['By Region']
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+
 
 
 def plot_vre(grid, variable, season, title, x_label, y_label, name, unit):
@@ -351,12 +374,22 @@ def plot(df, window_id):
         seasons = ['Winter', 'Summer']
         vre_variables = ['Wind', 'Solar']
 
+    e_years = []
+    e_regions = []
+    e_scenarios = []
+    e_p_type = []
+    if 'Extant Transmission' in classes:
+        e_p_type = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
+        e_years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
+        e_scenarios = df[df['variable'].str.startswith('Extant Transmission')]['scenario'].unique()
+        e_regions = df[df['variable'].str.startswith('Extant Transmission')]['region'].unique()
+
     t_p_type = []
-    years = []
+    t_years = []
     t_scenarios = []
     if 'Extant Transmission' in classes:
         t_p_type = ['Map Plot', 'Bar Plot']
-        years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
+        t_years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
         t_scenarios = df[df['variable'].str.startswith('Extant Transmission')]['scenario'].unique()
 
     vre_widget_layout = html.Div([
@@ -398,8 +431,8 @@ def plot(df, window_id):
         ),
         dmc.Select(
             label='Year',
-            data=[{'label': year, 'value': year} for year in years],
-            value=years[0],
+            data=[{'label': year, 'value': year} for year in t_years],
+            value=t_years[0],
             id={
                 'type': 'copper-inputs-year-select',
                 'index': window_id
@@ -433,6 +466,64 @@ def plot(df, window_id):
             'index': window_id
         })
 
+
+    extant_capacity_widget_layout = html.Div([
+        dmc.Select(
+            label='Representation Options',
+            data=[{'label': plot, 'value': plot} for plot in e_p_type],
+            value=e_p_type[0],
+            id={
+                'type': 'copper-inputs-extant-capacity-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Year',
+            data=[{'label': year, 'value': year} for year in e_years],
+            value=e_years[0],
+            id={
+                'type': 'copper-inputs-extant-capacity-year-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in e_regions],
+            value=e_regions[0],
+            id={
+                'type': 'copper-inputs-extant-capacity-region-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in e_scenarios],
+            value=e_scenarios[0],
+            id={
+                'type': 'copper-inputs-extant-capacity-scenario-select',
+                'index': window_id
+            },
+        ),
+        dmc.MultiSelect(
+            label='Select Scenarios',
+            data=[{'label': scenario, 'value': scenario} for scenario in e_scenarios],
+            value=e_scenarios,
+            id={
+                'type': 'copper-inputs-extant-capacity-scenario-multi-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        )
+        ],
+        id={
+            'type': 'copper-inputs-extant-capacity-widget',
+            'index': window_id
+        },
+        style={'display': 'none'}
+    )
+
+
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
@@ -445,6 +536,7 @@ def plot(df, window_id):
         ),
         vre_widget_layout,
         transmission_widget_layout,
+        extant_capacity_widget_layout,
 
 
 
