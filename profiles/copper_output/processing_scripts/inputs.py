@@ -39,7 +39,27 @@ def vre(vre_data):
         vre_data.loc[i, 'geometry'] = shapely.geometry.box(row['lon'] - 0.3125, row['lat'] - 0.25,
                                                           row['lon'] + 0.3125, row['lat'] + 0.25)
     return gpd.GeoDataFrame(vre_data, geometry='geometry')
-    
+
+def extant_transmission(data):
+    data['variable'] = data['variable'].apply(lambda x: x.split("|")[1])
+    # rename time to period
+    # sort by region, variable, period
+    data["region"] = data.region.apply(lambda x: x.split(".")[0])
+    data["variable"] = data.variable.apply(lambda x: x.split(".")[0])
+    # remove where variable == region
+    data = data[data.region != data.variable]
+    data = data.groupby(["region", "variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+
+    data = data.groupby(["region", "variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
+    data['short_region'] = data['region'].map(utils.province_short)
+    data['short_variable'] = data['variable'].map(utils.province_short)
+    data = pd.merge(data, prov_cord, how='inner', left_on=['region', 'variable'],
+                      right_on=['region', 'variable'])
+    data['from_lat'] = data['from_lat'].astype(float)
+    data['from_lon'] = data['from_lon'].astype(float)
+    data['variable'] = 'Extant Transmission|' + data['variable']
+    return data
 
 def process(selected: dict):
     dfs = []
@@ -55,6 +75,8 @@ def process(selected: dict):
             data = df[df.variable.str.startswith(cls)]
             if cls == 'Vre Capacity Factors':
                 dfs.append(vre(data))
+            elif cls == 'Extant Transmission':
+                dfs.append(extant_transmission(data))
             else:
                 dfs.append(data)
 
