@@ -378,11 +378,11 @@ def plot(df, window_id):
     e_regions = []
     e_scenarios = []
     e_p_type = []
-    if 'Extant Transmission' in classes:
+    if 'Extant Capacity' in classes:
         e_p_type = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
-        e_years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
-        e_scenarios = df[df['variable'].str.startswith('Extant Transmission')]['scenario'].unique()
-        e_regions = df[df['variable'].str.startswith('Extant Transmission')]['region'].unique()
+        e_years = df[df['variable'].str.startswith('Extant Capacity')]['time'].unique()
+        e_scenarios = df[df['variable'].str.startswith('Extant Capacity')]['scenario'].unique()
+        e_regions = df[df['variable'].str.startswith('Extant Capacity')]['region'].unique()
 
     t_p_type = []
     t_years = []

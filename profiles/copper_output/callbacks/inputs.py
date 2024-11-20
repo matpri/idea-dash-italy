@@ -228,22 +228,22 @@ def link(app):
                 e_scen = _extant_capacity_scenario_multi_select[idx]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'none'}
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'block'}
-                _extant_capacity_region_select_style[idx] = {'display': 'none'}
-                _extant_capacity_year_select_style[idx] = {'display': 'block'}
+                _extant_capacity_region_select_style[idx] = {'display': 'block'}
+                _extant_capacity_year_select_style[idx] = {'display': 'none'}
             elif e_select == 'By Region':
                 e_scen = _extant_capacity_scenario_multi_select[idx]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'none'}
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'block'}
-                _extant_capacity_region_select_style[idx] = {'display': 'block'}
-                _extant_capacity_year_select_style[idx] = {'display': 'none'}
+                _extant_capacity_region_select_style[idx] = {'display': 'none'}
+                _extant_capacity_year_select_style[idx] = {'display': 'block'}
             elif e_select == 'Trend Over Years':
-                e_scen = _extant_capacity_scenario_select[idx]
+                e_scen = [_extant_capacity_scenario_select[idx]]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'block'}
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'none'}
                 _extant_capacity_region_select_style[idx] = {'display': 'block'}
                 _extant_capacity_year_select_style[idx] = {'display': 'none'}
             else:
-                e_scen = _extant_capacity_scenario_select[idx]
+                e_scen = [_extant_capacity_scenario_select[idx]]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'block'}
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'none'}
                 _extant_capacity_region_select_style[idx] = {'display': 'block'}
@@ -255,7 +255,7 @@ def link(app):
         # Render the plot based on the selected inputs
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'],
                                    _vre_variable[idx], _season[idx], t_p_type=t_ptype[idx], t_year=t_year[idx],
-                                   t_scenarios=scen, e_year=e_year, e_region=e_region, e_scenarios=e_scen)
+                                   t_scenarios=scen, e_year=e_year, e_region=e_region, e_scenarios=e_scen, e_p_type=e_select)
 
         return _canvas, [dash.no_update for _ in
                          _data], _vre_style, _transmission_style, _extant_capacity_style, t_scen_style, t_scen_multi_style, _extant_capacity_rep_style, _extant_capacity_scenario_select_style, _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style, _extant_capacity_year_select_style

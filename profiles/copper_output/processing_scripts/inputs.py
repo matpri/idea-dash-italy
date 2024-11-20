@@ -61,6 +61,14 @@ def extant_transmission(data):
     data['variable'] = 'Extant Transmission|' + data['variable']
     return data
 
+
+def extant_capacity(data):
+    data["region"] = data["region"].apply(lambda x: x.split(".")[0])
+    data['region'] = data['region'].map(utils.province_short).fillna(data['region'])
+    data = data.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    return data
+
+
 def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
@@ -77,6 +85,8 @@ def process(selected: dict):
                 dfs.append(vre(data))
             elif cls == 'Extant Transmission':
                 dfs.append(extant_transmission(data))
+            elif cls == 'Extant Capacity':
+                dfs.append(extant_capacity(data))
             else:
                 dfs.append(data)
 
