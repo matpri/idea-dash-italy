@@ -18,13 +18,21 @@ def link(app):
             'index': ALL
         }, 'data'),
         Output({
-            'type': 'copper-inputs-season-select',
+            'type': 'copper-inputs-vre-widget',
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'copper-inputs-vre-variable-select',
+            'type': 'copper-inputs-transmission-widget',
             'index': ALL
         }, 'style'),
+        Output({
+                'type': 'copper-inputs-scenario-select',
+                'index': ALL
+            }, 'style'),
+        Output({
+                'type': 'copper-inputs-scenario-multi-select',
+                'index': ALL
+            }, 'style'),
         Input({
             'type': 'copper-inputs-plot-select',
             'index': ALL
@@ -37,6 +45,22 @@ def link(app):
             'type': 'copper-inputs-vre-variable-select',
             'index': ALL
         }, 'value'),
+        Input({
+                'type': 'copper-inputs-transmission-select',
+                'index': ALL
+            }, 'value'),
+        Input({
+                'type': 'copper-inputs-year-select',
+                'index': ALL
+            }, 'value'),
+        Input({
+                'type': 'copper-inputs-scenario-select',
+                'index': ALL
+            }, 'value'),
+        Input({
+                'type': 'copper-inputs-scenario-multi-select',
+                'index': ALL
+            }, 'value'),
         Input({
             'type': 'copper-inputs-download-button',
             'index': ALL
@@ -52,17 +76,24 @@ def link(app):
             'index': ALL
         }, 'data'),
         State({
-            'type': 'copper-inputs-season-select',
+            'type': 'copper-inputs-vre-widget',
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-inputs-vre-variable-select',
+            'type': 'copper-inputs-transmission-widget',
             'index': ALL
         }, 'style'),
-
+        State({
+            'type': 'copper-inputs-scenario-select',
+            'index': ALL
+        }, 'value'),
+        State({
+            'type': 'copper-inputs-scenario-multi-select',
+            'index': ALL
+        }, 'value'),
         prevent_initial_call=True
     )
-    def update_inputs(_p_type, _season, _vre_variable, _download, _canvas, _data, _season_style, _vre_variable_style):
+    def update_inputs(_p_type, _season, _vre_variable, t_ptype, _year, _scenario, _scenarios, _download, _canvas, _data, _vre_style, _transmission_style, t_scen_style, t_scen_multi_style):
         #print('updating inputs plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -77,7 +108,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Inputs'].to_csv,
                                              "inputs.csv")
-            return _canvas, _data, _season_style, _vre_variable_style
+            return _canvas, _data, _vre_style, _transmission_style, t_scen_style, t_scen_multi_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -86,12 +117,28 @@ def link(app):
                 idx = i
                 break
 
-        #print('idx:', idx, 'plot type:', _p_type[idx])
-
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'], _vre_variable[idx], _season[idx])
-
+        scen = []
         if 'Vre Capacity Factors' in _p_type[idx]:
-            _season_style[idx] = {'display': 'block'}
-            _vre_variable_style[idx] = {'display': 'block'}
+            _vre_style[idx] = {'display': 'block'}
+            _transmission_style[idx] = {'display': 'none'}
+        elif 'Extant Transmission' in _p_type[idx]:
+            _vre_style[idx] = {'display': 'none'}
+            _transmission_style[idx] = {'display': 'block'}
+            if t_ptype[idx] == 'Map Plot':
+                t_scen_style[idx] = {'display': 'block'}
+                t_scen_multi_style[idx] = {'display': 'none'}
+                scen = _scenario[idx]
+            else:
+                t_scen_style[idx] = {'display': 'none'}
+                t_scen_multi_style[idx] = {'display': 'block'}
+                scen = _scenarios[idx]
 
-        return _canvas, [dash.no_update for _ in _data], _season_style, _vre_variable_style
+
+        else:
+            _vre_style[idx] = {'display': 'none'}
+            _transmission_style[idx] = {'display': 'none'}
+
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'],
+                                   _vre_variable[idx], _season[idx], t_p_type=t_ptype[idx], year=_year[idx],t_scenarios=scen)
+
+        return _canvas, [dash.no_update for _ in _data], _vre_style, _transmission_style, t_scen_style, t_scen_multi_style

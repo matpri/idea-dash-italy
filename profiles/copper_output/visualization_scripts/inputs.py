@@ -12,7 +12,7 @@ from components import ids
 from profiles.copper_output.visualization_scripts.utils import bar_over_regions
 
 
-def render_plot(p_type, df, vre_variable=None, season=None):
+def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, year=None, t_scenarios=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -25,7 +25,7 @@ def render_plot(p_type, df, vre_variable=None, season=None):
         unit = '%'
         return plot_vre(data, vre_variable, season, title, x_label, y_label, name, unit)
     elif p_type == 'Extant Transmission':
-        return render_extant_transmission('Map Plot', data, 'ECCC_BAU_high', '2025')
+        return render_extant_transmission(t_p_type, data, t_scenarios, year)
     else:
         return go.Figure()
 
@@ -351,7 +351,87 @@ def plot(df, window_id):
         seasons = ['Winter', 'Summer']
         vre_variables = ['Wind', 'Solar']
 
+    t_p_type = []
+    years = []
+    t_scenarios = []
+    if 'Extant Transmission' in classes:
+        t_p_type = ['Map Plot', 'Bar Plot']
+        years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
+        t_scenarios = df[df['variable'].str.startswith('Extant Transmission')]['scenario'].unique()
 
+    vre_widget_layout = html.Div([
+        dmc.Select(
+            label='Season',
+            data=[{'label': season, 'value': season} for season in seasons],
+            value=seasons[0] if seasons else '',
+            id={
+                'type': 'copper-inputs-season-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='VRE Variable',
+            data=[{'label': vre_variable, 'value': vre_variable} for vre_variable in vre_variables],
+            value=vre_variables[0] if vre_variables else '',
+            id={
+                'type': 'copper-inputs-vre-variable-select',
+                'index': window_id
+            },
+        )
+    ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-vre-widget',
+            'index': window_id
+        }
+    )
+
+    transmission_widget_layout = html.Div([
+        dmc.Select(
+            label='Representation Options',
+            data=[{'label': plot, 'value': plot} for plot in t_p_type],
+            value=t_p_type[0],
+            id={
+                'type': 'copper-inputs-transmission-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Year',
+            data=[{'label': year, 'value': year} for year in years],
+            value=years[0],
+            id={
+                'type': 'copper-inputs-year-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in t_scenarios],
+            value=t_scenarios[0] if t_scenarios else '',
+            id={
+                'type': 'copper-inputs-scenario-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        ),
+        dmc.MultiSelect(
+            label='Select Scenarios',
+            data=[{'label': scenario, 'value': scenario} for scenario in t_scenarios],
+            value=t_scenarios if t_scenarios else [],
+            id={
+                'type': 'copper-inputs-scenario-multi-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        )
+
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-transmission-widget',
+            'index': window_id
+        })
 
     widget_layout = html.Div([
         dmc.Select(
@@ -363,26 +443,11 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
-        dmc.Select(
-            label='Season',
-            data=[{'label': season, 'value': season} for season in seasons],
-            value=seasons[0] if seasons else '',
-            id={
-                'type': 'copper-inputs-season-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
-            label='VRE Variable',
-            data=[{'label': vre_variable, 'value': vre_variable} for vre_variable in vre_variables],
-            value=vre_variables[0] if vre_variables else '',
-            id={
-                'type': 'copper-inputs-vre-variable-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        ),
+        vre_widget_layout,
+        transmission_widget_layout,
+
+
+
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
