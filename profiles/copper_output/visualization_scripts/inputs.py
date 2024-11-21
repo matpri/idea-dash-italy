@@ -648,7 +648,18 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df),
+        figure=render_plot(classes[0], df,
+                            vre_variable=vre_variables[0] if len(vre_variables) else None,
+                            season=seasons[0] if len(seasons) else None,
+                            t_p_type=t_p_type[0] if len(t_p_type) else None,
+                            t_year=t_years[0] if len(t_years) else None,
+                            t_scenarios=t_scenarios if len(t_scenarios) else None,
+                            e_p_type=e_p_type[0] if len(e_p_type) else None,
+                            e_year=e_years[0] if len(e_years) else None,
+                            e_region=e_regions[0] if len(e_regions) else None,
+                            e_scenarios=e_scenarios if len(e_scenarios) else None,
+                            _demand_scenario=demand_scenarios[0] if len(demand_scenarios) else None,
+                            _demand_time_step='hourly'),
         id={
             'type': ids.FIGURE,
             'index': window_id,
