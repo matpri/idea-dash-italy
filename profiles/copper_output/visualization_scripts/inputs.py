@@ -13,6 +13,12 @@ from profiles.copper_output import utils
 from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
     pie_chart
 
+def get_contrasting_font_color(rgb_color):
+    """Get a contrasting font color (black or white) based on the background color brightness."""
+    print(rgb_color)
+    r, g, b = [int(x) for x in rgb_color[4:-1].split(',')]
+    brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
+    return '#ffffff' if brightness < 128 else '#000000'
 
 def render_cost(data, _c_type, _c_scenario, _c_region):
     data = data[data['variable'].str.startswith(_c_type)]
@@ -22,10 +28,89 @@ def render_cost(data, _c_type, _c_scenario, _c_region):
     return trend_over_years.plot(data, _c_scenario, _c_region, False, _c_type, 'x', 'y', _c_type, unit)
 
 
+def render_t_cost(data, _t_cost_scenario):
+    data = data[data['scenario'].isin(_t_cost_scenario)]
+    if not data.empty:
+        # create a table
+        data = data[['scenario', 'variable', 'value']]
+
+        df_pivot = data.pivot(index='variable', columns='scenario', values='value')
+
+
+        df_pivot = df_pivot.fillna('')
+        # Create a Plotly Table
+        header_values = [''] + list(df_pivot.columns)
+        cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
+
+        min_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+        max_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
+
+        def normalize(value):
+            if isinstance(value, (int, float)):
+                return (value - min_value) / (max_value - min_value)
+            return None
+
+        colors = []
+
+        for col in df_pivot.columns:
+            normalized_data = [normalize(val) for val in df_pivot[col]]
+            colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
+                                     0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in
+                                 normalized_data])]
+
+        colors_by_row = [['#ffffff', '#e5eeec'] * (
+                    len(df_pivot.index) // 2)] + colors  # Determine font colors based on the background color
+        font_colors = [['#000000'] * len(df_pivot.index)]
+        for column in colors:
+            font_colors.append([get_contrasting_font_color(color) for color in column])
+        # Calculate the width for each column
+        column_width = []
+        column_width.append(max(df_pivot.index.str.len()) * 8)
+        for col in df_pivot.columns:
+            column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+
+        print(column_width)
+
+        # Create Plotly table
+        fig = go.Figure(data=[go.Table(
+            columnorder=[i + 1 for i in range(len(df_pivot.columns) + 1)],
+            columnwidth=column_width,
+            header=dict(values=header_values,
+                        fill_color=['#ffffff', '#248ce6', '#248ce6'],
+                        font=dict(color='white'),
+                        align='center'),
+            cells=dict(values=cell_values,
+                       fill_color=colors_by_row,
+                       line_color=colors_by_row,
+                       font=dict(color=font_colors),
+
+                       align='left'))
+        ])
+    else:
+        fig = go.Figure()
+        # print("No data available, since the results are all zero.")
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, since the results are all zero.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
+
+
+    return fig
+
+
 def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
                 _demand_scenario=None, _demand_time_step=None,
-                _c_type=None, _c_scenario=None, _c_region=None):
+                _c_type=None, _c_scenario=None, _c_region=None,
+                _t_cost_scenarios=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -45,6 +130,9 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
         return render_demand(data, _demand_scenario, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
     elif p_type == 'Cost':
         return render_cost(data, _c_type, _c_scenario, _c_region)
+    elif p_type == 'Transmission Costs':
+        return render_t_cost(data, _t_cost_scenarios)
+
 
     else:
         return go.Figure()
@@ -450,6 +538,29 @@ def plot(df, window_id):
     # print('plotting inputs')
     classes = df['variable'].apply(lambda x: x.split('|')[0]).unique()
 
+    transmission_cost_scenario = []
+    if 'Transmission Costs' in classes:
+        transmission_cost_scenario = df[df['variable'].str.startswith('Transmission Costs')]['scenario'].unique()
+
+    transmission_cost_widget_layout = html.Div([
+        dmc.MultiSelect(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in transmission_cost_scenario],
+            value=[transmission_cost_scenario[0]] if len(transmission_cost_scenario) else [],
+            id={
+                'type': 'copper-inputs-transmission-cost-scenario-select',
+                'index': window_id
+            },
+        ),
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-transmission-cost-widget',
+            'index': window_id
+        }
+    )
+
+
     demand_scenarios = []
     if 'Demand' in classes:
         demand_scenarios = df[df['variable'].str.startswith('Demand')]['scenario'].unique()
@@ -696,6 +807,7 @@ def plot(df, window_id):
         extant_capacity_widget_layout,
         demand_widget_layout,
         cost_widget_layout,
+        transmission_cost_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
