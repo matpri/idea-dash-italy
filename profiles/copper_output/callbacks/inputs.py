@@ -30,6 +30,10 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
+            'type': 'copper-inputs-cost-widget',
+            'index': ALL
+        }, 'style'),
+        Output({
             'type': 'copper-inputs-scenario-select',
             'index': ALL
         }, 'style'),
@@ -120,6 +124,18 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'copper-inputs-cost-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-cost-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-cost-region-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-inputs-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -143,6 +159,10 @@ def link(app):
         }, 'style'),
         State({
             'type': 'copper-inputs-extant-capacity-widget',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-inputs-cost-widget',
             'index': ALL
         }, 'style'),
         State({
@@ -183,7 +203,10 @@ def link(app):
                       _extant_capacity_select, _extant_capacity_region_select, _extant_capacity_year_select,
                       _extant_capacity_scenario_select, _extant_capacity_scenario_multi_select,
                       _demand_scenario, _demand_time_step,
-                      _download, _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, t_scen_style, t_scen_multi_style,
+                      _c_select, _c_scenario, _c_region,
+                      _download, _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style,
+                      t_scen_style,
+                      t_scen_multi_style,
                       _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
                       _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
                       _extant_capacity_year_select_style, _demand_style):
@@ -202,9 +225,12 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Inputs'].to_csv,
                                              "inputs.csv")
-            return (_canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, t_scen_style, t_scen_multi_style,
-                _extant_capacity_rep_style, _extant_capacity_scenario_select_style, _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style, _extant_capacity_year_select_style,
-                _demand_style)
+            return (
+            _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style, t_scen_style, t_scen_multi_style,
+            _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
+            _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
+            _extant_capacity_year_select_style,
+            _demand_style)
 
         # Determine the index of the plot select input
         idx = 0
@@ -227,12 +253,14 @@ def link(app):
             _vre_style[idx] = {'display': 'block'}
             _transmission_style[idx] = {'display': 'none'}
             _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'none'}
         elif 'Extant Transmission' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'block'}
             _extant_capacity_style[idx] = {'display': 'none'}
             _extant_capacity_rep_style[idx] = {'display': 'none'}
             _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'none'}
             if t_ptype[idx] == 'Map Plot':
                 t_scen_style[idx] = {'display': 'block'}
                 t_scen_multi_style[idx] = {'display': 'none'}
@@ -247,6 +275,7 @@ def link(app):
             _extant_capacity_style[idx] = {'display': 'block'}
             _extant_capacity_rep_style[idx] = {'display': 'block'}
             _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'none'}
             if e_select == 'By Year':
                 e_scen = _extant_capacity_scenario_multi_select[idx]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'none'}
@@ -271,21 +300,32 @@ def link(app):
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'none'}
                 _extant_capacity_region_select_style[idx] = {'display': 'block'}
                 _extant_capacity_year_select_style[idx] = {'display': 'block'}
+        elif 'Cost' in _p_type[idx]:
+            _vre_style[idx] = {'display': 'none'}
+            _transmission_style[idx] = {'display': 'none'}
+            _extant_capacity_style[idx] = {'display': 'none'}
+            _extant_capacity_rep_style[idx] = {'display': 'none'}
+            _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'block'}
         else:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'none'}
             _extant_capacity_style[idx] = {'display': 'none'}
             _demand_style[idx] = {'display': 'block'}
-
-
+            _cost_style[idx] = {'display': 'none'}
 
         # Render the plot based on the selected inputs
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'],
                                    _vre_variable[idx], _season[idx], t_p_type=t_ptype[idx], t_year=t_year[idx],
-                                   t_scenarios=scen, e_year=e_year, e_region=e_region, e_scenarios=e_scen, e_p_type=e_select,
-                                   _demand_scenario=_demand_scenario[idx], _demand_time_step=_demand_time_step[idx])
+                                   t_scenarios=scen, e_year=e_year, e_region=e_region, e_scenarios=e_scen,
+                                   e_p_type=e_select,
+                                   _demand_scenario=_demand_scenario[idx], _demand_time_step=_demand_time_step[idx],
+                                   _c_type=_c_select[idx], _c_scenario=_c_scenario[idx], _c_region=_c_region[idx])
 
         return (_canvas, [dash.no_update for _ in
-                         _data], _vre_style, _transmission_style, _extant_capacity_style, t_scen_style, t_scen_multi_style,
-                _extant_capacity_rep_style, _extant_capacity_scenario_select_style, _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style, _extant_capacity_year_select_style,
+                          _data], _vre_style, _transmission_style, _extant_capacity_style, _cost_style, t_scen_style,
+                t_scen_multi_style,
+                _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
+                _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
+                _extant_capacity_year_select_style,
                 _demand_style)

@@ -14,9 +14,18 @@ from profiles.copper_output.visualization_scripts.utils import bar_over_regions,
     pie_chart
 
 
+def render_cost(data, _c_type, _c_scenario, _c_region):
+    data = data[data['variable'].str.startswith(_c_type)]
+    unit = data['unit'].iloc[0]
+
+    data['variable'] = data['variable'].replace(_c_type + '|', '', regex=True)
+    return trend_over_years.plot(data, _c_scenario, _c_region, False, _c_type, 'x', 'y', _c_type, unit)
+
+
 def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
-                _demand_scenario=None, _demand_time_step=None):
+                _demand_scenario=None, _demand_time_step=None,
+                _c_type=None, _c_scenario=None, _c_region=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -34,6 +43,8 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
         return plot_capacity(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios[0])
     elif p_type == 'Demand':
         return render_demand(data, _demand_scenario, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
+    elif p_type == 'Cost':
+        return render_cost(data, _c_type, _c_scenario, _c_region)
 
     else:
         return go.Figure()
@@ -476,6 +487,50 @@ def plot(df, window_id):
         seasons = ['Winter', 'Summer']
         vre_variables = ['Wind', 'Solar']
 
+    costs = []
+    c_regions = []
+    c_scenarios = []
+    if 'Cost' in classes:
+        costs = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[1]).unique()
+        c_regions = df[df['variable'].str.startswith('Cost')]['region'].unique()
+        c_scenarios = df[df['variable'].str.startswith('Cost')]['scenario'].unique()
+
+    cost_widget_layout = html.Div([
+        dmc.Select(
+            label='Cost Type',
+            data=[{'label': cost, 'value': cost} for cost in costs],
+            value=costs[0] if len(costs) else '',
+            id={
+                'type': 'copper-inputs-cost-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in c_scenarios],
+            value=c_scenarios[0] if len(c_scenarios) else '',
+            id={
+                'type': 'copper-inputs-cost-scenario-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in c_regions],
+            value=c_regions[0] if len(c_regions) else '',
+            id={
+                'type': 'copper-inputs-cost-region-select',
+                'index': window_id
+            },
+        ),
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-cost-widget',
+            'index': window_id
+        }
+    )
+
     e_years = []
     e_regions = []
     e_scenarios = []
@@ -640,6 +695,7 @@ def plot(df, window_id):
         transmission_widget_layout,
         extant_capacity_widget_layout,
         demand_widget_layout,
+        cost_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
