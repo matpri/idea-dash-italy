@@ -125,7 +125,7 @@ Transmission Capacity:
     x_label: Line
     y_label: Capacity (GW)
   Year Plot:
-    title: Transmission Flow by Line
+    title: Transmission Flow by Year
     x_label: Years
     y_label: Flow (GW)
 Transmission Flow:
@@ -140,7 +140,7 @@ Transmission Flow:
     x_label: Line
     y_label: Flow (GW)
   Year Plot:
-    title: Transmission Flow by Line
+    title: Transmission Flow by Year
     x_label: Years
     y_label: Flow (GW)
 Total Cost:
