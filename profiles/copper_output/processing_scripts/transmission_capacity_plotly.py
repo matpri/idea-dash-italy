@@ -181,19 +181,14 @@ def process(selected):
         times = df['period'].unique().tolist()
         times.sort()
 
-        #flip region and variable
-        df['region'], df['variable'] = df['variable'], df['region']
 
         # rename time to period
         # sort by region, variable, period
-        df["region"] = df.region.apply(lambda x: x.split(".")[0])
-        df["variable"] = df.variable.apply(lambda x: x.split(".")[0])
-        # remove where variable == region
-        df = df[df.region != df.variable]
+        df["region"], df['sub_region'] = df.region.apply(lambda x: x.split(".")[0]), df.region.apply(lambda x: x.split(".")[1])
+        # where variable == region, add sub_region to region and sub_variable to variable
+        df.loc[df['variable'] == df['region'], 'region'] = df['region'] + '.' + df['sub_region']
+        df.loc[df['variable'] == df['region'].apply(lambda x: x.split(".")[0]), 'variable'] = df.apply(lambda x: x['variable'] + '.a' if x['sub_region'] == 'b' else x['variable'] + '.b', axis=1)
         df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
-
-        # flip variable and region
-        df['region'], df['variable'] = df['variable'], df['region']
 
         # cum_ls = []
         # for i in range(1, len(times)):
@@ -244,8 +239,4 @@ def process(selected):
     prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
-    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
-                  right_on=['region', 'variable'])
-    full_t['from_lat'] = full_t['from_lat'].astype(float)
-    full_t['from_lon'] = full_t['from_lon'].astype(float)
     return full_t

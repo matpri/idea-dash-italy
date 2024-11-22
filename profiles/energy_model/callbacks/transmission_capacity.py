@@ -25,6 +25,14 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
+            'type': 'energy_model-transmissioncapacity-year-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'energy_model-transmissioncapacity-lines-select',
+            'index': ALL
+        }, 'style'),
+        Output({
             'type': 'energy_model-transmissioncapacity-download',
             'index': ALL
         }, 'data'),
@@ -50,6 +58,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'energy_model-transmissioncapacity-lines-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'energy_model-transmissioncapacity-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -72,13 +84,21 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
+            'type': 'energy_model-transmissioncapacity-year-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'energy_model-transmissioncapacity-lines-select',
+            'index': ALL
+        }, 'style'),
+        State({
             'type': 'energy_model-transmissioncapacity-download',
             'index': ALL
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_transmissioncapacity(_p_type, _scenarios, _scenario_group, _scenario, _years, _d_button, _canvas,
-                                    _s_style, _m_style, _g_style, _data):
+    def update_transmissioncapacity(_p_type, _scenarios, _scenario_group, _scenario, _years, _lines, _d_button, _canvas,
+                                    _s_style, _m_style, _g_style, _y_style, _l_style, _data):
         # print('updating transmissioncapacity plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -91,24 +111,26 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Transmission Capacity'].to_csv, "transmissioncapacity.csv")
-            return _canvas, _s_style, _m_style, _g_style, _data
+            return _canvas, _s_style, _m_style, _g_style, _y_style, _l_style, _data
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if (id['id']['index'] == trigger_id['index']):
                 idx = i
                 break
-
         if _p_type[idx] == 'Map Plot':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _g_style[idx] = {'display': 'none'}
+            _y_style[idx] = {'display': 'block'}
+            _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Map Plot',
                                        data_handler.processed_data['Power System Models']['Transmission Capacity'],
                                        _scenario[idx],
-                                       _years[idx]
+                                       _years[idx],
+                                        _lines[idx]
                                        )
-        elif _p_type[idx] == 'Bar Plot':
+        elif _p_type[idx] == 'Per Line Bar Plot':
             df = data_handler.processed_data['Power System Models']['Transmission Capacity']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
@@ -120,10 +142,44 @@ def link(app):
             _g_style[idx] = {'display': 'block'}
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _canvas[idx] = render_plot('Bar Plot',
+            _y_style[idx] = {'display': 'block'}
+            _l_style[idx] = {'display': 'none'}
+            _canvas[idx] = render_plot('Per Line Bar Plot',
                                        data_handler.processed_data['Power System Models']['Transmission Capacity'],
                                        scens,
-                                       _years[idx]
+                                       _years[idx],
+                                        _lines[idx]
+                                       )
+        elif _p_type[idx] == 'Per Year Bar Plot':
+            df = data_handler.processed_data['Power System Models']['Transmission Capacity']
+            unique_scenarios = df['scenario'].unique().tolist()
+            scens = _scenarios[idx]
+            if _scenario_group[idx] != 'ALL':
+                scenarios = [scenario for scenario in unique_scenarios if
+                             scenario.split('|')[1] == _scenario_group[idx]]
+                scens += scenarios
+            _m_style[idx] = {'display': 'block'}
+            _s_style[idx] = {'display': 'none'}
+            _g_style[idx] = {'display': 'block'}
+            _y_style[idx] = {'display': 'none'}
+            _l_style[idx] = {'display': 'block'}
+            _canvas[idx] = render_plot('Per Year Bar Plot',
+                                       data_handler.processed_data['Power System Models']['Transmission Capacity'],
+                                       scens,
+                                       _years[idx],
+                                        _lines[idx]
+                                       )
+        elif _p_type[idx] == 'Trends Over Years':
+            _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _g_style[idx] = {'display': 'none'}
+            _y_style[idx] = {'display': 'none'}
+            _l_style[idx] = {'display': 'none'}
+            _canvas[idx] = render_plot('Trends Over Years',
+                                       data_handler.processed_data['Power System Models']['Transmission Capacity'],
+                                       _scenario[idx],
+                                       _years[idx],
+                                        _lines[idx]
                                        )
 
-        return _canvas, _s_style, _m_style, _g_style, _data
+        return _canvas, _s_style, _m_style, _g_style, _y_style, _l_style, [dash.no_update for _ in _data]

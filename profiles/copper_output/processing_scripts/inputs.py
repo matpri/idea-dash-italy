@@ -19,7 +19,7 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'copper').any():
-            if df.variable.str.startswith("Input").any():
+            if df.variable.str.startswith("Input|").any():
                 return True
         return False
     except Exception as e:

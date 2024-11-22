@@ -170,12 +170,13 @@ def process(selected):
         # group by region, variable, period
         trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
-        trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
-        trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])
+        trs["region"], trs['sub_region'] = trs.region.apply(lambda x: x.split(".")[0]), trs.region.apply(lambda x: x.split(".")[1])
+        # where variable == region, add sub_region to region and sub_variable to variable
+        trs.loc[trs['variable'] == trs['region'], 'region'] = trs['region'] + '.' + trs['sub_region']
+        trs.loc[trs['variable'] == trs['region'].apply(lambda x: x.split(".")[0]), 'variable'] = trs.apply(lambda x: x['variable'] + '.a' if x['sub_region'] == 'b' else x['variable'] + '.b', axis=1)
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         # flip variable and region
-        df['region'], df['variable'] = df['variable'], df['region']
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
@@ -183,8 +184,4 @@ def process(selected):
 
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
-    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
-                      right_on=['region', 'variable'])
-    full_t['from_lat'] = full_t['from_lat'].astype(float)
-    full_t['from_lon'] = full_t['from_lon'].astype(float)
     return full_t

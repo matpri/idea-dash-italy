@@ -106,4 +106,4 @@ def link(app):
                                        _years[idx]
                                        )
 
-        return _canvas, _s_style, _m_style
+        return _canvas, _s_style, _m_style, _data

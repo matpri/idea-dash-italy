@@ -47,10 +47,6 @@ def aggregate_lines(df):
 
 
 def year_subset(Line_Flow, Year, Scenario):
-    Line_Flow['from_lon'] = pd.to_numeric(Line_Flow['from_lon'])
-    Line_Flow['from_lat'] = pd.to_numeric(Line_Flow['from_lat'])
-    Line_Flow['to_lon'] = pd.to_numeric(Line_Flow['to_lon'])
-    Line_Flow['to_lat'] = pd.to_numeric(Line_Flow['to_lat'])
     Line_Flow = Line_Flow[Line_Flow['scenario'] == Scenario]
     Line_Flow = Line_Flow[Line_Flow['period'] == Year]
 
