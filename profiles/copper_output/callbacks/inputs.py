@@ -38,6 +38,10 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
+            'type': 'copper-inputs-params-widget',
+            'index': ALL
+        }, 'style'),
+        Output({
             'type': 'copper-inputs-scenario-select',
             'index': ALL
         }, 'style'),
@@ -144,6 +148,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'copper-inputs-params-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-inputs-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -175,6 +183,10 @@ def link(app):
         }, 'style'),
         State({
             'type': 'copper-inputs-transmission-cost-widget',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-inputs-params-widget',
             'index': ALL
         }, 'style'),
         State({
@@ -216,9 +228,9 @@ def link(app):
                       _extant_capacity_scenario_select, _extant_capacity_scenario_multi_select,
                       _demand_scenario, _demand_time_step,
                       _c_select, _c_scenario, _c_region,
-                      _t_c_scenarios,
+                      _t_c_scenarios, _param_scenario,
                       _download, _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style,
-                      _t_cost_style,
+                      _t_cost_style, _params_style,
                       t_scen_style, t_scen_multi_style,
                       _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
                       _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
@@ -240,6 +252,7 @@ def link(app):
                                              "inputs.csv")
             return (
                 _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style, _t_cost_style,
+                _params_style,
                 t_scen_style,
                 t_scen_multi_style,
                 _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
@@ -270,6 +283,7 @@ def link(app):
             _demand_style[idx] = {'display': 'none'}
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
         elif 'Extant Transmission' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'block'}
@@ -278,6 +292,7 @@ def link(app):
             _demand_style[idx] = {'display': 'none'}
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
             if t_ptype[idx] == 'Map Plot':
                 t_scen_style[idx] = {'display': 'block'}
                 t_scen_multi_style[idx] = {'display': 'none'}
@@ -294,6 +309,7 @@ def link(app):
             _demand_style[idx] = {'display': 'none'}
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
             if e_select == 'By Year':
                 e_scen = _extant_capacity_scenario_multi_select[idx]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'none'}
@@ -326,6 +342,7 @@ def link(app):
             _demand_style[idx] = {'display': 'none'}
             _cost_style[idx] = {'display': 'block'}
             _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
         elif 'Transmission Costs' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'none'}
@@ -334,6 +351,16 @@ def link(app):
             _demand_style[idx] = {'display': 'none'}
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'block'}
+            _params_style[idx] = {'display': 'none'}
+        elif 'Technology Parameter' in _p_type[idx]:
+            _vre_style[idx] = {'display': 'none'}
+            _transmission_style[idx] = {'display': 'none'}
+            _extant_capacity_style[idx] = {'display': 'none'}
+            _extant_capacity_rep_style[idx] = {'display': 'none'}
+            _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'none'}
+            _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'block'}
 
         else:
             _vre_style[idx] = {'display': 'none'}
@@ -342,6 +369,7 @@ def link(app):
             _demand_style[idx] = {'display': 'block'}
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
 
         # Render the plot based on the selected inputs
         _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['COPPER']['Inputs'],
@@ -350,10 +378,11 @@ def link(app):
                                    e_p_type=e_select,
                                    _demand_scenario=_demand_scenario[idx], _demand_time_step=_demand_time_step[idx],
                                    _c_type=_c_select[idx], _c_scenario=_c_scenario[idx], _c_region=_c_region[idx],
-                                   _t_cost_scenarios=_t_c_scenarios[idx])
+                                   _t_cost_scenarios=_t_c_scenarios[idx], _p_scenario=_param_scenario[idx])
 
         return (_canvas, [dash.no_update for _ in
                           _data], _vre_style, _transmission_style, _extant_capacity_style, _cost_style, _t_cost_style,
+                _params_style,
                 t_scen_style,
                 t_scen_multi_style,
                 _extant_capacity_rep_style, _extant_capacity_scenario_select_style,

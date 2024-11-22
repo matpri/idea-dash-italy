@@ -106,11 +106,89 @@ def render_t_cost(data, _t_cost_scenario):
     return fig
 
 
+def render_tech_params(data, _p_scenario):
+    data = data[data['scenario'] == _p_scenario]
+    if not data.empty:
+        # create a table
+        data = data[['scenario', 'variable', 'value']]
+
+        df_pivot = data.pivot(index='variable', columns='scenario', values='value')
+
+
+        df_pivot = df_pivot.fillna('')
+        # Create a Plotly Table
+        header_values = [''] + list(df_pivot.columns)
+        cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
+
+        min_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+        max_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
+
+        def normalize(value):
+            if isinstance(value, (int, float)):
+                return (value - min_value) / (max_value - min_value)
+            return None
+
+        colors = []
+
+        for col in df_pivot.columns:
+            normalized_data = [normalize(val) for val in df_pivot[col]]
+            colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
+                                     0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in
+                                 normalized_data])]
+
+        colors_by_row = [['#ffffff', '#e5eeec'] * (
+                    len(df_pivot.index) // 2)] + colors  # Determine font colors based on the background color
+        font_colors = [['#000000'] * len(df_pivot.index)]
+        for column in colors:
+            font_colors.append([get_contrasting_font_color(color) for color in column])
+        # Calculate the width for each column
+        column_width = []
+        column_width.append(max(df_pivot.index.str.len()) * 8)
+        for col in df_pivot.columns:
+            column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
+
+        print(column_width)
+
+        # Create Plotly table
+        fig = go.Figure(data=[go.Table(
+            columnorder=[i + 1 for i in range(len(df_pivot.columns) + 1)],
+            columnwidth=column_width,
+            header=dict(values=header_values,
+                        fill_color=['#ffffff', '#248ce6', '#248ce6'],
+                        font=dict(color='white'),
+                        align='center'),
+            cells=dict(values=cell_values,
+                       fill_color=colors_by_row,
+                       line_color=colors_by_row,
+                       font=dict(color=font_colors),
+
+                       align='left'))
+        ])
+    else:
+        fig = go.Figure()
+        # print("No data available, since the results are all zero.")
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, since the results are all zero.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
+
+
+    return fig
+
+
 def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
                 _demand_scenario=None, _demand_time_step=None,
                 _c_type=None, _c_scenario=None, _c_region=None,
-                _t_cost_scenarios=None):
+                _t_cost_scenarios=None, _p_scenario=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -132,7 +210,8 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
         return render_cost(data, _c_type, _c_scenario, _c_region)
     elif p_type == 'Transmission Costs':
         return render_t_cost(data, _t_cost_scenarios)
-
+    elif p_type == 'Technology Parameter':
+        return render_tech_params(data, _p_scenario)
 
     else:
         return go.Figure()
@@ -560,6 +639,28 @@ def plot(df, window_id):
         }
     )
 
+    params_scenario = []
+    if 'Technology Parameter' in classes:
+        params_scenario = df[df['variable'].str.startswith('Technology Parameter')]['scenario'].unique()
+
+    params_widget_layout = html.Div([
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in params_scenario],
+            value=params_scenario[0] if len(params_scenario) else '',
+            id={
+                'type': 'copper-inputs-params-scenario-select',
+                'index': window_id
+            },
+        ),
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-params-widget',
+            'index': window_id
+        }
+    )
+
 
     demand_scenarios = []
     if 'Demand' in classes:
@@ -808,6 +909,7 @@ def plot(df, window_id):
         demand_widget_layout,
         cost_widget_layout,
         transmission_cost_widget_layout,
+        params_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
@@ -827,7 +929,9 @@ def plot(df, window_id):
                             e_region=e_regions[0] if len(e_regions) else None,
                             e_scenarios=e_scenarios if len(e_scenarios) else None,
                             _demand_scenario=demand_scenarios[0] if len(demand_scenarios) else None,
-                            _demand_time_step='hourly'),
+                            _demand_time_step='hourly',
+                            _c_type=costs[0] if len(costs) else None,
+                           ),
         id={
             'type': ids.FIGURE,
             'index': window_id,
