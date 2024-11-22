@@ -57,7 +57,7 @@ def aggregate_db(db, scenario):
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
-    # aggregate the dim_name based on the tech_agg_COPPER dictionary
+    # aggregate the dim_name based on the tech_agg_NATEM Canada dictionary
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
