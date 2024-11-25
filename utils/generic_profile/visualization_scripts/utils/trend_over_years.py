@@ -15,7 +15,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     )
 
     try:
-        df_scen = subset(df, region, scenario, aggregate, season)
+        df_scen = subset(df, region, scenario, unit, aggregate, season)
         techs = df_scen.variable.unique().tolist()
 
         for i, tech in enumerate(techs):
@@ -71,14 +71,14 @@ def subset(df, region, scenario, aggregate, season=None):
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
-
+    df_scen = df_scen[df_scen['unit'] == unit]
     df_scen = df_scen[df_scen['region'] == region]
 
     # create new column for total in can_emissions df

@@ -15,7 +15,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     )
 
     try:
-        df_scen = subset(df, region, year, scenario, aggregate, season)
+        df_scen = subset(df, region, year, scenario, unit, aggregate, season)
         techs = df_scen.variable.unique().tolist()
 
         for i, tech in enumerate(techs):
@@ -53,7 +53,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     return fig
 
 
-def subset(df, region, year, scenario, aggregate, season=None):
+def subset(df, region, year, scenario, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
     df_scen['year'] = pd.to_datetime(df_scen['time'])
     df_scen['year'] = df_scen['year'].dt.strftime('%Y')
@@ -65,6 +65,8 @@ def subset(df, region, year, scenario, aggregate, season=None):
     df_scen = df_scen[df_scen['scenario'] == scenario]
 
     df_scen = df_scen[df_scen['region'] == region]
+
+    df_scen = df_scen[df_scen['unit'] == unit]
 
     # create new column for total in can_emissions df
     df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
