@@ -107,7 +107,7 @@ def render_t_cost(data, _t_cost_scenario):
 
 
 def render_tech_params(data, _p_scenario):
-    data = data[data['scenario'] == _p_scenario]
+    data = data[data['scenario'].isin(_p_scenario)]
     if not data.empty:
         # create a table
         data = data[['scenario', 'variable', 'value']]
@@ -647,10 +647,10 @@ def plot(df, window_id):
         params_variables = df[df['variable'].str.startswith('Technology Parameter')]['variable'].apply(lambda x: x.split('|')[1]).unique()
 
     params_widget_layout = html.Div([
-        dmc.Select(
+        dmc.MultiSelect(
             label='Scenario',
             data=[{'label': scenario, 'value': scenario} for scenario in params_scenario],
-            value=params_scenario[0] if len(params_scenario) else '',
+            value=[params_scenario[0]] if len(params_scenario) else [],
             id={
                 'type': 'copper-inputs-params-scenario-select',
                 'index': window_id
