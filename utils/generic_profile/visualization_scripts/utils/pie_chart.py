@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, season=None):
+def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, unit, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -15,7 +15,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     )
 
     try:
-        df_scen = subset(df, region, year, scenario, aggregate, season)
+        df_scen = subset(df, region, year, scenario, unit, aggregate, season)
         techs = df_scen.variable.unique().tolist()
         if aggregate:
             colors = [utils.get_group_colors(tech) for tech in techs]
@@ -45,7 +45,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     return fig
 
 
-def subset(df, region, year, scenario, aggregate, season=None):
+def subset(df, region, year, scenario, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
 
@@ -57,14 +57,14 @@ def subset(df, region, year, scenario, aggregate, season=None):
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
-
+    df_scen = df_scen[df_scen['unit'] == unit]  
     df_scen = df_scen[df_scen['region'] == region]
     df_scen = df_scen[df_scen['time'] == year]
 
