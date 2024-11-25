@@ -106,7 +106,7 @@ def preprocess(transmission, scenario="CER"):
     Returns:
         pd.DataFrame: Processed DataFrame.
     """
-    transmission = transmission.drop(columns=['model', 'unit'])
+    transmission = transmission.drop(columns=['model'])
     prov_cord = pd.read_csv('./arrow_coords.csv')
     transmission['time'] = pd.to_datetime(transmission['time'])
 
@@ -117,10 +117,10 @@ def preprocess(transmission, scenario="CER"):
     unique_dates = sub_transmission['time'].dt.date.unique()
     transmission = transmission.drop(columns=['time'])
     transmission = transmission[transmission.value != 0]
-    transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
+    transmission = transmission.groupby(["region", "variable", "period", 'unit']).sum().reset_index()
     transmission["region"] = transmission.region.map(utils.province_short)
     transmission["variable"] = transmission.variable.map(utils.province_short)
-    transmission = transmission.groupby(["region", "variable", "period"]).sum().reset_index()
+    transmission = transmission.groupby(["region", "variable", "period", 'unit']).sum().reset_index()
     transmission = transmission[transmission.region != transmission.variable]
     transmission['connection'] = transmission.apply(lambda row: connection(row), axis=1)
     transmission["period"] = transmission.period.astype(str)
@@ -168,7 +168,7 @@ def process(selected):
         # drop time
         trs = trs.drop(columns=['time'])
         # group by region, variable, period
-        trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
+        trs = trs.groupby(["region", "variable", "period", 'unit']).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"], trs['sub_region'] = trs.region.apply(lambda x: x.split(".")[0]), trs.region.apply(lambda x: x.split(".")[1])
         # where variable == region, add sub_region to region and sub_variable to variable
@@ -177,7 +177,7 @@ def process(selected):
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         # flip variable and region
-        trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
+        trs = trs.groupby(["region", "variable", "period", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
     prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')

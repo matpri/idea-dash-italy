@@ -36,7 +36,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return df
 
 
@@ -51,7 +51,7 @@ def calc_canadian(df):
         DataFrame: Formatted data with extracted information.
     """
     # Group by period and technology and sum the values
-    canadian_total = df.groupby(["time", "variable"]).sum(numeric_only=True).reset_index()
+    canadian_total = df.groupby(["time", "variable", 'unit']).sum(numeric_only=True).reset_index()
     canadian_total["region"] = "CAN"
     return canadian_total
 

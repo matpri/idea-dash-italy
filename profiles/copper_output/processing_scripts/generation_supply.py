@@ -40,7 +40,7 @@ def aggregate_db(db, scenario):
         pd.DataFrame: Aggregated and formatted DataFrame.
     """
     # safely remove model and unit column if they exist
-    db = db.drop(columns=['model', 'unit'], errors='ignore')
+    db = db.drop(columns=['model'], errors='ignore')
     db['region'] = db['region'].astype(str)
     db['variable'] = db['variable'].astype(str)
 
@@ -91,7 +91,7 @@ def aggregate_db(db, scenario):
     transmission_df['value'] = transmission_df['value'] * -1
 
     # aggregate df values by region, variable, time, hour
-    transmission_df = transmission_df.groupby(["region", "variable", "period"]).sum().reset_index()
+    transmission_df = transmission_df.groupby(["region", "variable", "period", 'unit']).sum().reset_index()
     # rename from and variable based on utils.province_short
     transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
@@ -117,7 +117,7 @@ def aggregate_db(db, scenario):
             dim_names.append(f"Imports from {row['variable']}")
     transmission_df['end_node'] = transmission_df['variable']
     transmission_df['variable'] = dim_names
-    transmission_df = transmission_df.groupby(['period', 'region', 'variable','end_node']).sum(numeric_only=True).reset_index()
+    transmission_df = transmission_df.groupby(['period', 'region', 'variable','end_node', 'unit']).sum(numeric_only=True).reset_index()
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
@@ -144,10 +144,10 @@ def aggregate_db(db, scenario):
     # fill na values with 0
     df = df.fillna(0)
     # df = df[df.value != 0]
-    df = df.groupby(['period', 'region', 'variable','end_node']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['period', 'region', 'variable','end_node', 'unit']).sum(numeric_only=True).reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
+    can_df = df.groupby(['variable', 'period', 'scenario','end_node', 'unit']).sum(numeric_only=True).reset_index()
     # can_df remove all variables that start with Import or Export
     can_df = can_df[~can_df.variable.str.startswith('Imports from')]
     can_df = can_df[~can_df.variable.str.startswith('Exports to')]

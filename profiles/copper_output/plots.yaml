@@ -248,6 +248,12 @@ Overview:
     title: Net New Capacity
     x_label: Year
     y_label: Capacity (GW)
+  Qualifying Capacity:
+    name: Qualifying Capacity
+    unit: GW
+    title: Qualifying Capacity
+    x_label: Year
+    y_label: Qualifying Capacity (GW)
   Emissions:
     name: Emissions
     unit: MtCO2eq
