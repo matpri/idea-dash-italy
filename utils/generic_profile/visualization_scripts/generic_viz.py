@@ -18,7 +18,7 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
                                    text_active=text_active, pattern_list=pattern_list)
     elif type == 'Trend Over Years':
         return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
-    elif type == 'Trend in one Years':
+    elif type == 'Trend in one Year':
         return trend_over_year.plot(df, scenario, region, year, aggregate, name, "Year", name, name, unit)
     elif type == 'Pie Chart':
         return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, unit)
@@ -102,7 +102,7 @@ def create_generic_plots(model, name, profile):
 
         plot_options = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
         if trend_one_year:
-            plot_options.append('Trend in one Years')
+            plot_options.append('Trend in one Year')
         widget_layout = html.Div([
             dmc.Select(
                 label='Plot Options',

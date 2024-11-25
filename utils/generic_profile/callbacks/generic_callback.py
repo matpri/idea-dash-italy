@@ -265,7 +265,7 @@ def link(app):
                                            _regions[idx],
                                            _units[idx],
                                            _years[idx], scenario=_scenario[idx], pattern_list=patterns)
-        elif _p_type[idx] == 'Trend in one Years':
+        elif _p_type[idx] == 'Trend in one Year':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
@@ -274,7 +274,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend in one Years',
+                _canvas[idx] = render_plot('Trend in one Year',
                                            name,
                                            data_handler.processed_data[model][name],
                                            _aggregates[idx],

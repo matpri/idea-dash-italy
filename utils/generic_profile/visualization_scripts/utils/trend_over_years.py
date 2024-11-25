@@ -53,7 +53,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     return fig
 
 
-def subset(df, region, scenario, aggregate, season=None):
+def subset(df, region, scenario, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
     if not pd.api.types.is_numeric_dtype(df['time']):

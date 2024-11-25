@@ -14,40 +14,40 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
         template="simple_white",
     )
 
-    try:
-        df_scen = subset(df, region, year, scenario, unit, aggregate, season)
-        techs = df_scen.variable.unique().tolist()
+    # try:
+    df_scen = subset(df, region, year, scenario, unit, aggregate, season)
+    techs = df_scen.variable.unique().tolist()
 
-        for i, tech in enumerate(techs):
-            data = df_scen[df_scen["variable"] == tech]
-            data = data.sort_values(by=['time'])
+    for i, tech in enumerate(techs):
+        data = df_scen[df_scen["variable"] == tech]
+        data = data.sort_values(by=['time'])
 
-            if aggregate:
-                color = utils.get_group_colors(tech)
-            else:
-                color = utils.get_color(tech)
+        if aggregate:
+            color = utils.get_group_colors(tech)
+        else:
+            color = utils.get_color(tech)
 
-            fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+        fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
-        fig.update_yaxes(showgrid=True)
-        if df_scen.empty:
-            print("No data available, since the results are all zero.")
-            fig.add_annotation(
-                x=0.5,
-                y=0.5,
-                text="No data available, since the results are all zero.",
-                showarrow=False,
-                font=dict(
-                    size=16,
-                    color="black"
-                ),
-                align="center",
-                valign="middle",
-            )
+    fig.update_yaxes(showgrid=True)
+    if df_scen.empty:
+        print("No data available, since the results are all zero.")
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, since the results are all zero.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
 
-    except Exception as e:
-        print(title, 'plot:', e)
+    # except Exception as e:
+    #     print(title, 'plot:', e)
 
     fig.layout.autosize = True
     return fig
@@ -60,7 +60,7 @@ def subset(df, region, year, scenario, unit, aggregate, season=None):
 
     df_scen = df_scen[df_scen['year'] == year]
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
 
