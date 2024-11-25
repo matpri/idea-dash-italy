@@ -117,15 +117,15 @@ class GenericProfile:
             # if time is a Timestamp, convert to int only keeping the year
             if df['time'].dtype == 'datetime64[ns]':
                 df['time'] = df['time'].dt.year
-            df = df.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+            df = df.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
             df['region'] = 'National'
 
             dfs.append(df)
         full_df = pd.concat(dfs)
 
 
-        processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
-        processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+        processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]))
+        processed_data.append((self.display_name, 'Output Stats', full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]))
 
         return processed_data
 
