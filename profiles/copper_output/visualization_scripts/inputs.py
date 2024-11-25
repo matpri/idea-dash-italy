@@ -188,7 +188,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
                 _demand_scenario=None, _demand_time_step=None,
                 _c_type=None, _c_scenario=None, _c_region=None,
-                _t_cost_scenarios=None, _p_scenario=None):
+                _t_cost_scenarios=None, _p_scenario=None, _p_variable=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -211,6 +211,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
     elif p_type == 'Transmission Costs':
         return render_t_cost(data, _t_cost_scenarios)
     elif p_type == 'Technology Parameter':
+        data = data[data['variable'].str.startswith(_p_variable)]
         return render_tech_params(data, _p_scenario)
 
     else:
@@ -640,8 +641,10 @@ def plot(df, window_id):
     )
 
     params_scenario = []
+    params_variables = []
     if 'Technology Parameter' in classes:
         params_scenario = df[df['variable'].str.startswith('Technology Parameter')]['scenario'].unique()
+        params_variables = df[df['variable'].str.startswith('Technology Parameter')]['variable'].apply(lambda x: x.split('|')[1]).unique()
 
     params_widget_layout = html.Div([
         dmc.Select(
@@ -650,6 +653,15 @@ def plot(df, window_id):
             value=params_scenario[0] if len(params_scenario) else '',
             id={
                 'type': 'copper-inputs-params-scenario-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Variable',
+            data=[{'label': variable, 'value': variable} for variable in params_variables],
+            value=params_variables[0] if len(params_variables) else '',
+            id={
+                'type': 'copper-inputs-params-variable-select',
                 'index': window_id
             },
         ),

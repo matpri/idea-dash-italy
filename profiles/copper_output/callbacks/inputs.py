@@ -152,6 +152,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'copper-inputs-params-variable-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-inputs-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -228,7 +232,7 @@ def link(app):
                       _extant_capacity_scenario_select, _extant_capacity_scenario_multi_select,
                       _demand_scenario, _demand_time_step,
                       _c_select, _c_scenario, _c_region,
-                      _t_c_scenarios, _param_scenario,
+                      _t_c_scenarios, _param_scenario, _param_variable,
                       _download, _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style,
                       _t_cost_style, _params_style,
                       t_scen_style, t_scen_multi_style,
@@ -378,7 +382,7 @@ def link(app):
                                    e_p_type=e_select,
                                    _demand_scenario=_demand_scenario[idx], _demand_time_step=_demand_time_step[idx],
                                    _c_type=_c_select[idx], _c_scenario=_c_scenario[idx], _c_region=_c_region[idx],
-                                   _t_cost_scenarios=_t_c_scenarios[idx], _p_scenario=_param_scenario[idx])
+                                   _t_cost_scenarios=_t_c_scenarios[idx], _p_scenario=_param_scenario[idx], _p_variable=_param_variable[idx])
 
         return (_canvas, [dash.no_update for _ in
                           _data], _vre_style, _transmission_style, _extant_capacity_style, _cost_style, _t_cost_style,
