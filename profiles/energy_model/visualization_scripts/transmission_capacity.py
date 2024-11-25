@@ -391,6 +391,7 @@ def plot(df, window_id):
                 'type': 'energy_model-transmissioncapacity-lines-select',
                 'index': window_id
             },
+            style={'display': 'none'}
         ),
         dmc.Button('Download Data', id={'type': 'energy_model-transmissioncapacity-download-button', 'index': window_id},
                    variant='light',

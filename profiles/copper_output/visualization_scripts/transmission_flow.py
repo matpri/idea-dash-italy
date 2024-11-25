@@ -414,6 +414,7 @@ def plot(df, window_id):
                 'type': 'copper-transmissionflow-lines-select',
                 'index': window_id
             },
+            style={'display': 'none'}
         ),
 
         dmc.Button('Download Data', id={'type': 'copper-transmissionflow-download-button', 'index': window_id},
