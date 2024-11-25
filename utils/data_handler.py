@@ -400,7 +400,8 @@ class DataHandler:
                     variables += df.variable.unique().tolist()
                     df['variable'] = viz + '|' + df['variable']
                     df['scenario'] = model + '|' + df['scenario']
-                    df['unit'] = 'unit'
+                    if 'unit' not in df.columns:
+                        df['unit'] = 'NA'
                     if dfs.get(viz, None) is None:
                         dfs[viz] = [df]
                     else :
