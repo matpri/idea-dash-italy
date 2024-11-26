@@ -11,7 +11,7 @@ def render_plot(type, df, scenarios, region, year, sector):
     name = 'OBPS Standard'
     data = df[df['sector'] == sector]
     if type == 'Table':
-        table.plot(data, scenarios, year, region)
+        return table.plot(data, scenarios, year, region)
     elif type == 'Trend Over Years':
         return trend_over_years.plot(data, scenarios, region, False, 'OBPS Standard', 'Year', 'value', name)
 
@@ -45,38 +45,18 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': '-standard-year-select',
+            'type': 'obps-standard-year-select',
             'index': window_id
         },
 
         style={'display': 'none'}
     )
 
-    pattern_toggle = dmc.Switch(
-        label='Pattern',
-        checked=True,
-        id={
-            'type': 'obps-standard-pattern-switch',
-            'index': window_id,
-        },
-        style={'display': 'block'}
-    )
-
-    text_toggle = dmc.Switch(
-        label='Text',
-        checked=False,
-        id={
-            'type': 'obps-standard-text-switch',
-            'index': window_id,
-        },
-        style={'display': 'block'}
-    )
-
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
-            value='By Year',
+            data=[{'label': plot, 'value': plot} for plot in ['Table', 'Trend Over Years']],
+            value='Table',
             id={
                 'type': 'obps-standard-plot-select',
                 'index': window_id
@@ -87,13 +67,10 @@ def plot(df, window_id):
             data=[{'label': sector, 'value': sector} for sector in sectors],
             value=sectors[0],
             id={
-                'type': 'obps-standard-plot-select',
+                'type': 'obps-standard-sector-select',
                 'index': window_id
             },
         ),
-        
-        pattern_toggle,
-        text_toggle,
         dmc.MultiSelect(
             label='Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],

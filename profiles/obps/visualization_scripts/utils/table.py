@@ -10,7 +10,7 @@ def get_contrasting_font_color(rgb_color):
     return '#ffffff' if brightness < 128 else '#000000'
 
 def plot(data, scenarios, year, region):
-    data = data[data['scenario'].isin(scenarios) & (data[data['time'] == year]) & (data[data['region']==region])]
+    data = data[(data['scenario'].isin(scenarios)) & (data['time'] == year) & (data['region']==region)]
     if not data.empty:
         data['variable'] = data['variable'] + ' (' + data['unit'] + ')'
         data = data[['scenario', 'variable', 'value']]

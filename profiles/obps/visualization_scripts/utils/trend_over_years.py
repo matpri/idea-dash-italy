@@ -21,6 +21,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
             data = data.sort_values(by=['time'])
+            unit = data['unit'].iloc[0]
 
             if aggregate:
                 color = utils.get_group_colors(tech)
@@ -29,15 +30,22 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
 
             if 'Fuel:' in tech:
                 tech, fuel_type = tech.split('|Fuel: ')
-                fig.add_scatter(x=data["time"], y=data["value"], name=fuel_type, mode='lines+markers',
+                fig.add_scatter(x=data["time"], y=data["value"], name=fuel_type, mode='lines+markers+text',
                                 marker_color=color,
                                 legendgroup=tech, legendgrouptitle=dict(text=tech),
                                 legendrank=2,
-                                hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + '<br><extra></extra>')
+                                hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}<br><extra></extra>',
+                                text=[''] * (len(data["time"]) // 5) + [unit] + [''] * (
+                                        len(data["time"]) - len(data["time"]) // 5 - 1),
+                                textposition="top center")
             else:
-                fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers+text',
+                                marker_color=color,
                                 legendrank=1,
-                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} '+ '<br><extra></extra>')
+                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}<br><extra></extra>',
+                                text=[''] * (len(data["time"]) // 5) + [unit] + [''] * (
+                                        len(data["time"]) - len(data["time"]) // 5 - 1),
+                                textposition="top center")
 
         fig.update_yaxes(showgrid=True)
         fig.update_layout(legend=dict(groupclick="toggleitem"))
@@ -75,18 +83,19 @@ def subset(df, region, scenario, aggregate):
 
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(
+            numeric_only=True).reset_index()
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
 
     df_scen = df_scen[df_scen['region'] == region]
 
     # create new column for total in can_emissions df
-    df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
+    df_scen['total'] = df_scen.groupby(['time', 'scenario', 'unit'])['value'].transform('sum').values
 
     df_scen = df_scen[df_scen['value'] != 0]
 
@@ -101,7 +110,8 @@ def subset(df, region, scenario, aggregate):
                     continue
                 else:
                     year_pad.append(
-                        {'variable': var, 'region': region, 'time': year, 'scenario': scen, 'value': 0, 'total': 0},
+                        {'variable': var, 'region': region, 'time': year, 'scenario': scen, 'value': 0, 'total': 0,
+                         'unit': ''},
                     )
     year_pad_df = pd.DataFrame(year_pad)
     df_scen = pd.concat([df_scen, year_pad_df])

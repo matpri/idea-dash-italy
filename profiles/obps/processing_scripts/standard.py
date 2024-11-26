@@ -31,15 +31,17 @@ def process(dbs: dict):
     Returns:
         pd.DataFrame: Processed generation capacity data.
     """
-    gen_caps = []
+    dfs = []
     for scenario_name, db in dbs.items():
         df = db.copy()
         df = df[df.variable.str.contains('Standard')]
-        df['variable'] = df['variable'].replace('Input|Policy|OBPS|Standard|', '')
+        df['variable'] = df['variable'].str.replace('Input|Policy|OBPS|Standard|', '')
         df['sector'], df['variable'] = df['variable'].apply(lambda x: x.split('|')[0]), df['variable'].apply(lambda x: '|'.join(x.split('|')[1:]))
         df['scenario'] = scenario_name
 
-    full_df = pd.concat(gen_caps)
+        dfs.append(df)
+
+    full_df = pd.concat(dfs)
     full_df['time'] = full_df['time'].astype(int)
 
     return full_df

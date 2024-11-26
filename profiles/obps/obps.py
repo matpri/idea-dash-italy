@@ -8,6 +8,18 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.obps import utils
 
+from profiles.obps.callbacks import (
+    settings as settings_callbacks,
+    standard as standard_callbacks,
+)
+
+from profiles.obps.processing_scripts import (
+    standard as standard_processing
+)
+
+from profiles.obps.visualization_scripts import (
+    standard as standard_visualization
+)
 
 
 def data_processing_task(profile_name, viz, data, processing_func):
@@ -17,17 +29,29 @@ def data_processing_task(profile_name, viz, data, processing_func):
 
 class OBPS(BaseProfile):
     display_name = 'OBPS'
-    name = 'obps'
-    db_name = 'obps'
+    name = 'OBPS'
+    db_name = 'OBPS'
     color = 'yellow 8'
     description = (
         'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-       
+        'Standard'
+
     ]
-    viz_options = {}
+    viz_options = {
+        'Standard':
+            {
+                'check': standard_processing.check,
+                'db_check': standard_processing.check,
+                'process': standard_processing.process,
+                'db_process': standard_processing.process,
+                'viz': standard_visualization.plot,
+                'callback': standard_callbacks.link,
+                'description': 'OBPS Standards',
+            },
+    }
 
     def __init__(self):
         super().__init__()
