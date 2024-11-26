@@ -68,7 +68,7 @@ class PypsaOutput(BaseProfile):
     db_name = 'pypsa'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
+        'The Canadian Opportunities for Planning and Production of Electricity Resources (NRCan-PyPsa) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [

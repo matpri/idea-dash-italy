@@ -77,7 +77,7 @@ def extant_process(fname):
     df['variable'] = df['ABA'].str.split('.').str[2]
     df = df.drop(columns=['ABA'])
     df = pd.melt(df, id_vars=['region', 'variable'], var_name='time', value_name='value')
-    df = df.groupby(['time', 'region', 'variable']).sum().reset_index()
+    df = df.groupby(['time', 'region', 'variable', 'unit']).sum().reset_index()
     return df
 
 def preprocess(df, scenario):
@@ -91,12 +91,12 @@ def preprocess(df, scenario):
     Returns:
         pd.DataFrame: Processed DataFrame.
     """
-    df = df.drop(columns=['unit', 'model'])
+    df = df.drop(columns=['model'])
     prov_cord = pd.read_csv('./province_coordinates.csv', header=0)
     df = df[df['value'] != 0]
     df['region'] = df['region'].str.split('.').str[0]
     df['variable'] = df['variable'].str.split('.').str[0]
-    df = df.groupby(['time', 'region', 'variable']).sum().reset_index()
+    df = df.groupby(['time', 'region', 'variable', 'unit']).sum().reset_index()
     df["built"] = 'new'
     df.time = df.time.astype(str)
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
@@ -120,7 +120,7 @@ def preprocess(df, scenario):
             df.loc[index, 'larrow'] = 0
 
     df = df[df['region'] != df['variable']]
-    df = df.groupby(['time', 'region', 'variable', 'line', 'scenario', 'built']).sum().reset_index()
+    df = df.groupby(['time', 'region', 'variable', 'line', 'scenario', 'built', 'unit']).sum().reset_index()
 
     rarrow = df[df['rarrow'] != 0]
     larrow = df[df['larrow'] != 0]
@@ -181,19 +181,14 @@ def process(selected):
         times = df['period'].unique().tolist()
         times.sort()
 
-        #flip region and variable
-        df['region'], df['variable'] = df['variable'], df['region']
 
         # rename time to period
         # sort by region, variable, period
-        df["region"] = df.region.apply(lambda x: x.split(".")[0])
-        df["variable"] = df.variable.apply(lambda x: x.split(".")[0])
-        # remove where variable == region
-        df = df[df.region != df.variable]
-        df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
-
-        # flip variable and region
-        df['region'], df['variable'] = df['variable'], df['region']
+        df["region"], df['sub_region'] = df.region.apply(lambda x: x.split(".")[0]), df.region.apply(lambda x: x.split(".")[1])
+        # where variable == region, add sub_region to region and sub_variable to variable
+        df.loc[df['variable'] == df['region'], 'region'] = df['region'] + '.' + df['sub_region']
+        df.loc[df['variable'] == df['region'].apply(lambda x: x.split(".")[0]), 'variable'] = df.apply(lambda x: x['variable'] + '.a' if x['sub_region'] == 'b' else x['variable'] + '.b', axis=1)
+        df = df.groupby(["region", "variable", "period", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
         # cum_ls = []
         # for i in range(1, len(times)):
@@ -218,7 +213,7 @@ def process(selected):
 
         df['scenario'] = scenario_name
         df['period'] = df['period'].astype(int)
-        df = df.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
+        df = df.groupby(["region", "variable", "period", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
         df['value'] = df['value'] / 1000
         # df['total'] = df['total'] / 1000
         # df['cumsum'] = df['cumsum'] / 1000
@@ -244,8 +239,4 @@ def process(selected):
     prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)
-    full_t = pd.merge(full_t, prov_cord, how='inner', left_on=['region', 'variable'],
-                  right_on=['region', 'variable'])
-    full_t['from_lat'] = full_t['from_lat'].astype(float)
-    full_t['from_lon'] = full_t['from_lon'].astype(float)
     return full_t

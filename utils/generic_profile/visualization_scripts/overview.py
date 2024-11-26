@@ -5,17 +5,18 @@ from dash import html, dcc
 from components import ids
 
 
-def render_plot(type, df):
+def render_plot(type, df, unit):
     df = df[df.variable == type].copy()
-    return plot_overview(df, 'Overview', 'Year', 'Value', type, 'unit')
+    df = df[df.unit == unit]
+    return plot_overview(df, type, 'Year', type, type, unit)
 
 
 def plot_overview(df, title, x_label, y_label, name, unit):
     fig = go.Figure()
     fig.update_layout(
-        title_text=title,
+        title_text=f'Overview of {title}',
         xaxis_title=x_label,
-        yaxis_title=y_label,
+        yaxis_title=y_label + f' ({unit})' if unit != 'NA' else y_label,
         template="simple_white",
     )
     try:
@@ -61,6 +62,7 @@ def create_overview_plot(model):
         '''
         # print('plotting overview')
         classes = df['variable'].unique().tolist()
+        units = df[df['variable'] == classes[0]]['unit'].unique().tolist()
 
         widget_layout = html.Div([
             dmc.Select(
@@ -69,6 +71,17 @@ def create_overview_plot(model):
                 value=classes[0],
                 id={
                     'type': 'plot-select',
+                    'model': model,
+                    'index': window_id,
+                    'viz': 'overview'
+                },
+            ),
+            dmc.Select(
+                label='Unit',
+                data=[{'label': unit, 'value': unit} for unit in units],
+                value=units[0],
+                id={
+                    'type': 'unit-select',
                     'model': model,
                     'index': window_id,
                     'viz': 'overview'
@@ -84,7 +97,7 @@ def create_overview_plot(model):
         ])
 
         plot_layout = dcc.Graph(
-            figure=render_plot(classes[0], df),
+            figure=render_plot(classes[0], df, units[0]),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,

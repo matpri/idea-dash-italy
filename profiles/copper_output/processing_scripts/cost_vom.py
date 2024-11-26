@@ -35,7 +35,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return df
 
 
@@ -52,10 +52,10 @@ def calculate_vom(vom_df):
     """
     # vom_df = df[df['variable'].isin(utils.vom_names)].copy()
     # vom_df['variable'] = vom_df['variable'].map(utils.cost_tech).fillna(vom_df['variable'])
-    vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
+    vom_df = vom_df.groupby(["variable", "region", "time", "scenario", 'unit']).sum(numeric_only=False).reset_index()
 
     # Aggregate data over all regions by variable, time, and scenario and sum the values
-    can_vom_df = vom_df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
+    can_vom_df = vom_df.groupby(["variable", "time", "scenario", 'unit'], as_index=False).sum(numeric_only=True)
 
     # Add a row with "Region" as "Can"
     can_vom_df = can_vom_df.assign(region='CAN')

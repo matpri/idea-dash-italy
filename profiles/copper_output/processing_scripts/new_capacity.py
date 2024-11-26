@@ -40,7 +40,7 @@ def process_newcap(prov_df, canada_df, scenario_name):
     df = pd.concat([canada_df, prov_df])
     df = df[~df.variable.str.contains('retire')]  # Remove rows containing 'retire' in the 'variable' column
     df['value'] = df['value'].div(1000)  # Convert 'value' to GW from MW
-    df = df.groupby(['region', 'variable', 'time']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
     df['scenario'] = scenario_name
 
     return df
@@ -64,7 +64,7 @@ def process(selected):
 
         prov_df = prov_df[~prov_df['variable'].str.contains("Retire")]
 
-        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable', 'unit']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         new_cap = process_newcap(prov_df, canada_df, scenario_name)
 

@@ -19,7 +19,7 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'copper').any():
-            if df.variable.str.startswith("Input").any():
+            if df.variable.str.startswith("Input|").any():
                 return True
         return False
     except Exception as e:
@@ -48,9 +48,9 @@ def extant_transmission(data):
     data["variable"] = data.variable.apply(lambda x: x.split(".")[0])
     # remove where variable == region
     data = data[data.region != data.variable]
-    data = data.groupby(["region", "variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    data = data.groupby(["region", "variable", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
-    data = data.groupby(["region", "variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    data = data.groupby(["region", "variable", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     prov_cord = pd.read_csv('./profiles/copper_output/visualization_scripts/utils/arrow_coords.csv')
     data['short_region'] = data['region'].map(utils.province_short)
     data['short_variable'] = data['variable'].map(utils.province_short)
@@ -65,7 +65,7 @@ def extant_transmission(data):
 def extant_capacity(data):
     data["region"] = data["region"].apply(lambda x: x.split(".")[0])
     data['region'] = data['region'].map(utils.province_short).fillna(data['region'])
-    data = data.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    data = data.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return data
 
 

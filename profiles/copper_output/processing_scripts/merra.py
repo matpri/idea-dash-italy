@@ -43,7 +43,7 @@ def process(selected: dict):
 
     for year in full_df['time'].unique():
         subset = full_df[full_df['time'] <= year]
-        subset = subset.groupby(['region', 'variable', 'scenario']).sum().reset_index()
+        subset = subset.groupby(['region', 'variable', 'scenario', 'unit']).sum().reset_index()
         subset['time'] = year
         subsets.append(subset)
 

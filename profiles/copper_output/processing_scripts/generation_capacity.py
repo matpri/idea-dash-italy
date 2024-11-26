@@ -43,7 +43,7 @@ def process_gencap(prov_df, canada_df, scenario_name):
     df = df[~df['variable'].str.contains("retire")]
     df = df[~df['variable'].str.contains("Retire")]
     df['value'] = df['value'].div(1000)
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     df['scenario'] = scenario_name
     return df
 
@@ -62,7 +62,7 @@ def process(dbs: dict):
         df = db.copy()
         prov_df = df[df.variable.str.startswith("Total Capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
-        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable', 'unit']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))

@@ -133,7 +133,7 @@ def plot(df, window_id):
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
             id={
-                'type': 'copper_output-output_stats-year-select',
+                'type': 'temoa_output-output_stats-year-select',
                 'index': window_id
             },
         ),
@@ -142,15 +142,15 @@ def plot(df, window_id):
             value=[''],
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             id={
-                'type': 'copper_output-output_stats-scenario-select',
+                'type': 'temoa_output-output_stats-scenario-select',
                 'index': window_id
             },
         ),
-        dmc.Button('Download Data', id={'type': 'copper_output-output_stats-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'temoa_output-output_stats-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'copper_output-output_stats-download', 'index': window_id}),
+        dcc.Download(id={'type': 'temoa_output-output_stats-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -158,7 +158,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'copper_output',
+            'profile': 'temoa_output',
             'viz': 'output_stats'
         },
         style={

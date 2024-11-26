@@ -8,14 +8,14 @@ from profiles.copper_output import utils
 def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None):
     fig = go.Figure()
     fig.update_layout(
-        title_text=title,
+        title_text=title + f' ({', '.join(scenarios)})' if len(scenarios) else title,
         xaxis_title=x_axis_label,
-        yaxis_title=y_axis_label,
+        yaxis_title=y_axis_label + f' ({unit})' if unit != 'NA' else y_axis_label,
         template="simple_white",
     )
 
     try:
-        df_scen = subset(df, region, scenarios, aggregate, season)
+        df_scen = subset(df, region, scenarios, unit, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
         num_years = df_scen.time.nunique()
@@ -62,7 +62,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
     return fig
 
 
-def subset(df, region, scenarios, aggregate, season=None):
+def subset(df, region, scenarios, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
 
     if not pd.api.types.is_numeric_dtype(df['time']):
@@ -80,13 +80,15 @@ def subset(df, region, scenarios, aggregate, season=None):
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
+
+    df_scen = df_scen[df_scen['unit'] == unit]
 
     df_scen = df_scen[df_scen['region'] == region]
 

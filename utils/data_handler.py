@@ -400,7 +400,8 @@ class DataHandler:
                     variables += df.variable.unique().tolist()
                     df['variable'] = viz + '|' + df['variable']
                     df['scenario'] = model + '|' + df['scenario']
-                    df['unit'] = 'unit'
+                    if 'unit' not in df.columns:
+                        df['unit'] = 'NA'
                     if dfs.get(viz, None) is None:
                         dfs[viz] = [df]
                     else :
@@ -436,7 +437,7 @@ class DataHandler:
                 data = pd.concat(overview_dfs)
                 data['variable'] = viz
 
-                data = data.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+                data = data.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
 
                 data['region'] = 'National'
 
@@ -445,8 +446,8 @@ class DataHandler:
             full_df = pd.concat(overview_data)
 
             full_df['time'] = full_df['time'].astype(int)
-            self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
-            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region']]
+            self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
 
         print("processed", self.processed_data)
 

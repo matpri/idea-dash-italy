@@ -36,7 +36,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return df
 
 def calc_canadian(df):
@@ -69,10 +69,10 @@ def calculate_generation_capacity(gen_cap_df):
     # gen_cap_df = df[df['variable'].isin(utils.gen_cap_names)].copy()
     # Rename entries based on gen_cap_names_dict
     # gen_cap_df['variable'] = gen_cap_df['variable'].map(utils.cost_tech).fillna(gen_cap_df['variable'])
-    gen_cap_df = gen_cap_df.groupby(["variable", "region", "time", "scenario"], as_index=False).sum(numeric_only=True)
+    gen_cap_df = gen_cap_df.groupby(["variable", "region", "time", "scenario", 'unit'], as_index=False).sum(numeric_only=True)
 
     # Compute Canadian total over all regions
-    can_gen_cap_df = gen_cap_df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
+    can_gen_cap_df = gen_cap_df.groupby(["variable", "time", "scenario", 'unit'], as_index=False).sum(numeric_only=True)
 
     # Add a row with "Region" as "CAN"
     can_gen_cap_df = can_gen_cap_df.assign(region='CAN')
