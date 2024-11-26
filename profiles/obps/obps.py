@@ -11,14 +11,17 @@ from profiles.obps import utils
 from profiles.obps.callbacks import (
     settings as settings_callbacks,
     standard as standard_callbacks,
+    tightening as tightening_callbacks
 )
 
 from profiles.obps.processing_scripts import (
-    standard as standard_processing
+    standard as standard_processing,
+    tightening as tightening_processing
 )
 
 from profiles.obps.visualization_scripts import (
-    standard as standard_visualization
+    standard as standard_visualization,
+    tightening as tightening_visualization
 )
 
 
@@ -37,9 +40,10 @@ class OBPS(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Standard'
-
+        'Standard',
+        'Tightening',
     ]
+
     viz_options = {
         'Standard':
             {
@@ -50,6 +54,16 @@ class OBPS(BaseProfile):
                 'viz': standard_visualization.plot,
                 'callback': standard_callbacks.link,
                 'description': 'OBPS Standards',
+            },
+        'Tightening':
+            {
+                'check': tightening_processing.check,
+                'db_check': tightening_processing.check,
+                'process': tightening_processing.process,
+                'db_process': tightening_processing.process,
+                'viz': tightening_visualization.plot,
+                'callback': tightening_callbacks.link,
+                'description': 'OBPS Tightening',
             },
     }
 

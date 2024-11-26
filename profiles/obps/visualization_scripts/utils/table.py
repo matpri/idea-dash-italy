@@ -28,6 +28,8 @@ def plot(data, scenarios, year, region):
 
         def normalize(value):
             if isinstance(value, (int, float)):
+                if min_value == max_value:
+                    return value
                 return (value - min_value) / (max_value - min_value)
             return None
 
