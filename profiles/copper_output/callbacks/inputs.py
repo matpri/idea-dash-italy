@@ -338,7 +338,7 @@ def link(app):
                 _extant_capacity_scenario_multi_select_style[idx] = {'display': 'none'}
                 _extant_capacity_region_select_style[idx] = {'display': 'block'}
                 _extant_capacity_year_select_style[idx] = {'display': 'block'}
-        elif 'Cost' in _p_type[idx]:
+        elif 'Cost' in _p_type[idx] and not 'Transmission Costs' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'none'}
             _extant_capacity_style[idx] = {'display': 'none'}

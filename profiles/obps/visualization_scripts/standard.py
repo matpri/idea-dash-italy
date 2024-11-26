@@ -49,7 +49,7 @@ def plot(df, window_id):
             'index': window_id
         },
 
-        style={'display': 'none'}
+        style={'display': 'block'}
     )
 
     widget_layout = html.Div([
