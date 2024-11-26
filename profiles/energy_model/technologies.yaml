@@ -1800,7 +1800,7 @@ Electricity|Steam|Industrial:
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas'
 
