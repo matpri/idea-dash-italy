@@ -8,6 +8,8 @@ import plotly.graph_objects as go
 import plotly.express as px
 import geopandas as gpd
 from dash import html, dcc
+from matplotlib.dates import datestr2num
+
 from components import ids
 from profiles.copper_output import utils
 from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
@@ -68,8 +70,6 @@ def render_t_cost(data, _t_cost_scenario):
         column_width.append(max(df_pivot.index.str.len()) * 8)
         for col in df_pivot.columns:
             column_width.append(max([len(str(col))] + [len(str(val)) for val in df_pivot[col]]) * 8)
-
-        print(column_width)
 
         # Create Plotly table
         fig = go.Figure(data=[go.Table(
@@ -186,7 +186,7 @@ def render_tech_params(data, _p_scenario):
 
 def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
-                _demand_scenario=None, _demand_time_step=None,
+                _demand_scenario=None, _demand_time_step=None, _demand_year=None, _demand_month=None, _demand_date=None,
                 _c_type=None, _c_scenario=None, _c_region=None,
                 _t_cost_scenarios=None, _p_scenario=None, _p_variable=None):
     data = df.copy()
@@ -205,7 +205,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
     elif p_type == 'Extant Capacity':
         return plot_capacity(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios[0])
     elif p_type == 'Demand':
-        return render_demand(data, _demand_scenario, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
+        return render_demand(data, _demand_scenario, _demand_year, _demand_month, _demand_date, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
     elif p_type == 'Cost':
         return render_cost(data, _c_type, _c_scenario, _c_region)
     elif p_type == 'Transmission Costs':
@@ -540,7 +540,7 @@ def render_extant_transmission(p_type, df, scenarios, year):
         df['variable'] = 'Capacity'
         return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
 
-def render_demand(df, scenario, title, x_axis_label, y_axis_label, time_size='hourly'):
+def render_demand(df, scenario, year, month, date, title, x_axis_label, y_axis_label, time_size='hourly'):
     # turn date range into a readable format
 
     fig = go.Figure()
@@ -557,12 +557,18 @@ def render_demand(df, scenario, title, x_axis_label, y_axis_label, time_size='ho
     df_scen['time'] = pd.to_datetime(df_scen['time'])
     # groupby time based on time_size
     if time_size == 'daily':
+        df_scen = df_scen[df_scen['time'].dt.year == year]
+        df_scen = df_scen[df_scen['time'].dt.strftime('%B') == month]
         df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d')
     elif time_size == 'monthly':
+        df_scen = df_scen[df_scen['time'].dt.year == year]
         df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m')
     elif time_size == 'yearly':
         df_scen['time'] = df_scen['time'].dt.strftime('%Y')
     else:
+        df_scen = df_scen[df_scen['time'].dt.year == year]
+        df_scen = df_scen[df_scen['time'].dt.strftime('%B') == month]
+        df_scen = df_scen[df_scen['time'].dt.strftime('%d') == date]
         df_scen['time'] = df_scen['time'].dt.strftime('%Y-%m-%d %H:%M:%S')
 
     cols = df_scen.columns.tolist()
@@ -675,8 +681,16 @@ def plot(df, window_id):
 
 
     demand_scenarios = []
+    demand_years = []
+    demand_months = []
+    demand_dates = []
     if 'Demand' in classes:
-        demand_scenarios = df[df['variable'].str.startswith('Demand')]['scenario'].unique()
+        demand = df[df['variable'].str.startswith('Demand')].copy()
+        demand['time'] = pd.to_datetime(demand['time'])
+        demand_scenarios = demand['scenario'].unique()
+        demand_years = demand['time'].dt.year.unique()
+        demand_months = demand['time'].dt.strftime('%B').unique()
+        demand_dates = demand['time'].dt.strftime('%d').unique()
 
     demand_widget_layout = html.Div([
         dmc.Select(
@@ -691,11 +705,41 @@ def plot(df, window_id):
         dmc.Select(
             label='Timestep',
             data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
-            value='hourly',
+            value='yearly',
             id={
                 'type': 'copper-inputs-demand-time_step-select',
                 'index': window_id,
             },
+        ),
+        dmc.Select(
+          label='Year',
+            data=[{'label': year, 'value': year} for year in demand_years],
+            value=demand_years[0] if len(demand_years) else '',
+            id={
+                'type': 'copper-inputs-demand-year-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Month',
+            data=[{'label': month, 'value': month} for month in demand_months],
+            value=demand_months[0] if len(demand_months) else '',
+            id={
+                'type': 'copper-inputs-demand-month-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Date',
+            data=[{'label': date, 'value': date} for date in demand_dates],
+            value=demand_dates[0] if len(demand_dates) else '',
+            id={
+                'type': 'copper-inputs-demand-date-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
         ),
         ],
         id={
@@ -941,7 +985,7 @@ def plot(df, window_id):
                             e_region=e_regions[0] if len(e_regions) else None,
                             e_scenarios=e_scenarios if len(e_scenarios) else None,
                             _demand_scenario=demand_scenarios[0] if len(demand_scenarios) else None,
-                            _demand_time_step='hourly',
+                            _demand_time_step='yearly',
                             _c_type=costs[0] if len(costs) else None,
                            ),
         id={
