@@ -29,8 +29,7 @@ def render_cost(data, _c_type, _c_scenario, _c_region):
     data['variable'] = data['variable'].replace(_c_type + '|', '', regex=True)
     return trend_over_years.plot(data, _c_scenario, _c_region, False, _c_type, 'x', 'y', _c_type, unit)
 
-
-def render_t_cost(data, _t_cost_scenario):
+def render_t_cost(data, _t_cost_scenario, bl=False):
     data = data[data['scenario'].isin(_t_cost_scenario)]
     if not data.empty:
         # create a table
@@ -38,33 +37,43 @@ def render_t_cost(data, _t_cost_scenario):
 
         df_pivot = data.pivot(index='variable', columns='scenario', values='value')
 
-
         df_pivot = df_pivot.fillna('')
         # Create a Plotly Table
         header_values = [''] + list(df_pivot.columns)
         cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
-        min_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
-        max_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
-
-        def normalize(value):
-            if isinstance(value, (int, float)):
-                return (value - min_value) / (max_value - min_value)
-            return None
-
-        colors = []
-
-        for col in df_pivot.columns:
-            normalized_data = [normalize(val) for val in df_pivot[col]]
-            colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
-                                     0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in
-                                 normalized_data])]
-
-        colors_by_row = [['#ffffff', '#e5eeec'] * (
-                    len(df_pivot.index) // 2)] + colors  # Determine font colors based on the background color
+        colors_by_row = []
         font_colors = [['#000000'] * len(df_pivot.index)]
-        for column in colors:
-            font_colors.append([get_contrasting_font_color(color) for color in column])
+
+        if bl:
+            # Convert values to Boolean and set colors accordingly
+            df_pivot = df_pivot.astype(bool)
+            colors = []
+            for col in df_pivot.columns:
+                colors.append(['rgb(255,153,153)' if not val else 'rgb(153,255,153)' for val in df_pivot[col]])
+            colors_by_row = [['#ffffff', '#e5eeec'] * (len(df_pivot.index) // 2)] + colors
+            for column in colors:
+                font_colors.append([get_contrasting_font_color(color) for color in column])
+        else:
+            # Normal processing for numeric values
+            min_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('inf')).min()
+            max_value = data['value'].apply(lambda x: x if isinstance(x, (int, float)) else float('-inf')).max()
+
+            def normalize(value):
+                if isinstance(value, (int, float)):
+                    return (value - min_value) / (max_value - min_value)
+                return None
+
+            colors = []
+            for col in df_pivot.columns:
+                normalized_data = [normalize(val) for val in df_pivot[col]]
+                colors += [np.array([px.colors.sample_colorscale('Blues', normalized_value)[
+                                         0] if normalized_value is not None else 'rgb(255,255,255)' for normalized_value in
+                                     normalized_data])]
+            colors_by_row = [['#ffffff', '#e5eeec'] * (len(df_pivot.index) // 2)] + colors  # Determine font colors based on the background color
+            for column in colors:
+                font_colors.append([get_contrasting_font_color(color) for color in column])
+
         # Calculate the width for each column
         column_width = []
         column_width.append(max(df_pivot.index.str.len()) * 8)
@@ -83,7 +92,6 @@ def render_t_cost(data, _t_cost_scenario):
                        fill_color=colors_by_row,
                        line_color=colors_by_row,
                        font=dict(color=font_colors),
-
                        align='left'))
         ])
     else:
@@ -101,7 +109,6 @@ def render_t_cost(data, _t_cost_scenario):
             align="center",
             valign="middle",
         )
-
 
     return fig
 
@@ -215,7 +222,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
         data = data[data['variable'].str.startswith(_p_variable)]
         return render_tech_params(data, _p_scenario)
     elif p_type == 'Policy':
-        return render_t_cost(data, _policy_scenarios)
+        return render_t_cost(data, _policy_scenarios, True)
     else:
         return go.Figure()
 
