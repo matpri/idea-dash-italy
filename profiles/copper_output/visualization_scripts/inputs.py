@@ -188,7 +188,8 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
                 e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
                 _demand_scenario=None, _demand_time_step=None, _demand_year=None, _demand_month=None, _demand_date=None,
                 _c_type=None, _c_scenario=None, _c_region=None,
-                _t_cost_scenarios=None, _p_scenario=None, _p_variable=None):
+                _t_cost_scenarios=None, _p_scenario=None, _p_variable=None,
+                _policy_scenarios=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
@@ -213,7 +214,8 @@ def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_yea
     elif p_type == 'Technology Parameter':
         data = data[data['variable'].str.startswith(_p_variable)]
         return render_tech_params(data, _p_scenario)
-
+    elif p_type == 'Policy':
+        return render_t_cost(data, _policy_scenarios)
     else:
         return go.Figure()
 
@@ -624,6 +626,29 @@ def plot(df, window_id):
     # print('plotting inputs')
     classes = df['variable'].apply(lambda x: x.split('|')[0]).unique()
 
+    policy_scenarios = []
+    if 'Policy' in classes:
+        policy_scenarios = df[df['variable'].str.startswith('Policy')]['scenario'].unique()
+
+    policy_widget_layout = html.Div([
+        dmc.MultiSelect(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in policy_scenarios],
+            value=[policy_scenarios[0]] if len(policy_scenarios) else [],
+            id={
+                'type': 'copper-inputs-policy-scenario-select',
+                'index': window_id
+            },
+        ),
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'copper-inputs-policy-widget',
+            'index': window_id
+        }
+    )
+
+
     transmission_cost_scenario = []
     if 'Transmission Costs' in classes:
         transmission_cost_scenario = df[df['variable'].str.startswith('Transmission Costs')]['scenario'].unique()
@@ -966,6 +991,7 @@ def plot(df, window_id):
         cost_widget_layout,
         transmission_cost_widget_layout,
         params_widget_layout,
+        policy_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button

@@ -87,6 +87,10 @@ def link(app):
             'type': 'copper-inputs-demand-date-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'copper-inputs-policy-widget',
+            'index': ALL
+        }, 'style'),
         Input({
             'type': 'copper-inputs-plot-select',
             'index': ALL
@@ -180,6 +184,10 @@ def link(app):
             'index': ALL
         }, 'value'),
         Input({
+            'type': 'copper-inputs-policy-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-inputs-download-button',
             'index': ALL
         }, 'n_clicks'),
@@ -261,6 +269,10 @@ def link(app):
             'type': 'copper-inputs-demand-date-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'copper-inputs-policy-widget',
+            'index': ALL
+        }, 'style'),
         prevent_initial_call=True
     )
     def update_inputs(_p_type, _season, _vre_variable, t_ptype, t_year, t_scenario, t_scenarios,
@@ -269,13 +281,14 @@ def link(app):
                       _demand_scenario, _demand_time_step, _demand_year, _demand_month, _demand_date,
                       _c_select, _c_scenario, _c_region,
                       _t_c_scenarios, _param_scenario, _param_variable,
+                      _policy_scenarios,
                       _download, _canvas, _data, _vre_style, _transmission_style, _extant_capacity_style, _cost_style,
                       _t_cost_style, _params_style,
                       t_scen_style, t_scen_multi_style,
                       _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
                       _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
                       _extant_capacity_year_select_style, _demand_style, _demand_year_style, _demand_month_style,
-                      _demand_date_style
+                      _demand_date_style, _policy_style
                       ):
         # Importing the data handler for processing data
         from main import data_handler
@@ -300,7 +313,7 @@ def link(app):
                 _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
                 _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
                 _extant_capacity_year_select_style,
-                _demand_style, _demand_year_style, _demand_month_style, _demand_date_style
+                _demand_style, _demand_year_style, _demand_month_style, _demand_date_style, _policy_style
             )
 
         # Determine the index of the plot select input
@@ -330,6 +343,7 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
         elif 'Extant Transmission' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'block'}
@@ -339,6 +353,7 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
             if t_ptype[idx] == 'Map Plot':
                 t_scen_style[idx] = {'display': 'block'}
                 t_scen_multi_style[idx] = {'display': 'none'}
@@ -356,6 +371,7 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
             if e_select == 'By Year':
                 e_scen = _extant_capacity_scenario_multi_select[idx]
                 _extant_capacity_scenario_select_style[idx] = {'display': 'none'}
@@ -389,6 +405,7 @@ def link(app):
             _cost_style[idx] = {'display': 'block'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
         elif 'Transmission Costs' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'none'}
@@ -398,6 +415,7 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'block'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
         elif 'Technology Parameter' in _p_type[idx]:
             _vre_style[idx] = {'display': 'none'}
             _transmission_style[idx] = {'display': 'none'}
@@ -407,6 +425,17 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'block'}
+            _policy_style[idx] = {'display': 'none'}
+        elif 'Policy' in _p_type[idx]:
+            _vre_style[idx] = {'display': 'none'}
+            _transmission_style[idx] = {'display': 'none'}
+            _extant_capacity_style[idx] = {'display': 'none'}
+            _extant_capacity_rep_style[idx] = {'display': 'none'}
+            _demand_style[idx] = {'display': 'none'}
+            _cost_style[idx] = {'display': 'none'}
+            _t_cost_style[idx] = {'display': 'none'}
+            _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'block'}
 
         else:
             _vre_style[idx] = {'display': 'none'}
@@ -416,6 +445,7 @@ def link(app):
             _cost_style[idx] = {'display': 'none'}
             _t_cost_style[idx] = {'display': 'none'}
             _params_style[idx] = {'display': 'none'}
+            _policy_style[idx] = {'display': 'none'}
 
             ts = _demand_time_step[idx]
             if ts == 'yearly':
@@ -445,7 +475,7 @@ def link(app):
                                    _demand_date=_demand_date[idx],
                                    _c_type=_c_select[idx], _c_scenario=_c_scenario[idx], _c_region=_c_region[idx],
                                    _t_cost_scenarios=_t_c_scenarios[idx], _p_scenario=_param_scenario[idx],
-                                   _p_variable=_param_variable[idx])
+                                   _p_variable=_param_variable[idx], _policy_scenarios=_policy_scenarios[idx])
 
         return (_canvas, [dash.no_update for _ in
                           _data], _vre_style, _transmission_style, _extant_capacity_style, _cost_style, _t_cost_style,
@@ -455,5 +485,5 @@ def link(app):
                 _extant_capacity_rep_style, _extant_capacity_scenario_select_style,
                 _extant_capacity_scenario_multi_select_style, _extant_capacity_region_select_style,
                 _extant_capacity_year_select_style,
-                _demand_style, _demand_year_style, _demand_month_style, _demand_date_style
+                _demand_style, _demand_year_style, _demand_month_style, _demand_date_style, _policy_style
                 )
