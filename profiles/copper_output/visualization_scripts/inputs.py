@@ -40,6 +40,8 @@ def render_t_cost(data, _t_cost_scenario, bl=False):
         df_pivot = df_pivot.fillna('')
         # Create a Plotly Table
         header_values = [''] + list(df_pivot.columns)
+        if bl:
+            df_pivot = df_pivot.applymap(lambda x: 'Yes' if x else 'No')
         cell_values = [df_pivot.index] + [df_pivot[col] for col in df_pivot.columns]
 
         colors_by_row = []
@@ -50,7 +52,7 @@ def render_t_cost(data, _t_cost_scenario, bl=False):
             df_pivot = df_pivot.astype(bool)
             colors = []
             for col in df_pivot.columns:
-                colors.append(['rgb(255,153,153)' if not val else 'rgb(153,255,153)' for val in df_pivot[col]])
+                colors.append(['rgb(255,153,153)' if val == "No" else 'rgb(153,255,153)' for val in df_pivot[col]])
             colors_by_row = [['#ffffff', '#e5eeec'] * (len(df_pivot.index) // 2)] + colors
             for column in colors:
                 font_colors.append([get_contrasting_font_color(color) for color in column])
