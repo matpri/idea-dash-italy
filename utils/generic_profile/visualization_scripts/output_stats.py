@@ -124,19 +124,20 @@ def create_scatter_plot(db, colors, model, year):
     """Create a scatter plot figure from the DataFrame."""
     fig = go.Figure()
 
-    def add_scatter_trace(data, name, color):
-        fig.add_trace(go.Scatter(x=data['variable'], y=data['value'], mode='markers', name=name, marker=dict(color=color, size=10)))
+    def add_scatter_trace(data, name, color, is_comparison):
+        fig.add_trace(go.Scatter(x=data['variable'], y=data['value'], mode='markers', name=name, marker=dict(color=color, size=10),
+                                    text=data['m_scen'] if is_comparison else data['scenario'],
+                                    hovertemplate='<b>%{text}</b><br><br>' +
+                                                  'Variable: %{x}<br>' +
+                                                  'Value: %{y}<extra></extra>',
 
-    if model == 'Generic Comparison':
-        for m_scen in db['m_scen'].unique():
-            m_scen_data = db[db['m_scen'] == m_scen]
-            color = colors[m_scen_data['scenario'].iloc[0]]
-            add_scatter_trace(m_scen_data, m_scen, color)
-    else:
-        for scenario in db['scenario'].unique():
-            scenario_data = db[db['scenario'] == scenario]
-            color = colors[scenario]
-            add_scatter_trace(scenario_data, scenario, color)
+
+                                 ))
+
+    for scenario in db['scenario'].unique():
+        scenario_data = db[db['scenario'] == scenario]
+        color = colors[scenario]
+        add_scatter_trace(scenario_data, scenario, color, model=='Generic Comparison')
 
     fig.update_layout(
         xaxis_title='Variable',
@@ -144,6 +145,7 @@ def create_scatter_plot(db, colors, model, year):
         title=f'Output Stats for {model} in {year}',
         template="simple_white"
     )
+    fig.update_layout(scattermode="group", scattergap=0.75)
     return fig
 
 
