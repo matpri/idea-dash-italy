@@ -21,7 +21,7 @@ region_mapping = {
     'Yukon': 'Yukon'
 }
 
-def plot_map(message_data, scenario, time, title, name, unit, variable='All', aggregate=False,):
+def plot_map(message_data, scenario, time, title, name, unit, variable='All', aggregate=False, is_emissions=False):
 
 
     rep_data = message_data[(message_data['time'] == time) & (message_data['scenario'] == scenario)]
@@ -32,7 +32,10 @@ def plot_map(message_data, scenario, time, title, name, unit, variable='All', ag
         rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
 
     if variable != 'All':
-        rep_data = rep_data[rep_data['variable'] == variable]
+        if is_emissions:
+            rep_data = rep_data[rep_data['variable'].str.contains(variable)]
+        else:
+            rep_data = rep_data[rep_data['variable'] == variable]
 
 
     with open('./profiles/messageix_output/visualization_scripts/utils/ca.json', 'r') as f:

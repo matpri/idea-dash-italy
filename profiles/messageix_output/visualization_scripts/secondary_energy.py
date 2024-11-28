@@ -7,11 +7,15 @@ from profiles.messageix_output.visualization_scripts.utils import bar_over_years
     pie_chart, map_plot
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, variable=None):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, variable=None, group='All'):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Secondary Energy']['name']
     unit = plot_settings['Secondary Energy']['unit']
+
+    if group != 'All':
+        df = df[df['group']==group]
+
     if type == 'By Year':
         plot_info = plot_settings['Secondary Energy']['By Year']
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
@@ -23,7 +27,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     elif type == 'Map Plot':
         title = plot_settings['Secondary Energy']['Map']['title']
-        return map_plot.plot_map(df, scenario, year, title, name, unit)
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variable)
     else:
         plot_info = plot_settings['Secondary Energy']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
@@ -39,6 +43,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
+    groups = ['All'] + df['group'].unique().tolist()
 
     df_scen = df.copy(deep=True)
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
@@ -137,6 +142,16 @@ def plot(df, window_id):
                 'index': window_id,
             },
             style={'display': 'none'}
+        ),
+        dmc.Select(
+            label='Variable Group',
+            data=[{'label': group, 'value': group} for group in groups],
+            value='All',
+            id={
+                'type': 'messageix-secondary_energy-group-select',
+                'index': window_id
+            },
+            style={'display': 'block'}
         ),
         map_plot_widgets,
         by_year_widgets,

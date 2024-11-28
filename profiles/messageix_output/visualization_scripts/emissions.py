@@ -23,7 +23,7 @@ def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     elif type == 'Map Plot':
         title = plot_settings['Emissions']['Map']['title']
-        return map_plot.plot_map(df, scenario, year, title, name, unit)
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variable, is_emissions=True)
     else:
         plot_info = plot_settings['Emissions']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
