@@ -101,9 +101,9 @@ def plot(df, window_id):
     )
 
     widget_layout = html.Div([
-        dmc.Select(
+         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
+            data=[{'label': plot, 'value': plot} for plot in ['Trend Over Years', 'Pie Chart', 'Map Plot']],
             value='Trend Over Years',
             id={
                 'type': 'messageix-efficiency-plot-select',
