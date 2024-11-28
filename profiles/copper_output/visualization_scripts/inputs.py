@@ -48,8 +48,6 @@ def render_t_cost(data, _t_cost_scenario, bl=False):
         font_colors = [['#000000'] * len(df_pivot.index)]
 
         if bl:
-            # Convert values to Boolean and set colors accordingly
-            df_pivot = df_pivot.astype(bool)
             colors = []
             for col in df_pivot.columns:
                 colors.append(['rgb(255,153,153)' if val == "No" else 'rgb(153,255,153)' for val in df_pivot[col]])
