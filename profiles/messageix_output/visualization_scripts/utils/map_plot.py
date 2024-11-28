@@ -57,7 +57,7 @@ def plot_map(message_data, scenario, time, title, name, unit, variable='All', ag
         locations=rep_data['region'],  # Regions from the rep_data
         z=rep_data['value'],  # Assuming 'value' is the column with the data to plot
         featureidkey="properties.name",  # Key to match the GeoJSON features
-        colorscale='Viridis',  # Color scale for the choropleth
+        colorscale='Blues',  # Color scale for the choropleth
         hovertemplate='%{location}: %{z}' + f'({unit})',  # Hover template
     ))
 
