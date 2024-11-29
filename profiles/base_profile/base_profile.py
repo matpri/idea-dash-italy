@@ -71,7 +71,7 @@ class BaseProfile:
         """Prepare dataframes for overview by filtering out imports and exports."""
         dfs = []
         for _, viz_option, data in processed_data:
-            if viz_option in ['Dispatch', 'Transmission Flow', 'Transmission Capacity']:
+            if viz_option in ['Dispatch', 'Transmission Flow', 'Transmission Capacity', 'Inputs', 'Input']:
                 continue
             df = data.copy()
             df = df[~df.variable.str.contains('Import|Export')]
