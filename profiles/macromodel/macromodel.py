@@ -8,12 +8,12 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.macromodel import utils
 from profiles.macromodel.callbacks import (
-                                              overview as overview_callbacks,
-                                settings as settings_callbacks,
-                                              non_sector as non_sector_callbacks,
-sector as sector_callbacks,
+    overview as overview_callbacks,
+    settings as settings_callbacks,
+    non_sector as non_sector_callbacks,
+    sector as sector_callbacks,
 
-                                              )
+)
 from profiles.macromodel.processing_scripts import (
     banks as banks_processing,
     central_Bank as central_Bank_processing,
@@ -22,6 +22,9 @@ from profiles.macromodel.processing_scripts import (
     government_entities as government_entities_processing,
     overview as overview_processing,
     economy as economy_processing,
+    labour_market as labour_market_processing,
+    households as households_processing,
+    housing_market as housing_market_processing,
 )
 from profiles.macromodel.visualization_scripts import (
     banks as banks_viz,
@@ -31,6 +34,9 @@ from profiles.macromodel.visualization_scripts import (
     government_entities as government_entities_viz,
     overview as overview_viz,
     economy as economy_viz,
+    labour_market as labour_market_viz,
+    households as households_viz,
+    housing_market as housing_market_viz,
 )
 
 
@@ -56,6 +62,9 @@ class Macromodel(BaseProfile):
         'Credit Market',
         'Government Entities',
         'Economy',
+        'Labour Market',
+        'Households',
+        'Housing Market',
     ]
     viz_options = {
         'Overview':
@@ -128,6 +137,36 @@ class Macromodel(BaseProfile):
                 'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
+        'Labour Market':
+            {
+                'check': labour_market_processing.check,
+                'db_check': labour_market_processing.check,
+                'process': labour_market_processing.process,
+                'db_process': labour_market_processing.process,
+                'viz': labour_market_viz.plot,
+                'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Households':
+            {
+                'check': households_processing.check,
+                'db_check': households_processing.check,
+                'process': households_processing.process,
+                'db_process': households_processing.process,
+                'viz': households_viz.plot,
+                'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Housing Market':
+            {
+                'check': housing_market_processing.check,
+                'db_check': housing_market_processing.check,
+                'process': housing_market_processing.process,
+                'db_process': housing_market_processing.process,
+                'viz': housing_market_viz.plot,
+                'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
 
     }
 
@@ -193,7 +232,8 @@ class Macromodel(BaseProfile):
             # Append overview data to processed data
             overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
             processed_data.append(
-                (self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]))
+                (self.display_name, 'Overview',
+                 overview_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]))
 
             # If output statistics are requested, append them as well
             if wants_output_stats:

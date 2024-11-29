@@ -2,14 +2,15 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from components import ids
-from profiles.macromodel.visualization_scripts import banks, central_Bank, central_government, credit_market, government_entities
+from profiles.macromodel.visualization_scripts import banks, central_Bank, central_government, credit_market, government_entities, housing_market
 
 render_func = {
     'banks': banks.render_plot,
     'central_Bank': central_Bank.render_plot,
     'central_government': central_government.render_plot,
     'credit_market': credit_market.render_plot,
-    'government_entities': government_entities.render_plot
+    'government_entities': government_entities.render_plot,
+    'housing_market': housing_market.render_plot
 }
 
 name_mapping = {
@@ -17,7 +18,8 @@ name_mapping = {
     'central_Bank': 'Central Bank',
     'central_government': 'Central Government',
     'credit_market': 'Credit Market',
-    'government_entities': 'Government Entities'
+    'government_entities': 'Government Entities',
+    'housing_market': 'Housing Market'
 }
 
 def link(app):

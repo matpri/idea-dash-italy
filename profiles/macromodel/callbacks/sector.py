@@ -2,14 +2,20 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from components import ids
-from profiles.macromodel.visualization_scripts import economy
+from profiles.macromodel.visualization_scripts import economy, households, housing_market, labour_market
 
 render_func = {
     'economy': economy.render_plot,
+    'households': households.render_plot,
+    'housing_market': housing_market.render_plot,
+    'labour_market': labour_market.render_plot
 }
 
 name_mapping = {
     'economy' : 'Economy',
+    'households': 'Households',
+    'housing_market': 'Housing Market',
+    'labour_market': 'Labour Market'
 }
 
 def link(app):
