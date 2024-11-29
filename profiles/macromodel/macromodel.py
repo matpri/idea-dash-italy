@@ -11,6 +11,7 @@ from profiles.macromodel.callbacks import (
                                               overview as overview_callbacks,
                                 settings as settings_callbacks,
                                               non_sector as non_sector_callbacks,
+sector as sector_callbacks,
 
                                               )
 from profiles.macromodel.processing_scripts import (
@@ -20,6 +21,7 @@ from profiles.macromodel.processing_scripts import (
     credit_market as credit_market_processing,
     government_entities as government_entities_processing,
     overview as overview_processing,
+    economy as economy_processing,
 )
 from profiles.macromodel.visualization_scripts import (
     banks as banks_viz,
@@ -28,6 +30,7 @@ from profiles.macromodel.visualization_scripts import (
     credit_market as credit_market_viz,
     government_entities as government_entities_viz,
     overview as overview_viz,
+    economy as economy_viz,
 )
 
 
@@ -52,6 +55,7 @@ class Macromodel(BaseProfile):
         'Central Government',
         'Credit Market',
         'Government Entities',
+        'Economy',
     ]
     viz_options = {
         'Overview':
@@ -112,6 +116,16 @@ class Macromodel(BaseProfile):
                 'db_process': government_entities_processing.process,
                 'viz': government_entities_viz.plot,
                 'callback': non_sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Economy':
+            {
+                'check': economy_processing.check,
+                'db_check': economy_processing.check,
+                'process': economy_processing.process,
+                'db_process': economy_processing.process,
+                'viz': economy_viz.plot,
+                'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
 
@@ -247,6 +261,7 @@ class Macromodel(BaseProfile):
     def link(self, app):
         settings_callbacks.link(app)
         non_sector_callbacks.link(app)
+        sector_callbacks.link(app)
         overview_callbacks.link(app)
 
     def render_settings(self):
