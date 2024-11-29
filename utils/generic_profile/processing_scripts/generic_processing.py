@@ -106,8 +106,6 @@ def create_process(name):
             if 'time' in df.columns and df['time'].dtype == object:
                 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
-            if 'time' in df.columns:
-                df = scale_time_data(df)
 
             df['scenario'] = scenario_name
             dfs.append(df)
