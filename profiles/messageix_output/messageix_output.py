@@ -69,7 +69,7 @@ from profiles.messageix_output.visualization_scripts import (
 
 
 class messageixOutput(BaseProfile):
-    name = 'MESSAGEix-Canada'
+    name = 'MESSAGEix-CA'
     display_name = 'MESSAGEix-Canada'
     db_name = 'messageix'
     color = 'yellow 8'
