@@ -1,6 +1,7 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
+from profiles.messageix_output import utils
 from profiles.messageix_output.visualization_scripts.capacity_additions import render_plot
 
 from components import ids
@@ -20,6 +21,18 @@ def link(app):
             'type': 'messageix-capacity_additions-year-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'data'),
+        Output({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'value'),
         Output({
             'type': 'messageix-capacity_additions-download',
             'index': ALL
@@ -70,6 +83,10 @@ def link(app):
             'type': 'messageix-capacity_additions-year-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'value'),
         Input(
             {
                 'type': 'messageix-capacity_additions-pattern-switch',
@@ -96,6 +113,14 @@ def link(app):
             'type': 'messageix-capacity_additions-year-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'messageix-capacity_additions-variable-select',
+            'index': ALL
+        }, 'data'),
         State({
             'type': ids.FIGURE,
             'index': ALL,
@@ -130,8 +155,8 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_capacity_additions(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _pattern, _text,
-                         _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style):
+    def update_capacity_additions(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _variables, _pattern, _text,
+                         _download,_r_style, _y_style, _v_style, _v_data, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style):
         print('updating capacity_additions plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -145,8 +170,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'].to_csv, "capacity_additions.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
-
+            return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, _data, _s_style, _m_style, _pattern_style, _text_style
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
@@ -163,6 +187,7 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'none'}
 
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Year', data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'],
@@ -170,33 +195,35 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx], variable=_variables[idx])
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'} 
+            _text_style[idx] = {'display': 'none'}
+            _v_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx], variable=_variables[idx])
 
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'} 
+            _text_style[idx] = {'display': 'none'}
+            _v_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx], variable=_variables[idx])
 
         elif _p_type[idx] == 'Map Plot':
             _m_style[idx] = {'display': 'none'}
@@ -205,12 +232,27 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'none'}
+            _v_style[idx] = {'display': 'block'}
+
+            if 'messageix-capacity_additions-aggregate-switch' in trigger_id['type']:
+                if _aggregates[idx] is not None:
+                    df_scen = data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'].copy(deep=True)
+                    if _aggregates[idx]:
+                        df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+                    else:
+                        df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+                    df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (df_scen['scenario'] == _scenario[idx])]
+
+                    _v_data[idx] = [{'label': 'All', 'value': 'All'}] + [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
+                    _variables[idx] = 'All'
+
+
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _years[idx], scenario=_scenario[idx], variable=_variables[idx])
 
         else:
             _m_style[idx] = {'display': 'block'}
@@ -219,12 +261,13 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Region', data_handler.processed_data['MESSAGEix-Canada']['Capacity Additions'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx], variable=_variables[idx])
 
-        return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, [dash.no_update for _ in _data], _s_style, _m_style, _pattern_style, _text_style

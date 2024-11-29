@@ -3,8 +3,9 @@ import geojson
 
 import plotly.graph_objects as go
 
+from profiles.messageix_output import utils
+
 region_mapping = {
-    'Canada': 'Canada',
     'BritishColumbia': 'British Columbia',
     'Alberta': 'Alberta',
     'Saskatchewan': 'Saskatchewan',
@@ -20,10 +21,21 @@ region_mapping = {
     'Yukon': 'Yukon'
 }
 
-def plot_map(message_data, scenario, time):
+def plot_map(message_data, scenario, time, title, name, unit, variable='All', aggregate=False, is_emissions=False):
 
 
     rep_data = message_data[(message_data['time'] == time) & (message_data['scenario'] == scenario)]
+
+    if aggregate:
+        rep_data['variable'] = rep_data['variable'].map(utils.groups).fillna(rep_data['variable'])
+    else:
+        rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
+
+    if variable != 'All':
+        if is_emissions:
+            rep_data = rep_data[rep_data['variable'].str.contains(variable)]
+        else:
+            rep_data = rep_data[rep_data['variable'] == variable]
 
 
     with open('./profiles/messageix_output/visualization_scripts/utils/ca.json', 'r') as f:
@@ -31,9 +43,13 @@ def plot_map(message_data, scenario, time):
 
     rep_data = rep_data.groupby('region').sum().reset_index()
 
-    rep_data['region'] = rep_data['region'].map(region_mapping).fillna(rep_data['region'])
+    rep_data['region'] = rep_data['region'].map(region_mapping)
+    # drop rows where region is not in region_mapping
+    rep_data = rep_data[rep_data['region'].notnull()]
+    # drop scenario column
+    rep_data = rep_data.drop(columns=['scenario'])
 
-    print(rep_data)
+    print(rep_data[['region', 'value']])
 
 
 
@@ -44,12 +60,13 @@ def plot_map(message_data, scenario, time):
         locations=rep_data['region'],  # Regions from the rep_data
         z=rep_data['value'],  # Assuming 'value' is the column with the data to plot
         featureidkey="properties.name",  # Key to match the GeoJSON features
-        colorscale='Viridis',  # Color scale for the choropleth
+        colorscale='Blues',  # Color scale for the choropleth
+        hovertemplate='%{location}: %{z}' + f'({unit})',  # Hover template
     ))
 
     # Update geos and layout
     fig.update_geos(fitbounds="locations", visible=False, projection_type="orthographic")
-    fig.update_layout(title=f'{time}')
+    fig.update_layout(title=f'{title} - ({unit})')
 
     # Show the figure
     return fig

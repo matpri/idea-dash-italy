@@ -1,11 +1,13 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 from components import ids
+
+from profiles.messageix_output import utils
 from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart, map_plot
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, variable=None):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Capital Cost']['name']
@@ -20,7 +22,8 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
         plot_info = plot_settings['Capital Cost']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     elif type == 'Map Plot':
-        return map_plot.plot_map(df, scenario, year)
+        title = plot_settings['Capital Cost']['Map']['title']
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variable)
     else:
         plot_info = plot_settings['Capital Cost']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
@@ -36,6 +39,12 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
+
+    df_scen = df.copy(deep=True)
+    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+    df_scen = df_scen[(df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (df_scen['scenario'] == scenarios[0])]
+
+    variables = ['All'] + df_scen.variable.unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -61,6 +70,17 @@ def plot(df, window_id):
         style={'display': 'none'}
     )
 
+    map_plot_widgets = dmc.Select(
+        label='Variable',
+        data=[{'label': variable, 'value': variable} for variable in variables],
+        value=variables[0],
+        id={
+            'type': 'messageix-capital_cost-variable-select',
+            'index': window_id
+        },
+        style={'display': 'none'}
+    )
+
     pattern_toggle = dmc.Switch(
         label='Pattern',
         checked=True,
@@ -82,10 +102,10 @@ def plot(df, window_id):
     )
 
     widget_layout = html.Div([
-        dmc.Select(
+         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
-            value='By Year',
+            data=[{'label': plot, 'value': plot} for plot in ['Trend Over Years', 'Pie Chart', 'Map Plot']],
+            value='Trend Over Years',
             id={
                 'type': 'messageix-capital_cost-plot-select',
                 'index': window_id
@@ -118,6 +138,7 @@ def plot(df, window_id):
             },
             style={'display': 'none'}
         ),
+        map_plot_widgets,
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'messageix-capital_cost-download-button', 'index': window_id},
@@ -128,7 +149,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('Trend Over Years', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
             'type': ids.FIGURE,
