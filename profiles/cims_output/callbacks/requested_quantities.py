@@ -63,6 +63,10 @@ def link(app):
             },
             'style'
         ),
+        Output({
+            'type': 'cims-requested_quantities-representation-select',
+            'index': MATCH
+        }, 'style'),
         Input({
             'type': 'cims-requested_quantities-representation-select',
             'index': MATCH
@@ -157,10 +161,14 @@ def link(app):
             },
             'style'
         ),
+        State({
+            'type': 'cims-requested_quantities-representation-select',
+            'index': MATCH
+        }, 'style'),
         prevent_initial_call=True
     )
     def update_requested_quantities(_representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
-                         _download, _sector, _service, _fuel ,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style):
+                         _download, _sector, _service, _fuel ,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style, _p_style):
         #print('updating requested_quantities plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -191,12 +199,19 @@ def link(app):
             _service_style = {'display': 'block'}
             _fuel_style = {'display': 'none'}
 
+        if _p_type == 'Sankey':
+            _sector_style = {'display': 'block'}
+            _service_style = {'display': 'none'}
+            _fuel_style = {'display': 'none'}
+
+
         if _p_type == 'By Year':
             _m_style = {'display': 'block'}
             _r_style = {'display': 'block'}
             _y_style = {'display': 'none'}
             _s_style = {'display': 'none'}
             _pattern_style = {'display': 'block'}
+            _p_style = {'display': 'block'}
             _text_style = {'display': 'block'}
             _canvas = render_plot(_representation,'By Year', data_handler.processed_data['CIMS']['Requested Quantities'],
                                        _scenarios,
@@ -209,6 +224,7 @@ def link(app):
             _r_style = {'display': 'block'}
             _y_style = {'display': 'none'}
             _s_style = {'display': 'block'}
+            _p_style = {'display': 'block'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
             _canvas = render_plot(_representation,'Trend Over Years', data_handler.processed_data['CIMS']['Requested Quantities'],
@@ -219,6 +235,7 @@ def link(app):
         elif _p_type == 'Pie Chart':
             _m_style = {'display': 'none'}
             _r_style = {'display': 'block'}
+            _p_style = {'display': 'block'}
             _y_style = {'display': 'block'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
@@ -227,11 +244,12 @@ def link(app):
                                        _regions,
                                        _years, scenario=_scenario, sector=_sector, service=_service, fuel=_fuel)
 
-        else:
+        elif _p_type == 'By Region':
             _m_style = {'display': 'block'}
             _y_style = {'display': 'block'}
             _r_style = {'display': 'none'}
             _s_style = {'display': 'none'}
+            _p_style = {'display': 'block'}
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
             _canvas = render_plot(_representation,'By Region', data_handler.processed_data['CIMS']['Requested Quantities'],
@@ -239,5 +257,16 @@ def link(app):
                                        _regions,
                                        _years, scenario=_scenario,
                                        pattern_active=_pattern, text_active=_text, sector=_sector, service=_service, fuel=_fuel)
-
-        return _canvas, _r_style, _y_style, _fuel_style, _sector_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style
+        else:
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _s_style = {'display': 'block'}
+            _p_style = {'display': 'none'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+            _canvas = render_plot(_representation,'Sankey', data_handler.processed_data['CIMS Output']['Requested Quantities'],
+                                       _scenarios,
+                                       _regions,
+                                       _years, scenario=_scenario, sector=_sector, service=_service, fuel=_fuel)
+        return _canvas, _r_style, _y_style, _fuel_style, _sector_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _p_style

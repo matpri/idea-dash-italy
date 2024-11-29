@@ -3,8 +3,11 @@ import math
 import dash_mantine_components as dmc
 from dash import html, dcc
 from components import ids
+import plotly.graph_objects as go
+
 from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart
+from profiles.cims_output.utils import get_color
 
 
 def render_plot(representation, type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
@@ -14,7 +17,10 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
-    df = process_represenation(df, representation, sector, service, fuel)
+    if type == 'Sankey':
+        df = df[(df['sector'] == sector)].copy()
+    else:
+        df = process_represenation(df, representation, sector, service, fuel)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
@@ -31,6 +37,71 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
         return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
                               plot_info['y_label'],
                               )
+    elif type == 'Sankey':
+        by_fuel = df[(df['year'] == year) & (df['region'] == region)].copy()
+        # drop where context == Total
+        by_fuel = by_fuel[by_fuel['context'] != 'Total']
+
+        # drop where short_path is None
+        by_fuel = by_fuel[by_fuel['short_path'].notna()]
+        by_fuel['source'] = by_fuel['short_path'].apply(lambda x: x.split('.')[-1])
+        by_fuel['target'] = by_fuel['short_path'].apply(
+            lambda x: x.split('.')[-2] if len(x.split('.')) > 1 else 'Total')
+        by_fuel['source_depth'] = by_fuel['short_path'].apply(lambda x: len(x.split('.')))
+        by_fuel['target_depth'] = by_fuel['short_path'].apply(lambda x: len(x.split('.')) - 1)
+
+        by_fuel = by_fuel[['source', 'target', 'context', 'value_num', 'source_depth', 'target_depth']]
+
+        max_depth = max(by_fuel['source_depth'].max(), by_fuel['target_depth'].max())
+
+        by_fuel['source_depth'] = 1 - by_fuel['source_depth'] / max_depth
+        by_fuel['target_depth'] = 1 -  by_fuel['target_depth'] / max_depth
+
+        # map source and target to integers adding a new column for label that is the source and target separated by a comma
+        nodes = []
+        x_poses = []
+        for i, row in by_fuel.iterrows():
+            if row['source'] not in nodes:
+                nodes.append(row['source'])
+                x_poses.append(row['source_depth'])
+            if row['target'] not in nodes:
+                nodes.append(row['target'])
+                x_poses.append(row['target_depth'])
+        by_fuel['source_int'] = by_fuel['source'].apply(lambda x: nodes.index(x))
+        by_fuel['target_int'] = by_fuel['target'].apply(lambda x: nodes.index(x))
+
+        colors = [get_color(context) for context in by_fuel['context'].unique().tolist()]
+        context_colors = dict(zip(by_fuel['context'].unique().tolist(), colors))
+        contexts = by_fuel['context'].unique().tolist()
+
+
+
+
+        fig = go.Figure(data=[go.Sankey(
+            arrangement='snap',
+            node=dict(
+                pad=15,
+                thickness=20,
+                line=dict(color="black", width=0.5),
+                label=nodes,
+                x = x_poses,
+
+            ),
+            link=dict(
+                source=by_fuel['source_int'].tolist(),
+                target=by_fuel['target_int'].tolist(),
+                value=by_fuel['value_num'].tolist(),
+                color=by_fuel['context'].apply(lambda x: context_colors[x]).tolist(),
+            )
+        )])
+
+        for context in contexts:
+            fig.add_scatter(x=[0], y=[0], mode='markers', marker=dict(color=context_colors[context], size=10),
+                            showlegend=True, name=context)
+
+        fig.update_layout(title_text="Sankey Diagram for Fuel Flow", font_size=10)
+        return fig
+
     else:
         plot_info = plot_settings[plot_name]['By Region']
         return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
@@ -45,7 +116,7 @@ def process_represenation(df, representation, sector, service, fuel):
             (df['technology'].isna()) &
             (df['sector'] == sector)
             ]
-        filtered_df = filtered_df[filtered_df.short_path == service]
+        filtered_df = filtered_df[(filtered_df.short_path == service) & (filtered_df['context'] != 'Total')]
         filtered_df = filtered_df[['region', 'context', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'context': 'variable', 'year': 'time'})
 
@@ -55,7 +126,7 @@ def process_represenation(df, representation, sector, service, fuel):
         filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     else:
-        filtered_df = df[(df['technology'].isna()) & (df['context'] == fuel)].groupby(
+        filtered_df = df[(df['technology'].isna()) & (df['context'] == fuel) & ~df.sector.isna() & (df.short_path == df.sector)].groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
         filtered_df = filtered_df[['region', 'sector', 'year', 'value_num', 'scenario']]
@@ -164,13 +235,14 @@ def plot(df, window_id):
                 'type': 'cims-requested_quantities-representation-select',
                 'index': window_id
             },
+            style={'display': 'block'}
         ),
         by_sector_widgets,
         by_service_widgets,
         by_fuel_widgets,
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+            data=[{'label': plot, 'value': plot} for plot in ['Sankey', 'By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
                 'type': 'cims-requested_quantities-plot-select',

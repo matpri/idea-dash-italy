@@ -125,8 +125,8 @@ def connect_to_database(n_clicks, api_key, children):
                 color='red',
                 withCloseButton=True,
                 style={'width': '80%', 'marginLeft': 'auto', 'marginRight': 'auto'}
-            )], dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
-    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+            )], dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+    return children, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
 def get_runs(model, scenario, author, db):
