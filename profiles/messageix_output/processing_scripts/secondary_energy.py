@@ -16,7 +16,7 @@ def check(df):
     """
     print("Checking for emissions in variable column")
     try:
-        if (df.model == 'MESSAGEix-Canada').any():
+        if (df.model == 'MESSAGEix-CA').any():
             if df.variable.str.startswith("Secondary Energy|").any():
                 return True
         return False
@@ -66,6 +66,8 @@ def process(selected: dict):
         #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canadian_total = calc_canadian(df)
         full_data = pd.concat([df, canadian_total])
+        full_data['group'] = full_data["variable"].map(utils.groups).fillna(full_data["variable"])
+
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)
