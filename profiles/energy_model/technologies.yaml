@@ -248,11 +248,6 @@ ROR Hydro Renewal:
   group: Hydro
   group_color: '#a6cee3'
   name: ROR Hydro Renewal
-Solar:
-  color: '#ffff99'
-  group: Solar
-  group_color: '#ffff99'
-  name: Solar
 Solar_Recon:
   color: '#000000'
   group: Solar
@@ -1648,16 +1643,6 @@ Capital costs:
   name: Capital costs
 
 
-Fossil fuel gas CCS:
-  color: '#000000'
-  group: Fossil fuel gas
-  group_color: '#ff6b6b'
-  name: Fossil fuel gas
-Fossil fuel solid CCS:
-  color: '#000000'
-  group: Fossil fuel solid
-  group_color: '#b15928'
-  name: Fossil fuel solid CCS
 Coal:
   color: '#000000'
   group: Fossil fuel solid
@@ -1668,11 +1653,6 @@ CoalCCS:
   group: Fossil fuel solid
   group_color: '#b15928'
   name: Fossil fuel solid CCS
-RNG:
-  color: '#000000'
-  group: Fossil fuel gas
-  group_color: '#ff6b6b'
-  name: RNG
 Fossil fuel gas industrial to grid:
   color: '#000000'
   group: Fossil fuel gas
@@ -1930,5 +1910,101 @@ Fixed O&M:
   group: 'FO&M costs'
   group_color: '#E69F00'
   name: 'FO&M costs'
+
+Unused fossil fueled capacity:
+  color: '#000000'
+  group: 'Fossil fuel gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|NG'
+
+Unused fossil fueled capacity Under 25 MW:
+  color: '#000000'
+  group: 'Fossil fuel gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|NG'
+
+Fossil fuel solid:
+  color: '#000000'
+  group: 'Fossil fuel solid'
+  group_color: '#b15928'
+  name: 'Electricity|Coal'
+
+Fossil fuel solid CCS:
+  color: '#000000'
+  group: 'Fossil fuel solid'
+  group_color: '#b15928'
+  name: 'Electricity|Coal|w\ CCS'
+
+Fossil fuel liquid:
+  color: '#000000'
+  group: 'Fossil fuel liquid'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel'
+
+RNG:
+  color: '#000000'
+  group: 'Fossil fuel gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|RNG'
+
+Fossil fuel gas CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: 'Electricity|NG|w\ CCS'
+
+Fossil fuel gas:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: 'Electricity|NG'
+
+Storage:
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: 'Electricity|Storage'
+
+Wind:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: 'Electricity|Wind|Onshore'
+
+Solar:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: 'Electricity|Solar'
+
+RNG industrial:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: 'Electricity|RNG|Industrial'
+
+Fossil fuel gas industrial:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: 'Electricity|NG|Industrial'
+
+Biomass CCS:
+    color: '#000000'
+    group: Biomass
+    group_color: '#33a02c'
+    name: 'Electricity|Biomass|w\ CCS'
+
+Under 25 MW:
+    color: '#000000'
+    group: 'Fossil fuel gas'
+    group_color: '#ff6b6b'
+    name: 'Electricity|NG'
+
+
+
+
+
+
 
 
