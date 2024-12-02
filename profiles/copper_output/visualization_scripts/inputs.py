@@ -15,6 +15,8 @@ from profiles.copper_output import utils
 from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
     pie_chart
 
+from profiles.copper_output.visualization_scripts.input_utils import transmission_cost, cost, extant_capacity, demand, vre, params, extant_transmission
+
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
     print(rgb_color)
@@ -656,348 +658,27 @@ def plot(df, window_id):
     )
 
 
-    transmission_cost_scenario = []
-    if 'Transmission Costs' in classes:
-        transmission_cost_scenario = df[df['variable'].str.startswith('Transmission Costs')]['scenario'].unique()
-
-    transmission_cost_widget_layout = html.Div([
-        dmc.MultiSelect(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in transmission_cost_scenario],
-            value=[transmission_cost_scenario[0]] if len(transmission_cost_scenario) else [],
-            id={
-                'type': 'copper-inputs-transmission-cost-scenario-select',
-                'index': window_id
-            },
-        ),
-        ],
-        style={'display': 'none'},
-        id={
-            'type': 'copper-inputs-transmission-cost-widget',
-            'index': window_id
-        }
-    )
-
-    params_scenario = []
-    params_variables = []
-    if 'Technology Parameter' in classes:
-        params_scenario = df[df['variable'].str.startswith('Technology Parameter')]['scenario'].unique()
-        params_variables = df[df['variable'].str.startswith('Technology Parameter')]['variable'].apply(lambda x: x.split('|')[1]).unique()
-
-    params_widget_layout = html.Div([
-        dmc.MultiSelect(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in params_scenario],
-            value=[params_scenario[0]] if len(params_scenario) else [],
-            id={
-                'type': 'copper-inputs-params-scenario-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Variable',
-            data=[{'label': variable, 'value': variable} for variable in params_variables],
-            value=params_variables[0] if len(params_variables) else '',
-            id={
-                'type': 'copper-inputs-params-variable-select',
-                'index': window_id
-            },
-        ),
-        ],
-        style={'display': 'none'},
-        id={
-            'type': 'copper-inputs-params-widget',
-            'index': window_id
-        }
-    )
-
-
-    demand_scenarios = []
-    demand_years = []
-    demand_months = []
-    demand_dates = []
-    if 'Demand' in classes:
-        demand = df[df['variable'].str.startswith('Demand')].copy()
-        demand['time'] = pd.to_datetime(demand['time'])
-        demand_scenarios = demand['scenario'].unique()
-        demand_years = demand['time'].dt.year.unique()
-        demand_months = demand['time'].dt.strftime('%B').unique()
-        demand_dates = demand['time'].dt.strftime('%d').unique()
-
-    demand_widget_layout = html.Div([
-        dmc.Select(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in demand_scenarios],
-            value=demand_scenarios[0] if demand_scenarios else '',
-            id={
-                'type': 'copper-inputs-demand-scenario-select',
-                'index': window_id,
-            },
-        ),
-        dmc.Select(
-            label='Timestep',
-            data=[{'label': t_step, 'value': t_step} for t_step in ['hourly', 'daily', 'monthly', 'yearly']],
-            value='yearly',
-            id={
-                'type': 'copper-inputs-demand-time_step-select',
-                'index': window_id,
-            },
-        ),
-        dmc.Select(
-          label='Year',
-            data=[{'label': year, 'value': year} for year in demand_years],
-            value=demand_years[0] if len(demand_years) else '',
-            id={
-                'type': 'copper-inputs-demand-year-select',
-                'index': window_id,
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
-            label='Month',
-            data=[{'label': month, 'value': month} for month in demand_months],
-            value=demand_months[0] if len(demand_months) else '',
-            id={
-                'type': 'copper-inputs-demand-month-select',
-                'index': window_id,
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
-            label='Date',
-            data=[{'label': date, 'value': date} for date in demand_dates],
-            value=demand_dates[0] if len(demand_dates) else '',
-            id={
-                'type': 'copper-inputs-demand-date-select',
-                'index': window_id,
-            },
-            style={'display': 'none'}
-        ),
-        ],
-        id={
-            'type': 'copper-inputs-demand-widget',
-            'index': window_id
-        },
-        style={'display': 'block'},)
 
     print(classes)
-    seasons = []
-    vre_variables = []
-    if 'Vre Capacity Factors' in classes:
-        seasons = ['Winter', 'Summer']
-        vre_variables = ['Wind', 'Solar']
-
-    costs = []
-    c_regions = []
-    c_scenarios = []
-    if 'Cost' in classes:
-        costs = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[1]).unique()
-        c_regions = df[df['variable'].str.startswith('Cost')]['region'].unique()
-        c_scenarios = df[df['variable'].str.startswith('Cost')]['scenario'].unique()
-
-    cost_widget_layout = html.Div([
-        dmc.Select(
-            label='Cost Type',
-            data=[{'label': cost, 'value': cost} for cost in costs],
-            value=costs[0] if len(costs) else '',
-            id={
-                'type': 'copper-inputs-cost-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in c_scenarios],
-            value=c_scenarios[0] if len(c_scenarios) else '',
-            id={
-                'type': 'copper-inputs-cost-scenario-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Region',
-            data=[{'label': region, 'value': region} for region in c_regions],
-            value=c_regions[0] if len(c_regions) else '',
-            id={
-                'type': 'copper-inputs-cost-region-select',
-                'index': window_id
-            },
-        ),
-        ],
-        style={'display': 'none'},
-        id={
-            'type': 'copper-inputs-cost-widget',
-            'index': window_id
-        }
-    )
-
-    e_years = []
-    e_regions = []
-    e_scenarios = []
-    e_p_type = []
-    if 'Extant Capacity' in classes:
-        e_p_type = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
-        e_years = df[df['variable'].str.startswith('Extant Capacity')]['time'].unique()
-        e_scenarios = df[df['variable'].str.startswith('Extant Capacity')]['scenario'].unique()
-        e_regions = df[df['variable'].str.startswith('Extant Capacity')]['region'].unique()
-
-    t_p_type = []
-    t_years = []
-    t_scenarios = []
-    if 'Extant Transmission' in classes:
-        t_p_type = ['Map Plot', 'Bar Plot']
-        t_years = df[df['variable'].str.startswith('Extant Transmission')]['time'].unique()
-        t_scenarios = df[df['variable'].str.startswith('Extant Transmission')]['scenario'].unique()
-
-    vre_widget_layout = html.Div([
-        dmc.Select(
-            label='Season',
-            data=[{'label': season, 'value': season} for season in seasons],
-            value=seasons[0] if seasons else '',
-            id={
-                'type': 'copper-inputs-season-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='VRE Variable',
-            data=[{'label': vre_variable, 'value': vre_variable} for vre_variable in vre_variables],
-            value=vre_variables[0] if vre_variables else '',
-            id={
-                'type': 'copper-inputs-vre-variable-select',
-                'index': window_id
-            },
-        )
-    ],
-        style={'display': 'none'},
-        id={
-            'type': 'copper-inputs-vre-widget',
-            'index': window_id
-        }
-    )
-
-    transmission_widget_layout = html.Div([
-        dmc.Select(
-            label='Representation Options',
-            data=[{'label': plot, 'value': plot} for plot in t_p_type],
-            value=t_p_type[0],
-            id={
-                'type': 'copper-inputs-transmission-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Year',
-            data=[{'label': year, 'value': year} for year in t_years],
-            value=t_years[0],
-            id={
-                'type': 'copper-inputs-year-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in t_scenarios],
-            value=t_scenarios[0] if t_scenarios else '',
-            id={
-                'type': 'copper-inputs-scenario-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        ),
-        dmc.MultiSelect(
-            label='Select Scenarios',
-            data=[{'label': scenario, 'value': scenario} for scenario in t_scenarios],
-            value=t_scenarios if t_scenarios else [],
-            id={
-                'type': 'copper-inputs-scenario-multi-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        )
-
-        ],
-        style={'display': 'none'},
-        id={
-            'type': 'copper-inputs-transmission-widget',
-            'index': window_id
-        })
-
-
-    extant_capacity_widget_layout = html.Div([
-        dmc.Select(
-            label='Representation Options',
-            data=[{'label': plot, 'value': plot} for plot in e_p_type],
-            value=e_p_type[0],
-            id={
-                'type': 'copper-inputs-extant-capacity-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Year',
-            data=[{'label': year, 'value': year} for year in e_years],
-            value=e_years[0],
-            id={
-                'type': 'copper-inputs-extant-capacity-year-select',
-                'index': window_id
-            },
-        ),
-        dmc.Select(
-            label='Region',
-            data=[{'label': region, 'value': region} for region in e_regions],
-            value=e_regions[0],
-            id={
-                'type': 'copper-inputs-extant-capacity-region-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in e_scenarios],
-            value=e_scenarios[0],
-            id={
-                'type': 'copper-inputs-extant-capacity-scenario-select',
-                'index': window_id
-            },
-        ),
-        dmc.MultiSelect(
-            label='Select Scenarios',
-            data=[{'label': scenario, 'value': scenario} for scenario in e_scenarios],
-            value=e_scenarios,
-            id={
-                'type': 'copper-inputs-extant-capacity-scenario-multi-select',
-                'index': window_id
-            },
-            style={'display': 'none'}
-        )
-        ],
-        id={
-            'type': 'copper-inputs-extant-capacity-widget',
-            'index': window_id
-        },
-        style={'display': 'none'}
-    )
 
 
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in classes],
-            value=classes[0],
+            value='',
             id={
                 'type': 'copper-inputs-plot-select',
                 'index': window_id
             },
         ),
-        vre_widget_layout,
-        transmission_widget_layout,
-        extant_capacity_widget_layout,
-        demand_widget_layout,
-        cost_widget_layout,
-        transmission_cost_widget_layout,
-        params_widget_layout,
+        vre.create_widgets(df, classes, window_id),
+        extant_capacity.create_widgets(df, classes, window_id),
+        demand.create_widgets(df, classes, window_id),
+        cost.create_widgets(df, classes, window_id),
+        transmission_cost.create_widgets(df, classes, window_id),
+        params.create_widgets(df, classes, window_id),
+        extant_transmission.create_widgets(df, classes, window_id),
         policy_widget_layout,
         dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
                    variant='light',
@@ -1006,21 +687,12 @@ def plot(df, window_id):
         dcc.Download(id={'type': 'copper-inputs-download', 'index': window_id}),
     ])
 
+    fig = go.Figure()
+    fig.add_annotation(text='Select a plot type to visualize the data', showarrow=False, xref='paper', yref='paper',
+                       x=0.5, y=0.5, font=dict(size=20), align='center', ax=0, ay=0)
+
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df,
-                            vre_variable=vre_variables[0] if len(vre_variables) else None,
-                            season=seasons[0] if len(seasons) else None,
-                            t_p_type=t_p_type[0] if len(t_p_type) else None,
-                            t_year=t_years[0] if len(t_years) else None,
-                            t_scenarios=t_scenarios if len(t_scenarios) else None,
-                            e_p_type=e_p_type[0] if len(e_p_type) else None,
-                            e_year=e_years[0] if len(e_years) else None,
-                            e_region=e_regions[0] if len(e_regions) else None,
-                            e_scenarios=e_scenarios if len(e_scenarios) else None,
-                            _demand_scenario=demand_scenarios[0] if len(demand_scenarios) else None,
-                            _demand_time_step='yearly',
-                            _c_type=costs[0] if len(costs) else None,
-                           ),
+        figure=fig,
         id={
             'type': ids.FIGURE,
             'index': window_id,
