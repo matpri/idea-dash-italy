@@ -111,7 +111,7 @@ def link(app):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS Output']['Industrial Minerals']
+        _data = data_handler.processed_data['CIMS']['Industrial Minerals']
 
         if trigger_id['type'] == 'cims-industrial_minerals-download-button':
             return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,

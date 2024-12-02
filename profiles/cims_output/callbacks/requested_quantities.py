@@ -265,7 +265,7 @@ def link(app):
             _p_style = {'display': 'none'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
-            _canvas = render_plot(_representation,'Sankey', data_handler.processed_data['CIMS Output']['Requested Quantities'],
+            _canvas = render_plot(_representation,'Sankey', data_handler.processed_data['CIMS']['Requested Quantities'],
                                        _scenarios,
                                        _regions,
                                        _years, scenario=_scenario, sector=_sector, service=_service, fuel=_fuel)

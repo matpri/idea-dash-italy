@@ -89,7 +89,7 @@ def link(app):
         else:
             _scenario_style[idx] = {'display': 'none'}
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['CIMS Output']['Overview'],
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['CIMS']['Overview'],
                                    show_sectors=_show_sectors[idx], scenario=_scenario[idx])
 
         return _canvas, [dash.no_update for _ in _data], _scenario_style

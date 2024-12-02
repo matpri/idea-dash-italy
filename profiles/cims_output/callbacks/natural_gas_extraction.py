@@ -111,7 +111,7 @@ def link(app):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS Output']['Natural Gas Extraction']
+        _data = data_handler.processed_data['CIMS']['Natural Gas Extraction']
 
         if trigger_id['type'] == 'cims-natural_gas_extraction-download-button':
             return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
