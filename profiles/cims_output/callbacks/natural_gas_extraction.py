@@ -107,11 +107,11 @@ def link(app):
     )
     def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
                     text_switch, download_btn):
-        print('Natural Gas Extraction')
+        print('Natural Gas Production')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS']['Natural Gas Extraction']
+        _data = data_handler.processed_data['CIMS']['Natural Gas Production']
 
         if trigger_id['type'] == 'cims-natural_gas_extraction-download-button':
             return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,

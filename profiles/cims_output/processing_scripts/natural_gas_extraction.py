@@ -27,8 +27,8 @@ def check(df):
     # print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIMS').any():
-            if (df.sector == 'Natural Gas Extraction').any():
-                df = df[df.sector == 'Natural Gas Extraction']
+            if (df.sector == 'Natural Gas Production').any():
+                df = df[df.sector == 'Natural Gas Production']
                 if stock_lcc.check(df):
                     return True
                 if requested_quantities.check(df):
@@ -45,7 +45,7 @@ def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        df = df[df.sector == 'Natural Gas Extraction']
+        df = df[df.sector == 'Natural Gas Production']
         # remove where region is CAN
         df_ghg = df.copy()
         df_ghg = ghg.process({scenario_name: df_ghg})

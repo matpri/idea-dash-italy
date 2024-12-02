@@ -111,7 +111,7 @@ class PypsaOutput(BaseProfile):
         'Light Industrial',
         'Metal Smelting',
         'Mining',
-        'Natural Gas Extraction',
+        'Natural Gas Production',
         'Petroleum Crude',
         'Petroleum Refining',
         'Pulp and Paper',
@@ -281,7 +281,7 @@ class PypsaOutput(BaseProfile):
                 'callback': mining_callbacks.link,
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             },
-        'Natural Gas Extraction':
+        'Natural Gas Production':
             {
                 'check': natural_gas_extraction_processing.check,
                 'db_check': natural_gas_extraction_processing.check,

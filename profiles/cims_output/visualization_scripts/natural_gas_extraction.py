@@ -20,20 +20,20 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
         variable = 'Requested Quantities'
 
     if r_type == 'By Year':
-        return bar_over_years.plot(df_plt, scenarios, region, 'Natural Gas Extraction: ' + variable, 'Year',
+        return bar_over_years.plot(df_plt, scenarios, region, 'Natural Gas Production: ' + variable, 'Year',
                                    variable,
                                    name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif r_type == 'Trend Over Years':
-        return trend_over_years.plot(df_plt, scenario, region, 'Natural Gas Extraction: ' + variable, 'Year',
+        return trend_over_years.plot(df_plt, scenario, region, 'Natural Gas Production: ' + variable, 'Year',
                                    variable,
                                      name, unit)
     elif r_type == 'Pie Chart':
-        return pie_chart.plot(df_plt, scenario, region, year, 'Natural Gas Extraction: ' + variable, 'Year',
+        return pie_chart.plot(df_plt, scenario, region, year, 'Natural Gas Production: ' + variable, 'Year',
                                    variable)
 
     else:
-        return bar_over_regions.plot(df_plt, scenarios, year, 'Natural Gas Extraction: ' + variable, 'Year',
+        return bar_over_regions.plot(df_plt, scenarios, year, 'Natural Gas Production: ' + variable, 'Year',
                                    variable,
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
