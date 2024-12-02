@@ -31,6 +31,7 @@ from profiles.cims_output.callbacks import (requested_quantities as requested_qu
                                             transportation_freight as transportation_freight_callbacks,
                                             transportation_personal as transportation_personal_callbacks,
                                             waste as waste_callbacks,
+                                            inputs as inputs_callbacks,
 
                                             )
 from profiles.cims_output.processing_scripts import (
@@ -55,6 +56,7 @@ from profiles.cims_output.processing_scripts import (
     transportation_freight as transportation_freight_processing,
     transportation_personal as transportation_personal_processing,
     waste as waste_processing,
+    inputs as inputs_processing,
 )
 from profiles.cims_output.processing_scripts.utils import ghg as ghg_processing, stock_lcc as stock_lcc_processing, \
     requested_quantities as requested_quantities_processing
@@ -83,12 +85,14 @@ from profiles.cims_output.visualization_scripts import (
     transportation_freight as transportation_freight_viz,
     transportation_personal as transportation_personal_viz,
     waste as waste_viz,
+    inputs as inputs_viz,
 )
 
 
 class PypsaOutput(BaseProfile):
     display_name = 'CIMS'
     db_name = 'cims'
+    name='cims'
     color = 'yellow 8'
     description = (
         'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
@@ -96,6 +100,7 @@ class PypsaOutput(BaseProfile):
 
     plot_order = [
         'Overview',
+        'Inputs',
         'Requested Quantities',
         'Stock LCC',
         'GHG',
@@ -130,6 +135,16 @@ class PypsaOutput(BaseProfile):
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Inputs':
+            {
+                'check': inputs_processing.check,
+                'db_check': inputs_processing.check,
+                'process': inputs_processing.process,
+                'db_process': inputs_processing.process,
+                'viz': inputs_viz.plot,
+                'callback': inputs_callbacks.link,
+                'description': 'Visualizations of the input data.'
             },
         'Requested Quantities':
             {

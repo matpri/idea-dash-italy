@@ -11,11 +11,9 @@ from dash import html, dcc
 from matplotlib.dates import datestr2num
 
 from components import ids
-from profiles.copper_output import utils
-from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
+from profiles.cims_output import utils
+from profiles.cims_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
     pie_chart
-
-from profiles.copper_output.visualization_scripts.input_utils import transmission_cost, cost, extant_capacity, demand, vre, params, extant_transmission
 
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
@@ -24,15 +22,19 @@ def get_contrasting_font_color(rgb_color):
     brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
     return '#ffffff' if brightness < 128 else '#000000'
 
-def render_cost(data, _c_type, _c_scenario, _c_region):
+def render_cost(data, _c_type, _c_scenario, _c_region, _c_sector):
     data = data[data['variable'].str.startswith(_c_type)]
     unit = data['unit'].iloc[0]
 
-    data['variable'] = data['variable'].replace(_c_type + '|', '', regex=True)
-    return trend_over_years.plot(data, _c_scenario, _c_region, False, _c_type, 'x', 'y', _c_type, unit)
+    data['variable'] = data['variable'].str.replace(_c_type + '|', '')
+    data = data[data['variable'].str.startswith(_c_sector)]
+    data['variable'] = data['variable'].str.replace(_c_sector + '|', '')
+    return trend_over_years.plot(data, _c_scenario, _c_region, _c_type, 'Cost', 'Year', _c_type, unit)
 
-def render_t_cost(data, _t_cost_scenario, bl=False):
+def render_t_cost(data, _t_cost_scenario,bl=False, region=None):
     data = data[data['scenario'].isin(_t_cost_scenario)]
+    if region is not None:
+        data = data[data['region'] == region]
     if not data.empty:
         # create a table
         data = data[['scenario', 'variable', 'value']]
@@ -193,43 +195,22 @@ def render_tech_params(data, _p_scenario):
     return fig
 
 
-def render_plot(p_type, df, vre_variable=None, season=None, t_p_type=None, t_year=None, t_scenarios=None,
-                e_p_type=None, e_year=None, e_region=None, e_scenarios=None,
-                _demand_scenario=None, _demand_time_step=None, _demand_year=None, _demand_month=None, _demand_date=None,
-                _c_type=None, _c_scenario=None, _c_region=None,
-                _t_cost_scenarios=None, _p_scenario=None, _p_variable=None,
-                _policy_scenarios=None):
+def render_plot(p_type, df,
+                _c_type=None, _c_scenario=None, _c_region=None, _c_sector=None,
+                _policy_scenarios=None, _policy_region=None):
     data = df.copy()
     data['class'], data['variable'] = data['variable'].apply(lambda x: x.split('|')[0]), data['variable'].apply(
         lambda x: '|'.join(x.split('|')[1:]))
     data = data[data['class'] == p_type]
-    if p_type == 'Vre Capacity Factors':
-        title = 'Vre Capacity Factors'
-        x_label = 'Year'
-        y_label = 'Capacity Factor'
-        name = 'Capacity Factor'
-        unit = '%'
-        return plot_vre(data, vre_variable, season, title, x_label, y_label, name, unit)
-    elif p_type == 'Extant Transmission':
-        return render_extant_transmission(t_p_type, data, t_scenarios, t_year)
-    elif p_type == 'Extant Capacity':
-        return plot_capacity(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios[0])
-    elif p_type == 'Demand':
-        return render_demand(data, _demand_scenario, _demand_year, _demand_month, _demand_date, 'Demand', 'Time', 'Demand (MW)', time_size=_demand_time_step)
-    elif p_type == 'Cost':
-        return render_cost(data, _c_type, _c_scenario, _c_region)
-    elif p_type == 'Transmission Costs':
-        return render_t_cost(data, _t_cost_scenarios)
-    elif p_type == 'Technology Parameter':
-        data = data[data['variable'].str.startswith(_p_variable)]
-        return render_tech_params(data, _p_scenario)
+    if p_type == 'Cost':
+        return render_cost(data, _c_type, _c_scenario, _c_region, _c_sector)
     elif p_type == 'Policy':
-        return render_t_cost(data, _policy_scenarios, True)
+        return render_t_cost(data, _policy_scenarios, True, _policy_region)
     else:
         return go.Figure()
 
 def plot_capacity(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
-    from profiles.copper_output.utils import plot_settings
+    from profiles.cims_output.utils import plot_settings
     #print('rendering plot', type)
     name = plot_settings['Capacity']['name']
     unit = plot_settings['Capacity']['unit']
@@ -471,9 +452,9 @@ def transmission_plot(df, scenario, year, title):
         return fig
 
 
-    with open('profiles/copper_output/visualization_scripts/utils/canada.geojson') as f:
+    with open('profiles/cims_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('profiles/copper_output/visualization_scripts/utils/arrows.geojson') as f:
+    with open('profiles/cims_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
@@ -538,7 +519,7 @@ def transmission_plot(df, scenario, year, title):
     return fig
 
 def render_extant_transmission(p_type, df, scenarios, year):
-    from profiles.copper_output.utils import plot_settings
+    from profiles.cims_output.utils import plot_settings
     name = plot_settings['Transmission Capacity']['name']
     unit = plot_settings['Transmission Capacity']['unit']
     if p_type == 'Map Plot':
@@ -636,8 +617,10 @@ def plot(df, window_id):
     classes = df['variable'].apply(lambda x: x.split('|')[0]).unique()
 
     policy_scenarios = []
+    policy_regions = []
     if 'Policy' in classes:
         policy_scenarios = df[df['variable'].str.startswith('Policy')]['scenario'].unique()
+        policy_regions = df[df['variable'].str.startswith('Policy')]['region'].unique()
 
     policy_widget_layout = html.Div([
         dmc.MultiSelect(
@@ -645,58 +628,110 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in policy_scenarios],
             value=[policy_scenarios[0]] if len(policy_scenarios) else [],
             id={
-                'type': 'copper-inputs-policy-scenario-select',
+                'type': 'cims-inputs-policy-scenario-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in policy_regions],
+            value=policy_regions[0] if len(policy_regions) else '',
+            id={
+                'type': 'cims-inputs-policy-region-select',
+                'index': window_id
+            },
+        )
+        ],
+        style={'display': 'none'},
+        id={
+            'type': 'cims-inputs-policy-widget',
+            'index': window_id
+        }
+    )
+
+    costs = []
+    c_regions = []
+    c_scenarios = []
+    c_sector = []
+    if 'Cost' in classes:
+        costs = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[1]).unique()
+        c_sector = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[2]).unique()
+        c_regions = df[df['variable'].str.startswith('Cost')]['region'].unique()
+        c_scenarios = df[df['variable'].str.startswith('Cost')]['scenario'].unique()
+
+    cost_widget_layout = html.Div([
+        dmc.Select(
+            label='Cost Type',
+            data=[{'label': cost, 'value': cost} for cost in costs],
+            value=costs[0] if len(costs) else '',
+            id={
+                'type': 'cims-inputs-cost-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Sector',
+            data=[{'label': sector, 'value': sector} for sector in c_sector],
+            value=c_sector[0] if len(c_sector) else '',
+            id={
+                'type': 'cims-inputs-cost-sector-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in c_scenarios],
+            value=c_scenarios[0] if len(c_scenarios) else '',
+            id={
+                'type': 'cims-inputs-cost-scenario-select',
+                'index': window_id
+            },
+        ),
+        dmc.Select(
+            label='Region',
+            data=[{'label': region, 'value': region} for region in c_regions],
+            value=c_regions[0] if len(c_regions) else '',
+            id={
+                'type': 'cims-inputs-cost-region-select',
                 'index': window_id
             },
         ),
         ],
         style={'display': 'none'},
         id={
-            'type': 'copper-inputs-policy-widget',
+            'type': 'cims-inputs-cost-widget',
             'index': window_id
         }
     )
-
-
-
-    print(classes)
 
 
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in classes],
-            value='',
+            value = '',
             id={
-                'type': 'copper-inputs-plot-select',
+                'type': 'cims-inputs-plot-select',
                 'index': window_id
             },
         ),
-        vre.create_widgets(df, classes, window_id),
-        extant_capacity.create_widgets(df, classes, window_id),
-        demand.create_widgets(df, classes, window_id),
-        cost.create_widgets(df, classes, window_id),
-        transmission_cost.create_widgets(df, classes, window_id),
-        params.create_widgets(df, classes, window_id),
-        extant_transmission.create_widgets(df, classes, window_id),
+        cost_widget_layout,
         policy_widget_layout,
-        dmc.Button('Download Data', id={'type': 'copper-inputs-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'cims-inputs-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'copper-inputs-download', 'index': window_id}),
+        dcc.Download(id={'type': 'cims-inputs-download', 'index': window_id}),
     ])
-
     fig = go.Figure()
-    fig.add_annotation(text='Select a plot type to visualize the data', showarrow=False, xref='paper', yref='paper',
-                       x=0.5, y=0.5, font=dict(size=20), align='center', ax=0, ay=0)
+    fig.add_annotation(text='Select a plot type to visualize the data', showarrow=False, xref='paper', yref='paper', x=0.5, y=0.5, font=dict(size=20), align='center', ax=0, ay=0)
 
     plot_layout = dcc.Graph(
         figure=fig,
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'copper_output',
+            'profile': 'cims_output',
             'viz': 'inputs'
         },
         style={
