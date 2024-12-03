@@ -132,7 +132,7 @@ def plot_map(message_data, scenario, time, title, name, unit, variable='All', ag
             scatter_data.append(go.Scattergeo(
                 lon=[centroids[region]['lon']],
                 lat=[centroids[region]['lat']],
-                text=f"{value_rounded} ({unit})",
+                text=f"<b>{value_rounded} ({unit})</b>",  # Bold text for better visibility
                 mode='markers+text',
                 marker=dict(size=4, color='black'),
                 textposition="top center",

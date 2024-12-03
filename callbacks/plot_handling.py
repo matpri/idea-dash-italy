@@ -17,13 +17,18 @@ def link(app):
             'index': MATCH,
             'model': ALL,
             'viz': ALL
+        }, 'figure'),Input({
+            'type': ids.FIGURE,
+            'index': MATCH,
+            'profile': ALL,
+            'name': ALL
         }, 'figure'),
         State({'type': ids.PLOT, 'index': MATCH}, 'figure'),
         prevent_initial_call=True,
     )(update_plot)
 
 
-def update_plot(_figs, _figs2, _fig3, _plots):
+def update_plot(_figs, _figs2, _fig3, _fig4, _plots):
     """
     Update the plot based on the triggered input.
     These are all id structures that are used to identify plots in IDEA (COULD BE UNIFIED TO ONE ID STRUCTURE) and when a plot is updated, we need to update the plots inside the tabs.
