@@ -1,5 +1,8 @@
 from dash import html
 import dash_mantine_components as dmc
+from profiles.copper_output import utils
+from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years, \
+    pie_chart
 
 
 def create_widgets(df, classes, window_id):
@@ -22,7 +25,6 @@ def create_widgets(df, classes, window_id):
                 'type': 'copper-inputs-extant-capacity-select',
                 'index': window_id
             },
-            style={'display': 'none'}
         ),
         dmc.Select(
             label='Year',
@@ -72,3 +74,22 @@ def create_widgets(df, classes, window_id):
         style={'display': 'none'}
     )
     return extant_capacity_widget_layout
+
+def render(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+    from profiles.copper_output.utils import plot_settings
+    #print('rendering plot', type)
+    name = plot_settings['Capacity']['name']
+    unit = plot_settings['Capacity']['unit']
+    if type == 'By Year':
+        plot_info = plot_settings['Capacity']['By Year']
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+    elif type == 'Trend Over Years':
+        plot_info = plot_settings['Capacity']['Trend Over Years']
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    elif type == 'Pie Chart':
+        plot_info = plot_settings['Capacity']['Pie Chart']
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+    else:
+        plot_info = plot_settings['Capacity']['By Region']
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+

@@ -1,5 +1,10 @@
+import numpy as np
 from dash import html
 import dash_mantine_components as dmc
+import plotly.graph_objects as go
+import plotly.express as px
+
+from profiles.copper_output.visualization_scripts.utils import trend_over_years
 
 
 def create_widgets(df, classes, window_id):
@@ -47,3 +52,10 @@ def create_widgets(df, classes, window_id):
         }
     )
     return cost_widget_layout
+
+def render(data, _c_type, _c_scenario, _c_region):
+    data = data[data['variable'].str.startswith(_c_type)]
+    unit = data['unit'].iloc[0]
+
+    data['variable'] = data['variable'].str.replace(_c_type + '|', '')
+    return trend_over_years.plot(data, _c_scenario, _c_region, False, _c_type, 'x', 'y', _c_type, unit)
