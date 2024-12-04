@@ -2001,7 +2001,24 @@ Under 25 MW:
     group_color: '#ff6b6b'
     name: 'Electricity|NG'
 
+Electricity|Coal|CCS:
+    color: '#000000'
+    group: 'Fossil fuel solid'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w\ CCS'
 
+Electricity|Direct Air Capture:
+    color: '#000000'
+    group: 'Direct Air Capture'
+    group_color: '#999999'
+    name: 'Electricity|Direct Air Capture'
+
+
+"variable_om_cost+Fuel Cost":
+    color: '#000000'
+    group: 'VO&M costs + Fuel costs'
+    group_color: '#9d2ed1'
+    name: 'VO&M costs + Fuel costs'
 
 
 
