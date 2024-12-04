@@ -2013,6 +2013,12 @@ Electricity|Direct Air Capture:
     group_color: '#999999'
     name: 'Electricity|Direct Air Capture'
 
+Electricity|Nuclear|PWR:
+    color: '#000000'
+    group: 'Nuclear'
+    group_color: '#ff7f00'
+    name: 'Electricity|Nuclear|PWR'
+
 
 "variable_om_cost+Fuel Cost":
     color: '#000000'
