@@ -5,7 +5,7 @@ from utils.data_handler import DataHandler
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Save files from data into IDEA pkl at this path.')
-parser.add_argument('autosave', type=str, help='Path to save the datahandler to.')
+parser.add_argument('autosave', type=str, help='Path to save the datahandler to.', default='datahandler.pkl')
 
 args = parser.parse_args()  # Parse the arguments
 autosave = args.autosave
