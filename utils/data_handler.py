@@ -395,8 +395,11 @@ class DataHandler:
                     continue
                 columns = viz_data.columns.tolist()
                 # check if column of viz_data contains 'variable', 'value', 'region', 'time', 'scenario'
-                if all(col in columns for col in ['variable', 'value', 'region', 'time', 'scenario']):
+                if all(col in columns for col in ['variable', 'value', 'region', 'scenario']) and ('time' in columns or 'period' in columns):
                     df = viz_data.copy()
+                    if 'period' in df.columns:
+                        df['time'] = df['period']
+                        df = df.drop(columns=['period'])
                     variables += df.variable.unique().tolist()
                     df['variable'] = viz + '|' + df['variable']
                     df['scenario'] = model + '|' + df['scenario']
