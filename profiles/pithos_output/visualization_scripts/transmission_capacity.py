@@ -414,6 +414,7 @@ def plot(df, window_id):
                 'type': 'pithos-transmissioncapacity-lines-select',
                 'index': window_id
             },
+            style={'display': 'none'}
         ),
 
         dmc.Button('Download Data', id={'type': 'pithos-transmissioncapacity-download-button', 'index': window_id},

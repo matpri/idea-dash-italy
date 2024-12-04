@@ -414,6 +414,7 @@ def plot(df, window_id):
                 'type': 'temoa-transmissionflow-lines-select',
                 'index': window_id
             },
+            style={'display': 'none'}
         ),
 
         dmc.Button('Download Data', id={'type': 'temoa-transmissionflow-download-button', 'index': window_id},
