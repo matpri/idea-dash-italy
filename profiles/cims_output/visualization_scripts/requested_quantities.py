@@ -135,7 +135,7 @@ def process_represenation(df, representation, sector, service, fuel):
     return filtered_df
 
 
-def plot(df, window_id):
+def widgets(df, window_id):
     """
     :param df: pandas Dataframe containing the data to visualize
     :param window_id: window id to use when registering components to dash
@@ -226,7 +226,7 @@ def plot(df, window_id):
         style={'display': 'block'}
     )
 
-    widget_layout = html.Div([
+    widget_layout = [
         dmc.Select(
             label='Result Representation',
             data=[{'label': plot, 'value': plot} for plot in ['By Fuel', 'By Service', 'By Sector']],
@@ -278,21 +278,9 @@ def plot(df, window_id):
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-requested_quantities-download', 'index': window_id}),
-    ])
+    ]
 
-    plot_layout = dcc.Graph(
-        figure=render_plot('By Sector', 'By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0], scenarios[0], fuel=fuels[0]),
-        id={
-            'type': ids.FIGURE,
-            'index': window_id,
-            'profile': 'cims_output',
-            'viz': 'requested_quantities'
-        },
-        style={
-            'width': '100%',
-            'height': '100%'
-        }
-    )
 
-    return widget_layout, plot_layout
+
+    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+                           years[0], scenarios[0], fuel=fuels[0])

@@ -11,8 +11,8 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'stock_lcc'
-        }, 'figure'),
+            'viz': 'overview'
+        }, 'figure', allow_duplicate=True),
         Output({
             'type': 'cims-stock_lcc-region-select',
             'index': MATCH
@@ -150,15 +150,16 @@ def link(app):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+        _data = data_handler.processed_data['CIMS']['Overview']
+        _data = _data[_data['tab'] == 'Technology Stocks']
 
         if 'cims-stock_lcc-download-button' in trigger_id['type']:
-            _data = dcc.send_data_frame(data_handler.processed_data['CIMS']['Technology Stocks'].to_csv,
+            _data = dcc.send_data_frame(_data.to_csv,
                                         "stock_lcc.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         services = dash.no_update
         if 'cims-stock_lcc-sector-select' in trigger_id['type']:
-            _data = data_handler.processed_data['CIMS']['Technology Stocks']
             _data = _data[_data['sector'] == _sector]
             services = _data[_data['technology'].isna()]['short_path'].unique().tolist()
 
@@ -170,7 +171,7 @@ def link(app):
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
             _canvas = render_plot('By Year',
-                                  data_handler.processed_data['CIMS']['Technology Stocks'],
+                                  _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
@@ -185,7 +186,7 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
             _canvas = render_plot('Trend Over Years',
-                                  data_handler.processed_data['CIMS']['Technology Stocks'],
+                                  _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -198,7 +199,7 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
             _canvas = render_plot('Pie Chart',
-                                  data_handler.processed_data['CIMS']['Technology Stocks'],
+                                  _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -212,7 +213,7 @@ def link(app):
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
             _canvas = render_plot('By Region',
-                                  data_handler.processed_data['CIMS']['Technology Stocks'],
+                                  _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,

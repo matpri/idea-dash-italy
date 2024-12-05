@@ -11,8 +11,8 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'requested_quantities'
-        }, 'figure'),
+            'viz': 'overview'
+        }, 'figure', allow_duplicate=True),
         Output({
             'type': 'cims-requested_quantities-region-select',
             'index': MATCH

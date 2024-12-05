@@ -51,7 +51,7 @@ def process_represenation(df, sector, service, parameter):
     return filtered_df
 
 
-def plot(df, window_id):
+def widgets(df, window_id):
     """
     :param df: pandas Dataframe containing the data to visualize
     :param window_id: window id to use when registering components to dash
@@ -133,7 +133,7 @@ def plot(df, window_id):
         style={'display': 'block'}
     )
 
-    widget_layout = html.Div([
+    widget_layout = [
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
@@ -183,22 +183,8 @@ def plot(df, window_id):
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-stock_lcc-download', 'index': window_id}),
-    ])
+    ]
 
-    plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+    return widget_layout, render_plot('By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0], scenarios[0], sector=sectors[0], service=services[0],
-                           parameter=stock_parameters[0], plot_name=stock_parameters[0]),
-        id={
-            'type': ids.FIGURE,
-            'index': window_id,
-            'profile': 'cims_output',
-            'viz': 'stock_lcc'
-        },
-        style={
-            'width': '100%',
-            'height': '100%'
-        }
-    )
-
-    return widget_layout, plot_layout
+                           parameter=stock_parameters[0], plot_name=stock_parameters[0])
