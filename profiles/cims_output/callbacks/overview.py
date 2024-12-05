@@ -23,6 +23,18 @@ def link(app):
             'type': 'cims-overview-emissions',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'cims-stocks-update',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'cims-demand-update',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'cims-emissions-update',
+            'index': ALL
+        }, 'value'),
         Input({
             'type': 'cims-overview-tabs-select',
             'index': ALL
@@ -39,9 +51,21 @@ def link(app):
             'type': 'cims-overview-emissions',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'cims-stocks-update',
+            'index': ALL
+        }, 'value'),
+        State({
+            'type': 'cims-demand-update',
+            'index': ALL
+        }, 'value'),
+        State({
+            'type': 'cims-emissions-update',
+            'index': ALL
+        }, 'value'),
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _stocks_style, _demand_style, _emissions_style):
+    def update_overview(_p_type, _stocks_style, _demand_style, _emissions_style, _stocks_update, _demand_update, _emissions_update):
         # print('updating overview plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -59,4 +83,8 @@ def link(app):
         _demand_style[idx] = {'display': 'block'} if _p_type[idx] == 'Energy Demand' else {'display': 'none'}
         _emissions_style[idx] = {'display': 'block'} if _p_type[idx] == 'Emissions' else {'display': 'none'}
 
-        return _stocks_style, _demand_style, _emissions_style
+        _stocks_update[idx] = not _stocks_update[idx] if _p_type[idx] == 'Technology Stocks' else dash.no_update
+        _demand_update[idx] = not _demand_update[idx] if _p_type[idx] == 'Energy Demand' else dash.no_update
+        _emissions_update[idx] = not _emissions_update[idx] if _p_type[idx] == 'Emissions' else dash.no_update
+
+        return _stocks_style, _demand_style, _emissions_style, _stocks_update, _demand_update, _emissions_update

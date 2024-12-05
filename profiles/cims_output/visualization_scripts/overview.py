@@ -27,6 +27,11 @@ def plot(df, window_id):
                                 style={'display': 'block'} if tabs[0] == 'Emissions' else {'display': 'none'}
                                 )
                        )
+        widgets.append(html.Button('CIMS-EMISSIONS',
+                                   id={
+                                       'type': 'cims-emissions-update',
+                                       'index': window_id
+                                   }, style={'display': 'none'}))
     if 'Energy Demand' in tabs:
         _w, fig = requested_quantities.widgets(df[df['tab'] == 'Energy Demand'], window_id)
         widgets.append(html.Div(_w,
@@ -37,6 +42,11 @@ def plot(df, window_id):
                                 style={'display': 'block'} if tabs[0] == 'Energy Demand' else {'display': 'none'}
                                 )
                        )
+        widgets.append(html.Button('CIMS-DEMAND',
+                                   id={
+                                       'type': 'cims-demand-update',
+                                       'index': window_id
+                                   }, style={'display': 'none'}))
     if 'Technology Stocks' in tabs:
         _w, fig = stock_lcc.widgets(df[df['tab'] == 'Technology Stocks'], window_id)
         widgets.append(html.Div(
@@ -48,6 +58,11 @@ def plot(df, window_id):
             style={'display': 'block'} if tabs[0] == 'Technology Stocks' else {'display': 'none'}
         )
         )
+        widgets.append(html.Button('CIMS-STOCKS',
+                                   id={
+                                       'type': 'cims-stocks-update',
+                                       'index': window_id
+                                   }, style={'display': 'none'}))
 
     widget_layout = html.Div([
         dmc.Select(

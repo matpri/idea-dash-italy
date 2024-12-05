@@ -52,6 +52,10 @@ def link(app):
             'style'
         ),
         Input({
+            'type': 'cims-stocks-update',
+            'index': MATCH
+        }, 'value'),
+        Input({
             'type': 'cims-stock_lcc-plot-select',
             'index': MATCH
         }, 'value'),
@@ -143,7 +147,7 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_stock_lcc(_p_type, _scenarios, _scenario, _variable, _regions, _years, _pattern, _text,
+    def update_stock_lcc(_update, _p_type, _scenarios, _scenario, _variable, _regions, _years, _pattern, _text,
                          _download, _sector, _service, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                          _pattern_style, _text_style):
         print('updating stock_lcc plot', _variable)

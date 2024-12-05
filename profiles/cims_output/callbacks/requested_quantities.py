@@ -68,6 +68,10 @@ def link(app):
             'index': MATCH
         }, 'style'),
         Input({
+            'type': 'cims-demand-update',
+            'index': MATCH
+        }, 'value'),
+        Input({
             'type': 'cims-requested_quantities-representation-select',
             'index': MATCH
         }, 'value'),
@@ -167,7 +171,7 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_requested_quantities(_representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
+    def update_requested_quantities(_update, _representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
                          _download, _sector, _service, _fuel ,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style, _p_style):
         #print('updating requested_quantities plot')
         from main import data_handler

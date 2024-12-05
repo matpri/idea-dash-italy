@@ -66,6 +66,10 @@ def link(app):
             'style'
         ),
         Input({
+            'type': 'cims-emissions-update',
+            'index': MATCH
+        }, 'value'),
+        Input({
             'type': 'cims-ghg-representation-select',
             'index': MATCH
         }, 'value'),
@@ -161,7 +165,7 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_ghg(_representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
+    def update_ghg(_update, _representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
                    _download, _sector, _service, _emission, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                    _pattern_style, _text_style):
         # print('updating ghg plot')
