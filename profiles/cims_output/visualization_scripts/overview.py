@@ -18,7 +18,7 @@ def plot(df, window_id):
     widgets = []
     fig = go.Figure()
     if 'Emissions' in tabs:
-        _w, fig = ghg.widgets(df[df['tab'] == 'Emissions'], window_id)
+        _w, _fig = ghg.widgets(df[df['tab'] == 'Emissions'], window_id)
         widgets.append(html.Div(_w,
                                 id={
                                     'type': 'cims-overview-emissions',
@@ -32,8 +32,10 @@ def plot(df, window_id):
                                        'type': 'cims-emissions-update',
                                        'index': window_id
                                    }, style={'display': 'none'}))
+        if tabs[0] == 'Emissions':
+            fig = _fig
     if 'Energy Demand' in tabs:
-        _w, fig = requested_quantities.widgets(df[df['tab'] == 'Energy Demand'], window_id)
+        _w, _fig = requested_quantities.widgets(df[df['tab'] == 'Energy Demand'], window_id)
         widgets.append(html.Div(_w,
                                 id={
                                     'type': 'cims-overview-demand',
@@ -47,8 +49,10 @@ def plot(df, window_id):
                                        'type': 'cims-demand-update',
                                        'index': window_id
                                    }, style={'display': 'none'}))
+        if tabs[0] == 'Energy Demand':
+            fig = _fig
     if 'Technology Stocks' in tabs:
-        _w, fig = stock_lcc.widgets(df[df['tab'] == 'Technology Stocks'], window_id)
+        _w, _fig = stock_lcc.widgets(df[df['tab'] == 'Technology Stocks'], window_id)
         widgets.append(html.Div(
             _w,
             id={
@@ -63,7 +67,8 @@ def plot(df, window_id):
                                        'type': 'cims-stocks-update',
                                        'index': window_id
                                    }, style={'display': 'none'}))
-
+        if tabs[0] == 'Technology Stocks':
+            fig = _fig
     widget_layout = html.Div([
         dmc.Select(
             label='Result Representation',
