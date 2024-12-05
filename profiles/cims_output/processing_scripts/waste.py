@@ -57,14 +57,14 @@ def process(selected: dict):
             subset['parameter'] = name
             ghg_ls.append(subset)
         df_ghg = pd.concat(ghg_ls)
-        df_ghg['plot'] = 'GHG'
+        df_ghg['plot'] = 'Emissions'
 
         df_stock = df.copy()
         df_stock = stock_lcc.process({scenario_name: df_stock})
-        df_stock['plot'] = 'Stock'
+        df_stock['plot'] = 'Technology Stocks'
         df_rq = df.copy()
         df_rq = requested_quantities.process({scenario_name: df_rq})
-        df_rq['plot'] = 'Requested Quantities'
+        df_rq['plot'] = 'Energy Demand'
         dfs.append(df_ghg)
         dfs.append(df_stock)
         dfs.append(df_rq)

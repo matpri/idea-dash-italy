@@ -626,7 +626,7 @@ def plot(df, window_id):
         dmc.MultiSelect(
             label='Scenario',
             data=[{'label': scenario, 'value': scenario} for scenario in policy_scenarios],
-            value=[policy_scenarios[0]] if len(policy_scenarios) else [],
+            value=policy_scenarios if len(policy_scenarios) else [],
             id={
                 'type': 'cims-inputs-policy-scenario-select',
                 'index': window_id
@@ -709,7 +709,7 @@ def plot(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in classes],
-            value = '',
+            value = 'Policy' if 'Policy' in classes else classes[0],
             id={
                 'type': 'cims-inputs-plot-select',
                 'index': window_id
@@ -723,11 +723,9 @@ def plot(df, window_id):
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-inputs-download', 'index': window_id}),
     ])
-    fig = go.Figure()
-    fig.add_annotation(text='Select a plot type to visualize the data', showarrow=False, xref='paper', yref='paper', x=0.5, y=0.5, font=dict(size=20), align='center', ax=0, ay=0)
 
     plot_layout = dcc.Graph(
-        figure=fig,
+        figure=render_plot('Policy', df, _policy_scenarios=policy_scenarios, _policy_region=policy_regions[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,

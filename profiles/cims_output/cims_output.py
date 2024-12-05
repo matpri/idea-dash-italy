@@ -101,9 +101,9 @@ class PypsaOutput(BaseProfile):
     plot_order = [
         'Overview',
         'Inputs',
-        'Requested Quantities',
-        'Stock LCC',
-        'GHG',
+        'Energy Demand',
+        'Technology Stocks',
+        'Emissions',
         'Agriculture',
         'Biodiesel',
         'Chemical Products',
@@ -146,7 +146,7 @@ class PypsaOutput(BaseProfile):
                 'callback': inputs_callbacks.link,
                 'description': 'Visualizations of the input data.'
             },
-        'Requested Quantities':
+        'Energy Demand':
             {
                 'check': requested_quantities_processing.check,
                 'db_check': requested_quantities_processing.check,
@@ -156,7 +156,7 @@ class PypsaOutput(BaseProfile):
                 'callback': requested_quantities_callbacks.link,
                 'description': 'Emissions that are produced by the generation mix in the model.'
             },
-        'Stock LCC':
+        'Technology Stocks':
             {
                 'check': stock_lcc_processing.check,
                 'db_check': stock_lcc_processing.check,
@@ -166,7 +166,7 @@ class PypsaOutput(BaseProfile):
                 'callback': stock_lcc_callbacks.link,
                 'description': 'The stock of technologies in the model.'
             },
-        'GHG':
+        'Emissions':
             {
                 'check': ghg_processing.check,
                 'db_check': ghg_processing.check,

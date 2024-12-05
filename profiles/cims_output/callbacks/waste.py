@@ -124,9 +124,9 @@ def link(app):
         _s_style = dash.no_update
         _pattern_style = dash.no_update
         _text_style = dash.no_update
-        _v_style = {'display': 'none'} if plot_type == 'Requested Quantities' else {'display': 'block'}
+        _v_style = {'display': 'none'} if plot_type == 'Energy Demand' else {'display': 'block'}
 
-        _rep_switch_style = {'display': 'block'} if plot_type == 'Requested Quantities' else {'display': 'none'}
+        _rep_switch_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
 
         if plot == 'By Year':
             _m_style = {'display': 'block'}
@@ -161,11 +161,11 @@ def link(app):
         df_plt = _data[_data['plot'] == plot_type]
         variables = dash.no_update
         if trigger_id['type'] == 'cims-waste-plot-select':
-            variables = [] if plot_type == 'Requested Quantities' else df_plt['parameter'].unique().tolist()
+            variables = [] if plot_type == 'Energy Demand' else df_plt['parameter'].unique().tolist()
             if variables:
                 variable = variables[0]
             else:
-                'Requested Quantities'
+                'Energy Demand'
 
         _canvas = render_plot(_data, plot_type, plot, rep_switch, year, region, scenarios, scenario, variable,
                               pattern_switch, text_switch)

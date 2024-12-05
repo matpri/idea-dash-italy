@@ -63,7 +63,7 @@ def process(data):
             df = df[(df['technology'].isna()) & (df['context'] != 'Total')].groupby(
                 ['region', 'year', 'scenario', 'sector']).sum(numeric_only=True).reset_index()
             df = df.rename(columns={'value_num': 'value', 'year': 'time'})
-            df['variable'] = 'Requested Quantities'
+            df['variable'] = 'Energy Demand'
             df = df[['scenario', 'variable', 'time', 'value', 'sector']]
             dfs.append(df)
         if stock_lcc.check(db):

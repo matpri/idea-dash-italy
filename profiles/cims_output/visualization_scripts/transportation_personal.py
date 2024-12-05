@@ -16,8 +16,8 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
 
     df_plt = process_represenation(p_type, by_rep, variable, df_plt)\
 
-    if p_type == 'Requested Quantities':
-        variable = 'Requested Quantities'
+    if p_type == 'Energy Demand':
+        variable = 'Energy Demand'
 
     if r_type == 'By Year':
         return bar_over_years.plot(df_plt, scenarios, region, 'Transportation Personal: ' + variable, 'Year',
@@ -40,7 +40,7 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
 
 
 def process_represenation(p_type, by_rep, variable, df):
-    if p_type == 'GHG':
+    if p_type == 'Emissions':
         filtered_df = df[
             (df.parameter == variable)
         ]
@@ -51,7 +51,7 @@ def process_represenation(p_type, by_rep, variable, df):
                                                 'variable'] else '- Emitted'
         filtered_df = filtered_df[['region', 'variable', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
-    elif p_type == 'Stock':
+    elif p_type == 'Technology Stocks':
         filtered_df = df[df['parameter'] == variable]
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
@@ -76,14 +76,14 @@ def plot(df, window_id):
     plot_types = df['plot'].unique().tolist()
     plot_type = plot_types[0]
     df_plt = df[df['plot'] == plot_type]
-    if plot_type == 'Requested Quantities':
+    if plot_type == 'Energy Demand':
         df_plt = df_plt[df_plt['technology'].isna()]
 
     regions = df_plt.region.unique().tolist()
     years = df_plt.year.unique().tolist()
     scenarios = df_plt.scenario.unique().tolist()
 
-    variables = [] if plot_type == 'Requested Quantities' else df_plt[
+    variables = [] if plot_type == 'Energy Demand' else df_plt[
         'parameter'].unique().tolist()
 
     by_year_widgets = dmc.Select(
@@ -161,7 +161,7 @@ def plot(df, window_id):
                 'type': 'cims-transportation_personal-rep_switch',
                 'index': window_id
             },
-            style={'display': 'block'} if plot_type == 'Requested Quantities' else {'display': 'none'}
+            style={'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
         ),
 
         dmc.Select(

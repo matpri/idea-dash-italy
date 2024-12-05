@@ -170,12 +170,12 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
         if 'cims-ghg-download-button' in trigger_id['type']:
-            _data = dcc.send_data_frame(data_handler.processed_data['CIMS']['GHG'].to_csv, "ghg.csv")
+            _data = dcc.send_data_frame(data_handler.processed_data['CIMS']['Emissions'].to_csv, "ghg.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         services = dash.no_update
 
-        _data = data_handler.processed_data['CIMS']['GHG']
+        _data = data_handler.processed_data['CIMS']['Emissions']
         emissions_list = _data[_data['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
         to_use = emissions_mapping[_emission]
         emissions_list = [e_type for e_type in emissions_list if e_type in to_use]
@@ -200,7 +200,7 @@ def link(app):
             _s_style = {'display': 'none'}
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
-            _canvas = render_plot(_representation, 'By Year', data_handler.processed_data['CIMS']['GHG'],
+            _canvas = render_plot(_representation, 'By Year', data_handler.processed_data['CIMS']['Emissions'],
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
@@ -215,7 +215,7 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
             _canvas = render_plot(_representation, 'Trend Over Years',
-                                  data_handler.processed_data['CIMS']['GHG'],
+                                  data_handler.processed_data['CIMS']['Emissions'],
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -227,7 +227,7 @@ def link(app):
             _y_style = {'display': 'block'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
-            _canvas = render_plot(_representation, 'Pie Chart', data_handler.processed_data['CIMS']['GHG'],
+            _canvas = render_plot(_representation, 'Pie Chart', data_handler.processed_data['CIMS']['Emissions'],
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -240,7 +240,7 @@ def link(app):
             _s_style = {'display': 'none'}
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
-            _canvas = render_plot(_representation, 'By Region', data_handler.processed_data['CIMS']['GHG'],
+            _canvas = render_plot(_representation, 'By Region', data_handler.processed_data['CIMS']['Emissions'],
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,

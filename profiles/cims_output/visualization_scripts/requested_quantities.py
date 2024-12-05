@@ -13,7 +13,7 @@ from profiles.cims_output.utils import get_color
 def render_plot(representation, type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
                 sector=None, service=None, fuel=None):
     from profiles.cims_output.utils import plot_settings
-    plot_name = 'Requested Quantities'
+    plot_name = 'Energy Demand'
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
