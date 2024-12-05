@@ -60,7 +60,7 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
-
+        *widgets
     ])
 
     plot_layout = dcc.Graph(

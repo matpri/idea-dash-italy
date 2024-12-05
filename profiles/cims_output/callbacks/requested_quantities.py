@@ -133,7 +133,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'requested_quantities'
+            'viz': 'overview'
         }, 'figure'),
         State({
             'type': 'cims-requested_quantities-download',

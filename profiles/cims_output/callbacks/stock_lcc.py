@@ -113,7 +113,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'stock_lcc'
+            'viz': 'overview'
         }, 'figure'),
         State({
             'type': 'cims-stock_lcc-download',

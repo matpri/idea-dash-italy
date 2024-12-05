@@ -131,7 +131,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'ghg'
+            'viz': 'overview'
         }, 'figure'),
         State({
             'type': 'cims-ghg-download',

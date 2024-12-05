@@ -42,6 +42,7 @@ def process(data):
         if ghg.check(db):
             df = ghg.process({scenario_name: db})
             df['tab'] = 'Emissions'
+            dfs.append(df)
         if requested_quantities.check(db):
             df = requested_quantities.process({scenario_name: db})
             df['tab'] = 'Energy Demand'
