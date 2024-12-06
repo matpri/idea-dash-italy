@@ -38,23 +38,23 @@ Emissions:
     x_label: Region
     y_label: Emissions   
     
-Stock:
-  name: Stock
+Technology Stocks:
+  name: Technology Stocks
   unit:
   By Year:
-    title: Stock by Year
+    title: Technology Stocks by Year
     x_label: Year
     y_label: Stock
   Trend Over Years:
-    title: Stock by Year
+    title: Technology Stocks by Year
     x_label: Year
     y_label: Stock
   Pie Chart:
-    title: Stock
+    title: Technology Stocks
     x_label:
     y_label:
   By Region:
-    title: Stock by Region
+    title: Technology Stocks by Region
     x_label: Region
     y_label: Stock
   
