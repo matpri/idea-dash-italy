@@ -8,7 +8,6 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.macromodel import utils
 from profiles.macromodel.callbacks import (
-    overview as overview_callbacks,
     settings as settings_callbacks,
     non_sector as non_sector_callbacks,
     sector as sector_callbacks,
@@ -17,7 +16,6 @@ from profiles.macromodel.callbacks import (
 from profiles.macromodel.processing_scripts import (
     financial_markets as financial_markets_processing,
     government as government_processing,
-    overview as overview_processing,
     economy as economy_processing,
     labour_market as labour_market_processing,
     households as households_processing,
@@ -25,7 +23,6 @@ from profiles.macromodel.processing_scripts import (
 from profiles.macromodel.visualization_scripts import (
     financial_markets as financial_markets_viz,
     government as government_viz,
-    overview as overview_viz,
     economy as economy_viz,
     labour_market as labour_market_viz,
     households as households_viz,
@@ -47,7 +44,6 @@ class Macromodel(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Overview',
         'Economy',
         'Financial Markets',
         'Households',
@@ -55,14 +51,14 @@ class Macromodel(BaseProfile):
         'Government'
     ]
     viz_options = {
-        'Overview':
+        'Economy':
             {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': overview_viz.plot,
-                'callback': overview_callbacks.link,
+                'check': economy_processing.check,
+                'db_check': economy_processing.check,
+                'process': economy_processing.process,
+                'db_process': economy_processing.process,
+                'viz': economy_viz.plot,
+                'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
         'Government':
@@ -83,16 +79,6 @@ class Macromodel(BaseProfile):
                 'db_process': financial_markets_processing.process,
                 'viz': financial_markets_viz.plot,
                 'callback': non_sector_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-        'Economy':
-            {
-                'check': economy_processing.check,
-                'db_check': economy_processing.check,
-                'process': economy_processing.process,
-                'db_process': economy_processing.process,
-                'viz': economy_viz.plot,
-                'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
         'Labour Market':
@@ -253,7 +239,6 @@ class Macromodel(BaseProfile):
         settings_callbacks.link(app)
         non_sector_callbacks.link(app)
         sector_callbacks.link(app)
-        overview_callbacks.link(app)
 
     def render_settings(self):
         layout = html.Div(
