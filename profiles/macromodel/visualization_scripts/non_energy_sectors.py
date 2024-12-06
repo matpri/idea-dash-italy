@@ -7,13 +7,9 @@ from profiles.macromodel.visualization_scripts.utils import bar_over_years, bar_
     pie_chart, trend_over_year
 
 
-def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False, sector='All'):
+def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False, sector='Sector: Agriculture'):
     print('rendering plot Non-Energy sectors', type)
-    if sector == 'All':
-        # only keep where sector is null
-        df = df[df['sector'].isnull()]
-    else:
-        df = df[df['sector'] == sector]
+    df = df[df['sector'] == sector]
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,
@@ -35,7 +31,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     units = df['unit'].unique().tolist()
-    sectors = ['All'] + df['sector'].unique().tolist()
+    sectors = df['sector'].unique().tolist()
     if pd.api.types.is_numeric_dtype(df['time']):
         years = df['time'].unique().tolist()
         trend_one_year = False
