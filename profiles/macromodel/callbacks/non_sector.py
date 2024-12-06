@@ -17,7 +17,7 @@ name_mapping = {
     'financial_markets': 'Financial Markets',
     'labour_market': 'Labour Market',
     'households': 'Households',
-    'economy': 'Economy'
+    'economy': 'Economy Overview'
 }
 
 def link(app):
