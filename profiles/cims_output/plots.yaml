@@ -136,7 +136,7 @@ Total Stock:
     y_label: Total Stock
 Net Emissions:
   name: Net Emissions
-  unit:
+  unit: tCO2e
   By Year:
     title: Net Emissions by Year
     x_label: Year

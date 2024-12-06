@@ -7,6 +7,8 @@ from dash import dcc
 
 def plot(df, scenarios, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
+    title = title + f" in {year}"
+    y_axis_label = y_axis_label + f" in {unit}" if unit is not None else y_axis_label
     fig.update_layout(
         title_text=title,
         xaxis_title=x_axis_label,
