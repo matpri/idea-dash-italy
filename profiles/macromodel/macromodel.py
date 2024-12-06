@@ -176,14 +176,9 @@ class Macromodel(BaseProfile):
             # only keep CAN
             full_df = full_df[full_df['region'] == 'CAN']
 
-            # aggregate with groupby
-            percentages = full_df[full_df['unit'].str.contains('percent') | full_df['unit'].str.contains('%')]
-            full_df = full_df[~full_df['unit'].str.contains('percent') & ~full_df['unit'].str.contains('%')]
-
-            full_df = full_df.groupby(['scenario', 'variable', 'time', 'region', 'unit']).sum(numeric_only=True).reset_index()
-            percentages = percentages.groupby(['scenario', 'variable', 'time', 'region', 'unit']).mean(numeric_only=True).reset_index()
-            full_df = pd.concat([full_df, percentages], ignore_index=True)
-
+            # filter to variables we want in overview
+            overview_vars = ['economy|cpi_inflation', 'economy|unemployment_rate', 'economy|gdp_output']
+            full_df = full_df[full_df['variable'].isin(overview_vars)]
 
             # Append overview data to processed data
             overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]

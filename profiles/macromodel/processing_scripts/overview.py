@@ -1,6 +1,6 @@
 import pandas as pd
 
-from profiles.macromodel.processing_scripts import financial_markets, government
+from profiles.macromodel.processing_scripts import economy
 
 
 def check(df):
@@ -15,9 +15,7 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if government.check(df):
-            return True
-        if financial_markets.check(df):
+        if economy.check(df):
             return True
         return False
     except Exception as e:
@@ -38,13 +36,9 @@ def process(data):
     """
     dfs = []
     for scenario_name, db in data.items():
-        if government.check(db):
-            df = government.process({scenario_name: db})
-            df['variable'] = 'Central Government'
-            dfs.append(df)
-        if financial_markets.check(db):
-            df = financial_markets.process({scenario_name: db})
-            df['variable'] = 'Financial Markets'
+        if economy.check(db):
+            df = economy.process({scenario_name: db})
+            df = df[df['variable'].isin(['economy|cpi_inflation', 'economy|unemployment_rate', 'economy|gdp_output'])]
             dfs.append(df)
 
     full_df = pd.concat(dfs)
