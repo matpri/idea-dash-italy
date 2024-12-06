@@ -17,6 +17,8 @@ from profiles.macromodel.processing_scripts import (
     financial_markets as financial_markets_processing,
     government as government_processing,
     economy as economy_processing,
+    energy_sectors as energy_processing,
+    non_energy_sectors as non_energy_processing,
     labour_market as labour_market_processing,
     households as households_processing,
 )
@@ -24,6 +26,8 @@ from profiles.macromodel.visualization_scripts import (
     financial_markets as financial_markets_viz,
     government as government_viz,
     economy as economy_viz,
+    energy_sectors as energy_viz,
+    non_energy_sectors as non_energy_viz,
     labour_market as labour_market_viz,
     households as households_viz,
 )
@@ -45,6 +49,8 @@ class Macromodel(BaseProfile):
 
     plot_order = [
         'Economy',
+        'Energy Sectors',
+        'Non-Energy Sectors',
         'Financial Markets',
         'Households',
         'Labour Market',
@@ -58,6 +64,26 @@ class Macromodel(BaseProfile):
                 'process': economy_processing.process,
                 'db_process': economy_processing.process,
                 'viz': economy_viz.plot,
+                'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Energy Sectors':
+            {
+                'check': energy_processing.check,
+                'db_check': energy_processing.check,
+                'process': energy_processing.process,
+                'db_process': energy_processing.process,
+                'viz': energy_viz.plot,
+                'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Non-Energy Sectors':
+            {
+                'check': non_energy_processing.check,
+                'db_check': non_energy_processing.check,
+                'process': non_energy_processing.process,
+                'db_process': non_energy_processing.process,
+                'viz': non_energy_viz.plot,
                 'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
