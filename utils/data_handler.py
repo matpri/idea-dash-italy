@@ -193,6 +193,7 @@ class DataHandler:
                 dfs = []
                 xls = pd.ExcelFile(os.path.join('data', file))
                 for sheet in xls.sheet_names:
+                    print(sheet)
                     _df = xls.parse(sheet)
                     # infer types of the column names
                     _df.columns = _df.columns.astype(str)
