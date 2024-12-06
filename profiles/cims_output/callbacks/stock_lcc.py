@@ -51,8 +51,26 @@ def link(app):
             },
             'style'
         ),
+        Output(
+            {
+                'type': 'cims-stock_lcc-service-select',
+                'index': MATCH
+            },
+            'style'
+        ),
+        Output(
+            {
+                'type': 'cims-stock_lcc-sector-select',
+                'index': MATCH
+            },
+            'style'
+        ),
         Input({
             'type': 'cims-stocks-update',
+            'index': MATCH
+        }, 'value'),
+        Input({
+            'type': 'cims-stock_lcc-representation-select',
             'index': MATCH
         }, 'value'),
         Input({
@@ -145,11 +163,25 @@ def link(app):
             },
             'style'
         ),
+        State(
+            {
+                'type': 'cims-stock_lcc-service-select',
+                'index': MATCH
+            },
+            'style'
+        ),
+        State(
+            {
+                'type': 'cims-stock_lcc-sector-select',
+                'index': MATCH
+            },
+            'style'
+        ),
         prevent_initial_call=True
     )
-    def update_stock_lcc(_update, _p_type, _scenarios, _scenario, _variable, _regions, _years, _pattern, _text,
+    def update_stock_lcc(_update, _rep, _p_type, _scenarios, _scenario, _variable, _regions, _years, _pattern, _text,
                          _download, _sector, _service, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
-                         _pattern_style, _text_style):
+                         _pattern_style, _text_style, _service_style, _sector_style):
         print('updating stock_lcc plot', _variable)
         from main import data_handler
         ctx = dash.callback_context
@@ -160,7 +192,15 @@ def link(app):
         if 'cims-stock_lcc-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv,
                                         "stock_lcc.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style, _service_style, _sector_style
+
+        if _rep == 'By Sector':
+            _sector_style = {'display': 'none'}
+            _service_style = {'display': 'none'}
+        else:
+            _sector_style = {'display': 'block'}
+            _service_style = {'display': 'block'}
+
 
         services = dash.no_update
         if 'cims-stock_lcc-sector-select' in trigger_id['type']:
@@ -176,6 +216,7 @@ def link(app):
             _text_style = {'display': 'block'}
             _canvas = render_plot('By Year',
                                   _data,
+                                  _rep,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
@@ -191,6 +232,7 @@ def link(app):
             _text_style = {'display': 'none'}
             _canvas = render_plot('Trend Over Years',
                                   _data,
+                                  _rep,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -204,6 +246,7 @@ def link(app):
             _text_style = {'display': 'none'}
             _canvas = render_plot('Pie Chart',
                                   _data,
+                                  _rep,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -218,10 +261,11 @@ def link(app):
             _text_style = {'display': 'block'}
             _canvas = render_plot('By Region',
                                   _data,
+                                  _rep,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
                                   parameter=_variable, plot_name=_variable)
 
-        return _canvas, _r_style, _y_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _service_style, _sector_style
