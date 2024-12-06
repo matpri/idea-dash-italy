@@ -48,7 +48,7 @@ class Macromodel(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Economy',
+        'Economy Overview',
         'Energy Sectors',
         'Non-Energy Sectors',
         'Financial Markets',
@@ -57,7 +57,7 @@ class Macromodel(BaseProfile):
         'Government'
     ]
     viz_options = {
-        'Economy':
+        'Economy Overview':
             {
                 'check': economy_processing.check,
                 'db_check': economy_processing.check,

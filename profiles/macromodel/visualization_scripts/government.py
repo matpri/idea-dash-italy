@@ -25,6 +25,8 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
                                      text_active=text_active)
 
 def plot(df, window_id):
+    df["variable"] = df["variable"].str.capitalize()
+    df["variable"] = df["variable"].str.replace('_', ' ')
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     units = df['unit'].unique().tolist()
