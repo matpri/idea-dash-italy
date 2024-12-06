@@ -71,7 +71,7 @@ def plot(df, window_id):
             fig = _fig
     widget_layout = html.Div([
         dmc.Select(
-            label='Result Representation',
+            label='Reporting Variable',
             data=[{'label': plot, 'value': plot} for plot in tabs],
             value=tabs[0],
             id={
