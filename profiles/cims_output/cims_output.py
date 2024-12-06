@@ -101,9 +101,6 @@ class PypsaOutput(BaseProfile):
     plot_order = [
         'Overview',
         'Inputs',
-        'Energy Demand',
-        'Technology Stocks',
-        'Emissions',
         'Agriculture',
         'Biodiesel',
         'Chemical Products',
@@ -134,7 +131,7 @@ class PypsaOutput(BaseProfile):
                 'db_process': overview_processing.process,
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+                'description': 'Visualizations for a general overview of the data.'
             },
         'Inputs':
             {
@@ -145,36 +142,6 @@ class PypsaOutput(BaseProfile):
                 'viz': inputs_viz.plot,
                 'callback': inputs_callbacks.link,
                 'description': 'Visualizations of the input data.'
-            },
-        'Energy Demand':
-            {
-                'check': requested_quantities_processing.check,
-                'db_check': requested_quantities_processing.check,
-                'process': requested_quantities_processing.process,
-                'db_process': requested_quantities_processing.process,
-                'viz': emissions_viz.plot,
-                'callback': requested_quantities_callbacks.link,
-                'description': 'Emissions that are produced by the generation mix in the model.'
-            },
-        'Technology Stocks':
-            {
-                'check': stock_lcc_processing.check,
-                'db_check': stock_lcc_processing.check,
-                'process': stock_lcc_processing.process,
-                'db_process': stock_lcc_processing.process,
-                'viz': stock_lcc_viz.plot,
-                'callback': stock_lcc_callbacks.link,
-                'description': 'The stock of technologies in the model.'
-            },
-        'Emissions':
-            {
-                'check': ghg_processing.check,
-                'db_check': ghg_processing.check,
-                'process': ghg_processing.process,
-                'db_process': ghg_processing.process,
-                'viz': ghg_viz.plot,
-                'callback': ghg_callbacks.link,
-                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             },
         'Agriculture':
             {

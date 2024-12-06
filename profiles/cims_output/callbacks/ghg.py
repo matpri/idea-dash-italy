@@ -21,8 +21,8 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'ghg'
-        }, 'figure'),
+            'viz': 'overview'
+        }, 'figure', allow_duplicate=True),
         Output({
             'type': 'cims-ghg-region-select',
             'index': MATCH
@@ -65,6 +65,10 @@ def link(app):
             },
             'style'
         ),
+        Input({
+            'type': 'cims-emissions-update',
+            'index': MATCH
+        }, 'value'),
         Input({
             'type': 'cims-ghg-representation-select',
             'index': MATCH
@@ -131,7 +135,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'cims_output',
-            'viz': 'ghg'
+            'viz': 'overview'
         }, 'figure'),
         State({
             'type': 'cims-ghg-download',
@@ -161,21 +165,22 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_ghg(_representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
+    def update_ghg(_update, _representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
                    _download, _sector, _service, _emission, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                    _pattern_style, _text_style):
         # print('updating ghg plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+        _data = data_handler.processed_data['CIMS']['Overview']
+        _data = _data[_data['tab'] == 'Emissions']
 
         if 'cims-ghg-download-button' in trigger_id['type']:
-            _data = dcc.send_data_frame(data_handler.processed_data['CIMS']['Emissions'].to_csv, "ghg.csv")
+            _data = dcc.send_data_frame(_data.to_csv, "ghg.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         services = dash.no_update
 
-        _data = data_handler.processed_data['CIMS']['Emissions']
         emissions_list = _data[_data['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
         to_use = emissions_mapping[_emission]
         emissions_list = [e_type for e_type in emissions_list if e_type in to_use]
@@ -200,7 +205,7 @@ def link(app):
             _s_style = {'display': 'none'}
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
-            _canvas = render_plot(_representation, 'By Year', data_handler.processed_data['CIMS']['Emissions'],
+            _canvas = render_plot(_representation, 'By Year', _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
@@ -215,7 +220,7 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
             _canvas = render_plot(_representation, 'Trend Over Years',
-                                  data_handler.processed_data['CIMS']['Emissions'],
+                                  _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -227,7 +232,7 @@ def link(app):
             _y_style = {'display': 'block'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
-            _canvas = render_plot(_representation, 'Pie Chart', data_handler.processed_data['CIMS']['Emissions'],
+            _canvas = render_plot(_representation, 'Pie Chart', _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector, service=_service,
@@ -240,7 +245,7 @@ def link(app):
             _s_style = {'display': 'none'}
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
-            _canvas = render_plot(_representation, 'By Region', data_handler.processed_data['CIMS']['Emissions'],
+            _canvas = render_plot(_representation, 'By Region', _data,
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,

@@ -14,7 +14,7 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
     name = plot_settings[p_type]['name']
     unit = plot_settings[p_type]['unit']
 
-    df_plt = process_represenation(p_type, by_rep, variable, df_plt)\
+    df_plt = process_represenation(p_type, by_rep, variable, df_plt)
 
     if p_type == 'Energy Demand':
         variable = 'Energy Demand'
