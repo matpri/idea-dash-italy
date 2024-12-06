@@ -8,7 +8,7 @@ from profiles.macromodel.visualization_scripts.utils import bar_over_years, bar_
 
 
 def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False):
-    print('rendering plot housing_market', type)
+    print('rendering plot government', type)
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,
@@ -50,7 +50,7 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'region-select',
-            'name': 'housing_market',
+            'name': 'government',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -64,7 +64,7 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'year-select',
-            'name': 'housing_market',
+            'name': 'government',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -77,7 +77,7 @@ def plot(df, window_id):
         checked=True,
         id={
             'type': 'pattern-switch',
-            'name': 'housing_market',
+            'name': 'government',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -89,7 +89,7 @@ def plot(df, window_id):
         checked=False,
         id={
             'type': 'text-switch',
-            'name': 'housing_market',
+            'name': 'government',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -107,7 +107,7 @@ def plot(df, window_id):
             value='Trend Over Years',
             id={
                 'type': 'plot-select',
-                'name': 'housing_market',
+                'name': 'government',
                 'profile': 'macromodel',
                 'index': window_id
             },
@@ -116,7 +116,7 @@ def plot(df, window_id):
                    checked=True,
                    id={
                        'type': 'aggregate-switch',
-                       'name': 'housing_market',
+                       'name': 'government',
                        'profile': 'macromodel',
                        'index': window_id}),
         pattern_toggle,
@@ -127,7 +127,7 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'scenario-multi-select',
-                'name': 'housing_market',
+                'name': 'government',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -139,7 +139,7 @@ def plot(df, window_id):
             value=scenarios[0],
             id={
                 'type': 'scenario-select',
-                'name': 'housing_market',
+                'name': 'government',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -151,7 +151,7 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'unit-select',
-                'name': 'housing_market',
+                'name': 'government',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -160,24 +160,24 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'download-button',
-                                        'name': 'housing_market',
+                                        'name': 'government',
                                         'profile': 'macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'download',
-                         'name': 'housing_market',
+                         'name': 'government',
                          'profile': 'macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Trend Over Years', 'Housing Market', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('Trend Over Years', 'Government', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            units[0], years[0], scenarios[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'macromodel',
-            'name': 'housing_market'
+            'name': 'government'
         },
         style={
             'width': '100%',

@@ -15,28 +15,20 @@ from profiles.macromodel.callbacks import (
 
 )
 from profiles.macromodel.processing_scripts import (
-    banks as banks_processing,
-    central_Bank as central_Bank_processing,
-    central_government as central_government_processing,
-    credit_market as credit_market_processing,
-    government_entities as government_entities_processing,
+    financial_markets as financial_markets_processing,
+    government as government_processing,
     overview as overview_processing,
     economy as economy_processing,
     labour_market as labour_market_processing,
     households as households_processing,
-    housing_market as housing_market_processing,
 )
 from profiles.macromodel.visualization_scripts import (
-    banks as banks_viz,
-    central_Bank as central_Bank_viz,
-    central_government as central_government_viz,
-    credit_market as credit_market_viz,
-    government_entities as government_entities_viz,
+    financial_markets as financial_markets_viz,
+    government as government_viz,
     overview as overview_viz,
     economy as economy_viz,
     labour_market as labour_market_viz,
     households as households_viz,
-    housing_market as housing_market_viz,
 )
 
 
@@ -56,15 +48,11 @@ class Macromodel(BaseProfile):
 
     plot_order = [
         'Overview',
-        'Banks',
-        'Central Bank',
-        'Central Government',
-        'Credit Market',
-        'Government Entities',
         'Economy',
-        'Labour Market',
+        'Financial Markets',
         'Households',
-        'Housing Market',
+        'Labour Market',
+        'Government'
     ]
     viz_options = {
         'Overview':
@@ -77,53 +65,23 @@ class Macromodel(BaseProfile):
                 'callback': overview_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
-        'Banks':
+        'Government':
             {
-                'check': banks_processing.check,
-                'db_check': banks_processing.check,
-                'process': banks_processing.process,
-                'db_process': banks_processing.process,
-                'viz': banks_viz.plot,
+                'check': government_processing.check,
+                'db_check': government_processing.check,
+                'process': government_processing.process,
+                'db_process': government_processing.process,
+                'viz': government_viz.plot,
                 'callback': non_sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
-        'Central Bank':
+        'Financial Markets':
             {
-                'check': central_Bank_processing.check,
-                'db_check': central_Bank_processing.check,
-                'process': central_Bank_processing.process,
-                'db_process': central_Bank_processing.process,
-                'viz': central_Bank_viz.plot,
-                'callback': non_sector_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-        'Central Government':
-            {
-                'check': central_government_processing.check,
-                'db_check': central_government_processing.check,
-                'process': central_government_processing.process,
-                'db_process': central_government_processing.process,
-                'viz': central_government_viz.plot,
-                'callback': non_sector_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-        'Credit Market':
-            {
-                'check': credit_market_processing.check,
-                'db_check': credit_market_processing.check,
-                'process': credit_market_processing.process,
-                'db_process': credit_market_processing.process,
-                'viz': credit_market_viz.plot,
-                'callback': non_sector_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-        'Government Entities':
-            {
-                'check': government_entities_processing.check,
-                'db_check': government_entities_processing.check,
-                'process': government_entities_processing.process,
-                'db_process': government_entities_processing.process,
-                'viz': government_entities_viz.plot,
+                'check': financial_markets_processing.check,
+                'db_check': financial_markets_processing.check,
+                'process': financial_markets_processing.process,
+                'db_process': financial_markets_processing.process,
+                'viz': financial_markets_viz.plot,
                 'callback': non_sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
@@ -157,17 +115,6 @@ class Macromodel(BaseProfile):
                 'callback': sector_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
-        'Housing Market':
-            {
-                'check': housing_market_processing.check,
-                'db_check': housing_market_processing.check,
-                'process': housing_market_processing.process,
-                'db_process': housing_market_processing.process,
-                'viz': housing_market_viz.plot,
-                'callback': sector_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-            },
-
     }
 
     def __init__(self):

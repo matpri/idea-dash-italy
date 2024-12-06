@@ -1,6 +1,6 @@
 import pandas as pd
 
-from profiles.macromodel.processing_scripts import banks, central_Bank, central_government, credit_market, government_entities
+from profiles.macromodel.processing_scripts import financial_markets, government
 
 
 def check(df):
@@ -15,15 +15,9 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if banks.check(df):
+        if government.check(df):
             return True
-        if central_Bank.check(df):
-            return True
-        if central_government.check(df):
-            return True
-        if credit_market.check(df):
-            return True
-        if government_entities.check(df):
+        if financial_markets.check(df):
             return True
         return False
     except Exception as e:
@@ -44,25 +38,13 @@ def process(data):
     """
     dfs = []
     for scenario_name, db in data.items():
-        if banks.check(db):
-            df = banks.process({scenario_name: db})
-            df['variable'] = 'Banks'
-            dfs.append(df)
-        if central_Bank.check(db):
-            df = central_Bank.process({scenario_name: db})
-            df['variable'] = 'Central Bank'
-            dfs.append(df)
-        if central_government.check(db):
-            df = central_government.process({scenario_name: db})
+        if government.check(db):
+            df = government.process({scenario_name: db})
             df['variable'] = 'Central Government'
             dfs.append(df)
-        if credit_market.check(db):
-            df = credit_market.process({scenario_name: db})
-            df['variable'] = 'Credit Market'
-            dfs.append(df)
-        if government_entities.check(db):
-            df = government_entities.process({scenario_name: db})
-            df['variable'] = 'Government Entities'
+        if financial_markets.check(db):
+            df = financial_markets.process({scenario_name: db})
+            df['variable'] = 'Financial Markets'
             dfs.append(df)
 
     full_df = pd.concat(dfs)

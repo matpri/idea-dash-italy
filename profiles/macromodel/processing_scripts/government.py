@@ -16,7 +16,7 @@ def check(df):
     #print("Checking for gen cap in variable column")
     try:
         if (df.model == 'macromodel').any():
-            if df.variable.str.startswith("government_entities").any():
+            if df.variable.str.startswith("government").any():
                 return True
         return False
     except Exception as e:
@@ -36,7 +36,7 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        gen_cap = df[df.variable.str.startswith("government_entities|")]
+        gen_cap = df[df.variable.str.startswith("government|")]
         gen_cap['value'] = gen_cap['value'].astype(float)
 
         gen_cap['variable'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
