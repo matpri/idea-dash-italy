@@ -41,13 +41,13 @@ def process(dbs: dict):
 
         gen_cap['variable'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
 
-        sectors = gen_cap[gen_cap['variable'].str.contains('Sector')]
-        sectors['variable'], sectors['sector'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[:-1])), gen_cap['variable'].apply(lambda x: x.split("|")[-1])
+        #sectors = gen_cap[gen_cap['variable'].str.contains('Sector')]
+        #sectors['variable'], sectors['sector'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[:-1])), gen_cap['variable'].apply(lambda x: x.split("|")[-1])
 
-        gen_cap = gen_cap[~gen_cap['variable'].str.contains('Sector')]
-        gen_cap = pd.concat([gen_cap, sectors])
+        #gen_cap = gen_cap[~gen_cap['variable'].str.contains('Sector')]
+        #gen_cap = pd.concat([gen_cap, sectors])
 
-        gen_cap['scenario'] = scenario_name
+        #gen_cap['scenario'] = scenario_name
         gen_caps.append(gen_cap)
 
     full_net_new_cap = pd.concat(gen_caps)

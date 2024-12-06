@@ -8,7 +8,7 @@ from profiles.macromodel.visualization_scripts.utils import bar_over_years, bar_
 
 
 def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False, sector='All'):
-    print('rendering plot non-energy sectors', type)
+    print('rendering plot Non-Energy sectors', type)
     if sector == 'All':
         # only keep where sector is null
         df = df[df['sector'].isnull()]
@@ -56,7 +56,7 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'sectored-region-select',
-            'name': 'non-energy-sectors',
+            'name': 'non_energy_sectors',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -70,7 +70,7 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'sectored-year-select',
-            'name': 'non-energy-sectors',
+            'name': 'non_energy_sectors',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -83,7 +83,7 @@ def plot(df, window_id):
         checked=True,
         id={
             'type': 'sectored-pattern-switch',
-            'name': 'non-energy-sectors',
+            'name': 'non_energy_sectors',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -95,7 +95,7 @@ def plot(df, window_id):
         checked=False,
         id={
             'type': 'sectored-text-switch',
-            'name': 'non-energy-sectors',
+            'name': 'non_energy_sectors',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -113,7 +113,7 @@ def plot(df, window_id):
             value='Trend Over Years',
             id={
                 'type': 'sectored-plot-select',
-                'name': 'non-energy-sectors',
+                'name': 'non_energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id
             },
@@ -122,7 +122,7 @@ def plot(df, window_id):
                    checked=True,
                    id={
                        'type': 'sectored-aggregate-switch',
-                       'name': 'non-energy-sectors',
+                       'name': 'non_energy_sectors',
                        'profile': 'macromodel',
                        'index': window_id}),
         pattern_toggle,
@@ -133,7 +133,7 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'sectored-scenario-multi-select',
-                'name': 'non-energy-sectors',
+                'name': 'non_energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -145,7 +145,7 @@ def plot(df, window_id):
             value=scenarios[0],
             id={
                 'type': 'sectored-scenario-select',
-                'name': 'non-energy-sectors',
+                'name': 'non_energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -158,7 +158,7 @@ def plot(df, window_id):
             value=sectors[0],
             id={
                 'type': 'sectored-sector-select',
-                'name': 'non-energy-sectors',
+                'name': 'non_energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -170,7 +170,7 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'sectored-unit-select',
-                'name': 'non-energy-sectors',
+                'name': 'non_energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -179,24 +179,24 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'sectored-download-button',
-                                        'name': 'non-energy-sectors',
+                                        'name': 'non_energy_sectors',
                                         'profile': 'macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'sectored-download',
-                         'name': 'non-energy-sectors',
+                         'name': 'non_energy_sectors',
                          'profile': 'macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Trend Over Years', 'Non-energy Sectors', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('Trend Over Years', 'Non-Energy Sectors', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            units[0], years[0], scenarios[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'macromodel',
-            'name': 'non-energy-sectors'
+            'name': 'non_energy_sectors'
         },
         style={
             'width': '100%',

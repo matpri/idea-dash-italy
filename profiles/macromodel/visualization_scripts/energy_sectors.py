@@ -56,7 +56,7 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'sectored-region-select',
-            'name': 'energy-sectors',
+            'name': 'energy_sectors',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -70,7 +70,7 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'sectored-year-select',
-            'name': 'energy-sectors',
+            'name': 'energy_sectors',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -83,7 +83,7 @@ def plot(df, window_id):
         checked=True,
         id={
             'type': 'sectored-pattern-switch',
-            'name': 'energy-sectors',
+            'name': 'energy_sectors',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -95,7 +95,7 @@ def plot(df, window_id):
         checked=False,
         id={
             'type': 'sectored-text-switch',
-            'name': 'energy-sectors',
+            'name': 'energy_sectors',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -113,7 +113,7 @@ def plot(df, window_id):
             value='Trend Over Years',
             id={
                 'type': 'sectored-plot-select',
-                'name': 'energy-sectors',
+                'name': 'energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id
             },
@@ -122,7 +122,7 @@ def plot(df, window_id):
                    checked=True,
                    id={
                        'type': 'sectored-aggregate-switch',
-                       'name': 'energy-sectors',
+                       'name': 'energy_sectors',
                        'profile': 'macromodel',
                        'index': window_id}),
         pattern_toggle,
@@ -133,7 +133,7 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'sectored-scenario-multi-select',
-                'name': 'energy-sectors',
+                'name': 'energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -145,7 +145,7 @@ def plot(df, window_id):
             value=scenarios[0],
             id={
                 'type': 'sectored-scenario-select',
-                'name': 'energy-sectors',
+                'name': 'energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -158,7 +158,7 @@ def plot(df, window_id):
             value=sectors[0],
             id={
                 'type': 'sectored-sector-select',
-                'name': 'energy-sectors',
+                'name': 'energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -170,7 +170,7 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'sectored-unit-select',
-                'name': 'energy-sectors',
+                'name': 'energy_sectors',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -179,13 +179,13 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'sectored-download-button',
-                                        'name': 'energy-sectors',
+                                        'name': 'energy_sectors',
                                         'profile': 'macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'sectored-download',
-                         'name': 'energy-sectors',
+                         'name': 'energy_sectors',
                          'profile': 'macromodel', 'index': window_id}),
     ])
 
@@ -196,7 +196,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'macromodel',
-            'name': 'energy-sectors'
+            'name': 'energy_sectors'
         },
         style={
             'width': '100%',

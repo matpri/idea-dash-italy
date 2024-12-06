@@ -2,18 +2,16 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from components import ids
-from profiles.macromodel.visualization_scripts import economy, households, labour_market
+from profiles.macromodel.visualization_scripts import energy_sectors, non_energy_sectors
 
 render_func = {
-    'economy': economy.render_plot,
-    'households': households.render_plot,
-    'labour_market': labour_market.render_plot
+    'energy_sectors': energy_sectors.render_plot,
+    'non_energy_sectors': non_energy_sectors.render_plot
 }
 
 name_mapping = {
-    'economy' : 'Economy',
-    'households': 'Households',
-    'labour_market': 'Labour Market'
+    'energy_sectors' : 'Energy Sectors',
+    'non_energy_sectors' : 'Non-Energy Sectors'
 }
 
 def link(app):

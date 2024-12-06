@@ -7,13 +7,9 @@ from profiles.macromodel.visualization_scripts.utils import bar_over_years, bar_
     pie_chart, trend_over_year
 
 
-def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False, sector='All'):
+def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False):
     print('rendering plot economy', type)
-    if sector == 'All':
-        # only keep where sector is null
-        df = df[df['sector'].isnull()]
-    else:
-        df = df[df['sector'] == sector]
+    
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,
@@ -33,7 +29,6 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     units = df['unit'].unique().tolist()
-    sectors = ['All'] + df['sector'].unique().tolist()
     if pd.api.types.is_numeric_dtype(df['time']):
         years = df['time'].unique().tolist()
         trend_one_year = False
@@ -55,7 +50,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'sectored-region-select',
+            'type': 'region-select',
             'name': 'economy',
             'profile': 'macromodel',
             'index': window_id
@@ -69,7 +64,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'sectored-year-select',
+            'type': 'year-select',
             'name': 'economy',
             'profile': 'macromodel',
             'index': window_id
@@ -82,7 +77,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'sectored-pattern-switch',
+            'type': 'pattern-switch',
             'name': 'economy',
             'profile': 'macromodel',
             'index': window_id,
@@ -94,7 +89,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'sectored-text-switch',
+            'type': 'text-switch',
             'name': 'economy',
             'profile': 'macromodel',
             'index': window_id,
@@ -112,7 +107,7 @@ def plot(df, window_id):
                   ],
             value='Trend Over Years',
             id={
-                'type': 'sectored-plot-select',
+                'type': 'plot-select',
                 'name': 'economy',
                 'profile': 'macromodel',
                 'index': window_id
@@ -121,7 +116,7 @@ def plot(df, window_id):
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'sectored-aggregate-switch',
+                       'type': 'aggregate-switch',
                        'name': 'economy',
                        'profile': 'macromodel',
                        'index': window_id}),
@@ -132,7 +127,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'sectored-scenario-multi-select',
+                'type': 'scenario-multi-select',
                 'name': 'economy',
                 'profile': 'macromodel',
                 'index': window_id,
@@ -144,32 +139,19 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'sectored-scenario-select',
+                'type': 'scenario-select',
                 'name': 'economy',
                 'profile': 'macromodel',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
-
-        dmc.Select(
-            label='Sector',
-            data=[{'label': sector, 'value': sector} for sector in sectors],
-            value=sectors[0],
-            id={
-                'type': 'sectored-sector-select',
-                'name': 'economy',
-                'profile': 'macromodel',
-                'index': window_id,
-            },
-            style={'display': 'block'}
-        ),
         dmc.Select(
             label='Unit',
             data=[{'label': unit, 'value': unit} for unit in units],
             value=units[0],
             id={
-                'type': 'sectored-unit-select',
+                'type': 'unit-select',
                 'name': 'economy',
                 'profile': 'macromodel',
                 'index': window_id,
@@ -178,13 +160,13 @@ def plot(df, window_id):
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'sectored-download-button',
+        dmc.Button('Download Data', id={'type': 'download-button',
                                         'name': 'economy',
                                         'profile': 'macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'sectored-download',
+        dcc.Download(id={'type': 'download',
                          'name': 'economy',
                          'profile': 'macromodel', 'index': window_id}),
     ])
