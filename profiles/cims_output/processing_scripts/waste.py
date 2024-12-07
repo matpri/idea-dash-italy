@@ -52,8 +52,8 @@ def process(selected: dict):
         ghg_ls = []
         for name, emission_list in emissions_mapping.items():
             subset = df_ghg[df_ghg.parameter.isin(emission_list)][
-                ['region', 'year', 'value_num', 'scenario', 'context', 'sub_context']].groupby(
-                ['region', 'year', 'scenario', 'context', 'sub_context']).sum().reset_index()
+                ['region', 'year', 'value_num', 'scenario', 'context', 'sub_context', 'short_path', 'sector']].groupby(
+                ['region', 'year', 'scenario', 'context', 'sub_context', 'short_path', 'sector']).sum().reset_index()
             subset['parameter'] = name
             ghg_ls.append(subset)
         df_ghg = pd.concat(ghg_ls)

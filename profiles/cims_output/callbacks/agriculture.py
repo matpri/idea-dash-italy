@@ -126,7 +126,7 @@ def link(app):
         _text_style = dash.no_update
         _v_style = {'display': 'none'} if plot_type == 'Energy Demand' else {'display': 'block'}
 
-        _rep_switch_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
+        _rep_switch_style = {'display': 'block'} if plot_type in ('Energy Demand', 'Emissions') else {'display': 'none'}
 
         if plot == 'By Year':
             _m_style = {'display': 'block'}
@@ -156,7 +156,12 @@ def link(app):
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
 
-        rep_switch_label = 'By Fuel' if rep_switch else 'By Sector'
+        if plot_type == 'Energy Demand':
+            rep_switch_label = 'By Fuel' if rep_switch else 'By Sector'
+
+        if plot_type == 'Emissions':
+            rep_switch_label = 'By Emission' if rep_switch else 'By Sector'
+
 
         df_plt = _data[_data['plot'] == plot_type]
         variables = dash.no_update
