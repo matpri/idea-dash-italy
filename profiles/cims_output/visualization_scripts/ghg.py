@@ -55,11 +55,23 @@ def process_represenation(df, representation, sector, service, emissions_list):
         filtered_df = filtered_df[['region', 'variable', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'year': 'time'})
 
+    elif representation == 'By Sector':
+        filtered_df = df[
+            (df.parameter.isin(emissions_list))
+            ]
+
+        filtered_df['variable'] = filtered_df['sector']
+        # only keep where shortpath == sector
+        filtered_df = filtered_df[filtered_df['short_path'] == filtered_df['sector']]
+        filtered_df = filtered_df[['region', 'variable', 'year', 'value_num', 'scenario']]
+        filtered_df = filtered_df.rename(columns={'value_num': 'value', 'year': 'time'})
+
     else:
         if sector == 'All':
             filtered_df = df[(df.parameter.isin(emissions_list))]
+            filtered_df = filtered_df[filtered_df['short_path'] == filtered_df['sector']]
         else:
-            filtered_df = df[(df.parameter.isin(emissions_list)) & (df['sector'] == sector)]
+            filtered_df = df[(df.parameter.isin(emissions_list)) & (df['sector'] == sector) & (df['short_path'] == sector)]
         filtered_df['variable'] = filtered_df['sub_context'] + '|' + filtered_df['context']
         filtered_df['variable'] += '- Negative' if 'negative' in filtered_df[
             'variable'] else '- Avoided' if 'avoided' in \
@@ -173,8 +185,8 @@ def widgets(df, window_id):
     widget_layout = [
         dmc.Select(
             label='Result Representation',
-            data=[{'label': plot, 'value': plot} for plot in ['By Service', 'By Sector']],
-            value='By Sector',
+            data=[{'label': plot, 'value': plot} for plot in ['By Emission','By Service', 'By Sector']],
+            value='By Emission',
             id={
                 'type': 'cims-ghg-representation-select',
                 'index': window_id
@@ -231,7 +243,7 @@ def widgets(df, window_id):
         dcc.Download(id={'type': 'cims-ghg-download', 'index': window_id}),
     ]
 
-    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]],
+    return widget_layout, render_plot('By Emission', 'By Year', df, [scenarios[0]],
                                       'CAN' if 'CAN' in regions else regions[0],
                                       years[0], scenarios[0], sector=sectors[0], service=services[0],
                                       emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],

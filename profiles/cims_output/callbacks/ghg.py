@@ -194,13 +194,16 @@ def link(app):
             services = _data[_data.parameter.isin(emissions_list)]['short_path'].unique().tolist()
 
         _service_style = dash.no_update
-        if _representation == 'By Sector':
+        if _representation == 'By Emission':
             _sector_style = {'display': 'block'}
             _service_style = {'display': 'none'}
 
         elif _representation == 'By Service':
             _sector_style = {'display': 'block'}
             _service_style = {'display': 'block'}
+        else:
+            _sector_style = {'display': 'none'}
+            _service_style = {'display': 'none'}
 
         if _p_type == 'By Year':
             _m_style = {'display': 'block'}
@@ -213,7 +216,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
-                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
+                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Trend Over Years':
@@ -227,7 +230,7 @@ def link(app):
                                   _data,
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
+                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Pie Chart':
@@ -239,7 +242,7 @@ def link(app):
             _canvas = render_plot(_representation, 'Pie Chart', _data,
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
+                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         else:
@@ -253,7 +256,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
-                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Sector' else _service_sector,
+                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Emission' else _service_sector,
                                   service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
