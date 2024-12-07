@@ -32,7 +32,7 @@ def link(app):
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-ghg-service-select',
+            'type': 'cims-ghg-service-widgets',
             'index': MATCH
         }, 'style'),
         Output({
@@ -116,6 +116,10 @@ def link(app):
             'index': MATCH
         }, 'value'),
         Input({
+            'type': 'cims-ghg-service-sector-select',
+            'index': MATCH
+        }, 'value'),
+        Input({
             'type': 'cims-ghg-service-select',
             'index': MATCH
         }, 'value'),
@@ -166,7 +170,7 @@ def link(app):
         prevent_initial_call=True
     )
     def update_ghg(_update, _representation, _p_type, _scenarios, _scenario, _regions, _years, _pattern, _text,
-                   _download, _sector, _service, _emission, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
+                   _download, _sector, _service_sector, _service, _emission, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                    _pattern_style, _text_style):
         # print('updating ghg plot')
         from main import data_handler
@@ -185,7 +189,7 @@ def link(app):
         to_use = emissions_mapping[_emission]
         emissions_list = [e_type for e_type in emissions_list if e_type in to_use]
 
-        if 'cims-ghg-sector-select' in trigger_id['type']:
+        if 'cims-ghg-service-sector-select' in trigger_id['type']:
             _data = _data[_data['sector'] == _sector]
             services = _data[_data.parameter.isin(emissions_list)]['short_path'].unique().tolist()
 
@@ -209,7 +213,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
-                                  pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
+                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Trend Over Years':
@@ -223,7 +227,7 @@ def link(app):
                                   _data,
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector, service=_service,
+                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         elif _p_type == 'Pie Chart':
@@ -235,7 +239,7 @@ def link(app):
             _canvas = render_plot(_representation, 'Pie Chart', _data,
                                   _scenarios,
                                   _regions,
-                                  _years, scenario=_scenario, sector=_sector, service=_service,
+                                  _years, scenario=_scenario, sector=_sector if _representation == 'By Sector' else _service_sector, service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         else:
@@ -249,7 +253,8 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario,
-                                  pattern_active=_pattern, text_active=_text, sector=_sector, service=_service,
+                                  pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Sector' else _service_sector,
+                                  service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
         return _canvas, _r_style, _y_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style

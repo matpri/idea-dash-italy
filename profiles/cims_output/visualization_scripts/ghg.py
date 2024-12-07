@@ -17,21 +17,25 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     df = process_represenation(df, representation, sector, service, emissions_list)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
-        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
-                                        name, unit, pattern_active=pattern_active,
+        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
+                                   plot_info['y_label'],
+                                   name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings[plot_name]['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
-                                        name, unit)
+        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'],
+                                     plot_info['y_label'],
+                                     name, unit)
     elif type == 'Pie Chart':
         plot_info = plot_settings[plot_name]['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
-                                        )
+        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
+                              plot_info['y_label'],
+                              )
     else:
         plot_info = plot_settings[plot_name]['By Region']
-        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'],
-                                        name, unit, pattern_active=pattern_active,
+        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
+                                     plot_info['y_label'],
+                                     name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
 
 
@@ -52,7 +56,10 @@ def process_represenation(df, representation, sector, service, emissions_list):
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'year': 'time'})
 
     else:
-        filtered_df = df[(df.parameter.isin(emissions_list)) & (df['sector'] == sector)]
+        if sector == 'All':
+            filtered_df = df[(df.parameter.isin(emissions_list))]
+        else:
+            filtered_df = df[(df.parameter.isin(emissions_list)) & (df['sector'] == sector)]
         filtered_df['variable'] = filtered_df['sub_context'] + '|' + filtered_df['context']
         filtered_df['variable'] += '- Negative' if 'negative' in filtered_df[
             'variable'] else '- Avoided' if 'avoided' in \
@@ -104,17 +111,34 @@ def widgets(df, window_id):
         style={'display': 'none'}
     )
 
-    by_service_widgets = dmc.Select(
-        label='Service',
-        data=[{'label': service, 'value': service} for service in services],
-        value=services[0] if len(services) > 0 else None,
+    by_service_widgets = html.Div([
+        dmc.Select(
+            label='Service',
+            data=[{'label': service, 'value': service} for service in services],
+            value=services[0] if len(services) > 0 else None,
+            id={
+                'type': 'cims-ghg-service-select',
+                'index': window_id
+            }
+        ),
+        dmc.Select(
+            label='Sector',
+            data=[{'label': sector, 'value': sector} for sector in sectors],
+            value=sectors[0],
+            id={
+                'type': 'cims-ghg-service-sector-select',
+                'index': window_id
+            },
+            style={'display': 'block'}
+        )
+    ],
+        style={'display': 'none'},
         id={
-            'type': 'cims-ghg-service-select',
+            'type': 'cims-ghg-service-widgets',
             'index': window_id
-        },
-        style={'display': 'block'}
-    )
+        })
 
+    sectors = ['All'] + sectors
     by_sector_widgets = dmc.Select(
         label='Sector',
         data=[{'label': sector, 'value': sector} for sector in sectors],
@@ -207,7 +231,8 @@ def widgets(df, window_id):
         dcc.Download(id={'type': 'cims-ghg-download', 'index': window_id}),
     ]
 
-    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0], scenarios[0], sector=sectors[0], service=services[0],
-                           emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
-                           plot_name='Net Emissions')
+    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]],
+                                      'CAN' if 'CAN' in regions else regions[0],
+                                      years[0], scenarios[0], sector=sectors[0], service=services[0],
+                                      emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
+                                      plot_name='Net Emissions')
