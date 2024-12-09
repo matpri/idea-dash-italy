@@ -1284,6 +1284,13 @@ Carbon Tax:
   group: Carbon price
   group_color: '#DC267F'
   name: Carbon Tax
+
+Carbon_Tax:
+  color: '#000000'
+  group: Carbon price
+  group_color: '#DC267F'
+  name: Carbon Tax
+
 Carbon:
   color: '#000000'
   group: Carbon price
@@ -1307,3 +1314,14 @@ Capital costs:
   group: 'Fuel costs'
   group_color: '#ff6b6b'
   name: 'Fuel price'
+
+Fixed_OM:
+  color: '#000000'
+  group: 'FO&M costs'
+  group_color: '#E69F00'
+  name: 'FO&M costs'
+Variable_OM:
+  color: '#000000'
+  group: 'VO&M costs'
+  group_color: '#D35FB7'
+  name: 'VO&M costs'

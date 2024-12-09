@@ -1911,6 +1911,13 @@ Fixed O&M:
   group_color: '#E69F00'
   name: 'FO&M costs'
 
+
+"variable_om_cost+Fuel Cost":
+  color: '#000000'
+  group: 'VO&M costs + Fuel costs'
+  group_color: '#9d2ed1'
+  name: 'VO&M costs + Fuel costs'
+
 Unused fossil fueled capacity:
   color: '#000000'
   group: 'Fossil fuel gas'
@@ -2020,11 +2027,6 @@ Electricity|Nuclear|PWR:
     name: 'Electricity|Nuclear|PWR'
 
 
-"variable_om_cost+Fuel Cost":
-    color: '#000000'
-    group: 'VO&M costs + Fuel costs'
-    group_color: '#9d2ed1'
-    name: 'VO&M costs + Fuel costs'
 
 
 

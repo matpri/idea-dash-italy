@@ -1646,3 +1646,23 @@ Capital costs:
   group: Capacity
   group_color: '#785EF0'
   name: Capital costs
+
+
+Variable O&M:
+  color: '#000000'
+  group: 'VO&M costs'
+  group_color: '#D35FB7'
+  name: 'VO&M costs'
+
+Fixed O&M:
+  color: '#000000'
+  group: 'FO&M costs'
+  group_color: '#E69F00'
+  name: 'FO&M costs'
+
+
+"variable_om_cost+Fuel Cost":
+  color: '#000000'
+  group: 'VO&M costs + Fuel costs'
+  group_color: '#9d2ed1'
+  name: 'VO&M costs + Fuel costs'
