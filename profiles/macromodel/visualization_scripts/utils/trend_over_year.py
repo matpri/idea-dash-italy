@@ -28,7 +28,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
             color = utils.get_color(tech)
 
         fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                        hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                        hovertemplate=f'<b>{tech}</b><br><br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
     fig.update_yaxes(showgrid=True)
     if df_scen.empty:
@@ -55,10 +55,10 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
 
 def subset(df, region, year, scenario, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
-    df_scen['year'] = pd.to_datetime(df_scen['time'])
-    df_scen['year'] = df_scen['year'].dt.strftime('%Y')
-
-    df_scen = df_scen[df_scen['year'] == year]
+    # df_scen['year'] = pd.to_datetime(df_scen['time'])
+    # df_scen['year'] = df_scen['year'].dt.strftime('%Y')
+    #
+    # df_scen = df_scen[df_scen['year'] == year]
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 

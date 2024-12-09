@@ -11,4 +11,4 @@ model_mapping = {
     'CIMS': ['CIMS']
 }
 
-exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input']
+exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel']

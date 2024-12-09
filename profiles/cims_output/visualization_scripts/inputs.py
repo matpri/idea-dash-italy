@@ -29,7 +29,7 @@ def render_cost(data, _c_type, _c_scenario, _c_region, _c_sector):
     data['variable'] = data['variable'].str.replace(_c_type + '|', '')
     data = data[data['variable'].str.startswith(_c_sector)]
     data['variable'] = data['variable'].str.replace(_c_sector + '|', '')
-    return trend_over_years.plot(data, _c_scenario, _c_region, _c_type, 'Cost', 'Year', _c_type, unit)
+    return trend_over_years.plot(data, _c_scenario, _c_region, _c_type,  'Year', 'Cost', _c_type, unit)
 
 def render_t_cost(data, _t_cost_scenario,bl=False, region=None):
     data = data[data['scenario'].isin(_t_cost_scenario)]
