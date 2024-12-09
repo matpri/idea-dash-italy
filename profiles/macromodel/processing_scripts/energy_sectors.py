@@ -51,7 +51,7 @@ def process(dbs: dict):
         gen_caps.append(gen_cap)
 
     full_net_new_cap = pd.concat(gen_caps)
-    full_net_new_cap['time'] = full_net_new_cap['time'].astype(int)
+    #full_net_new_cap['time'] = full_net_new_cap['time'].astype(int)
 
 
     return full_net_new_cap
