@@ -16,7 +16,7 @@ def check(df):
     """
     print("Checking for emissions in variable column")
     try:
-        if (df.model == 'MESSAGEix-CA').any():
+        if (df.model == 'MESSAGEix-Canada').any():
             if df.variable.str.startswith("Primary Energy (substitution method)|").any():
                 return True
         return False
