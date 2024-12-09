@@ -7,6 +7,7 @@ from profiles.cims_output import utils
 
 def plot(df, scenario, region, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
     fig = go.Figure()
+    y_axis_label = y_axis_label + f" in {unit}" if unit is not None else y_axis_label
     fig.update_layout(
         title_text=title,
         xaxis_title=x_axis_label,

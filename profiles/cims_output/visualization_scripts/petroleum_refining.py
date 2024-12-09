@@ -41,16 +41,25 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
 
 def process_represenation(p_type, by_rep, variable, df):
     if p_type == 'Emissions':
-        filtered_df = df[
-            (df.parameter == variable)
-        ]
-        filtered_df['variable'] = filtered_df['sub_context'] + '|' + filtered_df['context']
-        filtered_df['variable'] += '- Negative' if 'negative' in filtered_df[
-            'variable'] else '- Avoided' if 'avoided' in \
-                                            filtered_df[
-                                                'variable'] else '- Emitted'
-        filtered_df = filtered_df[['region', 'variable', 'year', 'value_num', 'scenario']]
-        filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
+        if by_rep:
+            filtered_df = df[
+                (df.parameter == variable) & (df.short_path == df.sector)
+                ]
+
+            filtered_df['variable'] = filtered_df['sub_context'] + '|' + filtered_df['context']
+            filtered_df['variable'] += '- Negative' if 'negative' in filtered_df[
+                'variable'] else '- Avoided' if 'avoided' in \
+                                                filtered_df[
+                                                    'variable'] else '- Emitted'
+            filtered_df = filtered_df[['region', 'variable', 'year', 'value_num', 'scenario']]
+            filtered_df = filtered_df.rename(columns={'value_num': 'value', 'year': 'time'})
+        else:
+            filtered_df = df[
+                (df.parameter == variable)
+                ]
+
+            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
+            filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     elif p_type == 'Technology Stocks':
         filtered_df = df[df['parameter'] == variable]
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
@@ -161,7 +170,7 @@ def plot(df, window_id):
                 'type': 'cims-petroleum_refining-rep_switch',
                 'index': window_id
             },
-            style={'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
+            style={'display': 'block'} if plot_type in ('Energy Demand', 'Emissions') else {'display': 'none'}
         ),
 
         dmc.Select(

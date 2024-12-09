@@ -18,11 +18,11 @@ def check(df):
         if (df.model == 'NRCan-PyPsa').any():
             if df.variable.str.contains("Carbon price").any() or df.variable.str.contains(
                     "Capital costs").any() or df.variable.str.contains(
-                "Fixed O&M costs").any() or df.variable.str.contains(
+                "FO&M costs").any() or df.variable.str.contains(
                 "VO&M costs").any() or df.variable.str.contains("Fuel costs").any():
                 return df[df.variable.str.contains("Carbon price") | df.variable.str.contains(
                     "Capital costs")| df.variable.str.contains(
-                "Fixed O&M costs") | df.variable.str.contains(
+                "FO&M costs") | df.variable.str.contains(
                 "VO&M costs") | df.variable.str.contains("Fuel costs")]['value'].sum() > 0
         return False
     except Exception as e:
@@ -206,7 +206,7 @@ def process(data):
         df = db.copy()
         df = df[df.variable.str.startswith("Carbon price") | df.variable.str.startswith(
                     "Capital costs")| df.variable.str.startswith(
-                "Fixed O&M costs") | df.variable.str.startswith(
+                "FO&M costs") | df.variable.str.startswith(
                 "VO&M costs") | df.variable.str.startswith("Fuel costs")]
         df.variable = df.variable.apply(lambda x: x.split("|")[0])
         # formatted_df = format_df(df)

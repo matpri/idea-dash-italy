@@ -210,6 +210,7 @@ def link(app):
 
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
             _g_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}

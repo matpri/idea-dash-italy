@@ -2,16 +2,6 @@ import pandas as pd
 
 from profiles.cims_output.processing_scripts.utils import ghg, stock_lcc, requested_quantities
 
-emissions_mapping = {
-    'Net Emissions': ['total_cumul_net_emissions',
-                      'total_cumul_avoided_emissions',
-                      'total_cumul_negative_emissions',
-                      'total_cumul_bio_emissions'],
-    'Avoided Emissions': ['total_cumul_avoided_emissions'],
-    'Negative Emissions': ['total_cumul_negative_emissions'],
-    'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions'],
-    'Emissions Costs': ['total_cumul_emissions_cost']}
-
 def check(df):
     """
     Check if 'cost' is present in the 'variable' column.
@@ -51,33 +41,16 @@ def process(data):
     for scenario_name, db in data.items():
         if ghg.check(db):
             df = ghg.process({scenario_name: db})
-            for key, value in emissions_mapping.items():
-                emissions = df[df['parameter'].isin(value)].copy()
-                emissions['variable'] = key
-                emissions = emissions.rename(columns={'value_num': 'value', 'year': 'time'})
-                emissions = emissions.groupby(['scenario', 'variable', 'time', 'sector']).sum(numeric_only=True).reset_index()
-                emissions = emissions[['scenario', 'variable', 'time', 'value', 'sector']]
-                dfs.append(emissions)
+            df['tab'] = 'Emissions'
+            dfs.append(df)
         if requested_quantities.check(db):
             df = requested_quantities.process({scenario_name: db})
-            df = df[(df['technology'].isna()) & (df['context'] != 'Total')].groupby(
-                ['region', 'year', 'scenario', 'sector']).sum(numeric_only=True).reset_index()
-            df = df.rename(columns={'value_num': 'value', 'year': 'time'})
-            df['variable'] = 'Energy Demand'
-            df = df[['scenario', 'variable', 'time', 'value', 'sector']]
+            df['tab'] = 'Energy Demand'
             dfs.append(df)
         if stock_lcc.check(db):
             df = stock_lcc.process({scenario_name: db})
-            stock_parameters = df['parameter'].unique().tolist()
-            for parameter in stock_parameters:
-                stock = df[df['parameter'] == parameter].copy()
-                stock['variable'] = parameter
-                stock = stock.rename(columns={'value_num': 'value', 'year': 'time'})
-                stock = stock.groupby(['scenario', 'variable', 'time', 'sector']).sum(numeric_only=True).reset_index()
-                stock = stock[['scenario', 'variable', 'time', 'value', 'sector']]
-                dfs.append(stock)
+            df['tab'] = 'Technology Stocks'
             dfs.append(df)
 
     full_df = pd.concat(dfs)
-    full_df = full_df.groupby(['scenario', 'variable','time', 'sector']).sum(numeric_only=True).reset_index()
-    return full_df[['scenario', 'variable', 'time', 'value', 'sector']]
+    return full_df

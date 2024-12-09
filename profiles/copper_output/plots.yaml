@@ -283,13 +283,13 @@ Overview:
     unit: Million $
     title: Fixed O&M Cost
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   VOM Cost:
       name: Cost
       unit: Million $
       title: Variable O&M Cost
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 
 
 
