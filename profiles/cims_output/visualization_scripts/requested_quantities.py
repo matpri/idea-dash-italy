@@ -116,7 +116,9 @@ def process_represenation(df, representation, sector, service, fuel):
         filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     else:
-        filtered_df = df[(df['technology'].isna()) & (df['context'] == fuel) & ~df.sector.isna() & (
+        if fuel != 'All':
+            df = df[(df['context'] == fuel)]
+        filtered_df = df[(df['technology'].isna()) & ~df.sector.isna() & (
                     df.short_path == df.sector)].groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
@@ -139,7 +141,7 @@ def widgets(df, window_id):
     sectors = [sector for sector in sectors if
                sector is not None and sector != '' and sector != math.nan and isinstance(sector, str)]
     services = df[(df['technology'].isna()) & (df['sector'] == sectors[0])]['short_path'].unique().tolist()
-    fuels = df[(df['technology'].isna())]['context'].unique().tolist()
+    fuels = ['All'] + df[(df['technology'].isna())]['context'].unique().tolist()
 
     # get max depth which is the number of layers in the short_path
     max_depth = df['short_path'].apply(lambda x: len(x.split('.'))).max()

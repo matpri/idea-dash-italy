@@ -65,6 +65,13 @@ def link(app):
             },
             'style'
         ),
+        Output(
+            {
+                'type': 'cims-ghg-sector-select',
+                'index': MATCH
+            },
+            'style'
+        ),
         Input({
             'type': 'cims-emissions-update',
             'index': MATCH
@@ -181,7 +188,7 @@ def link(app):
 
         if 'cims-ghg-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv, "ghg.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style, dash.no_update
 
         services = dash.no_update
 
@@ -199,7 +206,7 @@ def link(app):
             _service_style = {'display': 'none'}
 
         elif _representation == 'By Service':
-            _sector_style = {'display': 'block'}
+            _sector_style = {'display': 'none'}
             _service_style = {'display': 'block'}
         else:
             _sector_style = {'display': 'none'}
@@ -260,4 +267,4 @@ def link(app):
                                   service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
-        return _canvas, _r_style, _y_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _sector_style
