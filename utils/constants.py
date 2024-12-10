@@ -11,4 +11,5 @@ model_mapping = {
     'CIMS': ['CIMS']
 }
 
-exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel']
+exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel',
+                           'COPPER', 'HEC-PITHOS', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra-TEMOA']
