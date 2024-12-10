@@ -5,10 +5,7 @@ from profiles.cims_output.visualization_scripts.ghg import render_plot
 from components import ids
 
 emissions_mapping = {
-    'Net Emissions': ['total_cumul_net_emissions',
-                      'total_cumul_avoided_emissions',
-                      'total_cumul_negative_emissions',
-                      'total_cumul_bio_emissions'],
+    'Net Emissions': ['total_cumul_net_emissions'],
     'Avoided Emissions': ['total_cumul_avoided_emissions'],
     'Negative Emissions': ['total_cumul_negative_emissions'],
     'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions'],
