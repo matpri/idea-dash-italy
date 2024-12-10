@@ -73,8 +73,8 @@ class NextGridOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Output Stats',
         'Overview',
+        'Output Stats',
         'Emissions',
         'Capacity',
         'Net New Capacity',

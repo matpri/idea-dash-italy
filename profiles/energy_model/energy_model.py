@@ -78,8 +78,8 @@ class energy_modelsOutput(BaseProfile):
         'It represents each models output as its own scenario which allows for easy inter model comparisons')
 
     plot_order = [
-        'Output Stats',
         'Overview',
+        'Output Stats',
         'Comparison',
         'Comparison Matrix',
         'Emissions',

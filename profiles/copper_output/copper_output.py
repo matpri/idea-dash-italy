@@ -80,9 +80,9 @@ class CopperOutput(BaseProfile):
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
-        'Inputs',
-        'Output Stats',
         'Overview',
+        'Output Stats',
+        'Inputs',
         'Emissions',
         'Capacity',
         'VRE Capacity',

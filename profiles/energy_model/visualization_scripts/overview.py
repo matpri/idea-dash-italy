@@ -230,7 +230,7 @@ def plot(df, window_id):
         ),
         dmc.Select(
             label='Group By',
-            value=0,
+            value=1,
             data=[
                 {'label': 'No Grouping', 'value': 0},
                 {'label': 'Group by Model', 'value': 1},
@@ -281,7 +281,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, False, False, False),
+        figure=render_plot(classes[0], df, True, False, False),
         id={
             'type': ids.FIGURE,
             'index': window_id,
