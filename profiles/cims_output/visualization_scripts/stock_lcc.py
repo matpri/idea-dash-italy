@@ -2,12 +2,12 @@ import math
 
 import dash_mantine_components as dmc
 from dash import html, dcc
-
+from components import ids
 from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
     pie_chart
 
 
-def render_plot(type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
+def render_plot(type, df, representation, scenarios, region, year, scenario, pattern_active=True, text_active=False,
                 sector=None, service=None, parameter='new_stock', plot_name='New Stock'):
     print('rendering plot', type)
     from profiles.cims_output.utils import plot_settings
@@ -15,7 +15,7 @@ def render_plot(type, df, scenarios, region, year, scenario, pattern_active=True
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
-    df = process_represenation(df, sector, service, parameter)
+    df = process_represenation(df, representation, sector, service, parameter)
     print('processed', df)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
@@ -37,21 +37,26 @@ def render_plot(type, df, scenarios, region, year, scenario, pattern_active=True
                                      text_active=text_active)
 
 
-def process_represenation(df, sector, service, parameter):
-    df = df[df['parameter'] == parameter]
-    filtered_df = df[
-        (df['parameter'] == parameter) &
-        (df['sector'] == sector) &
-        (df.short_path.str.startswith(service))
-        ]
+def process_represenation(df, representation, sector, service, parameter):
+    if representation == 'By Service':
+        df = df[df['parameter'] == parameter]
+        filtered_df = df[
+            (df['parameter'] == parameter) &
+            (df['sector'] == sector) &
+            (df.short_path.str.startswith(service))
+            ]
 
-    filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
-    filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
+        filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
+        filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
+    else:
+        filtered_df = df[(df['parameter'] == parameter)]
+        filtered_df = filtered_df[['region', 'sector', 'year', 'value_num', 'scenario']]
+        filtered_df = filtered_df.rename(columns={'value_num': 'value', 'sector': 'variable', 'year': 'time'})
 
     return filtered_df
 
 
-def plot(df, window_id):
+def widgets(df, window_id):
     """
     :param df: pandas Dataframe containing the data to visualize
     :param window_id: window id to use when registering components to dash
@@ -133,7 +138,16 @@ def plot(df, window_id):
         style={'display': 'block'}
     )
 
-    widget_layout = html.Div([
+    widget_layout = [
+        dmc.Select(
+            label='Result Representation',
+            data=[{'label': plot, 'value': plot} for plot in ['By Service', 'By Sector']],
+            value='By Service',
+            id={
+                'type': 'cims-stock_lcc-representation-select',
+                'index': window_id
+            },
+        ),
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
@@ -183,22 +197,8 @@ def plot(df, window_id):
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-stock_lcc-download', 'index': window_id}),
-    ])
+    ]
 
-    plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+    return widget_layout, render_plot('By Year', df, 'By Service', [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0], scenarios[0], sector=sectors[0], service=services[0],
-                           parameter=stock_parameters[0], plot_name=stock_parameters[0]),
-        id={
-            'type': 'figure',
-            'index': window_id,
-            'profile': 'cims_output',
-            'viz': 'stock_lcc'
-        },
-        style={
-            'width': '100%',
-            'height': '100%'
-        }
-    )
-
-    return widget_layout, plot_layout
+                           parameter=stock_parameters[0], plot_name=stock_parameters[0])

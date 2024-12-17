@@ -5,17 +5,17 @@ from utils.generic_profile import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None):
     fig = go.Figure()
     fig.update_layout(
-        title_text=title,
+        title_text=title + f' ({', '.join(scenarios)})' if len(scenarios) else title,
         xaxis_title=x_axis_label,
-        yaxis_title=y_axis_label,
+        yaxis_title=y_axis_label + f' ({unit})' if unit != 'NA' else y_axis_label,
         template="simple_white",
     )
 
     try:
-        df_scen = subset(df, year, scenarios, aggregate, season)
+        df_scen = subset(df, year, scenarios, unit, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
 
@@ -26,7 +26,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
             x = []
             x.append(data["region"].values)
             x.append(data['scenario'].values)
-            scen_patterns = [utils.pattern_from_key(scen) for scen in data['scenario'].values]
+            scen_patterns = pattern_list if pattern_list else [utils.pattern_from_key(scen) for scen in scenarios]
 
             if aggregate:
                 color = utils.get_group_colors(tech)
@@ -60,23 +60,29 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     return fig
 
 
-def subset(df, year, scenarios, aggregate, season=None):
+def subset(df, year, scenarios, unit, aggregate, season=None):
     df_scen = df.copy(deep=True)
+
+    if not pd.api.types.is_numeric_dtype(df['time']):
+        df_scen['time'] = pd.to_datetime(df_scen['time'])
+        df_scen['time'] = df_scen['time'].dt.strftime('%Y')
+
     df_scen = df_scen[df_scen['region'] != 'CAN']
     regions = df_scen['region'].unique().tolist()
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
     if aggregate:
         df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     else:
         df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
-    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
     df_scen = df_scen[df_scen['time'] == year]
     df_scen = df_scen[df_scen['region'] != 'CAN']
+    df_scen = df_scen[df_scen['unit'] == unit]
     df_scen = df_scen[df_scen['value'] != 0]
     df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum').values
     # for every variable type in the df, make sure all regions are present if necessary fill with 0

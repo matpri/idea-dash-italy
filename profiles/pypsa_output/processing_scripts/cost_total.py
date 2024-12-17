@@ -16,8 +16,14 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'NRCan-PyPsa').any():
-            if df.variable.str.contains("Operational|").any() or df.variable.str.contains("Capital|").any():
-                return df[df.variable.str.contains("Operational|")]['value'].sum() != 0 or df[df.variable.str.contains("Capital|")]['value'].sum() != 0
+            if df.variable.str.contains("Carbon price").any() or df.variable.str.contains(
+                    "Capital costs").any() or df.variable.str.contains(
+                "FO&M costs").any() or df.variable.str.contains(
+                "VO&M costs").any() or df.variable.str.contains("Fuel costs").any():
+                return df[df.variable.str.contains("Carbon price") | df.variable.str.contains(
+                    "Capital costs")| df.variable.str.contains(
+                "FO&M costs") | df.variable.str.contains(
+                "VO&M costs") | df.variable.str.contains("Fuel costs")]['value'].sum() > 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -198,7 +204,10 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Operational|") | df.variable.str.startswith("Capital|")]
+        df = df[df.variable.str.startswith("Carbon price") | df.variable.str.startswith(
+                    "Capital costs")| df.variable.str.startswith(
+                "FO&M costs") | df.variable.str.startswith(
+                "VO&M costs") | df.variable.str.startswith("Fuel costs")]
         df.variable = df.variable.apply(lambda x: x.split("|")[0])
         # formatted_df = format_df(df)
         # gen_cap = calculate_generation_capacity(formatted_df)

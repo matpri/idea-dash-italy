@@ -13,7 +13,9 @@ def link(app):
         Input({
             'type': 'general-technology-settings-dropdown',
             'profile': MATCH,
-        }, 'value')
+        }, 'value'),
+
+        prevent_initial_call=True,
     )
     def update_tech_settings(tech):
         print('updating tech settings', tech)

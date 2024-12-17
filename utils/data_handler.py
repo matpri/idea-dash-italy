@@ -1,32 +1,19 @@
 import base64
 import io
 import json
+import os
+import pickle
 import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
 from collections import defaultdict
 
+import chardet
 import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
-from utils.generic_profile.callbacks import generic_callback
-
-model_mapping = {
-    'silver' : ['SILVER Output'],
-    'copper': ['COPPER Output', 'Power System Models'],
-    'cef': ['Canada Energy Futures', 'Power System Models'],
-    'ECCC-NextGrid': ['ECCC-NextGrid Output', 'Power System Models'],
-    'NATEM-POWER': ['NATEM-POWER Output', 'Power System Models'],
-    'HEC-PITHOS': ['HEC-PITHOS Output', 'Power System Models'],
-    'NRCan-PyPsa': ['NRCan-PyPsa Output', 'Power System Models'],
-    'PyPSA_CAN': ['PyPSA_CAN Output', 'Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA Output', 'Power System Models'],
-    'CIMS': ['CIMS Output']
-}
-
-
-
+from utils.constants import model_mapping, exclude_from_comparison
 
 def create_generic_profile(df, model):
     """
@@ -177,17 +164,63 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER Output', 'Canada Energy Futures', 'ECCC-NextGrid Output',
-                     'NATEM-POWER Output', 'HEC-PITHOS Output', 'NRCan-PyPsa Output', 'PyPSA_CAN Output',
-                     'Sutubra-TEMOA Output']
+    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+                     'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
+        for profile in self.profiles.values():
+            if profile.name not in model_mapping.keys():
+                model_mapping[profile.name] = [profile.display_name]
         self.data = {}
         self.processed = []
         self.processed_data = {}
+        self.pkls = {}
         self.viz = {}
+        self.to_delete = []
         self.runs = pd.DataFrame()
+
+    def preload_data(self, data_files):
+        data_files = [file for file in data_files if file not in self.data.keys()]
+        fail = False
+        for file in data_files:
+            print('Preloading', file)
+            f_name, extension = os.path.splitext(file)
+            if extension == '.csv':
+                df = pd.read_csv(os.path.join('data', file))
+            elif extension == '.xlsx':
+                dfs = []
+                xls = pd.ExcelFile(os.path.join('data', file))
+                for sheet in xls.sheet_names:
+                    print(sheet)
+                    _df = xls.parse(sheet)
+                    # infer types of the column names
+                    _df.columns = _df.columns.astype(str)
+                    dfs.append(_df)
+                # Combine all DataFrames into one
+                df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.pkl':
+                self.pkls[f_name] = os.path.join('data', file)
+            else:
+                fail = True
+                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                continue
+
+            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+            if not checked:
+                fail = True
+            else:
+                profiles = list(self.data[file]['visualizations'].keys())
+                colors = []
+                for p in profiles:
+                    colors.append(self.profiles[p].color)
+
+        if fail:
+            print(fail)
+
+        self.process_data()
+
 
 
     def select_run(self, profile, scenario, author,db):
@@ -257,37 +290,60 @@ class DataHandler:
 
         filename = f'{profile}|{scenario}|{author}|{db}'
 
-        if filename not in self.data:
-            self.data[filename] = {}
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
+
+        self.data[filename] = {}
 
         self.data[filename]['content'] = df
 
-        # Check if the data has visualizations it can be processed into
-        visualizations = {}
-        selected = {}
-        for profile_name, profile in self.profiles.items():
-            for viz_name, viz_dict in profile.viz_options.items():
-                if viz_name not in visualizations:
-                    check_func = viz_dict.get('check')
-                    if check_func(df):
-                        if visualizations.get(profile.name) is None:
-                            visualizations[profile.name] = []
-                        visualizations[profile.name].append(viz_name)
+        # make all headers lowercase
+        df.columns = df.columns.str.lower()
 
-                        if selected.get(profile.name) is None:
-                            selected[profile.name] = []
-                        selected[profile.name].append(viz_name)
+        model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+
+        profile_options = model_mapping.get(model, None)
+        if profile_options is None:
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
+
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
+        for profile_name, profile in profiles_to_check.items():
+            for viz_name, viz_dict in profile.viz_options.items():
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
-    def process_data(self):
+        return filename
+
+    def process_data(self, reset=False):
         """
         Process the data that has been loaded into the data handler.
         :return:
         """
+        # Collect results
+        if reset:
+            self.processed_data = {}
+            self.processed = []
+
+        for pkl in self.pkls.values():
+            self.load(pkl)
 
         # Collect data from all selected profiles
         data_collection = {}
@@ -317,7 +373,7 @@ class DataHandler:
             if power_system_results is not None:
                 results.extend(power_system_results)
 
-        # Collect results
+
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -325,6 +381,80 @@ class DataHandler:
                 self.processed_data[profile][viz] = processed_data
             else:
                 self.processed_data[profile][viz] = pd.concat([self.processed_data[profile][viz], processed_data])
+
+        dfs = {}
+        classes = []
+        variables = []
+        for model, viz_option in self.processed_data.items():
+            print('Processing', model)
+            if model in exclude_from_comparison:
+                continue
+            if model == 'Power System Models' or model == 'Generic Comparison':
+                continue
+            for viz, viz_data in viz_option.items():
+                if viz == 'Overview' or viz == 'Output Stats' or viz == 'Inputs':
+                    continue
+                columns = viz_data.columns.tolist()
+                # check if column of viz_data contains 'variable', 'value', 'region', 'time', 'scenario'
+                if all(col in columns for col in ['variable', 'value', 'region', 'scenario']) and ('time' in columns or 'period' in columns):
+                    df = viz_data.copy()
+                    if 'period' in df.columns:
+                        df['time'] = df['period']
+                        df = df.drop(columns=['period'])
+                    variables += df.variable.unique().tolist()
+                    df['variable'] = viz + '|' + df['variable']
+                    df['scenario'] = model + '|' + df['scenario']
+                    if 'unit' not in df.columns:
+                        df['unit'] = 'NA'
+                    if dfs.get(viz, None) is None:
+                        dfs[viz] = [df]
+                    else :
+                        dfs[viz].append(df)
+                    classes.append(viz)
+                else:
+                    print(f"Data for {model} - {viz} does not contain the necessary columns")
+
+        if classes:
+            classes = list(set(classes))
+            profile = GenericProfile('Generic Comparison', classes, variables)
+            self.profiles['Generic Comparison'] = profile
+            self.processed_data['Generic Comparison'] = {}
+            for viz in classes:
+                self.processed_data['Generic Comparison'][viz] = pd.concat(dfs[viz])
+            overview_data = []
+            for viz in classes:
+                overview_dfs = []
+                for df in dfs[viz]:
+                    # if CAN in region, remove all other regions
+                    if 'region' in df.columns:
+                        if 'CAN' in df['region'].unique():
+                            df = df[df['region'] == 'CAN']
+                        elif 'National' in df['region'].unique():
+                            df = df[df['region'] == 'National']
+
+                    # if time is a Timestamp, convert to int only keeping the year
+                    if df['time'].dtype == 'datetime64[ns]':
+                        df['time'] = df['time'].dt.year
+
+                    overview_dfs.append(df)
+
+                data = pd.concat(overview_dfs)
+                data['variable'] = viz
+
+                data = data.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
+
+                data['region'] = 'National'
+
+                overview_data.append(data)
+
+            full_df = pd.concat(overview_data)
+
+            full_df['time'] = full_df['time'].astype(int)
+            self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
+
+        print("processed", self.processed_data)
+
 
     def get_viz(self, profile: str, viz: str, window_id: str):
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
@@ -334,15 +464,14 @@ class DataHandler:
         Get the visualizations that are available for each profile.
         :return:
         """
+        self.validate_profiles_present()
+
         viz = {}
-        for data in self.data.values():
-            for profile, viz_options in data['selected'].items():
-                if viz_options:
-                    if viz.get(profile) is None:
-                        viz[profile] = []
-                    viz[profile].extend(viz_options)
-        for profile, viz_options in viz.items():
-            viz[profile] = list(set(viz_options))
+        for model, viz_options in self.processed_data.items():
+            for viz_name in viz_options.keys():
+                if viz.get(model) is None:
+                    viz[model] = []
+                viz[model].append(viz_name)
         return viz
 
     def load_profiles(self):
@@ -355,42 +484,53 @@ class DataHandler:
                 obj = getattr(module, name)
                 if isinstance(obj, type) and obj.__module__ == module.__name__ and obj.__name__ != 'BaseProfile':
                     model = obj()
-                    found[model.name] = model
+                    found[model.display_name] = model
 
         return found
 
     def link(self, app):
         for profile in self.profiles.values():
             profile.link(app)
-        generic_callback.link(app)
+        GenericProfile.link(app)
 
-    def check_content(self, filename, content, extension):
+    def check_content(self, filename, content, extension, encoded=True):
         if content is None:
             return
+        if encoded:
+            # decode the content string
+            content_type, content_string = content.split(',')
+            decoded = base64.b64decode(content_string)
 
-        # decode the content string
-        content_type, content_string = content.split(',')
-        decoded = base64.b64decode(content_string)
+            try:
+                if extension == 'xlsx':
+                    xls = pd.ExcelFile(io.BytesIO(decoded))
+                    # Get all sheet names
+                    sheet_names = xls.sheet_names
+                    # Read all sheets into a DataFrame list
+                    df_list = []
+                    for sheet in sheet_names:
+                        print(sheet)
+                        _df = xls.parse(sheet)
+                        # infer types of the column names
+                        _df.columns = _df.columns.astype(str)
+                        df_list.append(_df)
+                    # Combine all DataFrames into one
+                    df = pd.concat(df_list, ignore_index=True)
+                else:
+                    # Detect the encoding using chardet
+                    detected_encoding = chardet.detect(decoded)['encoding']
+                    print(f"Detected encoding: {detected_encoding}")
 
-        try:
-            if extension == 'xlsx':
-                xls = pd.ExcelFile(io.BytesIO(decoded))
-                # Get all sheet names
-                sheet_names = xls.sheet_names
-                # Read all sheets into a DataFrame list
-                df_list = []
-                for sheet in sheet_names:
-                    print(sheet)
-                    _df = xls.parse(sheet)
-                    # infer types of the column names
-                    _df.columns = _df.columns.astype(str)
-                    df_list.append(_df)
-                # Combine all DataFrames into one
-                df = pd.concat(df_list, ignore_index=True)
-            else:
-                df = pd.read_csv(io.StringIO(decoded.decode('utf-8')))
-        except pd.errors.EmptyDataError:
-            df = pd.DataFrame()
+                    # Use the detected encoding to decode the file content
+                    df = pd.read_csv(io.StringIO(decoded.decode(detected_encoding)))
+            except pd.errors.EmptyDataError:
+                df = pd.DataFrame()
+            except UnicodeDecodeError as e:
+                print(f"Decoding error: {e}")
+                # Fallback to a common alternative encoding (ISO-8859-1)
+                df = pd.read_csv(io.StringIO(decoded.decode('ISO-8859-1')))
+        else:
+            df = content
 
 
         # make all headers lowercase
@@ -403,26 +543,37 @@ class DataHandler:
                 if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
                     diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
                     print(f"Columns missing in {filename}", diff)
-                    return False, f"These Columns were expected: {diff}"
+                    return False, f"These Columns were expected: {diff}", filename
 
             else:
                 # make sure scenario is in the columns
                 if 'scenario' not in df.columns:
-                    return False, "Scenario column is missing from the data."
+                    return False, "Scenario column is missing from the data.", filename
 
-        if filename not in self.data:
-            self.data[filename] = {}
-
-        self.data[filename]['content'] = df
+        if filename in self.data:
+            counter = 1
+            while f'{filename}_{counter}' in self.data:
+                counter += 1
+            filename = f'{filename}_{counter}'
 
         model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
 
         profile_options = model_mapping.get(model, None)
         if profile_options is None:
-            profile = create_generic_profile(df, model)
-            self.profiles[profile.name] = profile
-            profile_options = [profile.name]
+            # if df has columns model, scenario, unit, region, variable, value
+            if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                profile = create_generic_profile(df, model)
+                self.profiles[profile.display_name] = profile
+                profile_options = [profile.display_name]
+
+            else:
+                return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
+
+
+        self.data[filename] = {}
+
+        self.data[filename]['content'] = df
 
         profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
                              profile_options} if profile_options else self.profiles
@@ -433,12 +584,78 @@ class DataHandler:
             for viz_name, viz_dict in profile.viz_options.items():
                 check_func = viz_dict.get('check')
                 if check_func(df):
-                    visualizations[profile.name].append(viz_name)
-                    selected[profile.name].append(viz_name)
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
-        return True, "Data loaded successfully!"
+        return True, "Data loaded successfully!", filename
+
+    def save(self, filename, temporary=False):
+        """
+        Save self.data, self.processed_data, self.processedto a file.
+        :param filename: The name of the file to save the data handler to.
+        :param temporary: Whether the file is temporary or not.
+        :return: The file path if not temporary, else the bytes of the pickle.
+        """
+
+        if temporary:
+            return pickle.dumps([self.data, self.processed_data, self.processed])
+        else:
+            with open(filename, 'wb') as f:
+                pickle.dump([self.data, self.processed_data, self.processed], f)
+            return filename
+
+
+    def load(self, filename_or_bytes):
+        """
+        Load self.data, self.processed_data, self.processed from a file or encoded bytes.
+        :param filename_or_bytes: The name of the file to load the data handler from or encoded bytes.
+        :return:
+        """
+        if isinstance(filename_or_bytes, str):
+            with open(filename_or_bytes, 'rb') as f:
+                loaded_data, loaded_processed_data, loaded_processed = pickle.load(f)
+        else:
+            loaded_data, loaded_processed_data, loaded_processed = pickle.loads(filename_or_bytes)
+
+        # Safely update self.data
+        for key, value in loaded_data.items():
+            if key in self.data:
+                self.data[key].update(value)
+            else:
+                self.data[key] = value
+
+        # Safely update self.processed_data
+        for key, value in loaded_processed_data.items():
+            if key in self.processed_data:
+                self.processed_data[key].update(value)
+            else:
+                self.processed_data[key] = value
+
+        # Safely update self.processed
+        self.processed.extend(x for x in loaded_processed if x not in self.processed)
+
+
+    def validate_profiles_present(self):
+        # if a profile in the keys of loaded_processed_data is not in self.profiles, add it using the generic profile logic
+        for profile in self.processed_data.keys():
+            if profile not in self.profiles:
+                classes = list(self.processed_data[profile].keys())
+                variables = []
+                for cls in classes:
+                    variables += self.processed_data[profile][cls].variable.unique().tolist()
+
+                # make variables unique
+                variables = list(set(variables))
+                profile = GenericProfile(profile, classes, variables)
+
+                self.profiles[profile.display_name] = profile
+
+
+
+
+

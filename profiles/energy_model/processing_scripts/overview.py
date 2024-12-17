@@ -28,7 +28,7 @@ def check(df):
             return copper_overview.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_overview.check(df)
-        elif df.model.unique()[0] == "NATEM-POWER":
+        elif df.model.unique()[0] == "NATEM_Canad":
             return natem_overview.check(df)
         elif df.model.unique()[0] == "HEC-PITHOS":
             return pithos_overview.check(df)
@@ -58,9 +58,9 @@ def process(selected: dict):
             df = nextgrid_overview.process({scenario_name: db})
             df.model = "ECCC-NextGrid"
             dfs.append(df)
-        elif db.model.unique()[0] == "NATEM-POWER":
+        elif db.model.unique()[0] == "NATEM_Canad":
             df = natem_overview.process({scenario_name: db})
-            df.model = "NATEM-POWER"
+            df.model = "NATEM_Canad"
             dfs.append(df)
         elif db.model.unique()[0] == "HEC-PITHOS":
             df = pithos_overview.process({scenario_name: db})

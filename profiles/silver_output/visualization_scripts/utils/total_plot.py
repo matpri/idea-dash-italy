@@ -57,7 +57,7 @@ def render(df, scenarios, title, x_axis_label, y_axis_label, time_size='hourly')
                 title_text=title,
                 annotations=[dict(text=f'Total: {total["value"].sum():.2f} {unit}', showarrow=False)]
             )
-        elif unique_times < 10:
+        elif unique_times < 12:
             # Create a bar plot
             for i, scen in enumerate(scenarios):
                 df_scen = total[total['scenario'] == scen]

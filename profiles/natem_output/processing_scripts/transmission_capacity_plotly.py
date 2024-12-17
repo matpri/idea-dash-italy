@@ -15,11 +15,11 @@ def check(df):
     """
     #print("Checking for capacity_transmission in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
                 test = df.copy()
                 test = test[test.variable.str.startswith("Total transmission capacity|")]
-                test['variable'] = test['variable'].apply(lambda x: x.split("|to")[1])
+                test['variable'] = test['variable'].apply(lambda x: x.split("|To")[1])
                 test = test[test.region != test.variable]
                 return test.value.sum() != 0
         return False
@@ -179,7 +179,7 @@ def process(selected):
     for scenario_name, db in selected.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Total transmission capacity|")]
-        df['variable'] = df['variable'].apply(lambda x: x.split("|to ")[1])
+        df['variable'] = df['variable'].apply(lambda x: x.split("|To ")[1])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])
         times = df['period'].unique().tolist()

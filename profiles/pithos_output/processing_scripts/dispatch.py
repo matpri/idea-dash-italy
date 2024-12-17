@@ -56,7 +56,7 @@ def aggregate_db(db, scenario):
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
-    # aggregate the dim_name based on the tech_agg_COPPER dictionary
+    # aggregate the dim_name based on the tech_agg_HEC-PITHOS dictionary
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
@@ -161,6 +161,16 @@ def process(selected):
     dfs = []
     for scenario, db in selected.items():
         df_processed = aggregate_db(db.copy(), scenario)
+
+        # Create a new 'date' column from 'time' and format it to 'day-month-year'
+        df_processed['date'] = df_processed['time'].dt.strftime('%d-%m-%Y')
+
+        # Filter out dates where the sum of all values is zero
+        non_zero_dates = df_processed.groupby(['date', 'region'])['value'].transform('sum') != 0
+        df_processed = df_processed[non_zero_dates]
+
+        # Drop the temporary 'date' column as it's no longer needed
+        df_processed.drop(columns=['date'], inplace=True)
 
         dfs.append(df_processed)
 

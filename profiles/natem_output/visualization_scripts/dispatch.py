@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 from profiles.natem_output import utils
 from profiles.natem_output.utils import custom_sort_key
 
@@ -308,7 +308,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot('Dispatched Electricity', df, True, scenarios[0], 'CAN' if 'CAN' in regions else regions[0], years[0], days[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'natem_output',
             'viz': 'dispatch'

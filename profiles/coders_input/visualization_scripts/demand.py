@@ -2,7 +2,7 @@ import dash_mantine_components as dmc
 import pandas as pd
 import plotly.graph_objects as go
 from dash import html, dcc
-
+from components import ids
 date_mapper = {1: 'January', 2: 'February', 3: 'March', 4: 'April', 5: 'May', 6: 'June', 7: 'July', 8: 'August',
                9: 'September',
                10: 'October', 11: 'November', 12: 'December', 'January': '01', 'February': '02', 'March': '03',
@@ -93,7 +93,7 @@ def plot(df, window_id):
     plot_layout = dcc.Graph(
         figure=render_plot(df),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
             'profile': 'coders_input',
             'viz': 'demand'

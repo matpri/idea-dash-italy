@@ -27,7 +27,7 @@ def aggregate_db(db, scenario):
     df = df.groupby(['region', 'time', 'variable']).sum().reset_index()
     df['scenario'] = scenario
     df['line'] = df['variable'].apply(lambda x: x.split("|")[1])
-    df['region'] = df['line'] + ' -> ' + df['region']
+    df['region'] = str(df['line']) + ' -> ' + str(df['region'])
     df['time'] = pd.to_datetime(df['time'])
     df['period'] = df['time'].dt.year.astype(int)
     df = df[['time', 'region', 'value', 'scenario']]

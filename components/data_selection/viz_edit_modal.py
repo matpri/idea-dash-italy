@@ -1,6 +1,8 @@
 import dash_mantine_components as dmc
 from dash import html
 
+from components import ids
+
 
 def render(file):
     from main import data_handler
@@ -17,7 +19,7 @@ def render(file):
             ))
         chip_groups[profile] = dmc.ChipGroup(
             children=chips,
-            id={'type': 'upload-chip-group', 'file': file, 'profile': profile},
+            id={'type': ids.UPLOAD_CHIP_GROUP, 'file': file, 'profile': profile},
             value=data_handler.data[file]['selected'][profile],
             multiple=True,
             style={'paddingBottom': '4px'}
@@ -26,12 +28,12 @@ def render(file):
     layout = dmc.Modal(
         opened=False,
         size='60%',
-        id={'type': 'modal', 'index': f'selected-{file}'},
+        id={'type': ids.MODAL, 'index': f'selected-{file}'},
         title=html.H5(f'{file}'),
         zIndex=10001,
         children=[
             dmc.TextInput(
-                id={'type': 'upload-scenario-name', 'file': file},
+                id={'type':  ids.UPLOAD_SCENARIO_NAME, 'file': file},
                 label='Scenario Name',
                 value=data_handler.data[file]['scenario'],
                 placeholder='Enter Scenario Name',
@@ -72,18 +74,12 @@ def render(file):
             ),
             dmc.Divider(),
             html.Div(
-            [dmc.Button('Submit', id={'type': 'modal-submit-button', 'index': f'selected-{file}'},
+            [dmc.Button('Submit', id={'type': ids.MODAL_SUBMIT_BUTTON, 'index': f'selected-{file}'},
                         variant='gradient'),
-             dmc.Button('Close', id={'type': 'modal-close-button', 'index': f'selected-{file}'}, variant='outline'),]
+             dmc.Button('Close', id={'type': ids.MODAL_CLOSE_BUTTON, 'index': f'selected-{file}'}, variant='outline'),]
                 , style={'display': 'flex', 'justifyContent': 'space-between',
                          'padding': '10px 0px 0px 0px'}
             ),
         ],
     )
     return layout
-
-
-def update_chips(values):
-    # Running a print statement for each chip group
-    for val in values:
-        print(val)

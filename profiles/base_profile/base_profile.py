@@ -16,7 +16,8 @@ def data_processing_task(profile_name, viz, data, processing_func):
     return profile_name, viz, data_out
 
 class BaseProfile:
-    name = 'Base Profile'
+    display_name = 'Base Profile'
+    name = 'base'
     db_name = 'base'
     description = 'A Base profile without any visualizations to define model dashboards'
     viz_options = {}
@@ -36,44 +37,59 @@ class BaseProfile:
 
     def process_data(self, data_collection):
         print('Base collective preprocess')
-        wants_overview = False
-        args = []
-        for viz_option, data in data_collection.items():
-            if viz_option == 'Overview':
-                wants_overview = True
-                continue
-            args.append((self.name, viz_option, data, self.viz_options[viz_option]['process']))
+        
+        # Initialize flags and arguments for processing
+        wants_overview = 'Overview' in data_collection
+        args = [
+            (self.display_name, viz_option, data, self.viz_options[viz_option]['process'])
+            for viz_option, data in data_collection.items()
+            if viz_option != 'Overview'
+        ]
 
-        # if len(args) > 2:
-        #     with mp.Pool(mp.cpu_count()) as pool:
-        #         processed_data = pool.starmap(data_processing_task, args)
-        # else:
+        # Process data using the defined processing function
         processed_data = [data_processing_task(*arg) for arg in args]
 
         if wants_overview:
-            dfs = []
-            for _, viz_option, data in processed_data:
-                if viz_option == 'Dispatch' or viz_option == 'Transmission Flow' or viz_option == 'Transmission Capacity':
-                    continue
-                df = data.copy()
-                #ab_qc remove all variables that start with Imports or Exports
-                df = df[~df.variable.str.contains('Import')]
-                df = df[~df.variable.str.contains('Export')]
-                df['variable'] = viz_option
-                dfs.append(df)
-            full_df = pd.concat(dfs)
+            # Prepare dataframes for overview
+            dfs = self._prepare_overview_data(processed_data)
 
-            ab_qc = full_df[(full_df['region'] == 'AB') | (full_df['region'] == 'QC')].copy()
-            ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
-            ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-            ab_qc['region'] = 'AB+QC'
+            # Create aggregated data for Alberta and Quebec
+            ab_qc = self._aggregate_ab_qc_data(dfs)
 
-            full_df = pd.concat([full_df, ab_qc], ignore_index=True)
+            # Combine full data with AB+QC data
+            full_df = pd.concat([dfs, ab_qc], ignore_index=True)
 
-            full_df = full_df[(full_df['region'] == 'CAN') | (full_df['region'] == 'AB+QC')]
-            full_df = full_df.groupby(['scenario', 'variable', 'time','region']).sum(numeric_only=True).reset_index()
-            processed_data.append((self.name, 'Overview', full_df[['scenario', 'variable', 'time', 'value','region']]))
+            # Filter and group the final dataframe
+            full_df = self._filter_and_group_full_df(full_df)
+
+            # Append overview data to processed data
+            processed_data.append((self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
         return processed_data
+
+    def _prepare_overview_data(self, processed_data):
+        """Prepare dataframes for overview by filtering out imports and exports."""
+        dfs = []
+        for _, viz_option, data in processed_data:
+            if viz_option in ['Dispatch', 'Transmission Flow', 'Transmission Capacity', 'Inputs', 'Input']:
+                continue
+            df = data.copy()
+            df = df[~df.variable.str.contains('Import|Export')]
+            df['variable'] = viz_option
+            dfs.append(df)
+        return pd.concat(dfs)
+
+    def _aggregate_ab_qc_data(self, full_df):
+        """Aggregate data for Alberta and Quebec."""
+        ab_qc = full_df[full_df['region'].isin(['AB', 'QC'])].copy()
+        ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
+        ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+        ab_qc['region'] = 'AB+QC'
+        return ab_qc
+
+    def _filter_and_group_full_df(self, full_df):
+        """Filter and group the full dataframe for final output."""
+        full_df = full_df[full_df['region'].isin(['CAN', 'AB+QC'])]
+        return full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
 

@@ -35,7 +35,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return df
 
 
@@ -51,7 +51,7 @@ def aggregate_technologies(df):
     """
     df = df.copy()
     df = df.groupby(["variable", "region", "time"]).sum(numeric_only=True).reset_index()
-    return df.sort_values(["region", "time", "variable"])
+    return df.sort_values(["region", "time", "variable", 'unit'])
 
 def calculate_fom(fom_df):
     """
@@ -68,10 +68,10 @@ def calculate_fom(fom_df):
 
     fom_df['variable'] = fom_df['variable'].map(utils.cost_tech).fillna(fom_df['variable'])
     fom_df.sort_values(by=["region", "time", 'variable'])
-    fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
+    fom_df = fom_df.groupby(["variable", "region", "time", "scenario", 'unit']).sum(numeric_only=False).reset_index()
 
     # Aggregate data over all regions by variable, time, and scenario and sum the values
-    can_fom_df = fom_df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
+    can_fom_df = fom_df.groupby(["variable", "time", "scenario", 'unit'], as_index=False).sum(numeric_only=True)
 
     # Add a row with "Region" as "CAN"
     can_fom_df = can_fom_df.assign(region='CAN')

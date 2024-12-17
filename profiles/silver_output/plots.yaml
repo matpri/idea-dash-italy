@@ -132,3 +132,74 @@ UC Line Flow:
     title: UC Line Flow by Line
     x_label: Year
     y_label: MW
+Overview:
+  Price OPF:
+    name: Price OPF
+    unit: CAD
+    total:
+      title: Total Price OPF
+      x_label: Year
+      y_label: Price OPF
+  UC Results:
+    name: UC Results
+    unit: MW
+    total:
+      title: Total UC Results
+      x_label: Year
+      y_label: MW
+  UC Emissions:
+    name: UC Emissions
+    unit: tCO2
+    total:
+      title: Total UC Emissions
+      x_label: Year
+      y_label: tCO2
+  UC VRE Curtailment:
+    name: UC VRE Curtailment
+    unit: tCO2
+    total:
+      title: Total UC VRE Curtailment
+      x_label: Year
+      y_label: tCO2
+  OPF Results:
+    name: OPF Results
+    unit: MW
+    total:
+      title: Total OPF Results
+      x_label: Year
+      y_label: MW
+  OPF Emissions:
+    name: OPF Emissions
+    unit: tCO2
+    total:
+      title: Total OPF Emissions
+      x_label: Year
+      y_label: tCO2
+  OPF VRE Curtailment:
+    name: OPF VRE Curtailment
+    unit: tCO2
+    total:
+      title: Total OPF VRE Curtailment
+      x_label: Year
+      y_label: tCO2
+  OPF Costs:
+    name: OPF Costs
+    unit: CAD
+    total:
+      title: Total OPF Costs
+      x_label: Year
+      y_label: CAD
+  OPF Line Flow:
+    name: OPF Line Flow
+    unit: MW
+    total:
+      title: Total OPF Line Flow
+      x_label: Year
+      y_label: MW
+  UC Line Flow:
+    name: UC Line Flow
+    unit: MW
+    total:
+      title: Total UC Line Flow
+      x_label: Year
+      y_label: MW

@@ -1,0 +1,94 @@
+import dash
+from dash import Output, Input, State, ALL, dcc
+
+from profiles.labourabm_output.visualization_scripts.total_unemployment import render_plot
+
+from components import ids
+def link(app):
+    @app.callback(
+        Output({
+            'type': ids.FIGURE,
+            'index': ALL,
+            'profile': 'labourabm_output',
+            'viz': 'total_unemployment'
+        }, 'figure'),
+        Output({
+            'type': 'labourabm-total_unemployment-region-select',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'labourabm-total_unemployment-region-select',
+            'index': ALL
+        }, 'data'),
+        Output({
+            'type': 'labourabm-total_unemployment-download',
+            'index': ALL
+        }, 'data'),
+        Input({
+            'type': 'labourabm-total_unemployment-scenario-multi-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'labourabm-total_unemployment-occupation-multi-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'labourabm-total_unemployment-region-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'labourabm-total_unemployment-download-button',
+            'index': ALL
+        }, 'n_clicks'),
+        State({
+            'type': ids.FIGURE,
+            'index': ALL,
+            'profile': 'labourabm_output',
+            'viz': 'total_unemployment'
+        }, 'figure'),
+        State({
+            'type': 'labourabm-total_unemployment-region-select',
+            'index': ALL
+        }, 'data'),
+        State({
+            'type': 'labourabm-total_unemployment-download',
+            'index': ALL
+        }, 'data'),
+
+        prevent_initial_call=True
+    )
+    def update_total_unemployment(_scenarios, _occupations, _region, _download, _canvas, _regions, _data):
+        #print('updating total_unemployment plot')
+        from main import data_handler
+        ctx = dash.callback_context
+        trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+
+        if 'labourabm-total_unemployment-download-button' in trigger_id['type']:
+            idx = 0
+            for i, id in enumerate(ctx.inputs_list[0]):
+                if ((id['id']['index'] == trigger_id['index']) and
+                        (id['id']['type'] == 'labourabm-total_unemployment-download-button')):
+                    idx = i
+                    break
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['LabourABM']['Total Unemployment'].to_csv,
+                                             "total_unemployment.csv")
+            return _canvas, _region, _regions, _data
+
+        idx = 0
+        for i, id in enumerate(ctx.inputs_list[0]):
+            if ((id['id']['index'] == trigger_id['index']) and
+                    (id['id']['type'] == 'labourabm-total_unemployment-plot-select')):
+                idx = i
+                break
+
+        if 'labourabm-total_unemployment-scenario-multi-select' in trigger_id['type']:
+            data = data_handler.processed_data['LabourABM']['Total Unemployment']
+            _regions[idx] = data[data['scenario'].isin(_scenarios[idx])]['region'].unique().tolist()
+            if len(_regions[idx]) == 0:
+                _region[idx] = ''
+            else:
+                _region[idx] = _regions[idx][0]
+
+        _canvas[idx] = render_plot(data_handler.processed_data['LabourABM']['Total Unemployment'], _scenarios[idx], _occupations[idx], _region[idx])
+
+        return _canvas, _region, _regions, [dash.no_update for _ in _data]

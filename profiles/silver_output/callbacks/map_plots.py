@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.silver_output.visualization_scripts.map_plots import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'map_plots'
@@ -65,7 +65,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'silver_output',
             'viz': 'map_plots'
@@ -104,7 +104,7 @@ def link(app):
                         (id['id']['type'] == 'silver-map_plots-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER Output']['Map Plots'].to_csv, "map_plots.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['Map Plots'].to_csv, "map_plots.csv")
             return _canvas, _data
 
         if 'silver-map_plots-time_step-select' in trigger_id['type']:
@@ -117,7 +117,7 @@ def link(app):
 
             # Get the selected time step
             selected_time_step = _ts[idx]
-            df = data_handler.processed_data['SILVER Output']['Map Plots']
+            df = data_handler.processed_data['SILVER']['Map Plots']
             scen_df = df[(df['scenario'] == _scenario[idx]) & (df['classes'] == _p_type[idx])].copy()
 
             if selected_time_step == 'hourly':
@@ -225,14 +225,14 @@ def link(app):
             date_format = '%Y-%m'
 
         # Get the unique times for the selected date
-        unique_times = sorted(data_handler.processed_data['SILVER Output']['Map Plots'][
-            data_handler.processed_data['SILVER Output']['Map Plots']['time'].dt.strftime(time_format) == selected_date
+        unique_times = sorted(data_handler.processed_data['SILVER']['Map Plots'][
+            data_handler.processed_data['SILVER']['Map Plots']['time'].dt.strftime(time_format) == selected_date
         ]['time'].dt.strftime(date_format).unique().tolist())
 
         # Get the selected time
         selected_time = unique_times[_time[idx]]
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['SILVER Output']['Map Plots'], 
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['SILVER']['Map Plots'],
                                    _scenario[idx], selected_time, time_size=_ts[idx])
 
         return _canvas, [dash.no_update for _ in _data], [dash.no_update for _ in _date], [dash.no_update for _ in _date], [dash.no_update for _ in _time], [dash.no_update for _ in _time], [dash.no_update for _ in _time], [dash.no_update for _ in _style]

@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.cost_vom import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'vom_cost'
@@ -105,7 +106,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'vom_cost'
@@ -210,6 +211,7 @@ def link(app):
 
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
             _g_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}

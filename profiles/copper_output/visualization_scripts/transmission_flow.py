@@ -1,14 +1,14 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
 import geojson
 
 from profiles.copper_output import utils
-from profiles.copper_output.visualization_scripts.utils import bar_over_regions
+from profiles.copper_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years
 
 
 def aggregate_lines(df):
@@ -48,11 +48,6 @@ def aggregate_lines(df):
 
 
 def year_subset(Line_Flow, Year, Scenario):
-    Line_Flow['from_lon'] = pd.to_numeric(Line_Flow['from_lon'])
-    Line_Flow['from_lat'] = pd.to_numeric(Line_Flow['from_lat'])
-    Line_Flow['to_lon'] = pd.to_numeric(Line_Flow['to_lon'])
-    Line_Flow['to_lat'] = pd.to_numeric(Line_Flow['to_lat'])
-
     Line_Flow = Line_Flow[Line_Flow['period'] == Year]
     Line_Flow = Line_Flow[Line_Flow['scenario'] == Scenario]
 
@@ -264,20 +259,83 @@ def transmission_plot(df, scenario, year, title):
     fig.layout.autosize = True
     return fig
 
-def render_plot(type, df, scenarios, year):
+def render_plot(type, df, scenarios, year, line):
     from profiles.copper_output.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
+    print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Flow']['Map Plot']
         return transmission_plot(df, scenarios, year, plot_info['title'])
-    if type == 'Bar Plot':
+    if type == 'Per Line Bar Plot':
         plot_info = plot_settings['Transmission Flow']['Bar Plot']
         df = df.copy()
         df['region'] = df['short_region'] + '<br>-><br>' + df['short_variable']
         df['variable'] = 'Flow'
         df = df.rename(columns={'period': 'time'})
         return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    if type == 'Per Year Bar Plot':
+        plot_info = plot_settings['Transmission Flow']['Year Plot']
+        df = df.copy()
+        df['region'] = df['short_region'] + ' -> ' + df['short_variable']
+        df['variable'] = 'Flow'
+        df = df.rename(columns={'period': 'time'})
+        return bar_over_years.plot(df, scenarios, line, False, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    if type == 'Trends Over Years':
+        plot_info = plot_settings['Transmission Flow']['Year Plot']
+
+        title = plot_info['title']
+        x_axis_label = plot_info['x_label']
+        y_axis_label = plot_info['y_label']
+
+        fig = go.Figure()
+        fig.update_layout(
+            title_text=title,
+            xaxis_title=x_axis_label,
+            yaxis_title=y_axis_label,
+            template="simple_white",
+        )
+
+        try:
+            df = df.copy()
+            df = df.rename(columns={'period': 'time'})
+            df_scen = df.copy(deep=True)
+            df_scen = df_scen[df_scen['scenario'] == scenarios]
+            df_scen['variable'] = df_scen['short_region'] + ' -> ' + df_scen['short_variable']
+            techs = df_scen.variable.unique().tolist()
+
+            for i, tech in enumerate(techs):
+                data = df_scen[df_scen["variable"] == tech]
+                data = data.sort_values(by=['time'])
+
+                color = utils.get_color(tech)
+
+                fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Scenario: {scenarios}<br>'  + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+
+            fig.update_yaxes(showgrid=True)
+            if df_scen.empty:
+                #print("No data available, since the results are all zero.")
+                fig.add_annotation(
+                    x=0.5,
+                    y=0.5,
+                    text="No data available, since the results are all zero.",
+                    showarrow=False,
+                    font=dict(
+                        size=16,
+                        color="black"
+                    ),
+                    align="center",
+                    valign="middle",
+                )
+
+        except Exception as e:
+            print(title, 'plot:', e)
+
+        fig.layout.autosize = True
+        return fig
+
+
 
 
 def plot(df, window_id):
@@ -289,15 +347,19 @@ def plot(df, window_id):
     '''
 
     scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
+    lines = (df['short_region'] + ' -> ' + df['short_variable']).unique().tolist()
     # make all years int
     years.sort()
 
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
+            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Per Line Bar Plot', 'Per Year Bar Plot', 'Trends Over Years']],
             value='Map Plot',
             id={
                 'type': 'copper-transmissionflow-plot-select',
@@ -325,6 +387,16 @@ def plot(df, window_id):
             style={'display': 'none'}
         ),
         dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value=[base_scenarios[0]],
+            id={
+                'type': 'copper-transmissionflow-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
             label='Year',
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
@@ -332,15 +404,33 @@ def plot(df, window_id):
                 'type': 'copper-transmissionflow-year-select',
                 'index': window_id
             },
-        )
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Line',
+            data=[{'label': line, 'value': line} for line in lines],
+            value=lines[0],
+            id={
+                'type': 'copper-transmissionflow-lines-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        ),
+
+        dmc.Button('Download Data', id={'type': 'copper-transmissionflow-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'copper-transmissionflow-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Map Plot', df, scenarios[0], years[0]),
+        figure=render_plot('Map Plot', df, scenarios[0], years[0], lines[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'copper_output',
+            'profile': 'copper',
             'viz': 'transmission_flow'
         },
         style={

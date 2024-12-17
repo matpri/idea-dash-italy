@@ -2,12 +2,13 @@ import dash
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.cef.visualization_scripts.generation_capacity import render_plot
+from components import ids
 
 
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
             'viz': 'gencap'
@@ -97,7 +98,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
             'viz': 'gencap'
@@ -145,7 +146,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Canada Energy Futures']['Capacity'].to_csv, "gencap.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):

@@ -41,9 +41,10 @@ def process_gencap(prov_df, canada_df, scenario_name):
     prov_df['region'] = prov_df['region'].map(utils.province_short).fillna(prov_df['region'])
     df = pd.concat([prov_df, canada_df])
 
-    # make value for any variable that contains retire negative
-    df.loc[df['variable'].str.contains("retire"), 'value'] = df.loc[df['variable'].str.contains("retire"), 'value'] * -1
-    df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+    # remove retire and Retire variables
+    df = df[~df['variable'].str.contains("retire")]
+    df = df[~df['variable'].str.contains("Retire")]
+    df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     df['value'] = df['value'].div(1000)
     df['scenario'] = scenario_name
     return df
@@ -57,10 +58,10 @@ def process_extant(gen_cap, path, scenario_name):
     extant = extant.drop(columns=['ABA'])
 
     extant = pd.melt(extant, id_vars=['region', 'variable'], var_name='time', value_name='value')
-    extant = extant.groupby(['region', 'variable', 'time']).sum().reset_index()
+    extant = extant.groupby(['region', 'variable', 'time', 'unit']).sum().reset_index()
 
     # add region Canada which is sum of all regions
-    extant_canada = extant.groupby(['variable', 'time']).sum().reset_index()
+    extant_canada = extant.groupby(['variable', 'time', 'unit']).sum().reset_index()
     extant_canada['region'] = 'CAN'
 
     # append to extant
@@ -70,7 +71,7 @@ def process_extant(gen_cap, path, scenario_name):
     # only keep time 2021
     extant = extant[extant['time'] == '2021']
     # aggregate
-    extant = extant.groupby(['region', 'variable', 'time']).sum().reset_index()
+    extant = extant.groupby(['region', 'variable', 'time', 'unit']).sum().reset_index()
 
     extant['value'] = extant['value'].div(1000)
 
@@ -89,10 +90,10 @@ def process_net_new_cap(gen_cap):
     Returns:
         pd.DataFrame: Processed net new capacity DataFrame.
     """
-    diff_df = pd.DataFrame(columns=['variable', 'region', 'scenario', 'time', 'value'])
+    diff_df = pd.DataFrame(columns=['variable', 'region', 'scenario', 'time', 'value', 'unit'])
 
     # Iterate over each unique combination of variable, region, and scenario
-    for name, group in gen_cap.groupby(['variable', 'region', 'scenario']):
+    for name, group in gen_cap.groupby(['variable', 'region', 'scenario', 'unit']):
         group = group.sort_values(by='time')
         group['value'] = group['value'].diff().fillna(0)  # Calculate the difference over time
         diff_df = pd.concat([diff_df, group])
@@ -116,7 +117,7 @@ def process(dbs: dict):
         df = db.copy()
         prov_df = df[df.variable.str.startswith("Total Capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
-        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        canada_df = prov_df.groupby(['time', 'scenario', 'variable', 'unit']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))

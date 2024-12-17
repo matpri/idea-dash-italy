@@ -1,0 +1,299 @@
+Emissions:
+  name: Emissions
+  unit: MtCO2eq
+  By Year:
+    title: Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Trend Over Years:
+    title: Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Pie Chart:
+    title: Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Emissions by Region
+    x_label: Region
+    y_label: Emissions (MtCO2eq)
+Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+New Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Trend Over Years:
+    title: New Capacity by Year
+    x_label: Year
+    y_label: New Capacity (GW)
+  Pie Chart:
+    title: New Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: New Capacity by Region
+    x_label: Region
+    y_label: New Capacity (GW)
+Net New Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: Net New Capacity by Year
+    x_label: Year
+    y_label: Net New Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Net New Capacity (GW)
+  Pie Chart:
+    title: Net New Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Net New Capacity by Region
+    x_label: Region
+    y_label: Net New Capacity (GW)
+Qualifying Capacity:
+  name: Qualifying Capacity
+  unit: GW
+  By Year:
+    title: Qualifying Capacity by Year
+    x_label: Year
+    y_label: Qualifying Capacity (GW)
+  Trend Over Years:
+    title: Qualifying Capacity by Year
+    x_label: Year
+    y_label: Qualifying Capacity (GW)
+  Pie Chart:
+    title: Qualifying Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Qualifying Capacity by Region
+    x_label: Region
+    y_label: Qualifying Capacity (GW)
+Supply:
+    name: Supply
+    unit: TWh
+    By Year:
+        title: Supply by Year
+        x_label: Year
+        y_label: Supply (TWh)
+
+    Trend Over Years:
+        title: Supply by Year
+        x_label: Year
+        y_label:  Supply (TWh)
+    Pie Chart:
+        title: Supply
+        x_label:
+        y_label:
+    By Region:
+        title: Supply by Region
+        x_label: Region
+        y_label: Supply (TWh)
+Transmission Capacity:
+  name: Transmission Capacity
+  unit: Capacity (GW)
+  Map Plot:
+    title: Transmission Capacity by Line
+    x_label:
+    y_label:
+  Bar Plot:
+    title: Transmission Capacity by Line
+    x_label: Line
+    y_label: Capacity (GW)
+  Year Plot:
+    title: Transmission Flow by Year
+    x_label: Years
+    y_label: Flow (GW)
+Transmission Flow:
+  name: Transmission Flow
+  unit: Flow (GW)
+  Map Plot:
+    title: Transmission Flow by Line
+    x_label:
+    y_label:
+  Bar Plot:
+    title: Transmission Flow by Line
+    x_label: Line
+    y_label: Flow (GW)
+  Year Plot:
+    title: Transmission Flow by Year
+    x_label: Years
+    y_label: Flow (GW)
+Total Cost:
+  name: Cost
+  unit: Billion $
+  By Year:
+    title: Total Cost by Year
+    x_label: Year
+    y_label: Total Cost (Billion $)
+  Trend Over Years:
+    title: Total Cost by Year
+    x_label: Year
+    y_label: Total Cost (Billion $)
+  Pie Chart:
+    title: Total Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Total Cost by Region
+    x_label: Region
+    y_label: Total Cost (Billion $)
+Capacity Cost:
+  name: Cost
+  unit: Billion $
+  By Year:
+    title: Capacity Cost by Year
+    x_label: Year
+    y_label: Capacity Cost (Billion $)
+  Trend Over Years:
+    title: Capacity Cost by Year
+    x_label: Year
+    y_label: Capacity Cost (Billion $)
+  Pie Chart:
+    title: Capacity Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity Cost by Region
+    x_label: Region
+    y_label: Capacity Cost (Billion $)
+FOM Cost:
+  name: Cost
+  unit: Billion $
+  By Year:
+    title: Fixed O&M Cost by Year
+    x_label: Year
+    y_label: Fixed O&M Cost (Billion $)
+  Trend Over Years:
+    title: Fixed O&M Cost by Year
+    x_label: Year
+    y_label: Fixed O&M Cost (Billion $)
+  Pie Chart:
+    title: Fixed O&M Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Fixed O&M Cost by Region
+    x_label: Region
+    y_label: Fixed O&M Cost (Billion $)
+VOM Cost:
+  name: Cost
+  unit: Billion $
+  By Year:
+      title: Variable O&M Cost by Year
+      x_label: Year
+      y_label: Variable O&M Cost (Billion $)
+
+  Trend Over Years:
+      title: Variable O&M Cost by Year
+      x_label: Year
+      y_label:  Variable O&M Cost (Billion $)
+  Pie Chart:
+      title: Variable O&M Cost
+      x_label:
+      y_label:
+  By Region:
+      title: Variable O&M Cost by Region
+      x_label: Region
+      y_label: Variable O&M Cost (Billion $)
+Dispatch:
+  Dispatched Electricity:
+    title: Dispatched Electricity by Year
+    x_label: Year
+    y_label: Dispatched Electricity (TWh)
+  Exported Electricity:
+    title: Exported Electricity by Year
+    x_label: Year
+    y_label: Exported Electricity (TWh)
+Overview:
+  Capacity:
+    name: Capacity
+    unit: GW
+    title: Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  New Capacity:
+    name: New Capacity
+    unit: GW
+    title: New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Net New Capacity:
+    name: Net New Capacity
+    unit: GW
+    title: Net New Capacity
+    x_label: Year
+    y_label: Capacity (GW)
+  Qualifying Capacity:
+    name: Qualifying Capacity
+    unit: GW
+    title: Qualifying Capacity
+    x_label: Year
+    y_label: Qualifying Capacity (GW)
+  Emissions:
+    name: Emissions
+    unit: MtCO2eq
+    title: Emissions
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Supply:
+    name: Supply
+    unit: TWh
+    title: Supply
+    x_label: Year
+    y_label: Supply (TWh)
+  Total Cost:
+    name: Cost
+    unit: Billion $
+    title: Total Cost
+    x_label: Year
+    y_label: Total Cost (Billion $)
+  Capacity Cost:
+    name: Cost
+    unit: Billion $
+    title: Capacity Cost
+    x_label: Year
+    y_label: Capacity Cost (Billion $)
+  FOM Cost:
+    name: Cost
+    unit: Million $
+    title: Fixed O&M Cost
+    x_label: Year
+    y_label: Fixed O&M Cost (Million $)
+  VOM Cost:
+      name: Cost
+      unit: Million $
+      title: Variable O&M Cost
+      x_label: Year
+      y_label: Variable O&M Cost (Million $)
+
+
+
+
+
+
+

@@ -124,6 +124,10 @@ Transmission Capacity:
     title: Transmission Capacity by Line
     x_label: Line
     y_label: Capacity (GW)
+  Year Plot:
+    title: Transmission Flow by Year
+    x_label: Years
+    y_label: Flow (GW)
 Transmission Flow:
   name: Transmission Flow
   unit: Flow (GW)
@@ -134,6 +138,10 @@ Transmission Flow:
   Bar Plot:
     title: Transmission Flow by Line
     x_label: Line
+    y_label: Flow (GW)
+  Year Plot:
+    title: Transmission Flow by Year
+    x_label: Years
     y_label: Flow (GW)
 Total Cost:
   name: Cost
@@ -175,15 +183,15 @@ Capacity Cost:
     y_label: Capacity Cost (Billion $)
 FOM Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
     title: Fixed O&M Cost by Year
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   Trend Over Years:
     title: Fixed O&M Cost by Year
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   Pie Chart:
     title: Fixed O&M Cost
     x_label:
@@ -191,19 +199,19 @@ FOM Cost:
   By Region:
     title: Fixed O&M Cost by Region
     x_label: Region
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
 VOM Cost:
   name: Cost
-  unit: Million $
+  unit: Billion $
   By Year:
       title: Variable O&M Cost by Year
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 
   Trend Over Years:
       title: Variable O&M Cost by Year
       x_label: Year
-      y_label:  Variable O&M Cost (Million $)
+      y_label:  Variable O&M Cost (Billion $)
   Pie Chart:
       title: Variable O&M Cost
       x_label:
@@ -211,7 +219,7 @@ VOM Cost:
   By Region:
       title: Variable O&M Cost by Region
       x_label: Region
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 Dispatch:
   Dispatched Electricity:
     title: Dispatched Electricity by Year
@@ -269,13 +277,13 @@ Overview:
     unit: Million $
     title: Fixed O&M Cost
     x_label: Year
-    y_label: Fixed O&M Cost (Million $)
+    y_label: Fixed O&M Cost (Billion $)
   VOM Cost:
       name: Cost
       unit: Million $
       title: Variable O&M Cost
       x_label: Year
-      y_label: Variable O&M Cost (Million $)
+      y_label: Variable O&M Cost (Billion $)
 
 
 

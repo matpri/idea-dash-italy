@@ -15,7 +15,7 @@ def check(df):
     """
     #print("Checking for gen cap in variable column")
     try:
-        if (df.model == 'NATEM-POWER').any():
+        if (df.model == 'NATEM_Canad').any():
             if df.variable.str.startswith("Total generation capacity").any():
                 return True
         return False

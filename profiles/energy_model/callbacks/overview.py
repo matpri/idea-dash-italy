@@ -3,11 +3,11 @@ from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.overview import render_plot
 
-
+from components import ids
 def link(app):
     @app.callback(
         Output({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'overview'
@@ -52,7 +52,7 @@ def link(app):
             'index': ALL
         }, 'n_clicks'),
         State({
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': ALL,
             'profile': 'energy_model',
             'viz': 'overview'
@@ -84,7 +84,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Overview'].to_csv,
                                              "overview.csv")
-            return _canvas, _data,
+            return _canvas, _data, _fillswitch
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -96,13 +96,14 @@ def link(app):
         #print('idx:', idx, 'plot type:', _p_type[idx])
         _groupby_model = _groupby[idx] == 1
         _groupby_scenario = _groupby[idx] == 2
+        _groupby_version = _groupby[idx] == 3
 
         df = data_handler.processed_data['Power System Models']['Overview']
         if _scenarios[idx] != 'ALL':
             df = df[df['scenario'].str.contains(_scenarios[idx])]
 
         _canvas[idx] = render_plot(_p_type[idx], df,
-                                   _groupby_model, _groupby_scenario, _region[idx]=='CAN', _fill[idx])
+                                   _groupby_model, _groupby_scenario, _groupby_version, _region[idx]=='CAN', _fill[idx])
 
         _fillswitch[idx] = {'display': 'none'}
         if _groupby[idx] > 0:

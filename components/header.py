@@ -5,39 +5,29 @@ from components import ids
 
 HEIGHT = 40
 
+
 def render(app):
+    buttons = [
+        # logo from ./assets/logo.png
+        dcc.Link(
+            html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT),
+            href='/',
+        ),
+        # buttons
+        dmc.Button(
+            'Load Data',
+            variant='subtle',
+            id={'type': ids.OPEN_MODAL, 'index': 'data'}
+        ),
+    ]
     layout = html.Div(
         children=[
             dmc.Header(
                 [
-                    dmc.Group([
-                        # logo from ./assets/logo.png
-                        dcc.Link(
-                            html.Img(src='/assets/logo.png', alt='IDEA', className=ids.LOGO, height=HEIGHT),
-                            href='/',
-                        ),
-                        # buttons
-                        dmc.Button(
-                            'Load Data',
-                            variant='subtle',
-                            id={'type': 'open-modal', 'index': 'data'}
-                        ),
-                        dmc.Button(
-                            'Help',
-                            variant='subtle',
-                            id={'type': 'open-modal', 'index': 'help'}
-                        ),
-                        # dmc.Button(
-                        #     'Contact',
-                        #     variant='subtle',
-                        #     id=ids.CONTACT_MENU
-                        # ),
-                    ], spacing=1)
+                    dmc.Group(buttons, spacing=1)
                 ], height=HEIGHT, id=ids.HEADER
             ),
         ],
     )
-
-
 
     return layout

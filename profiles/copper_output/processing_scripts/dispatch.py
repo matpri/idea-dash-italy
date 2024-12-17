@@ -39,7 +39,7 @@ def aggregate_db(db, scenario):
     Returns:
         pd.DataFrame: Aggregated DataFrame.
     """
-    db.drop(columns=['model', "unit"], inplace=True, errors='ignore')
+    db.drop(columns=['model'], inplace=True, errors='ignore')
 
     db['region'] = db['region'].astype(str)
     db['variable'] = db['variable'].astype(str)
@@ -52,17 +52,21 @@ def aggregate_db(db, scenario):
 
     transmission_df = db[classes == 'Flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+
+    # flip region and variable
+    transmission_df['region'], transmission_df['variable'] = transmission_df['variable'], transmission_df['region']
+
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
     # aggregate df values by region, variable, time, hour
-    transmission_df = transmission_df.groupby(["region", "variable", "time"]).sum().reset_index()
+    transmission_df = transmission_df.groupby(["region", "variable", "time", 'unit']).sum().reset_index()
     # rename from and variable based on utils.province_short
     transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
     transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
     # create a dataframe where the region and variable are swapped and the value is -1* the value
     transmission_df_swap = transmission_df.copy()
-    transmission_df_swap["region"] = transmission_df["variable"]
-    transmission_df_swap["variable"] = transmission_df["region"]
-    transmission_df_swap["value"] = -1 * transmission_df["value"]
+    # transmission_df_swap["region"] = transmission_df["variable"]
+    # transmission_df_swap["variable"] = transmission_df["region"]
+    # transmission_df_swap["value"] = -1 * transmission_df["value"]
 
     transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
     transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
@@ -92,7 +96,7 @@ def aggregate_db(db, scenario):
     agg_df["region"] = agg_df.region.apply(lambda x: x[:2].upper())
 
     # sum up same variable, time, hour, region
-    agg_df = agg_df.groupby(["variable", "time", "region"]).sum(numeric_only=True).reset_index()
+    agg_df = agg_df.groupby(["variable", "time", "region", 'unit']).sum(numeric_only=True).reset_index()
 
     # value MW to GW
     agg_df["value"] = agg_df.value.apply(lambda x: x * 1e-6)
@@ -127,7 +131,7 @@ def process(selected):
     for scenario, db in selected.items():
         dfs.append(aggregate_db(db, scenario))
     full_data =  pd.concat(dfs)
-    can_data = full_data.groupby(["variable", "time", 'period', "scenario"]).sum(numeric_only=True).reset_index()
+    can_data = full_data.groupby(["variable", "time", 'period', "scenario", 'unit']).sum(numeric_only=True).reset_index()
     can_data["region"] = "CAN"
 
     # make period column just the year

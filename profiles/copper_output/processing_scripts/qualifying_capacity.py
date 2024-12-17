@@ -41,7 +41,7 @@ def process_qual_cap(winter_df, summer_df, scenario_name):
     winter_df['region'] = winter_df['region'].map(utils.province_short).fillna(winter_df['region'])
     winter_df['region'] = winter_df['region'].apply(lambda x: x[:2].upper())
 
-    can_winter_df = winter_df.groupby(['variable', 'region', 'time']).sum().reset_index()
+    can_winter_df = winter_df.groupby(['variable', 'region', 'time', 'unit']).sum().reset_index()
     can_winter_df['region'] = 'CAN'
     winter_df = pd.concat([winter_df, can_winter_df])
 
@@ -49,7 +49,7 @@ def process_qual_cap(winter_df, summer_df, scenario_name):
     summer_df['region'] = summer_df['region'].map(utils.province_short).fillna(summer_df['region'])
     summer_df['region'] = summer_df['region'].apply(lambda x: x[:2].upper())
 
-    can_summer_df = summer_df.groupby(['variable', 'region', 'time']).sum().reset_index()
+    can_summer_df = summer_df.groupby(['variable', 'region', 'time', 'unit']).sum().reset_index()
     can_summer_df['region'] = 'CAN'
     summer_df = pd.concat([summer_df, can_summer_df])
 
@@ -62,6 +62,7 @@ def process_qual_cap(winter_df, summer_df, scenario_name):
 
     # df = df[df['value'] != 0]
     df = df[~df['variable'].str.contains('retire')]
+    df = df[~df['variable'].str.contains('Retire')]
     df['value'] = df.value.div(1000)
     return df
 

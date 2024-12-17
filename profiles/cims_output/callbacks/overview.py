@@ -1,70 +1,90 @@
 import dash
 from dash import Output, Input, State, ALL, dcc
 
-from profiles.cims_output.visualization_scripts.overview import render_plot
+from profiles.cims_output.callbacks import ghg, stock_lcc, requested_quantities
+from components import ids
 
 
 def link(app):
+    ghg.link(app)
+    stock_lcc.link(app)
+    requested_quantities.link(app)
+
     @app.callback(
         Output({
-            'type': 'figure',
-            'index': ALL,
-            'profile': 'cims_output',
-            'viz': 'overview'
-        }, 'figure'),
-
-        Output({
-            'type': 'cims-overview-download',
+            'type': 'cims-overview-stocks',
             'index': ALL
-        }, 'data'),
-        Input({
-            'type': 'cims-overview-plot-select',
+        }, 'style'),
+        Output({
+            'type': 'cims-overview-demand',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'cims-overview-emissions',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'cims-stocks-update',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'cims-demand-update',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'cims-emissions-update',
             'index': ALL
         }, 'value'),
         Input({
-            'type': 'cims-overview-download-button',
+            'type': 'cims-overview-tabs-select',
             'index': ALL
-        }, 'n_clicks'),
+        }, 'value'),
         State({
-            'type': 'figure',
-            'index': ALL,
-            'profile': 'cims_output',
-            'viz': 'overview'
-        }, 'figure'),
-
-        State({
-            'type': 'cims-overview-download',
+            'type': 'cims-overview-stocks',
             'index': ALL
-        }, 'data'),
-
+        }, 'style'),
+        State({
+            'type': 'cims-overview-demand',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'cims-overview-emissions',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'cims-stocks-update',
+            'index': ALL
+        }, 'value'),
+        State({
+            'type': 'cims-demand-update',
+            'index': ALL
+        }, 'value'),
+        State({
+            'type': 'cims-emissions-update',
+            'index': ALL
+        }, 'value'),
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _download, _canvas, _data):
-        #print('updating overview plot')
+    def update_overview(_p_type, _stocks_style, _demand_style, _emissions_style, _stocks_update, _demand_update, _emissions_update):
+        # print('updating overview plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        if 'cims-overview-download-button' in trigger_id['type']:
-            idx = 0
-            for i, id in enumerate(ctx.inputs_list[0]):
-                if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'cims-overview-download-button')):
-                    idx = i
-                    break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['CIMS Output']['Overview'].to_csv,
-                                             "overview.csv")
-            return _canvas, _data,
-
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
             if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'cims-overview-plot-select')):
+                    ((id['id']['type'] == 'cims-overview-tabs-select'))
+            ):
                 idx = i
                 break
 
-        #print('idx:', idx, 'plot type:', _p_type[idx])
+        _stocks_style[idx] = {'display': 'block'} if _p_type[idx] == 'Technology Stocks' else {'display': 'none'}
+        _demand_style[idx] = {'display': 'block'} if _p_type[idx] == 'Energy Demand' else {'display': 'none'}
+        _emissions_style[idx] = {'display': 'block'} if _p_type[idx] == 'Emissions' else {'display': 'none'}
 
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['CIMS Output']['Overview'])
+        _stocks_update[idx] = not _stocks_update[idx] if _p_type[idx] == 'Technology Stocks' else dash.no_update
+        _demand_update[idx] = not _demand_update[idx] if _p_type[idx] == 'Energy Demand' else dash.no_update
+        _emissions_update[idx] = not _emissions_update[idx] if _p_type[idx] == 'Emissions' else dash.no_update
 
-        return _canvas, [dash.no_update for _ in _data]
+        return _stocks_style, _demand_style, _emissions_style, _stocks_update, _demand_update, _emissions_update

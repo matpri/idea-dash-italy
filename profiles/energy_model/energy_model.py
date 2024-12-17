@@ -10,6 +10,7 @@ from profiles.base_profile.base_profile import BaseProfile
 from profiles.energy_model import utils
 from profiles.energy_model.callbacks import (
     overview as overview_callbacks,
+    output_stats as output_stats_callbacks,
     matrix as matrix_callbacks,
     emissions as emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
@@ -24,12 +25,12 @@ from profiles.energy_model.callbacks import (
     transmission_capacity as transmission_capacity_callbacks,
     transmission_flow as transmission_flow_callbacks,
     comparison as comparison_callbacks,
-    heatmap as heatmap_callbacks,
     settings as settings_callbacks
 
 )
 from profiles.energy_model.processing_scripts import (
     overview as overview_processing,
+    output_stats as output_stats_processing,
     matrix as matrix_processing,
     emissions as emissions_processing,
     generation_capacity as generation_capacity_processing,
@@ -46,6 +47,7 @@ from profiles.energy_model.processing_scripts import (
 )
 from profiles.energy_model.visualization_scripts import (
     overview as overview_viz,
+    output_stats as output_stats_viz,
     matrix as matrix_viz,
     emissions as emissions_viz,
     generation_capacity as generation_capacity_viz,
@@ -60,14 +62,14 @@ from profiles.energy_model.visualization_scripts import (
     transmission_capacity as transmission_capacity_viz,
     transmission_flow as transmission_flow_viz,
     comparison as comparison_viz,
-    heatmap as heatmap_viz
 )
 
-power_system_models = ['COPPER Output', 'ECCC-NextGrid Output', 'NATEM-POWER Output', 'HEC-PITHOS Output',
-                       'NRCan-PyPsa Output', 'PyPSA_CAN Output', 'Sutubra-TEMOA Output', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
 
 
 class energy_modelsOutput(BaseProfile):
+    display_name = 'Power System Models'
     name = 'Power System Models'
     db_name = 'energy_models'
     color = 'yellow 8'
@@ -77,7 +79,7 @@ class energy_modelsOutput(BaseProfile):
 
     plot_order = [
         'Overview',
-        'Heatmap',
+        'Output Stats',
         'Comparison',
         'Comparison Matrix',
         'Emissions',
@@ -104,19 +106,19 @@ class energy_modelsOutput(BaseProfile):
                 'viz': overview_viz.plot,
                 'callback': overview_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
-
             },
-        'Heatmap':
+        'Output Stats':
             {
                 'check': overview_processing.check,
                 'db_check': overview_processing.check,
                 'process': overview_processing.process,
                 'db_process': overview_processing.process,
-                'viz': heatmap_viz.plot,
-                'callback': heatmap_callbacks.link,
-                'description': 'Line plots for a variety of variables, overviewing main results across scenarios & models.'
+                'viz': output_stats_viz.plot,
+                'callback': output_stats_callbacks.link,
+                'description': 'Output statistics of the model.'
 
             },
+
         'Comparison':
             {
                 'check': matrix_processing.check,
@@ -271,14 +273,16 @@ class energy_modelsOutput(BaseProfile):
 
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
+
         for profile, viz_option, df in data_collection:
             print(profile, viz_option)
             if (profile in power_system_models and viz_option not in ['Comparison',
                                                                       'Comparison Matrix'] and viz_option in self.viz_options):
 
                 data = df.copy()
+                data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
                 data['scenario'] = profile + '|' + data['scenario']
-                if not viz_option in ['Overview', 'Transmission Capacity', 'Transmission Flow']:
+                if not viz_option in ['Overview', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
                     unique_regions = set(data['region'].unique())
 
                     # Check if both 'A' and 'B' are in the unique values
@@ -309,8 +313,60 @@ class energy_modelsOutput(BaseProfile):
                     data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
                 processed_data[viz_option].append(data)
 
-        processed_data['Heatmap'] = processed_data['Overview'].copy()
-        results = [(self.name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
+        output_stats = []
+
+        if 'Overview' in processed_data:
+            for p_data in processed_data['Overview']:
+                for c in p_data.variable.unique():
+                    if c in self.viz_options:
+                        data = p_data[p_data.variable == c]
+                        # if net new capacity make cumsum of value based on time column
+                        if 'Net New Capacity' in c or 'New Capacity' in c:
+                            data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
+                        output_stats.append(data)
+
+        min_days = []
+        max_days = []
+        for model, plot_type, df in data_collection:
+            if model in power_system_models:
+                if plot_type == 'Dispatch':
+                    dispatch_data = df[(df.region == 'CAN')].copy()
+                    dispatch_data['time'] = pd.to_datetime(dispatch_data['time'])
+                    dispatch_data['scenario'] = model + '|' + dispatch_data['scenario']
+                    if 'version' in dispatch_data.columns:
+                        dispatch_data['scenario'] = dispatch_data['scenario'] + '|' + dispatch_data['version']
+                        dispatch_data = dispatch_data.drop(columns=['version'])
+
+                    # make date day-month-year
+                    dispatch_data['time'] = dispatch_data['time'].dt.strftime('%d-%m-%Y')
+                    columns = ['scenario', 'time', 'variable', 'region', 'period']
+                    dispatch_data = dispatch_data.groupby(columns).sum().reset_index()
+
+                    for year in dispatch_data['period'].unique():
+                        year_dispatch_data = dispatch_data[dispatch_data['period'] == year]
+                        for scenario in year_dispatch_data['scenario'].unique():
+                            scen_dispatch_data = year_dispatch_data[year_dispatch_data['scenario'] == scenario]
+                            # find date where value is min and max
+                            min_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].min()]
+                            min_day['variable'] = 'Min Dispatch'
+                            min_day['date'] = min_day['time']
+                            min_day['time'] = year
+
+
+                            max_day = scen_dispatch_data[scen_dispatch_data['value'] == scen_dispatch_data['value'].max()]
+                            max_day['variable'] = 'Max Dispatch'
+                            max_day['date'] = max_day['time']
+                            max_day['time'] = year
+
+                            min_days.append(min_day)
+                            max_days.append(max_day)
+
+        output_stats += min_days + max_days
+
+        if len(output_stats) > 0:
+            processed_data['Output Stats'] = output_stats
+
+        results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
         dfs = []
         for _, viz_option, df in results:
@@ -321,7 +377,7 @@ class energy_modelsOutput(BaseProfile):
         if len(dfs) > 0:
             full_df = pd.concat(dfs)
 
-            results.extend([(self.name, 'Comparison', full_df), (self.name, 'Comparison Matrix', full_df)])
+            results.extend([(self.display_name, 'Comparison', full_df), (self.display_name, 'Comparison Matrix', full_df)])
 
             return results
 

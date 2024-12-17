@@ -6,15 +6,22 @@ from components.plot_window import tabs
 
 
 def render():
+    """
+    Render a new plot window with tabs.
+
+    This function creates a new card for the plot window and initializes
+    the layout with tabs for visualizations.
+
+    Returns:
+    - The layout of the plot window.
+    """
     card_id = f'card-{len(ids.card_ids)}'
     ids.card_ids += [card_id]
 
     layout = dlc.Widget(
         html.Div(
-        tabs.render(card_id),
-        style={'height': '100%',
-               'width': '100%',}
-
+            tabs.render(card_id),
+            style={'height': '100%', 'width': '100%'}
         ),
         id=card_id,
         title='',

@@ -1,14 +1,15 @@
 import dash_mantine_components as dmc
 import pandas as pd
 from dash import html, dcc
-
+from components import ids
 import plotly.graph_objects as go
 import plotly.express as px
 import numpy as np
 import geojson
 
-from profiles.temoa_output.visualization_scripts.utils import bar_over_regions
 from profiles.temoa_output import utils
+from profiles.temoa_output.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years
+
 
 def aggregate_lines(df):
     sum_values = df.groupby(['line', 'start', 'end'])["value"].sum().reset_index()
@@ -46,17 +47,13 @@ def aggregate_lines(df):
     return df
 
 
-def year_subset(Line_Flow, Year, Scenario):
-    Line_Flow['from_lon'] = pd.to_numeric(Line_Flow['from_lon'])
-    Line_Flow['from_lat'] = pd.to_numeric(Line_Flow['from_lat'])
-    Line_Flow['to_lon'] = pd.to_numeric(Line_Flow['to_lon'])
-    Line_Flow['to_lat'] = pd.to_numeric(Line_Flow['to_lat'])
-    Line_Flow = Line_Flow[Line_Flow['scenario'] == Scenario]
-    Line_Flow = Line_Flow[Line_Flow['period'] == Year]
+def year_subset(Line_Capacity, Year, Scenario):
+    Line_Capacity = Line_Capacity[Line_Capacity['period'] == Year]
+    Line_Capacity = Line_Capacity[Line_Capacity['scenario'] == Scenario]
 
-    # Line_Flow = aggregate_lines(Line_Flow)
-    Line_Flow = Line_Flow[Line_Flow['value'] != 0]
-    return Line_Flow
+    # Line_Capacity = aggregate_lines(Line_Capacity)
+    Line_Capacity = Line_Capacity[Line_Capacity['value'] != 0]
+    return Line_Capacity
 
 
 def add_arrow(fig, df: pd.DataFrame, cfunc, group=None, year=None, scenario=None):
@@ -145,13 +142,17 @@ def to_color_plotly(min_value):
     return func
 
 def transmission_plot(df, scenario, year, title):
+    df = df[df['scenario'] == scenario]
+    max_value = df['value'].max()
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
+    df['norm_value'] = df['value'] / max_value
+    df['norm_value'] = df['norm_value'].fillna(0)
+
+    colorfunc = to_color_plotly(df['norm_value'].min())
 
     min_value = df['value'].min()
     max_value = df['value'].max()
     df = year_subset(df, year, scenario)
-
-    # round value, total, cumsum to 2 decimal places
     df['value'] = df['value'].round(2)
 
     if df.empty:
@@ -175,13 +176,22 @@ def transmission_plot(df, scenario, year, title):
         fig.layout.autosize = True
         return fig
 
-
-    with open('profiles/temoa_output/visualization_scripts/utils/canada.geojson') as f:
+    with open('./profiles/temoa_output/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('profiles/temoa_output/visualization_scripts/utils/arrows.geojson') as f:
+    with open('./profiles/temoa_output/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
+    line_colors = {}
+    for i, row in df.iterrows():
+        line_colors[f'{row.short_region} -> {row.short_variable}'] = colorfunc(row['norm_value'])
+
+    # create data frame with columns line and color
+    line_colors_df = pd.DataFrame(list(line_colors.items()), columns=['line', 'color'])
+
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
+    # ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
+    #        'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',
+    #        'Nunavut']
 
     fig_base = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
@@ -195,21 +205,23 @@ def transmission_plot(df, scenario, year, title):
     )
     for area in fig_base.data:
         area.showlegend = False  # turn off legend
-        df_region = df[df['region'] == area.name]
-        df_region = df_region[df_region['value'] != 0]
+        # df_region = df[df['region'] == area.name]
+        # df_region = df_region[df_region['value'] != 0]
         template = f'{area.name}<extra></extra>'
+        # for index, row in df_region.iterrows():
+        #     template += f'{row["short_region"]} -> {row["short_variable"]}: {row["total"]} GWh <br>'
+        # template += '<extra></extra>'
         area.update(hovertemplate=template)
     fig_base.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
-    fig = go.Figure(
-        data=fig_base.data,
-        layout=go.Layout(
-        )
-    )
+    fig = go.Figure(data=fig_base.data,
+                    layout=go.Layout(
+                        title=go.layout.Title(text=title),
+                    )
+                    )
+
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
-        str) + '<br>' + 'Total Capacity: ' + df['value'].astype(str) + ' GW <br>' #+ \
-        #          'New Capacity: ' + df['value'].astype(str) + ' GW <br>' + 'Total Capacity: ' + df['total'].astype(
-        # str) + " GW"
+        str) + '<br>' + 'Capacity: ' + df['value'].astype(str) + ' GWh'
 
     fig_overlay = go.Figure(
         data=go.Choropleth(
@@ -221,20 +233,25 @@ def transmission_plot(df, scenario, year, title):
             zmin=min_value,
             zmax=max_value,
             text=df['text'],
+
         )
     )
+
     fig_overlay.update_traces(coloraxis="coloraxis2")
     fig_overlay.update_layout(margin=dict(l=0, r=0, t=0, b=0))
+
     fig.add_traces(fig_overlay.data)
 
-    fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.9),
+    fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.7),
                                       # set colorscale
-                                      colorscale='GnBu', colorbar_title='Transmission Capacity (GW)'))
+                                      colorscale='GnBu', colorbar_title='Transmission Capacity (GWh)'))
     fig.update_geos(showcountries=False, showcoastlines=False, showland=False, fitbounds="locations", showlakes=False,
                     showrivers=False,
                     subunitcolor='white')
 
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0}, )
+    #print(f"The title is: {title}")
+    fig.update_layout(title=title)
     fig.update_geos(projection_type="orthographic")
     # remove box around plot
     fig.update_layout(showlegend=False)
@@ -242,20 +259,82 @@ def transmission_plot(df, scenario, year, title):
     fig.layout.autosize = True
     return fig
 
-def render_plot(type, df, scenarios, year):
+def render_plot(type, df, scenarios, year, line):
     from profiles.temoa_output.utils import plot_settings
     name = plot_settings['Transmission Capacity']['name']
     unit = plot_settings['Transmission Capacity']['unit']
+    print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Capacity']['Map Plot']
         return transmission_plot(df, scenarios, year, plot_info['title'])
-    if type == 'Bar Plot':
+    if type == 'Per Line Bar Plot':
         plot_info = plot_settings['Transmission Capacity']['Bar Plot']
         df = df.copy()
         df['region'] = df['short_region'] + '<br>-><br>' + df['short_variable']
         df['variable'] = 'Capacity'
         df = df.rename(columns={'period': 'time'})
         return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    if type == 'Per Year Bar Plot':
+        plot_info = plot_settings['Transmission Capacity']['Year Plot']
+        df = df.copy()
+        df['region'] = df['short_region'] + ' -> ' + df['short_variable']
+        df['variable'] = 'Capacity'
+        df = df.rename(columns={'period': 'time'})
+        return bar_over_years.plot(df, scenarios, line, False, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+    if type == 'Trends Over Years':
+        plot_info = plot_settings['Transmission Capacity']['Year Plot']
+
+        title = plot_info['title']
+        x_axis_label = plot_info['x_label']
+        y_axis_label = plot_info['y_label']
+
+        fig = go.Figure()
+        fig.update_layout(
+            title_text=title,
+            xaxis_title=x_axis_label,
+            yaxis_title=y_axis_label,
+            template="simple_white",
+        )
+
+        try:
+            df = df.copy()
+            df = df.rename(columns={'period': 'time'})
+            df_scen = df.copy(deep=True)
+            df_scen = df_scen[df_scen['scenario'] == scenarios]
+            df_scen['variable'] = df_scen['short_region'] + ' -> ' + df_scen['short_variable']
+            techs = df_scen.variable.unique().tolist()
+
+            for i, tech in enumerate(techs):
+                data = df_scen[df_scen["variable"] == tech]
+                data = data.sort_values(by=['time'])
+
+                color = utils.get_color(tech)
+
+                fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
+                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Scenario: {scenarios}<br>'  + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+
+            fig.update_yaxes(showgrid=True)
+            if df_scen.empty:
+                #print("No data available, since the results are all zero.")
+                fig.add_annotation(
+                    x=0.5,
+                    y=0.5,
+                    text="No data available, since the results are all zero.",
+                    showarrow=False,
+                    font=dict(
+                        size=16,
+                        color="black"
+                    ),
+                    align="center",
+                    valign="middle",
+                )
+
+        except Exception as e:
+            print(title, 'plot:', e)
+
+        fig.layout.autosize = True
+        return fig
+
 
 
 
@@ -266,16 +345,21 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
+
     scenarios = df['scenario'].unique().tolist()
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
+    lines = (df['short_region'] + ' -> ' + df['short_variable']).unique().tolist()
+    # make all years int
     years.sort()
-
 
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Bar Plot']],
+            data=[{'label': plot, 'value': plot} for plot in ['Map Plot', 'Per Line Bar Plot', 'Per Year Bar Plot', 'Trends Over Years']],
             value='Map Plot',
             id={
                 'type': 'temoa-transmissioncapacity-plot-select',
@@ -303,6 +387,16 @@ def plot(df, window_id):
             style={'display': 'none'}
         ),
         dmc.Select(
+            label='Scenario Group',
+            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+            value=[base_scenarios[0]],
+            id={
+                'type': 'temoa-transmissioncapacity-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
             label='Year',
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
@@ -310,15 +404,33 @@ def plot(df, window_id):
                 'type': 'temoa-transmissioncapacity-year-select',
                 'index': window_id
             },
-        )
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Line',
+            data=[{'label': line, 'value': line} for line in lines],
+            value=lines[0],
+            id={
+                'type': 'temoa-transmissioncapacity-lines-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
+        ),
+
+        dmc.Button('Download Data', id={'type': 'temoa-transmissioncapacity-download-button', 'index': window_id},
+                   variant='light',
+                   # center the button
+                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+        dcc.Download(id={'type': 'temoa-transmissioncapacity-download', 'index': window_id}),
+
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Map Plot', df, scenarios[0], years[0]),
+        figure=render_plot('Map Plot', df, scenarios[0], years[0], lines[0]),
         id={
-            'type': 'figure',
+            'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'temoa_output',
+            'profile': 'temoa',
             'viz': 'transmission_capacity'
         },
         style={
