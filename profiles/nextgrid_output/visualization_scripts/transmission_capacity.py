@@ -221,7 +221,7 @@ def transmission_plot(df, scenario, year, title):
                     )
 
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
-        str) + '<br>' + 'Capacity: ' + df['value'].astype(str) + ' GWh'
+        str) + '<br>' + 'Capacity: ' + df['value'].astype(str) + ' GW'
 
     fig_overlay = go.Figure(
         data=go.Choropleth(
@@ -244,7 +244,7 @@ def transmission_plot(df, scenario, year, title):
 
     fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.7),
                                       # set colorscale
-                                      colorscale='GnBu', colorbar_title='Transmission Capacity (GWh)'))
+                                      colorscale='GnBu', colorbar_title='Transmission Capacity (GW)'))
     fig.update_geos(showcountries=False, showcoastlines=False, showland=False, fitbounds="locations", showlakes=False,
                     showrivers=False,
                     subunitcolor='white')
