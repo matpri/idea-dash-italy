@@ -156,6 +156,8 @@ def link(app):
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
 
+        rep_switch_label = ''
+
         if plot_type == 'Energy Demand':
             rep_switch_label = 'By Fuel' if rep_switch else 'By Sector'
 

@@ -119,7 +119,7 @@ def process_represenation(df, representation, sector, service, fuel):
         if fuel != 'All':
             df = df[(df['context'] == fuel) & (df['sector'] != fuel)]
         filtered_df = df[(df['technology'].isna()) & ~df.sector.isna() & (
-                    df.short_path == df.sector)].groupby(
+                df.short_path == df.sector)].groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
         filtered_df = filtered_df[['region', 'sector', 'year', 'value_num', 'scenario']]
@@ -187,8 +187,9 @@ def widgets(df, window_id):
         if i == 0:
             by_service_widgets.append(dmc.Select(
                 label=f'Layer {i}',
-                data=[{'label': service, 'value': service} for service in df[f'layer_{i}'].unique().tolist()],
-                value=df[f'layer_{i}'].unique().tolist()[0],
+                data=[{'label': service, 'value': service} for service in
+                      df[df.sector == sectors[0]][f'layer_{i}'].unique().tolist()],
+                value=df[df.sector == sectors[0]][f'layer_{i}'].unique().tolist()[0],
                 id={
                     'type': f'cims-requested_quantities-service-select',
                     'index': window_id,
@@ -196,6 +197,23 @@ def widgets(df, window_id):
                 },
                 style={'display': 'none'}
             ))
+
+        elif i == 1:
+            by_service_widgets.append(dmc.Select(
+                label=f'Layer {i}',
+                data=[{'label': service, 'value': service} for service in df[(df.sector == sectors[0]) & (
+                            df.layer_0 == df[df.sector == sectors[0]]['layer_0'].unique().tolist()[0])][
+                    f'layer_{i}'].unique().tolist()],
+                value='',
+                id={
+                    'type': f'cims-requested_quantities-service-select',
+                    'index': window_id,
+                    'layer': i
+                },
+                style={'display': 'none'}
+            ))
+
+
         else:
             by_service_widgets.append(dmc.Select(
                 label=f'Layer {i}',
