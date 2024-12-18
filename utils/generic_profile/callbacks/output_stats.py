@@ -28,6 +28,12 @@ def link(app):
             'viz': 'output_stats'
         }, 'value'),
         Input({
+            'type': 'scenario-group-select',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'output_stats'
+        }, 'value'),
+        Input({
             'type': 'year-select',
             'index': ALL,
             'model': MATCH,
@@ -59,7 +65,7 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _years, _scenarios, _download, _canvas, _data):
+    def update_gencap_cost(_p_type, _scen_group, _years, _scenarios, _download, _canvas, _data):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -84,11 +90,23 @@ def link(app):
                 idx = i
                 break
 
+        df = data_handler.processed_data[model][name].copy()
+        if _scen_group is not None:
+            if len(_scen_group) > 0:
+                if _scen_group[idx] != 'ALL':
+                    df = df[(df['base_scenario'] == _scen_group[idx]) | (df.scenario.isin(_scenarios[idx]))]
+                else:
+                    df = df[df.scenario.isin(_scenarios[idx])]
+            else:
+                df = df[df.scenario.isin(_scenarios[idx])]
+        else:
+            df = df[df.scenario.isin(_scenarios[idx])]
+
         print('idx:', idx, 'plot type:', _years[idx])
         _canvas[idx] = render_plot(
             _p_type[idx],
-            data_handler.processed_data[model][name],
-            _years[idx], _scenarios[idx],
+            df,
+            _years[idx],
             model
         )
 

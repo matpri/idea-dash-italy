@@ -74,7 +74,7 @@ class GenericProfile:
             'db_check': lambda x: True,
             'process': lambda x: x,
             'db_process': lambda x: x,
-            'viz': output_stats.create_plot(name),
+            'viz': output_stats.create_plot(name, is_comparison=name == 'Generic Comparison'),
             'description': 'Table of output statistics for each scenario.'
         }
 

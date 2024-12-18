@@ -452,7 +452,7 @@ class DataHandler:
             full_df['base_scenario'] = full_df['scenario'].apply(lambda x: x.split('|')[1])
             full_df['time'] = full_df['time'].astype(int)
             self.processed_data['Generic Comparison']['Overview'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit']]
-            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit']]
 
         print("processed", self.processed_data)
 
