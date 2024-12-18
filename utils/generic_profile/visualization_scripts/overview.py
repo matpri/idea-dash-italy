@@ -52,7 +52,7 @@ def plot_overview(df, title, x_label, y_label, name, unit):
     return fig
 
 
-def create_overview_plot(model):
+def create_overview_plot(model, is_comparison=False):
     def plot(df, window_id):
         '''
 
@@ -63,6 +63,26 @@ def create_overview_plot(model):
         # print('plotting overview')
         classes = df['variable'].unique().tolist()
         units = df[df['variable'] == classes[0]]['unit'].unique().tolist()
+
+        comparison_widgets = []
+        if is_comparison:
+            base_scenarios = df['base_scenario'].unique().tolist()
+            base_scenarios = ['ALL'] + base_scenarios
+
+            comparison_widgets = [
+                dmc.Select(
+                    label='Scenario Group',
+                    data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+                    value='ALL',
+                    id={
+                        'type': 'scenario-group-select',
+                        'model': model,
+                        'index': window_id,
+                        'viz': 'overview'
+                    },
+                    style={'display': 'block'}
+                ),
+            ]
 
         widget_layout = html.Div([
             dmc.Select(
@@ -76,6 +96,9 @@ def create_overview_plot(model):
                     'viz': 'overview'
                 },
             ),
+
+            *comparison_widgets,
+
             dmc.Select(
                 label='Unit',
                 data=[{'label': unit, 'value': unit} for unit in units],

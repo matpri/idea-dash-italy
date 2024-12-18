@@ -65,7 +65,7 @@ class GenericProfile:
             'db_check': lambda x: True,
             'process': lambda x: x,
             'db_process': lambda x: x,
-            'viz': overview.create_overview_plot(name),
+            'viz': overview.create_overview_plot(name, is_comparison=name == 'Generic Comparison'),
             'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
         }
 
