@@ -5,7 +5,7 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 
 def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, variable, pattern_active=True,
-                text_active=False):
+                text_active=False, service='Agriculture'):
     from profiles.cims_output.utils import plot_settings
     df_plt = df[
         (df['plot'] == p_type)
@@ -14,7 +14,7 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
     name = plot_settings[p_type]['name']
     unit = plot_settings[p_type]['unit']
 
-    df_plt = process_represenation(p_type, by_rep, variable, df_plt)\
+    df_plt = process_represenation(p_type, by_rep, variable, df_plt, service)
 
     if p_type == 'Energy Demand':
         variable = 'Energy Demand'
@@ -39,11 +39,11 @@ def render_plot(df, p_type, r_type, by_rep, year, region, scenarios, scenario, v
                                      text_active=text_active)
 
 
-def process_represenation(p_type, by_rep, variable, df):
+def process_represenation(p_type, by_rep, variable, df, service):
     if p_type == 'Emissions':
         if by_rep:
             filtered_df = df[
-                (df.parameter == variable) & (df.short_path == df.sector)
+                (df.parameter == variable) & (df.short_path == service)
                 ]
 
             filtered_df['variable'] = filtered_df['sub_context'] + '|' + filtered_df['context']
@@ -68,7 +68,7 @@ def process_represenation(p_type, by_rep, variable, df):
         df = df[df['context'] != 'Total']
         if by_rep:
             filtered_df = df[
-                (df['technology'].isna()) & ~df.sector.isna() & (df.short_path == df.sector)
+                (df['technology'].isna()) & ~df.sector.isna() & (df.short_path == service)
             ]
             filtered_df = filtered_df[['region', 'context', 'year', 'value_num', 'scenario']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'context': 'variable', 'year': 'time'})
@@ -92,8 +92,57 @@ def plot(df, window_id):
     years = df_plt.year.unique().tolist()
     scenarios = df_plt.scenario.unique().tolist()
 
+    # get all columns with layer_ in the name
+    max_depth = df_plt.columns.str.contains('layer_').sum()
+
     variables = [] if plot_type == 'Energy Demand' else df_plt[
         'parameter'].unique().tolist()
+
+    by_service_widgets = []
+
+    for i in range(max_depth):
+        if i == 0:
+            by_service_widgets.append(dmc.Select(
+                label=f'Layer {i}',
+                data=[{'label': service, 'value': service} for service in
+                      df[f'layer_{i}'].unique().tolist()],
+                value=df[f'layer_{i}'].unique().tolist()[0],
+                id={
+                    'type': f'cims-agriculture-service-select',
+                    'index': window_id,
+                    'layer': i
+                },
+                style={'display': 'none'}
+            ))
+
+        elif i == 1:
+            by_service_widgets.append(dmc.Select(
+                label=f'Layer {i}',
+                data=[{'label': service, 'value': service} for service in df[(
+                        df.layer_0 == df['layer_0'].unique().tolist()[0])][
+                    f'layer_{i}'].unique().tolist()],
+                value='',
+                id={
+                    'type': f'cims-agriculture-service-select',
+                    'index': window_id,
+                    'layer': i
+                },
+                style={'display': 'none'}
+            ))
+
+
+        else:
+            by_service_widgets.append(dmc.Select(
+                label=f'Layer {i}',
+                data=[],
+                value='',
+                id={
+                    'type': 'cims-agriculture-service-select',
+                    'index': window_id,
+                    'layer': i
+                },
+                style={'display': 'none'}
+            ))
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -204,6 +253,7 @@ def plot(df, window_id):
             },
             style={'display': 'none'}
         ),
+        *by_service_widgets,
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'cims-agriculture-download-button', 'index': window_id},
@@ -215,7 +265,8 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot(
-            df, plot_type, 'By Year', False, years[0], regions[0], scenarios, scenarios[0], variables[0]
+            df, plot_type, 'By Year', False, years[0], regions[0], scenarios, scenarios[0], variables[0],
+            pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0]
         ),
         id={
             'type': 'figure',
