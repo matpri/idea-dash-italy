@@ -67,6 +67,15 @@ def link(app):
             },
             'style'
         ),
+        Output(
+            {
+                'type': 'generic-scenario-group-select',
+                'index': ALL,
+                'model': MATCH,
+                'name': MATCH
+            },
+            'style'
+        ),
         Input({
             'type': 'generic-plot-select',
             'index': ALL,
@@ -79,6 +88,12 @@ def link(app):
             'model': MATCH,
             'name': MATCH
         }, 'checked'),
+        Input({
+            'type': 'generic-scenario-group-select',
+            'index': ALL,
+            'model': MATCH,
+            'name': MATCH
+        }, 'value'),
         Input({
             'type': 'generic-scenario-multi-select',
             'index': ALL,
@@ -193,11 +208,20 @@ def link(app):
             },
             'style'
         ),
+        State(
+            {
+                'type': 'generic-scenario-group-select',
+                'index': ALL,
+                'model': MATCH,
+                'name': MATCH
+            },
+            'style'
+        ),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
+    def update_gencap_cost(_p_type, _aggregates, _group_scen, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
                            _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _pattern_style,
-                           _text_style):
+                           _text_style, _group_style):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -214,7 +238,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(
                 data_handler.processed_data[model][name].to_csv, f"{name}.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _u_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -228,6 +252,8 @@ def link(app):
         patterns = [profile.pattern_from_key(key) for key in _scenarios[idx]]
         print('patterns:', patterns)
 
+
+
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'block'}
@@ -236,6 +262,14 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            if _group_style is not None and len(_group_scen) > 0:
+                _group_style[idx] = {'display': 'block'}
+
+            df = data_handler.processed_data[model][name].copy()
+            if _group_scen is not None:
+                if len(_group_scen) > 0:
+                    _scenarios[idx] += df[df['base_scenario'] == _group_scen[idx]]['scenario'].unique().tolist()
+                    _scenarios[idx] = list(set(_scenarios[idx]))
 
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Year',
@@ -256,6 +290,8 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            if _group_style is not None and len(_group_scen) > 0:
+                _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend Over Years',
                                            name,
@@ -273,6 +309,8 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            if _group_style is not None and len(_group_scen) > 0:
+                _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend in one Year',
                                            name,
@@ -291,6 +329,8 @@ def link(app):
             _u_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            if _group_style is not None and len(_group_scen) > 0:
+                _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart',
                                            name,
@@ -309,6 +349,14 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            if _group_style is not None and len(_group_scen) > 0:
+                _group_style[idx] = {'display': 'block'}
+
+            df = data_handler.processed_data[model][name].copy()
+            if _group_scen is not None:
+                if len(_group_scen) > 0:
+                    _scenarios[idx] += df[df['base_scenario'] == _group_scen[idx]]['scenario'].unique().tolist()
+                    _scenarios[idx] = list(set(_scenarios[idx]))
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('By Region',
                                            name,
@@ -321,4 +369,4 @@ def link(app):
                                            pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns)
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in
-                                             _data], _s_style, _m_style, _u_style, _pattern_style, _text_style
+                                             _data], _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style

@@ -51,7 +51,7 @@ class GenericProfile:
         self.pattern_dict = {}
 
         for class_name in classes:
-            plot = create_generic_plots(name, class_name, self)
+            plot = create_generic_plots(name, class_name, self, is_comparison=name == 'Generic Comparison')
             self.viz_options[class_name] = {
                 'check': generic_processing.create_check(class_name, name),
                 'db_check': generic_processing.create_check(class_name, name),
