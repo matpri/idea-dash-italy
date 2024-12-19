@@ -45,7 +45,7 @@ class GenericProfile:
 
         self.plot_order = classes
         self.plot_order.sort()
-        self.plot_order = ['Output Stats', 'Overview'] + self.plot_order
+        self.plot_order = ['Overview', 'Output Stats'] + self.plot_order
 
         self.viz_options = {}
         self.pattern_dict = {}

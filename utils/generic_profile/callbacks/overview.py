@@ -46,6 +46,18 @@ def link(app):
             'viz': 'overview'
         }, 'value'),
         Input({
+            'type': 'grouping-select',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'overview'
+        }, 'value'),
+        Input({
+            'type': 'fill-switch',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'overview'
+        }, 'checked'),
+        Input({
             'type': 'unit-select',
             'index': ALL,
             'model': MATCH,
@@ -77,7 +89,7 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _scenarios, _unit, _download, _canvas, _u_data, _data):
+    def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _unit, _download, _canvas, _u_data, _data):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -113,10 +125,18 @@ def link(app):
             if _scenarios[idx] != 'ALL':
                 df = df[df['base_scenario'] == _scenarios[idx]]
 
+        _groupby_model = _grouping[idx] == 1
+        _groupby_scenario = _grouping[idx] == 2
+        _groupby_version = _grouping[idx] == 3
+
         print('idx:', idx, 'plot type:', _p_type[idx])
         _canvas[idx] = render_plot(_p_type[idx],
                                    df,
-                                   _unit[idx]
+                                   _groupby_model,
+                                   _groupby_scenario,
+                                   _groupby_version,
+                                   _unit[idx],
+                                   fill=_fill[idx]
                                    )
 
         return _canvas, [dash.no_update for _ in
