@@ -151,7 +151,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                     data_model = data_model.sort_values(by=['time'])
                     pattern = get_model_pattern(f'{model} - {scen}')
                     sub_fig.add_scatter(x=data_model["time"], y=data_model["value"],
-                                        name=f'{model} - {scen} - {version}',
+                                        name=f'{model} - {scen} - {version}' if version else f'{model} - {scen}',
                                         mode='lines+markers',
                                         line=dict(color=get_scenario_color(scen),
                                                   dash=pattern,
@@ -266,7 +266,7 @@ def create_overview_plot(model, is_comparison=False):
                         {'label': 'No Grouping', 'value': 0},
                         {'label': 'Group by Model', 'value': 1},
                         {'label': 'Group by Scenario', 'value': 2},
-                        # {'label': 'Group by Version', 'value': 3},
+                        {'label': 'Group by Version', 'value': 3},
                     ],
                     id={
                         'type': 'grouping-select',

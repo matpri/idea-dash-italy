@@ -444,6 +444,8 @@ class DataHandler:
 
                 data = data.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
 
+                data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if x.count('|') > 1 else 'v0')
+
                 data['region'] = 'National'
 
                 overview_data.append(data)
@@ -452,8 +454,8 @@ class DataHandler:
 
             full_df['base_scenario'] = full_df['scenario'].apply(lambda x: x.split('|')[1])
             full_df['time'] = full_df['time'].astype(int)
-            self.processed_data['Generic Comparison']['Overview'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit']]
-            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit']]
+            self.processed_data['Generic Comparison']['Overview'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
 
         print("processed", self.processed_data)
 
