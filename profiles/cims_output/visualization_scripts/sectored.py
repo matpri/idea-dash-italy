@@ -1,7 +1,7 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
-    pie_chart
+    pie_chart, sankey
 
 
 def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, scenario, variable, pattern_active=True,
@@ -32,6 +32,9 @@ def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, sce
         return pie_chart.plot(df_plt, scenario, region, year, f'{sector}: ' + variable, 'Year',
                                    variable)
 
+    elif r_type == 'Sankey':
+        return sankey.plot(df_plt, scenario, region, year, f'{sector}: ' + variable, variable)
+
     else:
         return bar_over_regions.plot(df_plt, scenarios, year, f'{sector}: ' + variable, 'Year',
                                    variable,
@@ -58,7 +61,13 @@ def process_represenation(p_type, by_rep, variable, df, service):
                 (df.parameter == variable)
                 ]
 
-            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
+            filtered_df['context'] = filtered_df['sub_context'] + '|' + filtered_df['context']
+            filtered_df['context'] += '- Negative' if 'negative' in filtered_df[
+                'context'] else '- Avoided' if 'avoided' in \
+                                                filtered_df[
+                                                    'context'] else '- Emitted'
+
+            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario', 'context']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     elif p_type == 'Technology Stocks':
         filtered_df = df[df['parameter'] == variable]
@@ -76,7 +85,7 @@ def process_represenation(p_type, by_rep, variable, df, service):
             filtered_df = df[
                 (df['technology'].isna())
             ]
-            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario']]
+            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario', 'context', 'service', 'parent_service']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     return filtered_df
 
@@ -167,7 +176,7 @@ def create_plot(sector):
                 'index': window_id
             },
 
-            style={'display': 'none'}
+            style={'display': 'block'}
         )
 
         pattern_toggle = dmc.Switch(
@@ -215,7 +224,7 @@ def create_plot(sector):
             variable_select,
 
             dmc.Switch(
-                label='By Sector',
+                label='By Service',
                 checked=False,
                 id={
                     'type': f'cims-{lower_sector}-rep_switch',
@@ -226,8 +235,8 @@ def create_plot(sector):
 
             dmc.Select(
                 label='Representation Options',
-                data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
-                value='By Year',
+                data=[{'label': plot, 'value': plot} for plot in ['Sankey', 'Trend Over Years']],
+                value='Sankey',
                 id={
                     'type': f'cims-{lower_sector}-rep-select',
                     'index': window_id
@@ -267,7 +276,7 @@ def create_plot(sector):
 
         plot_layout = dcc.Graph(
             figure=render_plot(sector,
-                df, plot_type, 'By Year', False, years[0], regions[0], scenarios, scenarios[0], variables[0],
+                df, plot_type, 'Sankey', False, years[0], regions[0], scenarios, scenarios[0], variables[0],
                 pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0]
             ),
             id={
