@@ -9,7 +9,7 @@
 - **Edit Plots:** Use the settings button in the toolbar to customize colors for technologies, titles, and axis labels.
 - **Edit Loaded Data:** Use the last button in the toolbar to change the scenario name and the visualizations that
   should be created.
-
+- **Save Workspace:** Save your workspace to automatically load it the next time you open the app. (Works well only when less than 8 scenarios are loaded, otherwise use the saver script)
 
 
 ## Data Loading
@@ -19,7 +19,7 @@ By placing model outputs csv in the `data` folder the data will be loaded automa
 
 ### Load Data
 To load data, click the "Load Data" button in the header. Either Load Data from your local machine or from the IDEA database.
-![Opening Data Loading Window](https://gitlab.com/sesit/idea-dash/-/raw/master/assets/help/data_modal.gif)
+![Opening Data Loading Window](https://gitlab.com/sesit/idea-dash/-/raw/dev/assets/help/data_modal.gif)
 
 ### Local Files
 To load data from your local machine, click the "Local File" button. You can either click on the field or drag your files onto the upload area. At the moment IDEA supports COPPER results in PYAM format using our pyam conversion script.
@@ -47,9 +47,10 @@ Every window has a tab bar at the top. The tab bar is nested and contains tabs f
 Every plot has widgets to its left that allow you to change the plot by adjusting predefined parameters that include, but are not limited to, the scenario, period, region, and plot type. Changing these parameters will update the plot accordingly.
 ![Interacting with Plots](https://gitlab.com/sesit/idea-dash/-/raw/master/assets/help/plot_widgets.gif)
 
-### Save Plots
-To save a plot, click the "Save" button in the top right corner of the plot window. The plot will be saved as a PNG file.
-![Saving Plots](https://gitlab.com/sesit/idea-dash/-/raw/master/assets/help/plot_save.gif)
+### Plotly Interactions
+'All the plots that are currently implemented are based on the Plotly library. Plotly plots are interactive, meaning that you can zoom in, zoom out, hide sections, and save the plot as an image. To zoom in, click and drag the mouse over the area you want to zoom in. To zoom out, double click on the plot. To hide sections, in this case technologies in the stacked bar chart, single press on the legend entry. To only show one entry double click on the legend and only the selected entry will show in the plot. To save the plot as an image, click on the camera icon in the top right corner of the plot.'),
+'![Interacting with Plots](https://gitlab.com/sesit/idea-dash/-/raw/dev/assets/help/plot_interactions.gif)'
+
 
 ### Change View
 To have a clean interface where only the plot is visible, hide the widgets by clicking the hamburger menu in the top left corner of the window and press the "^" button to hide the tab bar. To show the widgets or tabs again, click the hamburger menu or the "v" button accordingly.
@@ -100,3 +101,8 @@ These plots are only available when the data is formatted as IAMC format.
 
 ## Comparison Plots
 In addition to showcasing the data per model there are 2 additional tabs available for comparison plots. First, the Power Systems tab colates data from models that are part of the Power Systems profile (\<LIST of MODELS\>), this tab has Power System specific plots showcasing the results from different models similar to scenarios. Second, a Generic Comparisson tab colates data from all models and showcases generic plots based on the naming of variables, if two or more models have the same variable name the plots will showcase the results from those models in one plot.
+
+## Save and Automatically Load
+To save your workspace, click the "Save" button in the toolbar. The workspace will be saved and you can load it in by uploading it in the local data section or by starting the program adding the '--datahandler' flag, i.e. `python main.py --datahandler=<path to file>` . This feature works well when less than 8 scenarios are loaded. If more than 8 scenarios are loaded, use `saver.py` script to save the workspace.
+Additionally, if you want to bypass having to load in data by using the interface, add the data you want to load into the `data` folder before starting the program. The data will be loaded automatically when the program starts.
+
