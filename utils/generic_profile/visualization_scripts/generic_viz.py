@@ -7,7 +7,8 @@ from utils.generic_profile.visualization_scripts.utils import bar_over_years, ba
     pie_chart, trend_over_year
 
 
-def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False,
+def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True,
+                text_active=False,
                 pattern_list=None):
     if pattern_list is None:
         pattern_list = []
@@ -27,7 +28,8 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
                                      pattern_active=pattern_active,
                                      text_active=text_active, pattern_list=pattern_list)
 
-def create_generic_plots(model, name, profile):
+
+def create_generic_plots(model, name, profile, is_comparison=False):
     def plot(df, window_id):
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
@@ -47,6 +49,25 @@ def create_generic_plots(model, name, profile):
                     trend_one_year = True
                     break
 
+        comparison_widgets = []
+        if is_comparison:
+            base_scenarios = df['base_scenario'].unique().tolist()
+            base_scenarios = ['ALL'] + base_scenarios
+
+            comparison_widgets = [
+                dmc.Select(
+                    label='Scenario Group',
+                    data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+                    value='ALL',
+                    id={
+                        'type': 'generic-scenario-group-select',
+                        'name': name,
+                        'model': model,
+                        'index': window_id
+                    },
+                    style={'display': 'block'}
+                ),
+            ]
 
         by_year_widgets = dmc.Select(
             label='Region',
@@ -125,6 +146,9 @@ def create_generic_plots(model, name, profile):
                            'index': window_id}),
             pattern_toggle,
             text_toggle,
+
+            *comparison_widgets,
+
             dmc.MultiSelect(
                 label='Scenarios',
                 data=[{'label': scenario, 'value': scenario} for scenario in scenarios],

@@ -17,11 +17,11 @@ def get_contrasting_font_color(rgb_color):
     return '#ffffff' if brightness < 128 else '#000000'
 
 
-def render_plot(p_type, df, year, scenarios, model):
+def render_plot(p_type, df, year, model):
     """Render a plot based on the specified plot type, data, year, scenarios, and model."""
     
     # Filter the DataFrame for the relevant data
-    db = df[(df.region == 'National') & (df.time == year) & (df.scenario.isin(scenarios))].copy()
+    db = df[(df.region == 'National') & (df.time == year)].copy()
 
     if db.empty:
         # Create a figure with a no data available message
@@ -149,7 +149,7 @@ def create_scatter_plot(db, colors, model, year):
     return fig
 
 
-def create_plot(model):
+def create_plot(model, is_comparison=False):
     def plot(df, window_id):
         '''
 
@@ -161,6 +161,26 @@ def create_plot(model):
         # sort years
         years.sort()
         scenarios = df['scenario'].unique().tolist()
+
+        comparison_widgets = []
+        if is_comparison:
+            base_scenarios = df['base_scenario'].unique().tolist()
+            base_scenarios = ['ALL'] + base_scenarios
+
+            comparison_widgets = [
+                dmc.Select(
+                    label='Scenario Group',
+                    data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
+                    value='ALL',
+                    id={
+                        'type': 'scenario-group-select',
+                        'model': model,
+                        'index': window_id,
+                        'viz': 'output_stats'
+                    },
+                    style={'display': 'block'}
+                ),
+            ]
 
         widget_layout = html.Div([
             dmc.Select(
@@ -174,6 +194,9 @@ def create_plot(model):
                     'viz': 'output_stats'
                 },
             ),
+
+            *comparison_widgets,
+
             dmc.Select(
                 label='Year',
                 data=[{'label': year, 'value': year} for year in years],
@@ -205,8 +228,10 @@ def create_plot(model):
                              'viz': 'output_stats'}),
         ])
 
+        df = df[df.scenario.isin([''])]
+
         plot_layout = dcc.Graph(
-            figure=render_plot('Table', df, years[0], [''], model),
+            figure=render_plot('Table', df, years[0], model),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,

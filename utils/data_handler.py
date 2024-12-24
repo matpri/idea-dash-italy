@@ -404,6 +404,7 @@ class DataHandler:
                     variables += df.variable.unique().tolist()
                     df['variable'] = viz + '|' + df['variable']
                     df['scenario'] = model + '|' + df['scenario']
+                    df['base_scenario'] = df['scenario'].apply(lambda x: x.split('|')[1])
                     if 'unit' not in df.columns:
                         df['unit'] = 'NA'
                     if dfs.get(viz, None) is None:
@@ -443,15 +444,18 @@ class DataHandler:
 
                 data = data.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
 
+                data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if x.count('|') > 1 else 'v0')
+
                 data['region'] = 'National'
 
                 overview_data.append(data)
 
             full_df = pd.concat(overview_data)
 
+            full_df['base_scenario'] = full_df['scenario'].apply(lambda x: x.split('|')[1])
             full_df['time'] = full_df['time'].astype(int)
-            self.processed_data['Generic Comparison']['Overview'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
-            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['scenario', 'variable', 'time', 'value', 'region', 'unit']]
+            self.processed_data['Generic Comparison']['Overview'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
+            self.processed_data['Generic Comparison']['Output Stats'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
 
         print("processed", self.processed_data)
 

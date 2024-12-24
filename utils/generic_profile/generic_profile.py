@@ -45,13 +45,13 @@ class GenericProfile:
 
         self.plot_order = classes
         self.plot_order.sort()
-        self.plot_order = ['Output Stats', 'Overview'] + self.plot_order
+        self.plot_order = ['Overview', 'Output Stats'] + self.plot_order
 
         self.viz_options = {}
         self.pattern_dict = {}
 
         for class_name in classes:
-            plot = create_generic_plots(name, class_name, self)
+            plot = create_generic_plots(name, class_name, self, is_comparison=name == 'Generic Comparison')
             self.viz_options[class_name] = {
                 'check': generic_processing.create_check(class_name, name),
                 'db_check': generic_processing.create_check(class_name, name),
@@ -65,7 +65,7 @@ class GenericProfile:
             'db_check': lambda x: True,
             'process': lambda x: x,
             'db_process': lambda x: x,
-            'viz': overview.create_overview_plot(name),
+            'viz': overview.create_overview_plot(name, is_comparison=name == 'Generic Comparison'),
             'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
         }
 
@@ -74,7 +74,7 @@ class GenericProfile:
             'db_check': lambda x: True,
             'process': lambda x: x,
             'db_process': lambda x: x,
-            'viz': output_stats.create_plot(name),
+            'viz': output_stats.create_plot(name, is_comparison=name == 'Generic Comparison'),
             'description': 'Table of output statistics for each scenario.'
         }
 

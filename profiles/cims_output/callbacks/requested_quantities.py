@@ -224,7 +224,6 @@ def link(app):
             _service[layer + 1:] = [''] * len(_service[layer + 1:])
 
         if 'cims-requested_quantities-service-select' in trigger_id['type']:
-            _data = _data
             _data = _data[_data['sector'] == _sector]
 
             layer = trigger_id['layer']

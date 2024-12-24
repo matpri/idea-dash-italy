@@ -22,12 +22,12 @@ def render():
             html.H3('Editing Plots', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
         ]),
 
-        html.H1('Save plots'),
+        html.H1('Plotly Interaction'),
         html.P(
-            'To save a plot, click the "Save" button in the top right corner of the plot window. The plot will be saved as a PNG file.'),
+            'All the plots that are currently implemented are based on the Plotly library. Plotly plots are interactive, meaning that you can zoom in, zoom out, hide sections, and save the plot as an image. To zoom in, click and drag the mouse over the area you want to zoom in. To zoom out, double click on the plot. To hide sections, in this case technologies in the stacked bar chart, single press on the legend entry. To only show one entry double click on the legend and only the selected entry will show in the plot. To save the plot as an image, click on the camera icon in the top right corner of the plot.'),
 
         html.Div([
-            html.Center(html.Img(src='/assets/help/plot_save.gif', style={'width': '100%'})),
+            html.Center(html.Img(src='/assets/help/plotly_interactions.gif', style={'width': '100%'})),
             html.H3('Saving Plots', style={'font-size': '15px', 'color': 'gray', 'text-align': 'center'}),
         ]),
 
