@@ -2,22 +2,14 @@ import dash
 from dash import Output, Input, State, ALL, dcc, MATCH
 
 from components import ids
-from profiles.macromodel.visualization_scripts import financial_markets, government, economy, households, labour_market
+from profiles.macromodel.visualization_scripts import sector_overview
 
 render_func = {
-    'central_government': government.render_plot,
-    'financial_markets': financial_markets.render_plot,
-    'labour_market': labour_market.render_plot,
-    'households': households.render_plot,
-    'economy': economy.render_plot
+    'sector_overview': sector_overview.render_plot
 }
 
 name_mapping = {
-    'government': 'Government',
-    'financial_markets': 'Financial Markets',
-    'labour_market': 'Labour Market',
-    'households': 'Households',
-    'economy': 'Economy Overview'
+    'sector_overview' : 'Sector Overview'
 }
 
 def link(app):
@@ -27,46 +19,52 @@ def link(app):
             'index': ALL,
             'profile':MATCH,
             'name': MATCH
-        }, 'figure'),
+        }, 'figure', allow_duplicate=True),
         Output({
-            'type': 'region-select',
+            'type': 'so-region-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
-            'type': 'year-select',
+            'type': 'so-year-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
-            'type': 'download',
+            'type': 'so-download',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'data'),
         Output({
-            'type': 'scenario-select',
+            'type': 'so-scenario-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
-            'type': 'scenario-multi-select',
+            'type': 'so-scenario-multi-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
-            'type': 'unit-select',
+            'type': 'so-unit-select',
+            'index': ALL,
+            'profile': MATCH,
+            'name': MATCH
+        }, 'style'),
+        Output({
+            'type': 'so-vartype-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output(
             {
-                'type': 'pattern-switch',
+                'type': 'so-pattern-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -75,7 +73,7 @@ def link(app):
         ),
         Output(
             {
-                'type': 'text-switch',
+                'type': 'so-text-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -83,50 +81,56 @@ def link(app):
             'style'
         ),
         Input({
-            'type': 'plot-select',
+            'type': 'so-plot-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
-            'type': 'aggregate-switch',
+            'type': 'so-aggregate-switch',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'checked'),
         Input({
-            'type': 'scenario-multi-select',
+            'type': 'so-scenario-multi-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
-            'type': 'scenario-select',
+            'type': 'so-scenario-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
-            'type': 'region-select',
+            'type': 'so-region-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
-            'type': 'year-select',
+            'type': 'so-year-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
-            'type': 'unit-select',
+            'type': 'so-unit-select',
+            'index': ALL,
+            'profile': MATCH,
+            'name': MATCH
+        }, 'value'),
+        Input({
+            'type': 'so-vartype-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input(
             {
-                'type': 'pattern-switch',
+                'type': 'so-pattern-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -135,7 +139,7 @@ def link(app):
         ),
         Input(
             {
-                'type': 'text-switch',
+                'type': 'so-text-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -143,19 +147,19 @@ def link(app):
             'checked'
         ),
         Input({
-            'type': 'download-button',
+            'type': 'so-download-button',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'n_clicks'),
         State({
-            'type': 'region-select',
+            'type': 'so-region-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
-            'type': 'year-select',
+            'type': 'so-year-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
@@ -167,32 +171,38 @@ def link(app):
             'name': MATCH
         }, 'figure'),
         State({
-            'type': 'download',
+            'type': 'so-download',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'data'),
         State({
-            'type': 'scenario-select',
+            'type': 'so-scenario-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
-            'type': 'scenario-multi-select',
+            'type': 'so-scenario-multi-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
-            'type': 'unit-select',
+            'type': 'so-unit-select',
+            'index': ALL,
+            'profile': MATCH,
+            'name': MATCH
+        }, 'style'),
+        State({
+            'type': 'so-vartype-select',
             'index': ALL,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State(
             {
-                'type': 'pattern-switch',
+                'type': 'so-pattern-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -201,7 +211,7 @@ def link(app):
         ),
         State(
             {
-                'type': 'text-switch',
+                'type': 'so-text-switch',
                 'index': ALL,
                 'profile': MATCH,
                 'name': MATCH
@@ -210,15 +220,15 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
-                           _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _pattern_style,
+    def update_gencap_cost(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _units, _vartypes, _pattern, _text,
+                           _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _v_style, _pattern_style,
                            _text_style):
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = 'Macromodel'
         name = name_mapping.get(trigger_id['name'])
-        print(f'updating non_sector for some reason {name}, {model} plot')
+        print(f'updating sector_overview {name}, {model} plot')
         render_plot = render_func[trigger_id['name']]
 
         if 'download-button' in trigger_id['type']:
@@ -230,7 +240,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(
                 data_handler.processed_data[model][name].to_csv, f"{name}.csv")
-            return _canvas, _r_style, _y_style, _s_style, _m_style, _u_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style, _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -244,6 +254,7 @@ def link(app):
             _m_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
@@ -257,6 +268,7 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
+                                           _vartypes[idx],
                                            _years[idx], scenario=_scenario[idx],
                                            pattern_active=_pattern[idx], text_active=_text[idx])
 
@@ -264,6 +276,7 @@ def link(app):
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
@@ -276,11 +289,13 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
+                                           _vartypes[idx],
                                            _years[idx], scenario=_scenario[idx])
         elif _p_type[idx] == 'Trend in one Year':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
@@ -293,6 +308,7 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
+                                           _vartypes[idx],
                                            _years[idx], scenario=_scenario[idx])
 
         elif _p_type[idx] == 'Pie Chart':
@@ -301,6 +317,7 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
@@ -311,12 +328,14 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
+                                           _vartypes[idx],
                                            _years[idx], scenario=_scenario[idx])
 
         else:
             _m_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _u_style[idx] = {'display': 'block'}
+            _v_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
@@ -329,8 +348,9 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
+                                           _vartypes[idx],
                                            _years[idx], scenario=_scenario[idx],
                                            pattern_active=_pattern[idx], text_active=_text[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in
-                                             _data], _s_style, _m_style, _u_style, _pattern_style, _text_style
+                                             _data], _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style

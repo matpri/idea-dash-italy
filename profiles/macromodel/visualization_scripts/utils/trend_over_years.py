@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, var_type=None, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f' ({scenario})',
@@ -15,7 +15,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     )
 
     try:
-        df_scen = subset(df, region, scenario, unit, aggregate, season)
+        df_scen = subset(df, region, scenario, unit, aggregate, var_type, season)
         techs = df_scen.variable.unique().tolist()
 
         for i, tech in enumerate(techs):
@@ -53,7 +53,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     return fig
 
 
-def subset(df, region, scenario, unit, aggregate, season=None):
+def subset(df, region, scenario, unit, aggregate, var_type=None, season=None):
     df_scen = df.copy(deep=True)
 
     # if not pd.api.types.is_numeric_dtype(df['time']):
@@ -79,6 +79,8 @@ def subset(df, region, scenario, unit, aggregate, season=None):
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
     df_scen = df_scen[df_scen['unit'] == unit]
+    if var_type is not None:
+        df_scen = df_scen[df_scen['variable'].str.contains(var_type, case=False, na=False)]
     df_scen = df_scen[df_scen['region'] == region]
 
     # create new column for total in can_emissions df

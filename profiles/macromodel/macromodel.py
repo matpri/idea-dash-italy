@@ -8,6 +8,7 @@ from dash import html, dcc
 from profiles.base_profile.base_profile import BaseProfile
 from profiles.macromodel import utils
 from profiles.macromodel.callbacks import (
+    sector_overview as sector_overview_callbacks,
     settings as settings_callbacks,
     non_sector as non_sector_callbacks,
     sector as sector_callbacks,
@@ -17,6 +18,7 @@ from profiles.macromodel.processing_scripts import (
     financial_markets as financial_markets_processing,
     government as government_processing,
     economy as economy_processing,
+    sector_overview as sector_overview_processing,
     energy_sectors as energy_processing,
     non_energy_sectors as non_energy_processing,
     labour_market as labour_market_processing,
@@ -26,6 +28,7 @@ from profiles.macromodel.visualization_scripts import (
     financial_markets as financial_markets_viz,
     government as government_viz,
     economy as economy_viz,
+    sector_overview as sector_overview_viz,
     energy_sectors as energy_viz,
     non_energy_sectors as non_energy_viz,
     labour_market as labour_market_viz,
@@ -44,11 +47,11 @@ class Macromodel(BaseProfile):
     db_name = 'macromodel'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (COPPER) framework is an electricity system planning model. \n'
-        'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
+        'Macromodel')
 
     plot_order = [
         'Economy Overview',
+        'Sector Overview',
         'Energy Sectors',
         'Non-Energy Sectors',
         'Financial Markets',
@@ -65,6 +68,16 @@ class Macromodel(BaseProfile):
                 'db_process': economy_processing.process,
                 'viz': economy_viz.plot,
                 'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Sector Overview':
+            {
+                'check': sector_overview_processing.check,
+                'db_check': sector_overview_processing.check,
+                'process': sector_overview_processing.process,
+                'db_process': sector_overview_processing.process,
+                'viz': sector_overview_viz.plot,
+                'callback': sector_overview_callbacks.link,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
         'Energy Sectors':
@@ -265,6 +278,7 @@ class Macromodel(BaseProfile):
         settings_callbacks.link(app)
         non_sector_callbacks.link(app)
         sector_callbacks.link(app)
+        sector_overview_callbacks.link(app)
 
     def render_settings(self):
         layout = html.Div(
