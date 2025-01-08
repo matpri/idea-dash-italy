@@ -1,4 +1,4 @@
-from idlelib.pyparse import trans
+
 
 import pandas as pd
 import os
