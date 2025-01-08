@@ -24,6 +24,8 @@ parser.add_argument('--help_popup', type=str, default='False',
                     help='Set to True to show help popup on startup.')
 parser.add_argument('--host', type=str, default='127.0.0.1',
                     help='Set the host address to run the server on, default: 127.0.0.1')
+parser.add_argument('--port', type=str, default='8050',
+                    help='Set the host port to run the server on, default: 8050')
 parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
 args = parser.parse_args()  # Parse the arguments
 
@@ -115,6 +117,6 @@ if __name__ == '__main__':
     print("Starting the application...")  # Debugging statement
     host = args.host
     
-    port = 8050  # or simply open on the default `8050` port
+    port = args.port
     Timer(1, open_browser, args=[port]).start()
     app.run_server(host=host, port=port)  # Run the app on the specified port
