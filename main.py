@@ -117,6 +117,6 @@ if __name__ == '__main__':
     print("Starting the application...")  # Debugging statement
     host = args.host
     
-    port = args.port
+    port = int(args.port)  # or simply open on the default `8050` port
     Timer(1, open_browser, args=[port]).start()
     app.run_server(host=host, port=port)  # Run the app on the specified port
