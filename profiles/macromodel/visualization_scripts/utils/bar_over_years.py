@@ -8,7 +8,7 @@ from profiles.macromodel import utils
 def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
     fig.update_layout(
-        title_text=title + f' ({', '.join(scenarios)})' if len(scenarios) else title,
+        title_text=title + f" ({', '.join(scenarios)})" if len(scenarios) else title,
         xaxis_title=x_axis_label,
         yaxis_title=y_axis_label + f' ({unit})' if unit != 'NA' else y_axis_label,
         template="simple_white",
