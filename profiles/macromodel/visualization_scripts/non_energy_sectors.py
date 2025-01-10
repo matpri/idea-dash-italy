@@ -189,7 +189,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot('Trend Over Years', 'Non-Energy Sectors', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           units[0], years[0], scenarios[0]),
+                           units[0], years[0], scenarios[0], sector=sectors[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
