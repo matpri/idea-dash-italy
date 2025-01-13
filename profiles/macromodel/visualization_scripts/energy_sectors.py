@@ -32,20 +32,9 @@ def plot(df, window_id):
     regions = df['region'].unique().tolist()
     units = df['unit'].unique().tolist()
     sectors = df['sector'].unique().tolist()
-    if pd.api.types.is_numeric_dtype(df['time']):
-        years = df['time'].unique().tolist()
-        trend_one_year = False
-    else:
-        years = pd.to_datetime(df['time']).dt.strftime('%Y').unique().tolist()
-        # set a boolean that shows that there are unique days in a single year
-        dates = pd.to_datetime(df['time'])
-        # find dates that are not in the same year
-        unique_dates = dates.dt.year.unique()
-        trend_one_year = False
-        for year in unique_dates:
-            if len(dates[dates.dt.year == year].dt.dayofyear.unique()) > 1:
-                trend_one_year = True
-                break
+
+    trend_one_year = False
+    years = df['time'].unique().tolist()
 
 
     by_year_widgets = dmc.Select(
