@@ -1,6 +1,6 @@
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
-from dash import html
+from dash import html, dcc
 from dash_iconify import DashIconify
 
 from assets.styles import hide_button_style, view_button_style
@@ -129,8 +129,20 @@ def render(card_id):
                 # center align
                 , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
             ),
+            # export button
+            dmc.ActionIcon(
+                html.Div(
+                    DashIconify(icon='carbon:download'),
+                    style={'text-align': 'center'}
+                ),
+                id={'type': 'export-tab', 'index': card_id},
+                size='sm',
+                radius='xl',
+                variant='outline',
+                style=view_button_style
+            ),
+            dcc.Download(id={'type': 'fig-download', 'index': card_id}),
 
-            html.Div(),
         ],
             style={'display': 'flex',
                    # all in one row,
