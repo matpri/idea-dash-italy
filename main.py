@@ -11,7 +11,7 @@ from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
     plot_handling, help_handling, save_datahandler, selected_files, database_connection, data_modal as data_modal_callback,\
-    export_fig
+    export_fig, plot_popup
 from components import ids, plot_canvas, sidebar
 from components.data_selection import data_modal
 from components.help import help
@@ -73,6 +73,7 @@ save_datahandler.link(app)
 database_connection.link(app)
 data_modal_callback.link(app)
 export_fig.link(app)
+plot_popup.link(app)
 
 print(data_files)
 print(bool(data_files))
@@ -126,4 +127,4 @@ if __name__ == '__main__':
     pio.to_image(fig, format="png", engine='kaleido')
     Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
-    app.run_server(host=host, port=port)  # Run the app on the specified port
+    app.run_server(host=host, port=port, debug=True)  # Run the app on the specified port

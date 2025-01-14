@@ -12,15 +12,9 @@ def link(app):
     '''
 
     @app.callback(
-        Output({
-            'type': 'fig-download',
-            'index': MATCH
-        }, 'data'),
-        Input({'type': 'export-tab', 'index': MATCH}, 'n_clicks'),
-        Input({
-                         'type': ids.PLOT,
-                         'index': MATCH
-                     }, 'figure'),
+        Output( 'fig-download', 'data'),
+        Input('export-tab', 'n_clicks'),
+        State(ids.PLOT_POPUP_GRAPH, 'figure'),
 
         prevent_initial_call=True,
     )

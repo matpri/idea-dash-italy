@@ -61,3 +61,9 @@ PROFILE_SELECT = 'profile-select'
 DATA_LOADING_NOTIFICATION = 'data-loading-notification'
 
 card_ids = []
+
+PLOT_POPUP = 'plot-popup'
+PLOT_POPUP_GRAPH = 'plot-popup-graph'
+PLOT_POPUP_BURGER = 'plot-popup-burger'
+PLOT_POPUP_DRAWER = 'plot-popup-drawer'
+PLOT_POPUP_WIDGETS = 'plot-popup-widgets'

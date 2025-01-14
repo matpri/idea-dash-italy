@@ -132,16 +132,15 @@ def render(card_id):
             # export button
             dmc.ActionIcon(
                 html.Div(
-                    DashIconify(icon='carbon:download'),
+                    DashIconify(icon='carbon:intent-request-scale-out'),
                     style={'text-align': 'center'}
                 ),
-                id={'type': 'export-tab', 'index': card_id},
+                id={'type': 'open_popup', 'index': card_id},
                 size='sm',
                 radius='xl',
                 variant='outline',
                 style=view_button_style
             ),
-            dcc.Download(id={'type': 'fig-download', 'index': card_id}),
 
         ],
             style={'display': 'flex',
