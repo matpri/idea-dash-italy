@@ -41,6 +41,15 @@ def process(dbs: dict):
 
         gen_cap['variable'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
 
+        household_vars = gen_cap[gen_cap['variable'].str.contains('Household')]
+        gen_cap = gen_cap[~gen_cap['variable'].str.contains('Household')]
+
+        household_vars['variable'] = household_vars['variable'].apply(lambda x: '|'.join(x.split("|")[:-1]))
+
+        household_vars = household_vars.groupby(['time', 'region', 'variable', 'unit', 'scenario']).sum().reset_index()
+
+        gen_cap = pd.concat([gen_cap, household_vars])
+
         #sectors = gen_cap[gen_cap['variable'].str.contains('Sector')]
         #sectors['variable'], sectors['sector'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[:-1])), gen_cap['variable'].apply(lambda x: x.split("|")[-1])
 

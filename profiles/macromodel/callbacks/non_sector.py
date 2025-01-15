@@ -9,7 +9,8 @@ render_func = {
     'financial_markets': financial_markets.render_plot,
     'labour_market': labour_market.render_plot,
     'households': households.render_plot,
-    'economy': economy.render_plot
+    'economy': economy.render_plot,
+    'government': government.render_plot
 }
 
 name_mapping = {
