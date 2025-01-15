@@ -123,7 +123,7 @@ def plot(df, window_id):
                 'profile': 'macromodel',
                 'index': window_id,
             },
-            style={'display': 'block'}
+            style={'display': 'none'}
         ),
         dmc.Select(
             label='Scenario',
