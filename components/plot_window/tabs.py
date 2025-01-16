@@ -173,7 +173,6 @@ def render_popup(window_id):
 
     return dmc.Modal(
         id={'type': ids.PLOT_POPUP, 'index': window_id},
-        title='Plot',
         fullScreen=True,
         children=[
 
@@ -189,7 +188,7 @@ def render_popup(window_id):
                         ),
                         id={'type': 'export-tab', 'index': window_id},
                         size='sm',
-                        radius='xl',
+                        radius='sm',
                         variant='outline',
                         style=view_button_style
                     ),
@@ -228,14 +227,17 @@ def render_popup(window_id):
                         }
                     ),
 
-                    dcc.Graph(
-                        id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
-                        style={
-                            'width': '100%',
-                            'height': '100%'
-                        }
-                    )
                 ]
+            ),
+            html.Div(
+                dcc.Graph(
+                    id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
+                    responsive=True,
+                    style={
+                        'width': '95vw',
+                        'height': '85vh'
+                    }
+                ),
             )
 
         ],

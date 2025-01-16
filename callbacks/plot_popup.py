@@ -15,12 +15,14 @@ def link(app):
         prevent_initial_call=True,
     )
     def open_plot_popup(n_clicks, figure):
-
         if n_clicks is None:
             return no_update
         print('downloading graph', n_clicks)
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
+
+        figure['automargin'] = True
+        figure['layout']['automargin'] = True
 
         if 'open_popup' not in triggered_id:
             return no_update
