@@ -3,6 +3,7 @@ from dash import html, Input, Output, State, MATCH, no_update, dcc
 from components import ids
 import plotly.io as pio
 
+
 def link(app):
     '''
     This callback is used to start the export functionality for figures.
@@ -12,9 +13,9 @@ def link(app):
     '''
 
     @app.callback(
-        Output( 'fig-download', 'data'),
-        Input('export-tab', 'n_clicks'),
-        State(ids.PLOT_POPUP_GRAPH, 'figure'),
+        Output({'type': 'fig-download', 'index': MATCH}, 'data'),
+        Input({'type': 'export-tab', 'index': MATCH}, 'n_clicks'),
+        State({'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
 
         prevent_initial_call=True,
     )

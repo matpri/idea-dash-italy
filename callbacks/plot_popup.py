@@ -21,9 +21,6 @@ def link(app):
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
-        figure['automargin'] = True
-        figure['layout']['automargin'] = True
-
         if 'open_popup' not in triggered_id:
             return no_update
 

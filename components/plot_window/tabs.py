@@ -176,7 +176,7 @@ def render_popup(window_id):
         fullScreen=True,
         children=[
 
-            dcc.Download(id='fig-download'),
+            dcc.Download(id={'type':'fig-download', 'index': window_id}),
             html.Div(
                 [
                     dmc.Burger(id={'type': ids.PLOT_POPUP_BURGER, 'index': window_id},
