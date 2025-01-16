@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, unit, season=None):
+def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_label, unit, var_type=None, season=None):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f' ({scenario})',
@@ -14,7 +14,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
         template="simple_white",
     )
     try:
-        df_scen = subset(df, region, year, scenario, unit, aggregate, season)
+        df_scen = subset(df, region, year, scenario, unit, aggregate, var_type, season)
         techs = df_scen.variable.unique().tolist()
         if aggregate:
             colors = [utils.get_group_colors(tech) for tech in techs]
@@ -44,7 +44,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     return fig
 
 
-def subset(df, region, year, scenario, unit, aggregate, season=None):
+def subset(df, region, year, scenario, unit, aggregate, var_type=None, season=None):
     df_scen = df.copy(deep=True)
 
 
@@ -64,6 +64,8 @@ def subset(df, region, year, scenario, unit, aggregate, season=None):
 
     df_scen = df_scen[df_scen['scenario'] == scenario]
     df_scen = df_scen[df_scen['unit'] == unit]  
+    if var_type is not None:
+        df_scen = df_scen[df_scen['variable'].str.contains(var_type, case=False, na=False)]
     df_scen = df_scen[df_scen['region'] == region]
     df_scen = df_scen[df_scen['time'] == year]
 

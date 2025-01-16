@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.macromodel import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, var_type=None, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f" ({', '.join(scenarios)})" if len(scenarios) else title,
@@ -15,7 +15,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
     )
 
     try:
-        df_scen = subset(df, region, scenarios, unit, aggregate, season)
+        df_scen = subset(df, region, scenarios, unit, aggregate, var_type, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
         num_years = df_scen.time.nunique()
@@ -62,7 +62,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
     return fig
 
 
-def subset(df, region, scenarios, unit, aggregate, season=None):
+def subset(df, region, scenarios, unit, aggregate, var_type=None, season=None):
     df_scen = df.copy(deep=True)
 
     # if not pd.api.types.is_numeric_dtype(df['time']):
@@ -89,7 +89,8 @@ def subset(df, region, scenarios, unit, aggregate, season=None):
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
 
     df_scen = df_scen[df_scen['unit'] == unit]
-
+    if var_type is not None:
+        df_scen = df_scen[df_scen['variable'].str.contains(var_type, case=False, na=False)]
     df_scen = df_scen[df_scen['region'] == region]
 
     # create new column for total in can_emissions df

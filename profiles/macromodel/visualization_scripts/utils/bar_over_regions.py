@@ -5,7 +5,7 @@ from profiles.macromodel import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, var_type=None, season=None, pattern_active=True, text_active=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f" ({', '.join(scenarios)})" if len(scenarios) else title,
@@ -15,7 +15,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     )
 
     try:
-        df_scen = subset(df, year, scenarios, unit, aggregate, season)
+        df_scen = subset(df, year, scenarios, unit, aggregate, var_type, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
 
@@ -61,7 +61,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     return fig
 
 
-def subset(df, year, scenarios, unit, aggregate, season=None):
+def subset(df, year, scenarios, unit, aggregate, var_type=None, season=None):
     df_scen = df.copy(deep=True)
 
     # if not pd.api.types.is_numeric_dtype(df['time']):
@@ -82,7 +82,10 @@ def subset(df, year, scenarios, unit, aggregate, season=None):
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
     df_scen = df_scen[df_scen['time'] == year]
     df_scen = df_scen[df_scen['unit'] == unit]
+    if var_type is not None:
+        df_scen = df_scen[df_scen['variable'].str.contains(var_type, case=False, na=False)]
     df_scen = df_scen[df_scen['value'] != 0]
+
     df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum').values
     # for every variable type in the df, make sure all regions are present if necessary fill with 0
     region_pad = []

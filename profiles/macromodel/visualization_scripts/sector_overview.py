@@ -7,20 +7,22 @@ from profiles.macromodel.visualization_scripts.utils import bar_over_years, bar_
     pie_chart, trend_over_year
 
 
-def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True, text_active=False):
-    print('rendering plot financial_markets', type)
+def render_plot(type, name, df, aggregate, scenarios, region, unit, var_type, year, scenario, pattern_active=True, text_active=False):
+    print('rendering plot sector_overview', type)
+    print(var_type)
+    
     if type == 'By Year':
-        return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
+        return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit, var_type,
                                    pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
-        return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit, var_type)
     elif type == 'Trend in one Year':
-        return trend_over_year.plot(df, scenario, region, year, aggregate, name, "Year", name, name, unit)
+        return trend_over_year.plot(df, scenario, region, year, aggregate, name, "Year", name, name, unit, var_type)
     elif type == 'Pie Chart':
-        return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, unit)
+        return pie_chart.plot(df, scenario, region, year, aggregate, name, "Year", name, unit, var_type)
     else:
-        return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
+        return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit, var_type,
                                      pattern_active=pattern_active,
                                      text_active=text_active)
 
@@ -30,6 +32,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     units = df['unit'].unique().tolist()
+    var_types = df["variable"].str.split('|').str[0].unique().tolist()
 
     trend_one_year = False
     years = df['time'].unique().tolist()
@@ -40,8 +43,8 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'region-select',
-            'name': 'financial_markets',
+            'type': 'so-region-select',
+            'name': 'sector_overview',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -54,8 +57,8 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'year-select',
-            'name': 'financial_markets',
+            'type': 'so-year-select',
+            'name': 'sector_overview',
             'profile': 'macromodel',
             'index': window_id
         },
@@ -67,8 +70,8 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'pattern-switch',
-            'name': 'financial_markets',
+            'type': 'so-pattern-switch',
+            'name': 'sector_overview',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -79,8 +82,8 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'text-switch',
-            'name': 'financial_markets',
+            'type': 'so-text-switch',
+            'name': 'sector_overview',
             'profile': 'macromodel',
             'index': window_id,
         },
@@ -95,10 +98,10 @@ def plot(df, window_id):
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in plot_options
                   ],
-            value='Trend Over Years',
+            value='By Year',
             id={
-                'type': 'plot-select',
-                'name': 'financial_markets',
+                'type': 'so-plot-select',
+                'name': 'sector_overview',
                 'profile': 'macromodel',
                 'index': window_id
             },
@@ -106,8 +109,8 @@ def plot(df, window_id):
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
-                       'type': 'aggregate-switch',
-                       'name': 'financial_markets',
+                       'type': 'so-aggregate-switch',
+                       'name': 'sector_overview',
                        'profile': 'macromodel',
                        'index': window_id}),
         pattern_toggle,
@@ -117,32 +120,44 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'scenario-multi-select',
-                'name': 'financial_markets',
-                'profile': 'macromodel',
-                'index': window_id,
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
-            label='Scenario',
-            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
-            value=scenarios[0],
-            id={
-                'type': 'scenario-select',
-                'name': 'financial_markets',
+                'type': 'so-scenario-multi-select',
+                'name': 'sector_overview',
                 'profile': 'macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
         ),
         dmc.Select(
+            label='Scenario',
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=scenarios[0],
+            id={
+                'type': 'so-scenario-select',
+                'name': 'sector_overview',
+                'profile': 'macromodel',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.Select(
             label='Unit',
             data=[{'label': unit, 'value': unit} for unit in units],
             value=units[0],
             id={
-                'type': 'unit-select',
-                'name': 'financial_markets',
+                'type': 'so-unit-select',
+                'name': 'sector_overview',
+                'profile': 'macromodel',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Variable type',
+            data=[{'label': var_type, 'value': var_type} for var_type in var_types],
+            value=var_types[0],
+            id={
+                'type': 'so-vartype-select',
+                'name': 'sector_overview',
                 'profile': 'macromodel',
                 'index': window_id,
             },
@@ -150,25 +165,25 @@ def plot(df, window_id):
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'download-button',
-                                        'name': 'financial_markets',
+        dmc.Button('Download Data', id={'type': 'so-download-button',
+                                        'name': 'sector_overview',
                                         'profile': 'macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'download',
-                         'name': 'financial_markets',
+        dcc.Download(id={'type': 'so-download',
+                         'name': 'sector_overview',
                          'profile': 'macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('Trend Over Years', 'Financial Markets', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           units[0], years[0], scenarios[0]),
+        figure=render_plot('By Year', 'Sector Overview', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+                           units[0], var_types[0], years[0], scenarios[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'macromodel',
-            'name': 'financial_markets'
+            'name': 'sector_overview'
         },
         style={
             'width': '100%',

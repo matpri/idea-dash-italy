@@ -16,7 +16,7 @@ def check(df):
     #print("Checking for gen cap in variable column")
     try:
         if (df.model == 'macromodel').any():
-            if df.variable.str.startswith("households").any():
+            if df.variable.str.startswith("sector_overview").any():
                 return True
         return False
     except Exception as e:
@@ -36,19 +36,10 @@ def process(dbs: dict):
     gen_caps = []
     for scenario_name, db in dbs.items():
         df = db.copy()
-        gen_cap = df[df.variable.str.startswith("households|")]
+        gen_cap = df[df.variable.str.startswith("sector_overview")]
         gen_cap['value'] = gen_cap['value'].astype(float)
 
         gen_cap['variable'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-
-        household_vars = gen_cap[gen_cap['variable'].str.contains('Household')]
-        gen_cap = gen_cap[~gen_cap['variable'].str.contains('Household')]
-
-        household_vars['variable'] = household_vars['variable'].apply(lambda x: '|'.join(x.split("|")[:-1]))
-
-        household_vars = household_vars.groupby(['time', 'region', 'variable', 'unit', 'scenario']).sum().reset_index()
-
-        gen_cap = pd.concat([gen_cap, household_vars])
 
         #sectors = gen_cap[gen_cap['variable'].str.contains('Sector')]
         #sectors['variable'], sectors['sector'] = gen_cap['variable'].apply(lambda x: '|'.join(x.split("|")[:-1])), gen_cap['variable'].apply(lambda x: x.split("|")[-1])
