@@ -6,6 +6,8 @@ from dash_iconify import DashIconify
 from assets.styles import hide_button_style, view_button_style
 from components.plot_window import viz_container
 
+from components import ids
+
 
 def render(card_id):
     from main import data_handler
@@ -15,7 +17,6 @@ def render(card_id):
 
     # sort keys by data_handler.profile_order
     profiles.sort(key=lambda x: data_handler.profile_order.index(x) if x in data_handler.profile_order else 1000)
-
 
     if not profiles:
         return html.Div()
@@ -158,7 +159,89 @@ def render(card_id):
                    'height': '90%',
                    'width': '100%'}
         ),
-        _hp
+        _hp,
+        render_popup(card_id)
     ]
 
     return layout
+
+
+def render_popup(window_id):
+    """
+    :return: dmc.Modal that has a dcc.Graph object. And a hidable Aside with widgets for font size, y/x-axis label and title.
+    """
+
+    return dmc.Modal(
+        id={'type': ids.PLOT_POPUP, 'index': window_id},
+        title='Plot',
+        fullScreen=True,
+        children=[
+
+            dcc.Download(id='fig-download'),
+            html.Div(
+                [
+                    dmc.Burger(id={'type': ids.PLOT_POPUP_BURGER, 'index': window_id},
+                               opened=False),
+                    dmc.ActionIcon(
+                        html.Div(
+                            DashIconify(icon='carbon:download'),
+                            style={'text-align': 'center'}
+                        ),
+                        id={'type': 'export-tab', 'index': window_id},
+                        size='sm',
+                        radius='xl',
+                        variant='outline',
+                        style=view_button_style
+                    ),
+                ],
+                style={'display': 'flex',
+                       # all in one row,
+                       'justify-content': 'space-between', }
+            ),
+            html.Div(
+                [
+                    dbc.Collapse(
+                        children=[
+                            dmc.Text("Widgets", align="left"),
+                            html.Div(
+                                id=ids.PLOT_POPUP_WIDGETS,
+                                style={
+                                    'height': 'calc(100% - 1rem)',
+                                    'background': 'rgba(255,255,255,0.4)',
+                                    'backdropFilter': 'blur(20px)',
+                                    'zIndex': 999,
+                                    'position': 'relative',
+                                    'boxShadow': '0 0 10px 0 rgba(0,0,0,0.1)',
+                                    'border': '1px solid rgba(0,0,0,0.1)',
+                                    'borderRadius': '10px',
+                                    'padding': '1rem',
+                                    'marginTop': '1rem',
+                                }
+                            )
+                        ],
+                        is_open=False,
+                        dimension="width",
+                        id={'type': ids.PLOT_POPUP_DRAWER, 'index': window_id},
+                        style={
+                            'width': '20%',
+                            'height': '100%',
+                        }
+                    ),
+
+                    dcc.Graph(
+                        id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
+                        style={
+                            'width': '100%',
+                            'height': '100%'
+                        }
+                    )
+                ]
+            )
+
+        ],
+
+        style={
+            'height': '100%',
+            'width': '100%'
+        }
+    )

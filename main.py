@@ -127,4 +127,4 @@ if __name__ == '__main__':
     pio.to_image(fig, format="png", engine='kaleido')
     Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
-    app.run_server(host=host, port=port, debug=True)  # Run the app on the specified port
+    app.run_server(host=host, port=port)  # Run the app on the specified port

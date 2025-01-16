@@ -3,11 +3,9 @@ from dash import html, Input, Output, State, MATCH, no_update, dcc
 from components import ids
 
 def link(app):
-
-
     @app.callback(
-        Output( ids.PLOT_POPUP_GRAPH, 'figure'),
-        Output( ids.PLOT_POPUP, 'opened'),
+        Output( {'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
+        Output( {'type': ids.PLOT_POPUP, 'index': MATCH}, 'opened'),
         Input({'type': 'open_popup', 'index': MATCH}, 'n_clicks'),
         State({
             'type': ids.PLOT,
