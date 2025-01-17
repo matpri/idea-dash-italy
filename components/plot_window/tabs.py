@@ -1,10 +1,12 @@
 import dash_bootstrap_components as dbc
 import dash_mantine_components as dmc
-from dash import html
+from dash import html, dcc
 from dash_iconify import DashIconify
 
 from assets.styles import hide_button_style, view_button_style
 from components.plot_window import viz_container
+
+from components import ids
 
 
 def render(card_id):
@@ -15,7 +17,6 @@ def render(card_id):
 
     # sort keys by data_handler.profile_order
     profiles.sort(key=lambda x: data_handler.profile_order.index(x) if x in data_handler.profile_order else 1000)
-
 
     if not profiles:
         return html.Div()
@@ -129,8 +130,19 @@ def render(card_id):
                 # center align
                 , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
             ),
+            # export button
+            dmc.ActionIcon(
+                html.Div(
+                    DashIconify(icon='carbon:intent-request-scale-out'),
+                    style={'text-align': 'center'}
+                ),
+                id={'type': 'open_popup', 'index': card_id},
+                size='sm',
+                radius='xl',
+                variant='outline',
+                style=view_button_style
+            ),
 
-            html.Div(),
         ],
             style={'display': 'flex',
                    # all in one row,
@@ -147,7 +159,146 @@ def render(card_id):
                    'height': '90%',
                    'width': '100%'}
         ),
-        _hp
+        _hp,
+        render_popup(card_id, _f)
     ]
 
     return layout
+
+
+def render_popup(window_id, graph):
+    """
+    :return: dmc.Modal that has a dcc.Graph object. And a hidable Aside with widgets for font size, y/x-axis label and title.
+    """
+    figure = graph.figure
+    return dmc.Modal(
+        id={'type': ids.PLOT_POPUP, 'index': window_id},
+        fullScreen=True,
+        children=[
+
+            dcc.Download(id={'type': 'fig-download', 'index': window_id}),
+            html.Div(
+                [
+                    dmc.Burger(id={'type': ids.PLOT_POPUP_BURGER, 'index': window_id},
+                               opened=False),
+                    dmc.ActionIcon(
+                        html.Div(
+                            DashIconify(icon='carbon:download'),
+                            style={'text-align': 'center'}
+                        ),
+                        id={'type': 'export-tab', 'index': window_id},
+                        size='sm',
+                        radius='sm',
+                        variant='outline',
+                        style=view_button_style
+                    ),
+                ],
+                style={'display': 'flex',
+                       # all in one row,
+                       'justify-content': 'space-between', }
+            ),
+            html.Div(
+                [
+                    dbc.Collapse(
+                        id={'type': ids.PLOT_POPUP_COLLAPSE, 'index': window_id},
+                        children=[
+                            dmc.Text("Widgets", align="left"),
+                            html.Div(
+                                [
+                                    # widgets for font size, y/x-axis label and title
+                                    dmc.Slider(
+                                        id={'type': ids.PLOT_POPUP_FONT_SIZE, 'index': window_id},
+                                        min=8,
+                                        max=24,
+                                        step=1,
+                                        value=12,
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='Title',
+                                        id={'type': ids.PLOT_POPUP_TITLE, 'index': window_id},
+                                        placeholder='Title',
+                                        value=figure['layout']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='X-axis Label',
+                                        id={'type': ids.PLOT_POPUP_X_LABEL, 'index': window_id},
+                                        placeholder='X-axis Label',
+                                        value=figure['layout']['xaxis']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='Y-axis Label',
+                                        id={'type': ids.PLOT_POPUP_Y_LABEL, 'index': window_id},
+                                        placeholder='Y-axis Label',
+                                        value=figure['layout']['yaxis']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+                                    html.Div(
+                                        # width and height of the saved image
+                                        [
+                                            dmc.TextInput(
+                                                label='Width',
+                                                id={'type': ids.PLOT_POPUP_WIDTH, 'index': window_id},
+                                                placeholder='Width',
+                                                value='1920',
+                                                style={'width': '100%'}
+                                            ),
+                                            dmc.TextInput(
+                                                label='Height',
+                                                id={'type': ids.PLOT_POPUP_HEIGHT, 'index': window_id},
+                                                placeholder='Height',
+                                                value='1080',
+                                                style={'width': '100%'}
+                                            ),
+                                        ],
+                                        style={'display': 'flex',
+                                               'justify-content': 'space-between'}
+                                    )
+
+                                ],
+                                id=ids.PLOT_POPUP_WIDGETS,
+                                style={
+                                    'height': 'calc(100% - 1rem)',
+                                    'background': 'rgba(255,255,255,0.4)',
+                                    'backdropFilter': 'blur(20px)',
+                                    'zIndex': 999,
+                                    'position': 'relative',
+                                    'boxShadow': '0 0 10px 0 rgba(0,0,0,0.1)',
+                                    'border': '1px solid rgba(0,0,0,0.1)',
+                                    'borderRadius': '10px',
+                                    'padding': '1rem',
+                                    'marginTop': '1rem',
+                                }
+                            )
+                        ],
+                        is_open=False,
+                        dimension="width",
+                        style={
+                            'width': '20%',
+                            'height': '100%',
+                        }
+                    ),
+                    dcc.Graph(
+                        id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
+                        responsive=True,
+                        style={
+                            'width': '95vw',
+                            'height': '85vh'
+                        }
+                    ),
+                ],
+                style={'display': 'flex',
+                       'justify-content': 'space-between',
+                       'height': '100%',
+                       'width': '100%'}
+            ),
+
+        ],
+
+        style={
+            'height': '100%',
+            'width': '100%'
+        }
+    )
