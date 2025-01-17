@@ -6,6 +6,9 @@ def link(app):
     @app.callback(
         Output( {'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
         Output( {'type': ids.PLOT_POPUP, 'index': MATCH}, 'opened'),
+        Output({'type': ids.PLOT_POPUP_TITLE, 'index': MATCH}, 'value'),
+        Output({'type': ids.PLOT_POPUP_X_LABEL, 'index': MATCH}, 'value'),
+        Output({'type': ids.PLOT_POPUP_Y_LABEL, 'index': MATCH}, 'value'),
         Input({'type': 'open_popup', 'index': MATCH}, 'n_clicks'),
         Input({'type': ids.PLOT_POPUP_FONT_SIZE, 'index': MATCH}, 'value'),
         Input({'type': ids.PLOT_POPUP_TITLE, 'index': MATCH}, 'value'),
@@ -35,9 +38,9 @@ def link(app):
             figure['layout']['xaxis']['title']['text'] = x_label
             figure['layout']['yaxis']['title']['text'] = y_label
             figure['layout']['template']['layout']['font']['size'] = font_size
-            return figure, no_update
+            return figure, no_update, no_update, no_update, no_update
 
-        return figure, True
+        return figure, True, figure['layout']['title']['text'], figure['layout']['xaxis']['title']['text'], figure['layout']['yaxis']['title']['text']
 
     @app.callback(
         Output({'type': ids.PLOT_POPUP_COLLAPSE, 'index': MATCH}, 'is_open'),
