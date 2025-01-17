@@ -235,6 +235,27 @@ def render_popup(window_id, graph):
                                         value=figure['layout']['yaxis']['title']['text'],
                                         style={'width': '100%'}
                                     ),
+                                    html.Div(
+                                        # width and height of the saved image
+                                        [
+                                            dmc.TextInput(
+                                                label='Width',
+                                                id={'type': ids.PLOT_POPUP_WIDTH, 'index': window_id},
+                                                placeholder='Width',
+                                                value='1920',
+                                                style={'width': '100%'}
+                                            ),
+                                            dmc.TextInput(
+                                                label='Height',
+                                                id={'type': ids.PLOT_POPUP_HEIGHT, 'index': window_id},
+                                                placeholder='Height',
+                                                value='1080',
+                                                style={'width': '100%'}
+                                            ),
+                                        ],
+                                        style={'display': 'flex',
+                                               'justify-content': 'space-between'}
+                                    )
 
                                 ],
                                 id=ids.PLOT_POPUP_WIDGETS,

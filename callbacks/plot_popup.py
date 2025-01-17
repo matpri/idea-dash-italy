@@ -2,18 +2,23 @@ import dash
 from dash import html, Input, Output, State, MATCH, no_update, dcc
 from components import ids
 
+
 def link(app):
     @app.callback(
-        Output( {'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
-        Output( {'type': ids.PLOT_POPUP, 'index': MATCH}, 'opened'),
+        Output({'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
+        Output({'type': ids.PLOT_POPUP, 'index': MATCH}, 'opened'),
         Output({'type': ids.PLOT_POPUP_TITLE, 'index': MATCH}, 'value'),
         Output({'type': ids.PLOT_POPUP_X_LABEL, 'index': MATCH}, 'value'),
         Output({'type': ids.PLOT_POPUP_Y_LABEL, 'index': MATCH}, 'value'),
+        Output({'type': ids.PLOT_POPUP_WIDTH, 'index': MATCH}, 'value'),
+        Output({'type': ids.PLOT_POPUP_HEIGHT, 'index': MATCH}, 'value'),
         Input({'type': 'open_popup', 'index': MATCH}, 'n_clicks'),
         Input({'type': ids.PLOT_POPUP_FONT_SIZE, 'index': MATCH}, 'value'),
         Input({'type': ids.PLOT_POPUP_TITLE, 'index': MATCH}, 'value'),
         Input({'type': ids.PLOT_POPUP_X_LABEL, 'index': MATCH}, 'value'),
         Input({'type': ids.PLOT_POPUP_Y_LABEL, 'index': MATCH}, 'value'),
+        Input({'type': ids.PLOT_POPUP_WIDTH, 'index': MATCH}, 'value'),
+        Input({'type': ids.PLOT_POPUP_HEIGHT, 'index': MATCH}, 'value'),
         State({
             'type': ids.PLOT,
             'index': MATCH
@@ -26,6 +31,8 @@ def link(app):
                         title,
                         x_label,
                         y_label,
+                        width,
+                        height,
                         figure):
         if n_clicks is None:
             return no_update
@@ -33,14 +40,31 @@ def link(app):
         ctx = dash.callback_context
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
+        if ids.PLOT_POPUP_WIDTH in triggered_id:
+            # make sure the width is a a valid number and not a string
+            try:
+                width = int(width)
+            except ValueError:
+                width = 1920
+
+        if ids.PLOT_POPUP_HEIGHT in triggered_id:
+            # make sure the height is a a valid number and not a string
+            try:
+                height = int(height)
+            except ValueError:
+                height = 1080
+
+        figure['layout']['template']['layout']['font']['size'] = font_size
         if 'open_popup' not in triggered_id:
             figure['layout']['title']['text'] = title
-            figure['layout']['xaxis']['title']['text'] = x_label
-            figure['layout']['yaxis']['title']['text'] = y_label
-            figure['layout']['template']['layout']['font']['size'] = font_size
-            return figure, no_update, no_update, no_update, no_update
+            figure['layout'].setdefault('xaxis', {}).setdefault('title', {})['text'] = x_label
+            figure['layout'].setdefault('yaxis', {}).setdefault('title', {})['text'] = y_label
+            return figure, no_update, no_update, no_update, no_update, no_update, no_update
 
-        return figure, True, figure['layout']['title']['text'], figure['layout']['xaxis']['title']['text'], figure['layout']['yaxis']['title']['text']
+        x_axis = figure['layout'].get('xaxis', {}).get('title', {}).get('text', '')
+        y_axis = figure['layout'].get('yaxis', {}).get('title', {}).get('text', '')
+
+        return figure, True, figure['layout']['title']['text'],x_axis, y_axis, width, height
 
     @app.callback(
         Output({'type': ids.PLOT_POPUP_COLLAPSE, 'index': MATCH}, 'is_open'),

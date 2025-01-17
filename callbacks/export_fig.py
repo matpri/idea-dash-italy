@@ -16,10 +16,12 @@ def link(app):
         Output({'type': 'fig-download', 'index': MATCH}, 'data'),
         Input({'type': 'export-tab', 'index': MATCH}, 'n_clicks'),
         State({'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
+        State({'type': ids.PLOT_POPUP_WIDTH, 'index': MATCH}, 'value'),
+        State({'type': ids.PLOT_POPUP_HEIGHT, 'index': MATCH}, 'value'),
 
         prevent_initial_call=True,
     )
-    def export_fig(n_clicks, figure):
+    def export_fig(n_clicks, figure, width, height):
         '''
         This function is used to download the current figure as a png file.
         :param n_clicks: The number of times the export button has been clicked
@@ -36,6 +38,6 @@ def link(app):
             return no_update
 
         png_data = pio.to_image(figure, format="png", engine='kaleido',
-                                width=800, height=600)
+                                width=width, height=height)
         # Return the image for download
         return dcc.send_bytes(png_data, "figure.png")
