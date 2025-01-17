@@ -7,6 +7,10 @@ def link(app):
         Output( {'type': ids.PLOT_POPUP_GRAPH, 'index': MATCH}, 'figure'),
         Output( {'type': ids.PLOT_POPUP, 'index': MATCH}, 'opened'),
         Input({'type': 'open_popup', 'index': MATCH}, 'n_clicks'),
+        Input({'type': ids.PLOT_POPUP_FONT_SIZE, 'index': MATCH}, 'value'),
+        Input({'type': ids.PLOT_POPUP_TITLE, 'index': MATCH}, 'value'),
+        Input({'type': ids.PLOT_POPUP_X_LABEL, 'index': MATCH}, 'value'),
+        Input({'type': ids.PLOT_POPUP_Y_LABEL, 'index': MATCH}, 'value'),
         State({
             'type': ids.PLOT,
             'index': MATCH
@@ -14,7 +18,12 @@ def link(app):
 
         prevent_initial_call=True,
     )
-    def open_plot_popup(n_clicks, figure):
+    def open_plot_popup(n_clicks,
+                        font_size,
+                        title,
+                        x_label,
+                        y_label,
+                        figure):
         if n_clicks is None:
             return no_update
         print('downloading graph', n_clicks)
@@ -22,7 +31,32 @@ def link(app):
         triggered_id = ctx.triggered[0]['prop_id'].split('.')[0]
 
         if 'open_popup' not in triggered_id:
-            return no_update
+            figure['layout']['title']['text'] = title
+            figure['layout']['xaxis']['title']['text'] = x_label
+            figure['layout']['yaxis']['title']['text'] = y_label
+            figure['layout']['template']['layout']['font']['size'] = font_size
+            return figure, no_update
 
         return figure, True
 
+    @app.callback(
+        Output({'type': ids.PLOT_POPUP_COLLAPSE, 'index': MATCH}, 'is_open'),
+        Output({'type': ids.PLOT_POPUP_BURGER, 'index': MATCH}, 'opened'),
+        Input({'type': ids.PLOT_POPUP_COLLAPSE, 'index': MATCH}, 'is_open'),
+        Input({'type': ids.PLOT_POPUP_BURGER, 'index': MATCH}, 'opened'),
+        prevent_initial_call=True,
+    )
+    def toggle_burger(drawers_open, burgers_open):
+        # Gather information about the triggering action
+        ctx = dash.callback_context
+        if not ctx.triggered:
+            # No input has been triggered
+            return drawers_open, burgers_open
+        trigger_id = ctx.triggered[0]["prop_id"].split(".")[0]  # using split as alternative to eval
+
+        # Handle the scenario where drawer's state changes
+        if ids.PLOT_POPUP_COLLAPSE in trigger_id:
+            return drawers_open, drawers_open
+        # Handle the scenario where burger's state changes
+        elif ids.PLOT_POPUP_BURGER in trigger_id:
+            return burgers_open, burgers_open

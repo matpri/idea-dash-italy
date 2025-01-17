@@ -160,23 +160,23 @@ def render(card_id):
                    'width': '100%'}
         ),
         _hp,
-        render_popup(card_id)
+        render_popup(card_id, _f)
     ]
 
     return layout
 
 
-def render_popup(window_id):
+def render_popup(window_id, graph):
     """
     :return: dmc.Modal that has a dcc.Graph object. And a hidable Aside with widgets for font size, y/x-axis label and title.
     """
-
+    figure = graph.figure
     return dmc.Modal(
         id={'type': ids.PLOT_POPUP, 'index': window_id},
         fullScreen=True,
         children=[
 
-            dcc.Download(id={'type':'fig-download', 'index': window_id}),
+            dcc.Download(id={'type': 'fig-download', 'index': window_id}),
             html.Div(
                 [
                     dmc.Burger(id={'type': ids.PLOT_POPUP_BURGER, 'index': window_id},
@@ -200,9 +200,43 @@ def render_popup(window_id):
             html.Div(
                 [
                     dbc.Collapse(
+                        id={'type': ids.PLOT_POPUP_COLLAPSE, 'index': window_id},
                         children=[
                             dmc.Text("Widgets", align="left"),
                             html.Div(
+                                [
+                                    # widgets for font size, y/x-axis label and title
+                                    dmc.Slider(
+                                        id={'type': ids.PLOT_POPUP_FONT_SIZE, 'index': window_id},
+                                        min=8,
+                                        max=24,
+                                        step=1,
+                                        value=12,
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='Title',
+                                        id={'type': ids.PLOT_POPUP_TITLE, 'index': window_id},
+                                        placeholder='Title',
+                                        value=figure['layout']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='X-axis Label',
+                                        id={'type': ids.PLOT_POPUP_X_LABEL, 'index': window_id},
+                                        placeholder='X-axis Label',
+                                        value=figure['layout']['xaxis']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+                                    dmc.TextInput(
+                                        label='Y-axis Label',
+                                        id={'type': ids.PLOT_POPUP_Y_LABEL, 'index': window_id},
+                                        placeholder='Y-axis Label',
+                                        value=figure['layout']['yaxis']['title']['text'],
+                                        style={'width': '100%'}
+                                    ),
+
+                                ],
                                 id=ids.PLOT_POPUP_WIDGETS,
                                 style={
                                     'height': 'calc(100% - 1rem)',
@@ -220,25 +254,25 @@ def render_popup(window_id):
                         ],
                         is_open=False,
                         dimension="width",
-                        id={'type': ids.PLOT_POPUP_DRAWER, 'index': window_id},
                         style={
                             'width': '20%',
                             'height': '100%',
                         }
                     ),
-
-                ]
+                    dcc.Graph(
+                        id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
+                        responsive=True,
+                        style={
+                            'width': '95vw',
+                            'height': '85vh'
+                        }
+                    ),
+                ],
+                style={'display': 'flex',
+                       'justify-content': 'space-between',
+                       'height': '100%',
+                       'width': '100%'}
             ),
-            html.Div(
-                dcc.Graph(
-                    id={'type': ids.PLOT_POPUP_GRAPH, 'index': window_id},
-                    responsive=True,
-                    style={
-                        'width': '95vw',
-                        'height': '85vh'
-                    }
-                ),
-            )
 
         ],
 
