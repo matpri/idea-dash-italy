@@ -56,6 +56,7 @@ class PypsaOutput(BaseProfile):
         'Iron and Steel',
         'Light Industrial',
         'Metal Smelting',
+        'Coal Mining',
         'Mining',
         'Natural Gas Production',
         'Petroleum Crude',
@@ -64,7 +65,7 @@ class PypsaOutput(BaseProfile):
         'Residential',
         'Transportation Freight',
         'Transportation Personal',
-        'Waste'
+        'Waste',
     ]
     viz_options = {
         'Overview':
@@ -205,6 +206,16 @@ class PypsaOutput(BaseProfile):
                 'db_process': sectored_processing.create_process('Mining'),
                 'viz': sectored_viz.create_plot('Mining'),
                 'callback': sectored_callbacks.create_link('Mining'),
+                'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
+            },
+        'Coal Mining':
+            {
+                'check': sectored_processing.create_check('Coal Mining'),
+                'db_check': sectored_processing.create_check('Coal Mining'),
+                'process': sectored_processing.create_process('Coal Mining'),
+                'db_process': sectored_processing.create_process('Coal Mining'),
+                'viz': sectored_viz.create_plot('Coal Mining'),
+                'callback': sectored_callbacks.create_link('Coal Mining'),
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             },
         'Natural Gas Production':
