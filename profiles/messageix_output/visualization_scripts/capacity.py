@@ -73,7 +73,7 @@ def plot(df, window_id):
     map_plot_widgets = dmc.MultiSelect(
         label='Variable',
         data=[{'label': variable, 'value': variable} for variable in variables],
-        value=variables,
+        value=[],
         id={
             'type': 'messageix-capacity-variable-select',
             'index': window_id
@@ -150,7 +150,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0],variables=variables),
+                           years[0],scenarios[0],variables=[]),
         id={
             'type': ids.FIGURE,
             'index': window_id,

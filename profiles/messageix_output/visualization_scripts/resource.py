@@ -6,26 +6,26 @@ from profiles.messageix_output.visualization_scripts.utils import bar_over_years
     pie_chart, map_plot
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, variable=None):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, variables=None):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Resource']['name']
     unit = plot_settings['Resource']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Resource']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Resource']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit,variables=variables)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Resource']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     elif type == 'Map Plot':
         title = plot_settings['Resource']['Map']['title']
-        return map_plot.plot_map(df, scenario, year, title, name, unit, variable)
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variables)
     else:
         plot_info = plot_settings['Resource']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
 
 
 def plot(df, window_id):
@@ -43,7 +43,7 @@ def plot(df, window_id):
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
     df_scen = df_scen[(df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (df_scen['scenario'] == scenarios[0])]
 
-    variables = ['All'] + df_scen.variable.unique().tolist()
+    variables = df_scen.variable.unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -69,15 +69,15 @@ def plot(df, window_id):
         style={'display': 'none'}
     )
 
-    map_plot_widgets = dmc.Select(
+    map_plot_widgets = dmc.MultiSelect(
         label='Variable',
         data=[{'label': variable, 'value': variable} for variable in variables],
-        value=variables[0],
+        value=[],
         id={
             'type': 'messageix-resource-variable-select',
             'index': window_id
         },
-        style={'display': 'none'}
+        style={'display': ''}
     )
 
     pattern_toggle = dmc.Switch(
@@ -149,7 +149,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0]),
+                           years[0],scenarios[0],variables=[]),
         id={
             'type': 'figure',
             'index': window_id,
