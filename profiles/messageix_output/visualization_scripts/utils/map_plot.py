@@ -77,7 +77,7 @@ centroids = {
 }
 
 
-def plot_map(message_data, scenario, time, title, name, unit, variable='All', aggregate=False, is_emissions=False):
+def plot_map(message_data, scenario, time, title, name, unit, variables='All', aggregate=False, is_emissions=False):
 
     title = f'{title} - {scenario} - in {time}'
 
@@ -88,11 +88,11 @@ def plot_map(message_data, scenario, time, title, name, unit, variable='All', ag
     else:
         rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
 
-    if variable != 'All':
+    if variables != 'All':
         if is_emissions:
-            rep_data = rep_data[rep_data['variable'].str.contains(variable)]
+            rep_data = rep_data[rep_data['variable'].str.contains('|'.join(variables))]
         else:
-            rep_data = rep_data[rep_data['variable'] == variable]
+            rep_data = rep_data[rep_data['variable'].isin(variables)]
 
     with open('./profiles/messageix_output/visualization_scripts/utils/ca.json', 'r') as f:
         map_data = geojson.load(f)

@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.messageix_output import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, variables='All', is_emissions=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -16,6 +16,11 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
 
     try:
         df_scen = subset(df, region, scenarios, aggregate, season)
+        if variables != 'All':
+            if is_emissions:
+                df_scen = df_scen[df_scen['variable'].str.contains('|'.join(variables))]
+            else:
+                df_scen = df_scen[df_scen['variable'].isin(variables)]
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
         num_years = df_scen.time.nunique()

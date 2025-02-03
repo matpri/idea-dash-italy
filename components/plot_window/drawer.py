@@ -28,7 +28,7 @@ def render(card_id, viz_func):
                   html.Div(viz_func,
                            id={'type': 'drawer-content', 'index': card_id},
                            style={
-                               'height': 'calc(100% - 1rem)',
+                               'height': 'calc(80vh)',
                                'background': 'rgba(255,255,255,0.4)',
                                'backdropFilter': 'blur(20px)',
                                'zIndex': 999,
@@ -38,6 +38,7 @@ def render(card_id, viz_func):
                                'borderRadius': '10px',
                                'padding': '1rem',
                                'marginTop': '1rem',
+                               'overflowY': 'auto'
                            }
                            )]
         ,
