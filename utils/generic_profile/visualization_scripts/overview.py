@@ -229,6 +229,7 @@ def create_overview_plot(model, is_comparison=False):
         '''
         # print('plotting overview')
         classes = df['variable'].unique().tolist()
+
         units = df[df['variable'] == classes[0]]['unit'].unique().tolist()
 
         comparison_widgets = []

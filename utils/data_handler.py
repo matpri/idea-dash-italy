@@ -544,10 +544,13 @@ class DataHandler:
             model = df.model.unique()[0]
             if model not in model_mapping:
                 # check if df.columns contain all the following: model, scenario, variable, value, unit
-                if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+                if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']):
                     diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
                     print(f"Columns missing in {filename}", diff)
                     return False, f"These Columns were expected: {diff}", filename
+                df = df[['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']]
+                # if unit is nan, set it to ''
+                df['unit'] = df['unit'].fillna('')
 
             else:
                 # make sure scenario is in the columns
