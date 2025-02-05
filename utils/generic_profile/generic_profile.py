@@ -45,7 +45,10 @@ class GenericProfile:
 
         self.plot_order = classes
         self.plot_order.sort()
-        self.plot_order = ['Overview', 'Output Stats'] + self.plot_order
+        if 'Overview' not in self.plot_order:
+            self.plot_order = ['Overview'] + self.plot_order
+        if 'Output Stats' not in self.plot_order:
+            self.plot_order = self.plot_order + ['Output Stats']
 
         self.viz_options = {}
         self.pattern_dict = {}
@@ -59,24 +62,28 @@ class GenericProfile:
                 'db_process': generic_processing.create_process(class_name),
                 'viz': plot,
             }
+        print(self.viz_options.keys())
+        if 'Overview' not in self.viz_options.keys():
+            print('creating overview')
+            self.viz_options['Overview'] = {
+                'check': lambda x: True,
+                'db_check': lambda x: True,
+                'process': lambda x: x,
+                'db_process': lambda x: x,
+                'viz': overview.create_overview_plot(name, is_comparison=name == 'Generic Comparison'),
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            }
 
-        self.viz_options['Overview'] = {
-            'check': lambda x: True,
-            'db_check': lambda x: True,
-            'process': lambda x: x,
-            'db_process': lambda x: x,
-            'viz': overview.create_overview_plot(name, is_comparison=name == 'Generic Comparison'),
-            'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
-        }
-
-        self.viz_options['Output Stats'] = {
-            'check': lambda x: True,
-            'db_check': lambda x: True,
-            'process': lambda x: x,
-            'db_process': lambda x: x,
-            'viz': output_stats.create_plot(name, is_comparison=name == 'Generic Comparison'),
-            'description': 'Table of output statistics for each scenario.'
-        }
+        if 'Output Stats' not in self.viz_options.keys():
+            print('creating output stats')
+            self.viz_options['Output Stats'] = {
+                'check': lambda x: True,
+                'db_check': lambda x: True,
+                'process': lambda x: x,
+                'db_process': lambda x: x,
+                'viz': output_stats.create_plot(name, is_comparison=name == 'Generic Comparison'),
+                'description': 'Table of output statistics for each scenario.'
+            }
 
     @classmethod
     def link(cls, app):
