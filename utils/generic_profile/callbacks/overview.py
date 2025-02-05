@@ -119,15 +119,21 @@ def link(app):
                 break
         if not trigger_id['type'] == 'unit-select':
             _unit[idx] = _u_data[idx][0]['value']
-
+        print('scen', _scenarios)
         df = data_handler.processed_data[model][name].copy()
-        if _scenarios is not None:
+        _groupby_model = False
+        _groupby_scenario = False
+        _groupby_version = False
+        _f = False
+
+        if _scenarios is not None and _scenarios != []:
             if _scenarios[idx] != 'ALL':
                 df = df[df['base_scenario'] == _scenarios[idx]]
 
-        _groupby_model = _grouping[idx] == 1
-        _groupby_scenario = _grouping[idx] == 2
-        _groupby_version = _grouping[idx] == 3
+            _groupby_model = _grouping[idx] == 1
+            _groupby_scenario = _grouping[idx] == 2
+            _groupby_version = _grouping[idx] == 3
+            _f = _fill[idx]
 
         print('idx:', idx, 'plot type:', _p_type[idx])
         _canvas[idx] = render_plot(_p_type[idx],
@@ -136,7 +142,7 @@ def link(app):
                                    _groupby_scenario,
                                    _groupby_version,
                                    _unit[idx],
-                                   fill=_fill[idx]
+                                   fill=_f
                                    )
 
         return _canvas, [dash.no_update for _ in
