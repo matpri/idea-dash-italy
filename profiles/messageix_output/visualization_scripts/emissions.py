@@ -1,10 +1,11 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
 from components import ids
+from profiles.messageix_output import utils
 from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart, map_plot
 
 
-def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario, pattern_active=True, text_active=False, variables=None):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Emissions']['name']
@@ -14,19 +15,19 @@ def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario
     df = df[df['type'].str.startswith(variable)]
     if type == 'By Year':
         plot_info = plot_settings['Emissions']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Emissions']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit,variables=variables)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Emissions']['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'],variables=variables)
     elif type == 'Map Plot':
         title = plot_settings['Emissions']['Map']['title']
-        return map_plot.plot_map(df, scenario, year, title, name, unit, variable, is_emissions=True)
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variables, is_emissions=True)
     else:
         plot_info = plot_settings['Emissions']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
 
 
 def plot(df, window_id):
@@ -45,6 +46,14 @@ def plot(df, window_id):
         emissions_type.append('CO2')
     if df['type'].str.startswith('TCE').any():
         emissions_type.append('TCE')
+
+    df_scen = df.copy(deep=True)
+    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+    df_scen = df_scen[
+        (df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
+                    df_scen['scenario'] == scenarios[0]) & (df_scen['type'] == emissions_type[0])]
+
+    variables = df_scen.variable.unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -136,6 +145,16 @@ def plot(df, window_id):
                 'index': window_id,
             },
         ),
+        dmc.MultiSelect(
+            label='Variable',
+            data=[{'label': variable, 'value': variable} for variable in variables],
+            value=[],
+            id={
+                'type': 'messageix-emissions-variable-select',
+                'index': window_id
+            },
+            style={'display': 'block'}
+        ),
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'messageix-emissions-download-button', 'index': window_id},
@@ -147,7 +166,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, emissions_type[0], [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0]),
+                           years[0],scenarios[0], variables=[]),
         id={
             'type': ids.FIGURE,
             'index': window_id,

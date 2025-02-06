@@ -179,6 +179,18 @@ def link(app):
                 break
 
         print('idx:', idx, 'plot type:', _p_type[idx])
+        if 'messageix-om_cost-aggregate-switch' in trigger_id['type']:
+            if _aggregates[idx] is not None:
+                df_scen = data_handler.processed_data['MESSAGEix-Canada']['OM Cost'].copy(deep=True)
+                if _aggregates[idx]:
+                    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+                else:
+                    df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+                df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (
+                            df_scen['scenario'] == _scenario[idx])]
+
+                _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
+                _variables[idx] = _v_data[idx]
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
@@ -233,19 +245,6 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'none'}
             _v_style[idx] = {'display': 'block'}
-
-            if 'messageix-om_cost-aggregate-switch' in trigger_id['type']:
-                if _aggregates[idx] is not None:
-                    df_scen = data_handler.processed_data['MESSAGEix-Canada']['OM Cost'].copy(deep=True)
-                    if _aggregates[idx]:
-                        df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
-                    else:
-                        df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
-                    df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (df_scen['scenario'] == _scenario[idx])]
-
-                    _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
-                    _variables[idx] = _v_data[idx]
-
 
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['OM Cost'],

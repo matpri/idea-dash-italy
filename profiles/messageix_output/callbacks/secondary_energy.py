@@ -272,8 +272,6 @@ def link(app):
             _v_style[idx] = {'display': 'block'}
             _group_style[idx] = {'display': 'none'}
 
-
-
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Secondary Energy'],
                                            _aggregates[idx],

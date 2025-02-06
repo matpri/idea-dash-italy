@@ -162,6 +162,7 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+
         if 'messageix-capacity-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
@@ -179,6 +180,19 @@ def link(app):
                 break
 
         print('idx:', idx, 'plot type:', _p_type[idx])
+
+        if 'messageix-capacity-aggregate-switch' in trigger_id['type']:
+            if _aggregates[idx] is not None:
+                df_scen = data_handler.processed_data['MESSAGEix-Canada']['Capacity'].copy(deep=True)
+                if _aggregates[idx]:
+                    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+                else:
+                    df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+                df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (
+                            df_scen['scenario'] == _scenario[idx])]
+
+                _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
+                _variables[idx] = _v_data[idx]
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}

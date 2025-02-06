@@ -155,8 +155,10 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_cumulative_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _variables, _pattern, _text,
-                         _download,_r_style, _y_style, _v_style, _v_data, _canvas, _data, _s_style, _m_style, _pattern_style, _text_style):
+    def update_cumulative_capacity(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _variables, _pattern,
+                                   _text,
+                                   _download, _r_style, _y_style, _v_style, _v_data, _canvas, _data, _s_style, _m_style,
+                                   _pattern_style, _text_style):
         print('updating cumulative_capacity plot')
         from main import data_handler
         ctx = dash.callback_context
@@ -169,7 +171,9 @@ def link(app):
                         (id['id']['type'] == 'messageix-cumulative_capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'].to_csv, "cumulative_capacity.csv")
+            _data[idx] = dcc.send_data_frame(
+                data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'].to_csv,
+                "cumulative_capacity.csv")
             return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, _data, _s_style, _m_style, _pattern_style, _text_style
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -179,6 +183,18 @@ def link(app):
                 break
 
         print('idx:', idx, 'plot type:', _p_type[idx])
+        if 'messageix-cumulative_capacity-aggregate-switch' in trigger_id['type']:
+            if _aggregates[idx] is not None:
+                df_scen = data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'].copy(deep=True)
+                if _aggregates[idx]:
+                    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+                else:
+                    df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+                df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (
+                        df_scen['scenario'] == _scenario[idx])]
+
+                _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
+                _variables[idx] = _v_data[idx]
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
@@ -187,15 +203,16 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
-            
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
+                _canvas[idx] = render_plot('By Year',
+                                           data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], variables=_variables[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx],
+                                           variables=_variables[idx])
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
@@ -203,9 +220,10 @@ def link(app):
             _y_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
-            
+
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
+                _canvas[idx] = render_plot('Trend Over Years',
+                                           data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -217,9 +235,10 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
-            
+
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
+                _canvas[idx] = render_plot('Pie Chart',
+                                           data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -234,21 +253,9 @@ def link(app):
             _text_style[idx] = {'display': 'none'}
             _v_style[idx] = {'display': 'block'}
 
-            if 'messageix-cumulative_capacity-aggregate-switch' in trigger_id['type']:
-                if _aggregates[idx] is not None:
-                    df_scen = data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'].copy(deep=True)
-                    if _aggregates[idx]:
-                        df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
-                    else:
-                        df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
-                    df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (df_scen['scenario'] == _scenario[idx])]
-
-                    _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
-                    _variables[idx] = _v_data[idx]
-
-
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
+                _canvas[idx] = render_plot('Map Plot',
+                                           data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -261,13 +268,16 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
-            
+
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
+                _canvas[idx] = render_plot('By Region',
+                                           data_handler.processed_data['MESSAGEix-Canada']['Cumulative Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], variables=_variables[idx])
+                                           pattern_active=_pattern[idx], text_active=_text[idx],
+                                           variables=_variables[idx])
 
-        return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, [dash.no_update for _ in _data], _s_style, _m_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, _v_style, _v_data, _variables, [dash.no_update for _ in
+                                                                            _data], _s_style, _m_style, _pattern_style, _text_style
