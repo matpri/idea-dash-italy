@@ -52,9 +52,15 @@ If you haven't installed Anaconda yet, please follow this [installation guide](h
    ```bash
    cd idea-dash
    ```
-3. **Create the Conda environment**: We've included a file named `environment.yml` in the IDEA directory where you just navigated. This file lists all the Python packages required to run IDEA. Use this command to create a new Conda environment named `idea-dash`, which has all these required packages:
-```bash
+3. **Create the Conda environment**: We've included a file named `environment.yml` (for Windows) or `linux_environment.yml` (for Linux/Mac) in the IDEA directory where you just navigated. This file lists all the Python packages required to run IDEA. Use this command to create a new Conda environment named `idea-dash`, which has all these required packages:
+
+Windows:
+   ```bash
    conda env create -f environment.yml
+   ```
+Linux/Mac:
+```bash
+   conda env create -f linux_environment.yml
    ```
 4. **Activate the Conda environment**: Now, activate the conda environment using this command:
    ```bash
