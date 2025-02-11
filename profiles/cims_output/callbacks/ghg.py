@@ -37,6 +37,10 @@ def link(app):
             'index': MATCH
         }, 'data'),
         Output({
+            'type': 'cims-ghg-service-select',
+            'index': MATCH
+        }, 'value'),
+        Output({
             'type': 'cims-ghg-download',
             'index': MATCH
         }, 'data'),
@@ -182,22 +186,23 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         _data = data_handler.processed_data['CIMS']['Overview']
         _data = _data[_data['tab'] == 'Emissions']
+        services = dash.no_update
+        _service_style = dash.no_update
 
         if 'cims-ghg-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv, "ghg.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style, dash.no_update
+            return _canvas, _r_style, _y_style, _service_style, _service, services,  _data, _s_style, _m_style, _pattern_style, _text_style, dash.no_update
 
-        services = dash.no_update
 
         emissions_list = _data[_data['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
         to_use = emissions_mapping[_emission]
         emissions_list = [e_type for e_type in emissions_list if e_type in to_use]
 
         if 'cims-ghg-service-sector-select' in trigger_id['type']:
-            _data = _data[_data['sector'] == _sector]
+            _data = _data[_data['sector'] == _service_sector]
             services = _data[_data.parameter.isin(emissions_list)]['short_path'].unique().tolist()
+            _service = services[0]
 
-        _service_style = dash.no_update
         if _representation == 'By Emission':
             _sector_style = {'display': 'block'}
             _service_style = {'display': 'none'}
@@ -264,4 +269,4 @@ def link(app):
                                   service=_service,
                                   emissions_list=emissions_list, plot_name=_emission)
 
-        return _canvas, _r_style, _y_style, _service_style, services, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _sector_style
+        return _canvas, _r_style, _y_style, _service_style,services, _service, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _sector_style

@@ -125,15 +125,6 @@ def widgets(df, window_id):
 
     by_service_widgets = html.Div([
         dmc.Select(
-            label='Service',
-            data=[{'label': service, 'value': service} for service in services],
-            value=services[0] if len(services) > 0 else None,
-            id={
-                'type': 'cims-ghg-service-select',
-                'index': window_id
-            }
-        ),
-        dmc.Select(
             label='Sector',
             data=[{'label': sector, 'value': sector} for sector in sectors],
             value=sectors[0],
@@ -142,7 +133,16 @@ def widgets(df, window_id):
                 'index': window_id
             },
             style={'display': 'block'}
-        )
+        ),
+        dmc.Select(
+            label='Service',
+            data=[{'label': service, 'value': service} for service in services],
+            value=services[0] if len(services) > 0 else None,
+            id={
+                'type': 'cims-ghg-service-select',
+                'index': window_id
+            }
+        ),
     ],
         style={'display': 'none'},
         id={
