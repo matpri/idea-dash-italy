@@ -536,6 +536,8 @@ class DataHandler:
         else:
             df = content
 
+        # remove all rows with all nan values
+        df = df.dropna(how='all')
 
         # make all headers lowercase
         df.columns = df.columns.str.lower()
