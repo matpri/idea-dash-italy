@@ -119,7 +119,8 @@ def process_represenation(df, representation, sector, service, fuel):
         if fuel != 'All':
             df = df[(df['context'] == fuel) & (df['sector'] != fuel)]
         filtered_df = df[(df['technology'].isna()) & ~df.sector.isna() & (
-                df.short_path == df.sector)].groupby(
+                (df.short_path == df.sector )& (df.parent_service==''))]
+        filtered_df = filtered_df.groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
         filtered_df = filtered_df[['region', 'sector', 'year', 'value_num', 'scenario']]
