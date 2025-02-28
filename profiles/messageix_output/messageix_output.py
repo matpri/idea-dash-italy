@@ -25,6 +25,7 @@ from profiles.messageix_output.callbacks import (emissions as emissions_callback
                                                  om_cost as om_cost_callbacks,
                                                  primary_energy_sub as primary_energy_substitution_callbacks,
                                                  resource as resource_callbacks,
+efficiency as efficiency_callbacks
                                                  )
 from profiles.messageix_output.processing_scripts import (
     emissions as emissions_processing,
@@ -44,7 +45,8 @@ from profiles.messageix_output.processing_scripts import (
     lifetime as lifetime_processing,
     om_cost as om_cost_processing,
     primary_energy_sub as primary_energy_substitution_processing,
-    resource as resource_processing
+    resource as resource_processing,
+efficiency as efficiency_processing
 )
 from profiles.messageix_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -64,7 +66,8 @@ from profiles.messageix_output.visualization_scripts import (
     lifetime as lifetime_viz,
     om_cost as om_cost_viz,
     primary_energy_sub as primary_energy_substitution_viz,
-    resource as resource_viz
+    resource as resource_viz,
+efficiency as efficiency_viz
 )
 
 
@@ -106,6 +109,16 @@ class messageixOutput(BaseProfile):
                 'viz': emissions_viz.plot,
                 'callback': emissions_callbacks.link,
                 'description': 'Emissions that are produced by the generation mix in the model.'
+            },
+        'Efficiency':
+            {
+                'check': efficiency_processing.check,
+                'db_check': efficiency_processing.check,
+                'process': efficiency_processing.process,
+                'db_process': efficiency_processing.process,
+                'viz': efficiency_viz.plot,
+                'callback': efficiency_callbacks.link,
+                'description': 'Efficiency of the energy system.'
             },
         'Total Cost':
             {
