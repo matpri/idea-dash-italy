@@ -104,7 +104,7 @@ def plot(df, window_id):
     widget_layout = html.Div([
          dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['Trend Over Years', 'Pie Chart', 'Map Plot']],
+            data=[{'label': plot, 'value': plot} for plot in ['Trend Over Years', 'Pie Chart', 'Map Plot', 'By Year', 'By Region']],
             value='Trend Over Years',
             id={
                 'type': 'messageix-capital_cost-plot-select',
