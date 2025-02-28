@@ -41,11 +41,7 @@ def plot(df, window_id):
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
     df['type'] = df['variable'].apply(lambda x: x.split('|')[1])
-    emissions_type = []
-    if 'CO2' in df['type'].unique():
-        emissions_type.append('CO2')
-    if df['type'].str.startswith('TCE').any():
-        emissions_type.append('TCE')
+    emissions_type = df['type'].unique().tolist()
 
     df_scen = df.copy(deep=True)
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])

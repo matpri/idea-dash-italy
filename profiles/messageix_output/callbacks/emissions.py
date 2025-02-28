@@ -182,7 +182,7 @@ def link(app):
 
         print('idx:', idx, 'plot type:', _p_type[idx])
 
-        if 'messageix-emissions-aggregate-switch' in trigger_id['type']:
+        if 'messageix-emissions-aggregate-switch' in trigger_id['type'] or 'messageix-emissions-emission-type-select' in trigger_id['type']:
             if _aggregates[idx] is not None:
                 df_scen = data_handler.processed_data['MESSAGEix-Canada']['Emissions'].copy(deep=True)
                 if _aggregates[idx]:
@@ -190,7 +190,7 @@ def link(app):
                 else:
                     df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
                 df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (
-                            df_scen['scenario'] == _scenario[idx]) & (df_scen['variable'].str.startswith('Emissions|'+_emissions_type[idx]))]
+                            df_scen['scenario'] == _scenario[idx]) & (df_scen['variable'].str.startswith('Emissions|'+_emissions_type[idx]+'|') | (df_scen['variable'] == 'Emissions|'+_emissions_type[idx]))]
 
                 _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
                 _variables[idx] = _v_data[idx]

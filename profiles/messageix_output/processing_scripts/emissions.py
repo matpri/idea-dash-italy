@@ -61,7 +61,7 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
-        df = df[df.variable.str.startswith("Emissions|CO2|") | df.variable.str.startswith("Emissions|TCE")].copy()
+        df = df[df.variable.str.startswith("Emissions")].copy()
         #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canadian_total = calc_canadian(df)
         full_data = pd.concat([df, canadian_total])
