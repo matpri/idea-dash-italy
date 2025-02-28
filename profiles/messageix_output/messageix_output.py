@@ -25,7 +25,8 @@ from profiles.messageix_output.callbacks import (emissions as emissions_callback
                                                  om_cost as om_cost_callbacks,
                                                  primary_energy_sub as primary_energy_substitution_callbacks,
                                                  resource as resource_callbacks,
-efficiency as efficiency_callbacks
+                                                 efficiency as efficiency_callbacks,
+                                                 cost as cost_callbacks
                                                  )
 from profiles.messageix_output.processing_scripts import (
     emissions as emissions_processing,
@@ -46,7 +47,8 @@ from profiles.messageix_output.processing_scripts import (
     om_cost as om_cost_processing,
     primary_energy_sub as primary_energy_substitution_processing,
     resource as resource_processing,
-efficiency as efficiency_processing
+    efficiency as efficiency_processing,
+    cost as cost_processing
 )
 from profiles.messageix_output.visualization_scripts import (
     emissions as emissions_viz,
@@ -67,7 +69,8 @@ from profiles.messageix_output.visualization_scripts import (
     om_cost as om_cost_viz,
     primary_energy_sub as primary_energy_substitution_viz,
     resource as resource_viz,
-efficiency as efficiency_viz
+    efficiency as efficiency_viz,
+    cost as cost_viz
 )
 
 
@@ -119,6 +122,16 @@ class messageixOutput(BaseProfile):
                 'viz': efficiency_viz.plot,
                 'callback': efficiency_callbacks.link,
                 'description': 'Efficiency of the energy system.'
+            },
+        'Cost':
+            {
+                'check': cost_processing.check,
+                'db_check': cost_processing.check,
+                'process': cost_processing.process,
+                'db_process': cost_processing.process,
+                'viz': cost_viz.plot,
+                'callback': cost_callbacks.link,
+                'description': 'Cost of the energy system.'
             },
         'Total Cost':
             {
