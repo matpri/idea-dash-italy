@@ -7,6 +7,10 @@ from profiles.messageix_output.visualization_scripts.final_energy import render_
 from components import ids
 
 
+sources = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids']
+sectors = ['Industry', 'Transportation', 'Non-Energy Use', 'Residential and Commercial']
+
+
 def link(app):
     @app.callback(
         Output({
@@ -64,12 +68,28 @@ def link(app):
             },
             'style'
         ),
+        Output({
+            'type': 'messageix-final_energy-show_sector-switch',
+            'index': MATCH
+        }, 'label'),
+        Output({
+            'type': 'messageix-final_energy-type-select',
+            'index': MATCH
+        }, 'data'),
+        Output({
+            'type': 'messageix-final_energy-type-select',
+            'index': MATCH
+        }, 'value'),
+        Output({
+            'type': 'messageix-final_energy-type-select',
+            'index': MATCH
+        }, 'label'),
         Input({
             'type': 'messageix-final_energy-plot-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'messageix-final_energy-aggregate-switch',
+            'type': 'messageix-final_energy-show_sector-switch',
             'index': MATCH
         }, 'checked'),
         Input({
@@ -167,7 +187,7 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_final_energy(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _types, _levels, _pattern,
+    def update_final_energy(_p_type, _show_sectors, _scenarios, _scenario, _regions, _years, _types, _levels, _pattern,
                             _text,
                             _download, _r_style, _y_style, _l_style, _l_data, _canvas, _data, _s_style, _m_style,
                             _pattern_style, _text_style):
@@ -176,20 +196,29 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+        _show_sectors_label = 'Show Sector' if _show_sectors else 'Show Resource Type'
+        _type_select_label = 'Sector' if _show_sectors else 'Resource Type'
+        _t_data = dash.no_update
         if 'messageix-final_energy-download-button' in trigger_id['type']:
 
             _data = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Final Energy'].to_csv,
                                              "final_energy.csv")
-            return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style, _show_sectors_label, _t_data, _types, _type_select_label
         df_scen = data_handler.processed_data['MESSAGEix-Canada']['Final Energy'].copy(deep=True)
 
+        df_scen = df_scen[df_scen['type'].isin(sectors)] if _show_sectors else df_scen[df_scen['type'].isin(sources)]
+
         if 'messageix-final_energy-type-select' in \
-                trigger_id['type'] or 'messageix-final_energy-level-select' in trigger_id['type']:
+                trigger_id['type'] or 'messageix-final_energy-level-select' in trigger_id['type'] or 'messageix-final_energy-show_sector-switch' in trigger_id['type']:
 
             df_scen = df_scen[(df_scen['region'] == _regions) & (df_scen['time'] == _years) & (
                     df_scen['scenario'] == _scenario)]
 
-            if 'messageix-final_energy-type-select' in trigger_id['type']:
+            if 'messageix-final_energy-show_sector-switch' in trigger_id['type']:
+                _types = 'All'
+                _t_data = df_scen[df_scen['type'].isin(sectors)].type.unique().tolist() if _show_sectors else df_scen[df_scen['type'].isin(sources)].type.unique().tolist()
+                _t_data = [{'label': x, 'value': x} for x in _t_data]
+            if 'messageix-final_energy-type-select' in trigger_id['type'] or 'messageix-final_energy-show_sector-switch' in trigger_id['type']:
                 if _types != 'All':
                     df_scen = df_scen[df_scen['type'] == _types]
 
@@ -247,9 +276,9 @@ def link(app):
             _pattern_style= {'display': 'block'}
             _text_style= {'display': 'block'}
 
-            if _aggregates is not None:
+            if _show_sectors is not None:
                 _canvas= render_plot('By Year', data_handler.processed_data['MESSAGEix-Canada']['Final Energy'],
-                                           _aggregates,
+                                           _show_sectors,
                                            _scenarios,
                                            _regions,
                                            _years, scenario=_scenario,
@@ -263,10 +292,10 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
 
-            if _aggregates is not None:
+            if _show_sectors is not None:
                 _canvas = render_plot('Trend Over Years',
                                            data_handler.processed_data['MESSAGEix-Canada']['Final Energy'],
-                                           _aggregates,
+                                           _show_sectors,
                                            _scenarios,
                                            _regions,
                                            _years, scenario=_scenario, variables=variables)
@@ -278,9 +307,9 @@ def link(app):
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}
 
-            if _aggregates is not None:
+            if _show_sectors is not None:
                 _canvas = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Final Energy'],
-                                           _aggregates,
+                                           _show_sectors,
                                            _scenarios,
                                            _regions,
                                            _years, scenario=_scenario, variables=variables)
@@ -293,9 +322,9 @@ def link(app):
             _s_style = {'display': 'block'}
             _text_style = {'display': 'none'}
 
-            if _aggregates is not None:
+            if _show_sectors is not None:
                 _canvas = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Final Energy'],
-                                           _aggregates,
+                                           _show_sectors,
                                            _scenarios,
                                            _regions,
                                            _years, scenario=_scenario, variables=variables)
@@ -308,13 +337,13 @@ def link(app):
             _pattern_style = {'display': 'block'}
             _text_style = {'display': 'block'}
 
-            if _aggregates is not None:
+            if _show_sectors is not None:
                 _canvas = render_plot('By Region', data_handler.processed_data['MESSAGEix-Canada']['Final Energy'],
-                                           _aggregates,
+                                           _show_sectors,
                                            _scenarios,
                                            _regions,
                                            _years, scenario=_scenario,
                                            pattern_active=_pattern, text_active=_text,
                                            variables=variables)
 
-        return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style, _show_sectors_label, _t_data, _types, _type_select_label

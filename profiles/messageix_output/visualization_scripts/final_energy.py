@@ -7,6 +7,10 @@ from profiles.messageix_output.visualization_scripts.utils import bar_over_years
     pie_chart, map_plot
 
 
+sources = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids']
+sectors = ['Industry', 'Transportation', 'Non-Energy Use', 'Residential and Commercial']
+
+
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False,
                 variables=[]):
     from profiles.messageix_output.utils import plot_settings
@@ -53,6 +57,7 @@ def plot(df, window_id):
     df_scen = df_scen[
         (df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
                 df_scen['scenario'] == scenarios[0])]
+    df_scen = df_scen[df_scen['type'].isin(sectors)]
     types = ['All'] + sorted(df_scen['type'].unique().tolist())
 
     max_depth = df_scen.levels.max()
@@ -148,7 +153,7 @@ def plot(df, window_id):
         dmc.Switch('Show Sector',
                    checked=True,
                    id={
-                       'type': 'messageix-final_energy-aggregate-switch',
+                       'type': 'messageix-final_energy-show_sector-switch',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
