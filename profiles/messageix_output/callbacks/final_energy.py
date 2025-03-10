@@ -217,6 +217,7 @@ def link(app):
             if 'messageix-final_energy-show_sector-switch' in trigger_id['type']:
                 _types = 'All'
                 _t_data = df_scen[df_scen['type'].isin(sectors)].type.unique().tolist() if _show_sectors else df_scen[df_scen['type'].isin(sources)].type.unique().tolist()
+                _t_data += ['All']
                 _t_data = [{'label': x, 'value': x} for x in _t_data]
             if 'messageix-final_energy-type-select' in trigger_id['type'] or 'messageix-final_energy-show_sector-switch' in trigger_id['type']:
                 if _types != 'All':
