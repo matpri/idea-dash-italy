@@ -62,12 +62,14 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Secondary Energy|")]
-        # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
-        #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canadian_total = calc_canadian(df)
-        full_data = pd.concat([df, canadian_total])
-        full_data['group'] = full_data["variable"].map(utils.groups).fillna(full_data["variable"])
 
+        full_data = pd.concat([df, canadian_total])
+
+        full_data['type'] = full_data['variable'].str.split('|').str[1]
+        # add levels which is the number of | in the variable name
+        full_data['levels'] = full_data['variable'].apply(lambda x: len(x.split('|')))
+        full_data['parent'] = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:-1]))
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)
