@@ -246,7 +246,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
                     else:
                         del data_handler.processed_data['Generic Comparison'][viz]
 
-            if data_handler.processed_data['Generic Comparison'] == {}:
+            if data_handler.processed_data.get('Generic Comparison', {}) != {}:
                 del data_handler.processed_data['Generic Comparison']
 
             # Delete profiles that have empty processed data
