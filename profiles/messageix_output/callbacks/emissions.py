@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State, ALL, dcc
+from dash import Output, Input, State, MATCH, dcc, ALL
 
 from profiles.messageix_output import utils
 from profiles.messageix_output.visualization_scripts.emissions import render_plot
@@ -7,265 +7,344 @@ from profiles.messageix_output.visualization_scripts.emissions import render_plo
 from components import ids
 
 
+# sources = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids', 'Hydrogen']
+# sectors = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids', 'Hydrogen']
+
+
 def link(app):
     @app.callback(
         Output({
             'type': ids.FIGURE,
-            'index': ALL,
+            'index': MATCH,
             'profile': 'messageix_output',
             'viz': 'emissions'
         }, 'figure'),
         Output({
             'type': 'messageix-emissions-region-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         Output({
             'type': 'messageix-emissions-year-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         Output({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
+        }, 'style'),
+        Output({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
+        }, 'data'),
+        Output({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
+        }, 'value'),
+        Output({
             'type': 'messageix-emissions-download',
-            'index': ALL
+            'index': MATCH
         }, 'data'),
         Output({
             'type': 'messageix-emissions-scenario-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         Output({
             'type': 'messageix-emissions-scenario-multi-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         Output(
             {
                 'type': 'messageix-emissions-pattern-switch',
-                'index': ALL
+                'index': MATCH
             },
             'style'
         ),
         Output(
             {
                 'type': 'messageix-emissions-text-switch',
-                'index': ALL
+                'index': MATCH
             },
             'style'
         ),
         Output({
-            'type': 'messageix-emissions-variable-select',
-            'index': ALL
+            'type': 'messageix-emissions-show_sector-switch',
+            'index': MATCH
+        }, 'label'),
+        Output({
+            'type': 'messageix-emissions-type-select',
+            'index': MATCH
         }, 'data'),
         Output({
-            'type': 'messageix-emissions-variable-select',
-            'index': ALL
+            'type': 'messageix-emissions-type-select',
+            'index': MATCH
         }, 'value'),
+        Output({
+            'type': 'messageix-emissions-type-select',
+            'index': MATCH
+        }, 'label'),
         Input({
             'type': 'messageix-emissions-plot-select',
-            'index': ALL
+            'index': MATCH
         }, 'value'),
         Input({
-            'type': 'messageix-emissions-aggregate-switch',
-            'index': ALL
+            'type': 'messageix-emissions-show_sector-switch',
+            'index': MATCH
         }, 'checked'),
         Input({
             'type': 'messageix-emissions-scenario-multi-select',
-            'index': ALL
+            'index': MATCH
         }, 'value'),
         Input({
             'type': 'messageix-emissions-scenario-select',
-            'index': ALL
+            'index': MATCH
         }, 'value'),
         Input({
             'type': 'messageix-emissions-region-select',
-            'index': ALL
+            'index': MATCH
         }, 'value'),
         Input({
             'type': 'messageix-emissions-year-select',
-            'index': ALL
+            'index': MATCH
+        }, 'value'),
+        Input({
+            'type': 'messageix-emissions-type-select',
+            'index': MATCH
+        }, 'value'),
+        Input({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
         }, 'value'),
         Input(
             {
                 'type': 'messageix-emissions-pattern-switch',
-                'index': ALL
+                'index': MATCH
             },
             'checked'
         ),
         Input(
             {
                 'type': 'messageix-emissions-text-switch',
-                'index': ALL
+                'index': MATCH
             },
             'checked'
         ),
         Input({
             'type': 'messageix-emissions-download-button',
-            'index': ALL
+            'index': MATCH
         }, 'n_clicks'),
-        Input({
-            'type': 'messageix-emissions-emission-type-select',
-            'index': ALL,
-        },
-            'value'),
-        Input({
-            'type': 'messageix-emissions-variable-select',
-            'index': ALL
-        }, 'value'),
         State({
             'type': 'messageix-emissions-region-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         State({
             'type': 'messageix-emissions-year-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         State({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
+        }, 'style'),
+        State({
+            'type': 'messageix-emissions-level-select',
+            'index': MATCH,
+            'level': ALL
+        }, 'data'),
+        State({
             'type': ids.FIGURE,
-            'index': ALL,
+            'index': MATCH,
             'profile': 'messageix_output',
             'viz': 'emissions'
         }, 'figure'),
         State({
             'type': 'messageix-emissions-download',
-            'index': ALL
+            'index': MATCH
         }, 'data'),
         State({
             'type': 'messageix-emissions-scenario-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         State({
             'type': 'messageix-emissions-scenario-multi-select',
-            'index': ALL
+            'index': MATCH
         }, 'style'),
         State(
             {
                 'type': 'messageix-emissions-pattern-switch',
-                'index': ALL
+                'index': MATCH
             },
             'style'
         ),
         State(
             {
                 'type': 'messageix-emissions-text-switch',
-                'index': ALL
+                'index': MATCH
             },
             'style'
         ),
-        State({
-            'type': 'messageix-emissions-variable-select',
-            'index': ALL
-        }, 'data'),
         prevent_initial_call=True
     )
-    def update_emissions(_p_type, _aggregates, _scenarios, _scenario, _regions, _years, _pattern, _text,
-                         _download, _emissions_type, _variables, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
-                         _pattern_style, _text_style, _v_data):
+    def update_emissions(_p_type, _show_sectors, _scenarios, _scenario, _regions, _years, _types, _levels, _pattern,
+                            _text,
+                            _download, _r_style, _y_style, _l_style, _l_data, _canvas, _data, _s_style, _m_style,
+                            _pattern_style, _text_style):
         print('updating emissions plot')
         from main import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+        _show_sectors_label = 'Show Sector' if _show_sectors else 'Show Resource Type'
+        _type_select_label = 'Sector' if _show_sectors else 'Resource Type'
+        _t_data = dash.no_update
         if 'messageix-emissions-download-button' in trigger_id['type']:
-            idx = 0
-            for i, id in enumerate(ctx.inputs_list[0]):
-                if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'messageix-emissions-download-button')):
-                    idx = i
-                    break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Emissions'].to_csv,
+
+            _data = dcc.send_data_frame(data_handler.processed_data['MESSAGEix-Canada']['Emissions'].to_csv,
                                              "emissions.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style, _v_data, _variables
+            return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style, _show_sectors_label, _t_data, _types, _type_select_label
+        df_scen = data_handler.processed_data['MESSAGEix-Canada']['Emissions'].copy(deep=True)
 
-        idx = 0
-        for i, id in enumerate(ctx.inputs_list[0]):
-            if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'messageix-emissions-plot-select')):
-                idx = i
-                break
+        # df_scen = df_scen[df_scen['type'].isin(sectors)] if _show_sectors else df_scen[df_scen['type'].isin(sources)]
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        if 'messageix-emissions-type-select' in \
+                trigger_id['type'] or 'messageix-emissions-level-select' in trigger_id['type'] or 'messageix-emissions-show_sector-switch' in trigger_id['type']:
 
-        if 'messageix-emissions-aggregate-switch' in trigger_id['type'] or 'messageix-emissions-emission-type-select' in trigger_id['type']:
-            if _aggregates[idx] is not None:
-                df_scen = data_handler.processed_data['MESSAGEix-Canada']['Emissions'].copy(deep=True)
-                if _aggregates[idx]:
-                    df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
-                else:
-                    df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
-                df_scen = df_scen[(df_scen['region'] == _regions[idx]) & (df_scen['time'] == _years[idx]) & (
-                            df_scen['scenario'] == _scenario[idx]) & (df_scen['variable'].str.startswith('Emissions|'+_emissions_type[idx]+'|') | (df_scen['variable'] == 'Emissions|'+_emissions_type[idx]))]
+            df_scen = df_scen[(df_scen['region'] == _regions) & (df_scen['time'] == _years) & (
+                    df_scen['scenario'] == _scenario)]
 
-                _v_data[idx] = [{'label': var, 'value': var} for var in df_scen.variable.unique().tolist()]
-                _variables[idx] = _v_data[idx]
+            if 'messageix-emissions-show_sector-switch' in trigger_id['type']:
+                _types = 'All'
+                _t_data = df_scen[df_scen['type']].type.unique().tolist()
+                _t_data += ['All']
+                _t_data = [{'label': x, 'value': x} for x in _t_data]
+            if 'messageix-emissions-type-select' in trigger_id['type'] or 'messageix-emissions-show_sector-switch' in trigger_id['type']:
+                if _types != 'All':
+                    df_scen = df_scen[df_scen['type'] == _types]
 
-        if _p_type[idx] == 'By Year':
-            _m_style[idx] = {'display': 'block'}
-            _r_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'none'}
-            _pattern_style[idx] = {'display': 'block'}
-            _text_style[idx] = {'display': 'block'}
+                layers = []
+                styles = []
 
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
-                                           _aggregates[idx], _emissions_type[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], variables=_variables[idx])
+                _p = df_scen.type.unique().tolist()
+                _p = ['Emissions|' + parent for parent in _p]
+                layers.append([{'label': variable, 'value': variable} for variable in _p])
+                styles.append({'display': 'block'})
+                for i in range(1, len(_levels)):
+                    layers.append([])
+                    styles.append({'display': 'none'})
 
-        elif _p_type[idx] == 'Trend Over Years':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'none'}
-            _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years',
+                _l_data = layers
+                _levels = _l_data
+                _l_style = styles
+
+        if 'messageix-emissions-level-select' in trigger_id['type']:
+            interacted_level = int(trigger_id['level'])
+            if not _levels[interacted_level]:
+                for i in range(interacted_level + 1, len(_levels)):
+                    _levels[i] = []
+                    _l_style[i] = {'display': 'none'}
+
+            else:
+                parents = _levels[interacted_level]
+                for i in range(interacted_level + 1, len(_levels)):
+                    variable_options = df_scen[df_scen.parent.isin(parents)].variable.unique().tolist()
+                    # remove all entries in levels[i] that are not in variables
+                    _levels[i] = [{'label': x, 'value': x} for x in variable_options if x in _levels[i]]
+                    _l_data[i] = [{'label': x, 'value': x} for x in variable_options]
+                    if variable_options:
+                        _l_style[i] = {'display': 'block'}
+                    else:
+                        _l_style[i] = {'display': 'none'}
+
+                    parents = _levels[i]
+
+
+        variables = []
+        for level in _levels:
+            variables.extend(level)
+
+        parents = df_scen[df_scen.variable.isin(variables)].parent.unique().tolist()
+
+        # remove parents from the list of variables
+        variables = [x for x in variables if x not in parents]
+
+        if _p_type== 'By Year':
+            _m_style= {'display': 'block'}
+            _r_style= {'display': 'block'}
+            _y_style= {'display': 'none'}
+            _s_style= {'display': 'none'}
+            _pattern_style= {'display': 'block'}
+            _text_style= {'display': 'block'}
+
+            if _show_sectors is not None:
+                _canvas= render_plot('By Year', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
+                                           _show_sectors,
+                                           _scenarios,
+                                           _regions,
+                                           _years, scenario=_scenario,
+                                           pattern_active=_pattern, text_active=_text,
+                                           variables=variables)
+
+        elif _p_type == 'Trend Over Years':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _y_style = {'display': 'none'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+
+            if _show_sectors is not None:
+                _canvas = render_plot('Trend Over Years',
                                            data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
-                                           _aggregates[idx], _emissions_type[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx], variables=_variables[idx])
+                                           _show_sectors,
+                                           _scenarios,
+                                           _regions,
+                                           _years, scenario=_scenario, variables=variables)
 
-        elif _p_type[idx] == 'Pie Chart':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'block'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
-                                           _aggregates[idx], _emissions_type[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx], variables=_variables[idx])
-        elif _p_type[idx] == 'Map Plot':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'none'}
-            _y_style[idx] = {'display': 'block'}
-            _pattern_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'block'}
-            _text_style[idx] = {'display': 'none'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
-                                           _aggregates[idx], _emissions_type[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx], variables=_variables[idx])
+        elif _p_type == 'Pie Chart':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+
+            if _show_sectors is not None:
+                _canvas = render_plot('Pie Chart', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
+                                           _show_sectors,
+                                           _scenarios,
+                                           _regions,
+                                           _years, scenario=_scenario, variables=variables)
+
+        elif _p_type == 'Map Plot':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'none'}
+            _y_style = {'display': 'block'}
+            _pattern_style = {'display': 'none'}
+            _s_style = {'display': 'block'}
+            _text_style = {'display': 'none'}
+
+            if _show_sectors is not None:
+                _canvas = render_plot('Map Plot', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
+                                           _show_sectors,
+                                           _scenarios,
+                                           _regions,
+                                           _years, scenario=_scenario, variables=variables)
 
         else:
-            _m_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _r_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'none'}
-            _pattern_style[idx] = {'display': 'block'}
-            _text_style[idx] = {'display': 'block'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
-                                           _aggregates[idx], _emissions_type[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], variables=_variables[idx])
+            _m_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _r_style = {'display': 'none'}
+            _s_style = {'display': 'none'}
+            _pattern_style = {'display': 'block'}
+            _text_style = {'display': 'block'}
 
-        return _canvas, _r_style, _y_style, [dash.no_update for _ in
-                                             _data], _s_style, _m_style, _pattern_style, _text_style, _v_data, _variables
+            if _show_sectors is not None:
+                _canvas = render_plot('By Region', data_handler.processed_data['MESSAGEix-Canada']['Emissions'],
+                                           _show_sectors,
+                                           _scenarios,
+                                           _regions,
+                                           _years, scenario=_scenario,
+                                           pattern_active=_pattern, text_active=_text,
+                                           variables=variables)
+
+        return _canvas, _r_style, _y_style, _l_style, _l_data, _levels, _data, _s_style, _m_style, _pattern_style, _text_style, _show_sectors_label, _t_data, _types, _type_select_label

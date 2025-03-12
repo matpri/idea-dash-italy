@@ -6,7 +6,7 @@ from profiles.messageix_output import utils
 
 def check(df):
     """
-    Check if 'Results_summary_carbon_AP_tech' is present in the 'variable' column.
+    Check if 'Capital Cost|' is present in the 'variable' column.
 
     Parameters:
         df (pd.DataFrame): The DataFrame to check.
@@ -14,7 +14,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    print("Checking for Capital Cost in variable column")
     try:
         if (df.model == 'MESSAGEix-Canada').any():
             if df.variable.str.startswith("Capital Cost|").any():
@@ -60,12 +60,16 @@ def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
+        # filter where 'Capital Cost|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Capital Cost|")]
-        # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
-        #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         canadian_total = calc_canadian(df)
+
         full_data = pd.concat([df, canadian_total])
+
+        full_data['type'] = full_data['variable'].str.split('|').str[1]
+        # add levels which is the number of | in the variable name
+        full_data['levels'] = full_data['variable'].apply(lambda x: len(x.split('|')))
+        full_data['parent'] = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:-1]))
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)

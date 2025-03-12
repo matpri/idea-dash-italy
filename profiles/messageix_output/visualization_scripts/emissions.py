@@ -1,33 +1,44 @@
 import dash_mantine_components as dmc
 from dash import html, dcc
-from components import ids
+
 from profiles.messageix_output import utils
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart, map_plot
+from components import ids
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+    pie_chart, map_plot
 
 
-def render_plot(type, db, aggregate, variable, scenarios, region, year, scenario, pattern_active=True, text_active=False, variables=None):
+# sources = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids', 'Hydrogen']
+# sectors = ['Electricity', 'Gases', 'Geothermal', 'Heat', 'Liquids', 'Solids', 'Hydrogen']
+
+
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False,
+                variables=[]):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
     name = plot_settings['Emissions']['name']
     unit = plot_settings['Emissions']['unit']
-    df = db.copy()
-    df['type'] = df['variable'].apply(lambda x: x.split('|')[1])
-    df = df[df['type'].str.startswith(variable)]
+
     if type == 'By Year':
         plot_info = plot_settings['Emissions']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'],
+                                   plot_info['y_label'], name, unit, pattern_active=pattern_active,
+                                   text_active=text_active, variables=variables)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Emissions']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit,variables=variables)
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'],
+                                     plot_info['y_label'], name, unit, variables=variables)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Emissions']['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'],variables=variables)
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
+                              plot_info['y_label'])
     elif type == 'Map Plot':
         title = plot_settings['Emissions']['Map']['title']
-        return map_plot.plot_map(df, scenario, year, title, name, unit, variables, is_emissions=True)
+        return map_plot.plot_map(df, scenario, year, title, name, unit, variables)
     else:
         plot_info = plot_settings['Emissions']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active,variables=variables)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'],
+                                     plot_info['y_label'], name, unit, pattern_active=pattern_active,
+                                     text_active=text_active, variables=variables)
 
 
 def plot(df, window_id):
@@ -40,21 +51,21 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
-    df['type'] = df['variable'].apply(lambda x: x.split('|')[1])
-    emissions_type = df['type'].unique().tolist()
 
     df_scen = df.copy(deep=True)
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
     df_scen = df_scen[
         (df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
-                    df_scen['scenario'] == scenarios[0]) & (df_scen['type'] == emissions_type[0])]
+                df_scen['scenario'] == scenarios[0])]
+    # df_scen = df_scen[df_scen['type'].isin(sectors)]
+    types = ['All'] + sorted(df_scen['type'].unique().tolist())
 
-    variables = df_scen.variable.unique().tolist()
+    max_depth = df_scen.levels.max()
 
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value= 'CAN' if 'CAN' in regions else regions[0],
+        value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'messageix-emissions-region-select',
             'index': window_id
@@ -74,6 +85,39 @@ def plot(df, window_id):
 
         style={'display': 'none'}
     )
+
+    map_plot_widgets = [
+        dmc.Select(
+            label='Production Type',
+            data=[{'label': variable, 'value': variable} for variable in types],
+            value='All',
+            id={
+                'type': 'messageix-emissions-type-select',
+                'index': window_id
+            },
+        ),
+           ]
+    parents = df_scen.type.unique().tolist()
+    parents = ['Emissions|' + parent for parent in parents]
+    for i in range(max_depth):
+        if i == 0:
+            variables = parents
+        else:
+            variables = df_scen[df_scen.parent.isin(parents)].variable.unique().tolist()
+        map_plot_widgets.append(
+            dmc.MultiSelect(
+                label=f'Level {i + 1}',
+                data=[{'label': variable, 'value': variable} for variable in variables],
+                value=[],
+                id={
+                    'type': 'messageix-emissions-level-select',
+                    'index': window_id,
+                    'level': i
+                },
+                style={'display': 'block'} if i == 0 else {'display': 'none'}
+            )
+        )
+        parents = []
 
     pattern_toggle = dmc.Switch(
         label='Pattern',
@@ -98,18 +142,21 @@ def plot(df, window_id):
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
-            data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
+            data=[{'label': plot, 'value': plot} for plot in
+                  ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
             value='By Year',
             id={
                 'type': 'messageix-emissions-plot-select',
                 'index': window_id
             },
         ),
-        dmc.Switch('Aggregate',
+        dmc.Switch('Show Sector',
                    checked=True,
                    id={
-                       'type': 'messageix-emissions-aggregate-switch',
-                       'index': window_id}),
+                       'type': 'messageix-emissions-show_sector-switch',
+                       'index': window_id},
+
+                   style={'display': 'none'}),
         pattern_toggle,
         text_toggle,
         dmc.MultiSelect(
@@ -132,37 +179,19 @@ def plot(df, window_id):
             },
             style={'display': 'none'}
         ),
-        dmc.Select(
-            label='Emission Type',
-            data=[{'label': emission, 'value': emission} for emission in emissions_type],
-            value=emissions_type[0],
-            id={
-                'type': 'messageix-emissions-emission-type-select',
-                'index': window_id,
-            },
-        ),
-        dmc.MultiSelect(
-            label='Variable',
-            data=[{'label': variable, 'value': variable} for variable in variables],
-            value=[],
-            id={
-                'type': 'messageix-emissions-variable-select',
-                'index': window_id
-            },
-            style={'display': 'block'}
-        ),
+        *map_plot_widgets,
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'messageix-emissions-download-button', 'index': window_id},
                    variant='light',
                    # center the button
-                     style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
+                   style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'messageix-emissions-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, emissions_type[0], [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0], variables=[]),
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+                           years[0], scenarios[0], variables=[]),
         id={
             'type': ids.FIGURE,
             'index': window_id,

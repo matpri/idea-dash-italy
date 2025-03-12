@@ -6,7 +6,7 @@ from profiles.messageix_output import utils
 
 def check(df):
     """
-    Check if 'Results_summary_carbon_AP_tech' is present in the 'variable' column.
+    Check if 'Capacity Additions|' is present in the 'variable' column.
 
     Parameters:
         df (pd.DataFrame): The DataFrame to check.
@@ -14,14 +14,14 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for emissions in variable column")
+    print("Checking for Capacity Additions in variable column")
     try:
         if (df.model == 'MESSAGEix-Canada').any():
-            if df.variable.str.startswith("Capacity Addition|").any():
+            if df.variable.str.startswith("Capacity Additions|").any():
                 return True
         return False
     except Exception as e:
-        print("Capacity Addition check", e)
+        print("Capacity Additions check", e)
         return False
 
 
@@ -60,15 +60,19 @@ def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
-        df = df[df.variable.str.startswith("Capacity Addition|")]
-        # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
-        #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        # filter where 'Capacity Additions|' in variable column entry and remove the prefix
+        df = df[df.variable.str.startswith("Capacity Additions|")]
         canadian_total = calc_canadian(df)
+
         full_data = pd.concat([df, canadian_total])
+
+        full_data['type'] = full_data['variable'].str.split('|').str[1]
+        # add levels which is the number of | in the variable name
+        full_data['levels'] = full_data['variable'].apply(lambda x: len(x.split('|')))
+        full_data['parent'] = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:-1]))
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)
     full_df['time'] = full_df['time'].astype(int)
-    print("Capacity Addition processed")
+    print("Capacity Additions processed")
     return full_df
