@@ -83,10 +83,10 @@ def plot_map(message_data, scenario, time, title, name, unit, variables='All', a
 
     rep_data = message_data[(message_data['time'] == time) & (message_data['scenario'] == scenario)]
 
-    if aggregate:
-        rep_data['variable'] = rep_data['variable'].map(utils.groups).fillna(rep_data['variable'])
-    else:
-        rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
+    # if aggregate:
+    #     rep_data['variable'] = rep_data['variable'].map(utils.groups).fillna(rep_data['variable'])
+    # else:
+    #     rep_data['variable'] = rep_data['variable'].map(utils.names).fillna(rep_data['variable'])
 
     if variables != 'All':
         if is_emissions:

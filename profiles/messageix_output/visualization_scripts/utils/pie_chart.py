@@ -15,12 +15,14 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     )
 
     try:
-        df_scen = subset(df, region, year, scenario, aggregate, season)
         if variables != 'All':
             if is_emissions:
-                df_scen = df_scen[df_scen['variable'].str.contains('|'.join(variables))]
+                df_scen = df[df['variable'].str.contains('|'.join(variables))].copy(deep=True)
             else:
-                df_scen = df_scen[df_scen['variable'].isin(variables)]
+                df_scen = df[df['variable'].isin(variables)].copy(deep=True)
+        else:
+            df_scen = df.copy(deep=True)
+        df_scen = subset(df_scen, region, year, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
         if aggregate:
             colors = [utils.get_group_colors(tech) for tech in techs]
@@ -50,16 +52,14 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
     return fig
 
 
-def subset(df, region, year, scenario, aggregate, season=None):
-    df_scen = df.copy(deep=True)
-
+def subset(df_scen, region, year, scenario, aggregate, season=None):
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.groups)
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
-    else:
-        df_scen['variable'] = df_scen["variable"].map(utils.names)
+    # if aggregate:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.groups)
+    #     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    # else:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.names)
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 

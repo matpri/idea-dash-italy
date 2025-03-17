@@ -30,7 +30,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
     elif type == 'Pie Chart':
         plot_info = plot_settings['Capacity Additions']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
-                              plot_info['y_label'])
+                              plot_info['y_label'], variables=variables)
     elif type == 'Map Plot':
         title = plot_settings['Capacity Additions']['Map']['title']
         return map_plot.plot_map(df, scenario, year, title, name, unit, variables)

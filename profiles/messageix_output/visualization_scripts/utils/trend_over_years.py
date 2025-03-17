@@ -15,12 +15,14 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     )
 
     try:
-        df_scen = subset(df, region, scenario, aggregate, season)
         if variables != 'All':
             if is_emissions:
-                df_scen = df_scen[df_scen['variable'].str.contains('|'.join(variables))]
+                df_scen = df[df['variable'].str.contains('|'.join(variables))].copy(deep=True)
             else:
-                df_scen = df_scen[df_scen['variable'].isin(variables)]
+                df_scen = df[df['variable'].isin(variables)].copy(deep=True)
+        else:
+            df_scen = df.copy(deep=True)
+        df_scen = subset(df_scen, region, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
 
         for i, tech in enumerate(techs):
@@ -58,10 +60,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     return fig
 
 
-def subset(df, region, scenario, aggregate, season=None):
-    df_scen = df.copy(deep=True)
-
-
+def subset(df_scen, region, scenario, aggregate, season=None):
     # Remove the years where all entries in the value column are 0
     value_sum_per_year = df_scen.groupby('time')['value'].sum()
     years_with_non_zero_values = value_sum_per_year[value_sum_per_year != 0].index
@@ -70,11 +69,11 @@ def subset(df, region, scenario, aggregate, season=None):
 
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
-    else:
-        df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+    # if aggregate:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+    #     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    # else:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 

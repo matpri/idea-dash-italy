@@ -15,12 +15,14 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     )
 
     try:
-        df_scen = subset(df, year, scenarios, aggregate, season)
         if variables != 'All':
             if is_emissions:
-                df_scen = df_scen[df_scen['variable'].str.contains('|'.join(variables))]
+                df_scen = df[df['variable'].str.contains('|'.join(variables))].copy(deep=True)
             else:
-                df_scen = df_scen[df_scen['variable'].isin(variables)]
+                df_scen = df[df['variable'].isin(variables)].copy(deep=True)
+        else:
+            df_scen = df.copy(deep=True)
+        df_scen = subset(df_scen, year, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
 
@@ -65,17 +67,16 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     return fig
 
 
-def subset(df, year, scenarios, aggregate, season=None):
-    df_scen = df.copy(deep=True)
+def subset(df_scen, year, scenarios, aggregate, season=None):
     df_scen = df_scen[df_scen['region'] != 'CAN']
     regions = df_scen['region'].unique().tolist()
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.groups)
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
-    else:
-        df_scen['variable'] = df_scen["variable"].map(utils.names)
+    # if aggregate:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.groups)
+    #     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    # else:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.names)
 
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
