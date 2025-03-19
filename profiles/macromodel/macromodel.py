@@ -12,6 +12,7 @@ from profiles.macromodel.callbacks import (
     settings as settings_callbacks,
     non_sector as non_sector_callbacks,
     sector as sector_callbacks,
+histogram as histogram_callbacks,
 
 )
 from profiles.macromodel.processing_scripts import (
@@ -23,6 +24,7 @@ from profiles.macromodel.processing_scripts import (
     non_energy_sectors as non_energy_processing,
     labour_market as labour_market_processing,
     households as households_processing,
+histogram as histogram_processing,
 )
 from profiles.macromodel.visualization_scripts import (
     financial_markets as financial_markets_viz,
@@ -33,6 +35,7 @@ from profiles.macromodel.visualization_scripts import (
     non_energy_sectors as non_energy_viz,
     labour_market as labour_market_viz,
     households as households_viz,
+histogram as histogram_viz,
 )
 
 
@@ -57,7 +60,8 @@ class Macromodel(BaseProfile):
         'Financial Markets',
         'Households',
         'Labour Market',
-        'Government'
+        'Government',
+        'Histograms',
     ]
     viz_options = {
         'Economy Overview':
@@ -138,6 +142,16 @@ class Macromodel(BaseProfile):
                 'db_process': households_processing.process,
                 'viz': households_viz.plot,
                 'callback': sector_callbacks.link,
+                'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
+            },
+        'Histograms':
+            {
+                'check': histogram_processing.check,
+                'db_check': histogram_processing.check,
+                'process': histogram_processing.process,
+                'db_process': histogram_processing.process,
+                'viz': histogram_viz.plot,
+                'callback': histogram_callbacks,
                 'description': 'Line plots for a variety of variables, overviewing main results across scenarios.'
             },
     }
@@ -279,6 +293,7 @@ class Macromodel(BaseProfile):
         non_sector_callbacks.link(app)
         sector_callbacks.link(app)
         sector_overview_callbacks.link(app)
+        histogram_callbacks.link(app)
 
     def render_settings(self):
         layout = html.Div(
