@@ -55,6 +55,20 @@ def calc_canadian(df):
     canadian_total["region"] = "CAN"
     return canadian_total
 
+def find_type(x, types):
+    for t in types:
+        if t in x:
+            return t
+
+def find_parent(x, variables):
+    num_pipes = x.count('|')
+    parent = '|'.join(x.split('|')[:2])
+    for i in range(num_pipes, 2, -1):
+        potential_parent = '|'.join(x.split('|')[:i])
+        if potential_parent in variables:
+            parent = potential_parent
+
+    return parent
 
 def process(selected: dict):
     dfs = []
@@ -62,12 +76,20 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("OM Cost|")]
-        # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
-        #df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        # formatted_df = format_df(df)
-        # formatted_df = aggregate_technologies(formatted_df)
+        df['cost_type'] = df['variable'].str.split('|').str[1]
+        df['variable'] = df['cost_type'] + ' OM Cost|' + df['variable'].apply(lambda x: '|'.join(x.split('|')[2:]))
+        df.drop(columns=['cost_type'], inplace=True)
         canadian_total = calc_canadian(df)
         full_data = pd.concat([df, canadian_total])
+        # add levels which is the number of | in the variable name
+        types = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:2])).unique()
+        full_data['type'] = full_data['variable'].apply(lambda x: find_type(x, types))
+        full_data['levels'] = full_data.apply(lambda row: len(row['variable'].split('|')) - len(row['type'].split('|')), axis=1)
+        variables = full_data['variable'].unique()
+        full_data['parent'] = full_data['variable'].apply(lambda x: find_parent(x, variables))
+        parents = full_data['parent'].unique()
+        parents_level_mapping = {parent: full_data[full_data.parent == parent].levels.min() for parent in parents}
+        full_data['levels'] = full_data.apply(lambda row: parents_level_mapping[row['parent']] + 1, axis=1)
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)
