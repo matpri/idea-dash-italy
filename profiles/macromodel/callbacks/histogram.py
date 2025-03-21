@@ -80,6 +80,12 @@ def link(app):
             'viz_type': 'histogram'
         }, 'value'),
         Input({
+            'type': 'bins-slider',
+            'index': MATCH,
+            'profile': MATCH,
+            'viz_type': 'histogram'
+        }, 'value'),
+        Input({
             'type': 'download-button',
             'index': MATCH,
             'profile': MATCH,
@@ -95,7 +101,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _scenarios, _variable, _regions, _years, _units,
+    def update_gencap_cost(_p_type, _scenarios, _variable, _regions, _years, _units, _nbins,
                            _download, _data):
         from main import data_handler
         ctx = dash.callback_context
@@ -132,6 +138,6 @@ def link(app):
         print('plot type:', _p_type)
 
         _canvas = render_plot(_p_type, data_handler.processed_data[model][name],
-                              _scenarios, _regions, _units, _years, _variable)
+                              _scenarios, _regions, _units, _years, _variable, n_bins=_nbins)
 
         return _canvas, dash.no_update, _units, units, _variable, variables

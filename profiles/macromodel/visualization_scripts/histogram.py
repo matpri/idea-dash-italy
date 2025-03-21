@@ -6,14 +6,14 @@ from components import ids
 import plotly.express as px
 
 
-def render_plot(type, df, scenarios, region, unit, year,variable):
+def render_plot(type, df, scenarios, region, unit, year,variable, n_bins=20):
     print('rendering plot histogram', type)
     db = df.copy()
     print('scenarios', scenarios)
     df_scen = db[db['scenario'].isin(scenarios) & (db['region'] == region) & (db['time'] == year) & (db['variable'] == variable) & (db['unit'] == unit) & (db['type'] == type)]
 
     # make histogram where colour is scenario
-    fig = px.histogram(df_scen, x='value', color='scenario', title=f'{variable} in {region} in {year}', labels={'value': f'{variable} ({unit})', 'scenario': 'Scenario'}, barmode='overlay')
+    fig = px.histogram(df_scen, x='value', color='scenario', title=f'{variable} in {region} in {year}', labels={'value': f'{variable} ({unit})', 'scenario': 'Scenario'}, barmode='overlay', nbins=n_bins)
     fig.update_traces(opacity=1 / len(scenarios) if len(scenarios) > 1 else 1)
     fig.update_layout(
         xaxis_title_text=f'{variable} ({unit})',
@@ -108,6 +108,20 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
+        dmc.Text('Number of Bins'),
+        dmc.Slider(
+            value=20,
+            min=1,
+            max=100,
+            step=1,
+            id={
+                'type': 'bins-slider',
+                'viz_type': 'histogram',
+                'profile': 'macromodel',
+                'index': window_id
+            },
+        ),
+
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'download-button',
