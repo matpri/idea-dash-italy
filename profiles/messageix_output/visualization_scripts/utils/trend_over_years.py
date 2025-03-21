@@ -5,13 +5,15 @@ from dash import dcc
 from profiles.messageix_output import utils
 
 
-def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, variables='All', is_emissions=False):
+def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None,
+         variables='All', is_emissions=False):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
         xaxis_title=x_axis_label,
         yaxis_title=y_axis_label,
         template="simple_white",
+        showlegend=True
     )
 
     try:
@@ -35,7 +37,7 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
                 color = utils.get_color(tech)
 
             fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>'  + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' '<br><extra></extra>')
+                            hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
@@ -85,7 +87,6 @@ def subset(df_scen, region, scenario, aggregate, season=None):
     df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
 
     df_scen = df_scen[df_scen['value'] != 0]
-
 
     df_scen = df_scen.fillna(0)
     year_pad = []

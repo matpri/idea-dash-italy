@@ -227,7 +227,6 @@ def link(app):
                 styles = []
 
                 _p = df_scen.type.unique().tolist()
-                _p = ['Efficiency|' + parent for parent in _p]
                 layers.append([{'label': variable, 'value': variable} for variable in _p])
                 styles.append({'display': 'block'})
                 for i in range(1, len(_levels)):
@@ -288,6 +287,7 @@ def link(app):
 
         elif _p_type == 'Trend Over Years':
             _m_style = {'display': 'none'}
+            _s_style= {'display': 'block'}
             _r_style = {'display': 'block'}
             _y_style = {'display': 'none'}
             _pattern_style = {'display': 'none'}
@@ -304,6 +304,7 @@ def link(app):
         elif _p_type == 'Pie Chart':
             _m_style = {'display': 'none'}
             _r_style = {'display': 'block'}
+            _s_style= {'display': 'block'}
             _y_style = {'display': 'block'}
             _pattern_style = {'display': 'none'}
             _text_style = {'display': 'none'}

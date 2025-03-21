@@ -6,7 +6,7 @@ from profiles.messageix_output import utils
 
 def check(df):
     """
-    Check if 'Lifetime|' is present in the 'variable' column.
+    Check if 'Results_summary_carbon_AP_tech' is present in the 'variable' column.
 
     Parameters:
         df (pd.DataFrame): The DataFrame to check.
@@ -14,7 +14,7 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    print("Checking for Lifetime in variable column")
+    print("Checking for emissions in variable column")
     try:
         if (df.model == 'MESSAGEix-Canada').any():
             if df.variable.str.startswith("Lifetime|").any():
@@ -55,21 +55,38 @@ def calc_canadian(df):
     canadian_total["region"] = "CAN"
     return canadian_total
 
+def find_type(x, types):
+    for t in types:
+        if t in x:
+            return t
+
+def find_parent(x, variables):
+    num_pipes = x.count('|')
+    parent = '|'.join(x.split('|')[:2])
+    for i in range(num_pipes, 2, -1):
+        potential_parent = '|'.join(x.split('|')[:i])
+        if potential_parent in variables:
+            parent = potential_parent
+
+    return parent
 
 def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
         df = db.copy()
-        # filter where 'Lifetime|' in variable column entry and remove the prefix
+        # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Lifetime|")]
         canadian_total = calc_canadian(df)
-
         full_data = pd.concat([df, canadian_total])
-
-        full_data['type'] = full_data['variable'].str.split('|').str[1]
         # add levels which is the number of | in the variable name
-        full_data['levels'] = full_data['variable'].apply(lambda x: len(x.split('|')))
-        full_data['parent'] = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:-1]))
+        types = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:2])).unique()
+        full_data['type'] = full_data['variable'].apply(lambda x: find_type(x, types))
+        full_data['levels'] = full_data.apply(lambda row: len(row['variable'].split('|')) - len(row['type'].split('|')), axis=1)
+        variables = full_data['variable'].unique()
+        full_data['parent'] = full_data['variable'].apply(lambda x: find_parent(x, variables))
+        parents = full_data['parent'].unique()
+        parents_level_mapping = {parent: full_data[full_data.parent == parent].levels.min() for parent in parents}
+        full_data['levels'] = full_data.apply(lambda row: parents_level_mapping[row['parent']] + 1, axis=1)
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)

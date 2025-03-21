@@ -98,7 +98,6 @@ def plot(df, window_id):
         ),
            ]
     parents = df_scen.type.unique().tolist()
-    parents = ['Lifetime|' + parent for parent in parents]
     for i in range(max_depth):
         if i == 0:
             variables = parents

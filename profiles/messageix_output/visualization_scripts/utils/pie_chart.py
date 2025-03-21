@@ -49,6 +49,7 @@ def plot(df, scenario, region, year, aggregate, title, x_axis_label, y_axis_labe
         print(title, 'plot:', e)
 
     fig.layout.autosize = True
+    fig.layout.showlegend = True
     return fig
 
 

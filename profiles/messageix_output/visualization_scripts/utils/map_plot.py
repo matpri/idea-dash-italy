@@ -146,7 +146,7 @@ def plot_map(message_data, scenario, time, title, name, unit, variables='All', a
 
     # Update geos and layout
     fig.update_geos(fitbounds="locations", visible=False, projection_type="orthographic")
-    fig.update_layout(title=title)
+    fig.update_layout(title=title, showlegend=True)
 
     # Show the figure
     return fig
