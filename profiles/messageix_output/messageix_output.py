@@ -1,6 +1,7 @@
 from random import randint
 
 import dash_mantine_components as dmc
+import pandas as pd
 import yaml
 from dash import html, dcc
 
@@ -73,6 +74,15 @@ from profiles.messageix_output.visualization_scripts import (
     cost as cost_viz
 )
 
+
+def data_processing_task(profile_name, viz, data, processing_func):
+    # try:
+    data_out = processing_func(data)
+    # except Exception as e:
+    #     print(f"Error processing data for {profile_name} - {viz}: {e}")
+    #     data_out = pd.DataFrame()
+
+    return profile_name, viz, data_out
 
 class messageixOutput(BaseProfile):
     name = 'MESSAGEix-Canada'
@@ -306,6 +316,73 @@ class messageixOutput(BaseProfile):
     def link(self, app):
         settings_callbacks.link(app)
         super().link(app)
+
+    def process_data(self, data_collection):
+        print('Base collective preprocess')
+
+        # Initialize flags and arguments for processing
+        wants_overview = 'Overview' in data_collection
+        args = [
+            (self.display_name, viz_option, data, self.viz_options[viz_option]['process'])
+            for viz_option, data in data_collection.items()
+            if viz_option != 'Overview'
+        ]
+
+        # Process data using the defined processing function
+        processed_data = [data_processing_task(*arg) for arg in args]
+
+        if wants_overview:
+            # Prepare dataframes for overview
+            dfs = self._prepare_overview_data(processed_data)
+
+            # Create aggregated data for Alberta and Quebec
+            ab_qc = self._aggregate_ab_qc_data(dfs)
+
+            # Combine full data with AB+QC data
+            full_df = pd.concat([dfs, ab_qc], ignore_index=True)
+
+            # Filter and group the final dataframe
+            full_df = self._filter_and_group_full_df(full_df)
+
+            # Append overview data to processed data
+            processed_data.append(
+                (self.display_name, 'Overview', full_df[['scenario', 'variable', 'time', 'value', 'region']]))
+
+        return processed_data
+
+    def _prepare_overview_data(self, processed_data):
+        """Prepare dataframes for overview by filtering out imports and exports."""
+        dfs = []
+        for _, viz_option, data in processed_data:
+            if viz_option in ['OM Cost', 'Efficiency', 'Lifetime']:
+                continue
+            df = data.copy()
+            if viz_option == 'Emissions':
+                df = df[df.variable == 'Emissions|Kyoto Gases']
+            elif viz_option == 'Resource':
+                df = df[df.variable == 'Resource|Extraction']
+            elif viz_option == 'Carbon Sequestration':
+                df = df[df.variable == 'Carbon Sequestration|CCS']
+            else:
+                df = df[df.variable.str.count('\|') == 1]
+                if viz_option == 'Useful Energy':
+                    df = df[~df.variable.str.contains('Input')]
+            df['variable'] = viz_option
+            dfs.append(df)
+        return pd.concat(dfs)
+
+    def _aggregate_ab_qc_data(self, full_df):
+        """Aggregate data for Alberta and Quebec."""
+        ab_qc = full_df[full_df['region'].isin(['AB', 'QC'])].copy()
+        ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
+        ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
+        ab_qc['region'] = 'AB+QC'
+        return ab_qc
+
+    def _filter_and_group_full_df(self, full_df):
+        """Filter and group the full dataframe for final output."""
+        full_df = full_df[full_df['region'].isin(['CAN', 'AB+QC'])]
+        return full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
     def render_settings(self):
         layout = html.Div(
