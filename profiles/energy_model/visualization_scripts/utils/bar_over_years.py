@@ -45,7 +45,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         fig.add_trace(go.Scatter(x=x, y=total_data["value"], name='Total', mode='markers', 
                                  marker=dict(size=3, color='rgba(0, 0, 255, 0.6)'),  # Smaller size and softer blue color
                                  hovertemplate='Total: %{y:.2f} '+f'{unit}'+'<br>Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br><extra></extra>'))
-        fig.update_layout(barmode='relative')
+        fig.update_layout(barmode='relative', legend_traceorder="reversed")
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
             #print("No data available, since the results are all zero.")

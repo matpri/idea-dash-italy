@@ -70,7 +70,7 @@ def plot_comparison(df, aggregate, title, x_label, y_label, name, unit, scenario
             fig.add_bar(x=tech_df['time'], y=tech_df['value'], name=tech, marker_color=color,
                         hovertemplate=f'{scen}<br>Technology: {tech}<br>'
                                       + 'Year: %{x}<br>Value: %{y:.2f}')
-        fig.update_layout(barmode='relative')
+        fig.update_layout(barmode='relative', legend_traceorder="reversed")
         fig.update_yaxes(showgrid=True)
     except Exception as e:
         print('ERROR', title, 'plot:', e)

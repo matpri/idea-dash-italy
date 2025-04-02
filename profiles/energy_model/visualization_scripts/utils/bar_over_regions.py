@@ -46,7 +46,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
                                  hovertemplate='Total: %{y:.2f} '+f'{unit}'+'<br>Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br><extra></extra>'))
         
         
-        fig.update_layout(barmode='relative')
+        fig.update_layout(barmode='relative', legend_traceorder="reversed")
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
             #print("No data available, since the results are all zero.")

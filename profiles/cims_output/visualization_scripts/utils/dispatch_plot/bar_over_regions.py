@@ -40,7 +40,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
                         hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f}' + f'{unit}<br>' +
                                           'Exports: %{customdata[1]:.2f} ' + f'{unit}' + '<br>Imports: '
                                                                                '%{customdata[2]:.2f} ' + f'{unit}' + '<br>' + '<br><extra></extra>')
-        fig.update_layout(barmode='relative')
+        fig.update_layout(barmode='relative', legend_traceorder="reversed")
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
             #print("No data available, since the results are all zero.")

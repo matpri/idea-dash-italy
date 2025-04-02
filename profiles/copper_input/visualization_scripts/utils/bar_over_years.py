@@ -37,7 +37,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
                         marker_pattern_shape=scen_patterns if pattern_active else None,
                         textposition='auto' if text_active else None, text=tech,
                         hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
-        fig.update_layout(barmode='relative')
+        fig.update_layout(barmode='relative', legend_traceorder="reversed")
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
             #print("No data available, since the results are all zero.")
