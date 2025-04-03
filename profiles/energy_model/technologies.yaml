@@ -858,6 +858,11 @@ solar:
   group: Solar
   group_color: '#ffff99'
   name: solar
+solar_recon:
+  color: '#000000'
+  group: Solar
+  group_color: '#ffff99'
+  name: solar_recon
 storage_LI:
   color: '#000000'
   group: Storage
