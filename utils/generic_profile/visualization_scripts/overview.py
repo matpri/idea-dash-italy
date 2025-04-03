@@ -17,7 +17,7 @@ version_colors = {}
 version_patterns = {}
 
 
-def color_to_rgba(color, alpha=0.2):
+def color_to_rgba(color, alpha=0.5):
     import colorsys
     h, l, s = color[4:-1].split(', ')
     h = float(h) / 360  # Convert degree to ratio
@@ -33,7 +33,7 @@ def get_scenario_color(scenario, alpha=0.8):
             hue = (len(scenario_colors) * 360 / 20) % 360  # More shades of base colors
             saturation = 50 + (len(scenario_colors) * 15 % 50)  # Varying saturation
             lightness = 50 + (len(scenario_colors) * 15 % 50)  # Varying lightness
-            scenario_colors[scenario] = f"hsl({hue}, {saturation}%, {lightness}%)"
+            scenario_colors[scenario] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)", alpha)
         else:
             scenario_colors[scenario] = colors[len(scenario_colors)]
     color = scenario_colors[scenario]
@@ -47,7 +47,7 @@ def get_model_color(model, alpha=0.8):
             hue = (len(model_colors) * 360 / 20) % 360
             saturation = 50 + (len(model_colors) * 15 % 50)
             lightness = 50 + (len(model_colors) * 15 % 50)
-            model_colors[model] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)")
+            model_colors[model] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)", alpha)
         else:
             model_colors[model] = colors[len(model_colors)]
     color = model_colors[model]
@@ -62,7 +62,7 @@ def get_version_color(version, alpha=0.8):
             hue = (len(version_colors) * 360 / 20) % 360
             saturation = 50 + (len(version_colors) * 15 % 50)
             lightness = 50 + (len(version_colors) * 15 % 50)
-            version_colors[version] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)")
+            version_colors[version] = color_to_rgba(f"hsl({hue}, {saturation}%, {lightness}%)", alpha)
         else:
             version_colors[version] = colors[len(version_colors)]
     color = version_colors[version]
@@ -129,7 +129,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                     pattern = get_scenario_pattern(scenario)
                     fig.add_scatter(x=data_scenario["time"], y=data_scenario["value"], name=f'{model} - {scenario}',
                                     mode='lines+markers',
-                                    line=dict(color=get_model_color(model),
+                                    line=dict(color=get_model_color(model, alpha=0.8),
                                               dash=pattern,
                                               width=2),
                                     fill=None if i == 0 or not fill else 'tonexty',
@@ -153,7 +153,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                     sub_fig.add_scatter(x=data_model["time"], y=data_model["value"],
                                         name=f'{model} - {scen} - {version}' if version else f'{model} - {scen}',
                                         mode='lines+markers',
-                                        line=dict(color=get_scenario_color(scen),
+                                        line=dict(color=get_scenario_color(scen, alpha=0.8),
                                                   dash=pattern,
                                                   width=2,
                                                   ),
@@ -179,7 +179,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
                         sub_fig.add_scatter(x=data_scenario["time"], y=data_scenario["value"],
                                             name=f'{model} - {scenario} - {version}',
                                             mode='lines+markers',
-                                            line=dict(color=get_version_color(version),
+                                            line=dict(color=get_version_color(version, alpha=0.8),
                                                       dash=pattern,
                                                       width=2,
                                                       ),
@@ -262,7 +262,7 @@ def create_overview_plot(model, is_comparison=False):
                 ),
                 dmc.Select(
                     label='Group By',
-                    value=1,
+                    value=0,
                     data=[
                         {'label': 'No Grouping', 'value': 0},
                         {'label': 'Group by Model', 'value': 1},
@@ -314,7 +314,7 @@ def create_overview_plot(model, is_comparison=False):
         ])
 
         plot_layout = dcc.Graph(
-            figure=render_plot(classes[0], df, True, False, False, units[0]),
+            figure=render_plot(classes[0], df, False, False, False, units[0]),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,
