@@ -1529,17 +1529,17 @@ gasSC_post2025:
   name: gasSC_post2025
 gasSC_ccs_pre2010:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_pre2010
 gasSC_ccs_2010to2024:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_2010to2024
 gasSC_ccs_post2025:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_post2025
 gasCC_pre2010:
@@ -1569,17 +1569,17 @@ gasCC_post2025:
   name: gasCC_post2025
 gasCC_ccs_pre2010:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_pre2010
 gasCC_ccs_2010to2024:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_2010to2024
 gasCC_ccs_post2025:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_post2025
 gasCG_pre2010:
@@ -1609,17 +1609,17 @@ gasCG_post2025:
   name: gasCG_post2025
 gasCG_ccs_pre2010:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_pre2010
 gasCG_ccs_2010to2024:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_2010to2024
 gasCG_ccs_post2025:
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_post2025
 
@@ -2105,22 +2105,4 @@ gasCG_ccs_post2025.renewable_gas_overlim:
   group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
   group_color: '#ff95b7'
   name: gasCG_post2025.renewable_gas_overlim
-
-'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas':
-  color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
-  group_color: '#ff4786'
-  name: 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas'
-
-'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas':
-  color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
-  group_color: '#ffaaa3'
-  name: 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas'
-
-'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas':
-  color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
-  group_color: '#ff95b7'
-  name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas'
 
