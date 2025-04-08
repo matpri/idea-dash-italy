@@ -18,6 +18,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, vre_scenario=None,
                 _t_cost_scenarios=None,
                 e_p_type=None, e_scenarios=None, e_region=None, e_year=None,
                 _c_type=None, _c_scenario=None, _c_region=None,
+                _demand_plot_type=None, _demand_region=None, _demand_multi_scenario=None,
                 _demand_scenario=None, _demand_year=None, _demand_month=None, _demand_date=None, _demand_time_step=None,
                 t_p_type=None, t_scenarios=None, t_year=None
                 ):
@@ -37,7 +38,7 @@ def render_plot(p_type, df, vre_variable=None, season=None, vre_scenario=None,
     elif p_type == 'Extant Capacity':
         return extant_capacity.render(e_p_type, data, False, e_scenarios, e_region, e_year, e_scenarios)
     elif p_type == 'Demand':
-        return demand.render(data, _demand_scenario, _demand_year, _demand_month, _demand_date, 'Demand', 'Time',
+        return demand.render(_demand_plot_type, data, _demand_scenario, _demand_multi_scenario, _demand_region, _demand_year, _demand_month, _demand_date, 'Demand', 'Time',
                              'Demand (MW)', time_size=_demand_time_step)
     elif p_type == 'Cost':
         return cost.render(data, _c_type, _c_scenario, _c_region)

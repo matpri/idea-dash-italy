@@ -65,6 +65,18 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
+            'type': 'copper-inputs-demand-region-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper-inputs-demand-scenario-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'copper-inputs-demand-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
+        Output({
             'type': 'copper-inputs-demand-date-select',
             'index': ALL
         }, 'style'),
@@ -161,7 +173,19 @@ def link(app):
         }, 'value'),
 
         Input({
+            'type': 'copper-inputs-demand-plot-type-select',
+            'index': ALL
+        }, 'value'),
+        Input({
             'type': 'copper-inputs-demand-scenario-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-demand-scenario-multi-select',
+            'index': ALL
+        }, 'value'),
+        Input({
+            'type': 'copper-inputs-demand-region-select',
             'index': ALL
         }, 'value'),
         Input({
@@ -259,6 +283,18 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
+            'type': 'copper-inputs-demand-region-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-inputs-demand-scenario-select',
+            'index': ALL
+        }, 'style'),
+        State({
+            'type': 'copper-inputs-demand-scenario-multi-select',
+            'index': ALL
+        }, 'style'),
+        State({
             'type': 'copper-inputs-demand-date-select',
             'index': ALL
         }, 'style'),
@@ -292,14 +328,14 @@ def link(app):
                       _extant_capacity_rep, _extant_capacity_year, _extant_capacity_region, _extant_capacity_scenario,
                       _extant_capacity_scenarios,
                       _c_type, _c_scenario, _c_region,
-                      _demand_scenario, _demand_timestep, _demand_date, _demand_month, _demand_year,
+                      _demand_plot_type,_demand_scenario,_demand_multi_scenario, _demand_region, _demand_timestep, _demand_date, _demand_month, _demand_year,
                       _t_type, _t_year, _t_scenario, _t_scenarios,
                       _download, _canvas, _data,
                       _policy_style, _vre_style, _params_style, _transmission_cost_style,
                       _extant_capacity_widget_style, _extant_capacity_year_style, _extant_capacity_region_style,
                       _extant_capacity_scenario_style, _extant_capacity_scenarios_style,
                       _cost_style,
-                      _demand_widget_style, _demand_date_style, _demand_month_style, _demand_year_style,
+                      _demand_widget_style,_demand_region_style, _demand_scenario_style,_demand_multi_scenario_style, _demand_date_style, _demand_month_style, _demand_year_style,
                       _transmission_style, _transmission_scenarios_style, _transmission_scenario_style
 
                       ):
@@ -322,7 +358,7 @@ def link(app):
                 _canvas, _data, _policy_style, _vre_style, _params_style, _transmission_cost_style,
                 _extant_capacity_widget_style, _extant_capacity_year_style, _extant_capacity_region_style,
                 _extant_capacity_scenario_style, _extant_capacity_scenarios_style, _cost_style,
-                _demand_widget_style, _demand_date_style, _demand_month_style, _demand_year_style,
+                _demand_widget_style, _demand_region_style,_demand_scenario_style,_demand_multi_scenario_style, _demand_date_style, _demand_month_style, _demand_year_style,
                 _transmission_style, _transmission_scenarios_style, _transmission_scenario_style
             )
 
@@ -368,6 +404,15 @@ def link(app):
                 _transmission_scenarios_style[idx] = {'display': 'block'}
         elif _p_type[idx] == 'Demand':
             _demand_widget_style[idx] = {'display': 'block'}
+            if _demand_plot_type[idx] == 'By Scenario':
+                _demand_scenario_style[idx] = {'display': 'none'}
+                _demand_multi_scenario_style[idx] = {'display': 'block'}
+                _demand_region_style[idx] = {'display': 'block'}
+            else:
+                _demand_scenario_style[idx] = {'display': 'block'}
+                _demand_multi_scenario_style[idx] = {'display': 'none'}
+                _demand_region_style[idx] = {'display': 'none'}
+
             ts = _demand_timestep[idx]
             if ts == 'yearly':
                 _demand_year_style[idx] = {'display': 'none'}
@@ -419,6 +464,7 @@ def link(app):
                                    _t_cost_scenarios=_transmission_cost_scenarios[idx],
                                    e_p_type=e_rep, e_scenarios=e_scen, e_region=e_region, e_year=e_year,
                                    _c_type=_c_type[idx], _c_scenario=_c_scenario[idx], _c_region=_c_region[idx],
+                                  _demand_plot_type=_demand_plot_type[idx], _demand_region=_demand_region[idx],_demand_multi_scenario=_demand_multi_scenario[idx],
                                    _demand_scenario=_demand_scenario[idx], _demand_year=_demand_year[idx],
                                    _demand_month=_demand_month[idx], _demand_date=_demand_date[idx],
                                    _demand_time_step=_demand_timestep[idx],
@@ -431,6 +477,6 @@ def link(app):
                           _data], _policy_style, _vre_style, _params_style, _transmission_cost_style,
                 _extant_capacity_widget_style, _extant_capacity_year_style, _extant_capacity_region_style,
                 _extant_capacity_scenario_style, _extant_capacity_scenarios_style, _cost_style,
-                _demand_widget_style, _demand_date_style, _demand_month_style, _demand_year_style,
+                _demand_widget_style, _demand_region_style,_demand_scenario_style,_demand_multi_scenario_style, _demand_date_style, _demand_month_style, _demand_year_style,
                 _transmission_style, _transmission_scenarios_style, _transmission_scenario_style
                 )
