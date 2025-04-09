@@ -7,12 +7,14 @@ import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
 from collections import defaultdict
+import yaml
 
 import chardet
 import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
+from utils.report_profile.report_profile import ReportProfile
 from utils.constants import model_mapping, exclude_from_comparison
 
 def create_generic_profile(df, model):
@@ -180,6 +182,8 @@ class DataHandler:
         self.viz = {}
         self.to_delete = []
         self.runs = pd.DataFrame()
+
+        self.reports = {}
 
     def preload_data(self, data_files):
         data_files = [file for file in data_files if file not in self.data.keys()]
@@ -461,7 +465,7 @@ class DataHandler:
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
-        return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
+        return self.profiles[profile].viz_options[viz]['viz'](self.processed_data.get(profile, {}).get(viz, None), window_id)
 
     def get_viz_options(self):
         """
@@ -476,6 +480,14 @@ class DataHandler:
                 if viz.get(model) is None:
                     viz[model] = []
                 viz[model].append(viz_name)
+
+        for report_name, report in self.reports.items():
+            if viz.get(report.display_name) is None:
+                viz[report.display_name] = []
+            for name in report.viz_options.keys():
+                if name not in viz[report.display_name]:
+                    viz[report.display_name].append(name)
+
         return viz
 
     def load_profiles(self):
@@ -663,6 +675,54 @@ class DataHandler:
                 profile = GenericProfile(profile, classes, variables)
 
                 self.profiles[profile.display_name] = profile
+        for report_name, report in self.reports.items():
+            if report.name not in self.profiles:
+                self.profiles[report.name] = report
+
+    def create_report(self, config):
+        """
+        Create a report based on the loaded config.
+        :param config: The configuration file to use for creating the report.
+        :return:
+        """
+        # Implement the logic to create a report based on the loaded config
+        name = config['name']
+        report = config['report']
+
+        # open markdown file in report
+        with open(os.path.join('data', report), 'r') as stream:
+            try:
+                data = stream.read()
+                self.reports[name] = ReportProfile(name, data)
+                if name not in self.profiles:
+                    self.profiles[name] = self.reports[name]
+            except Exception as exc:
+                print(exc)
+
+    def load_configs(self, configs):
+        print('Loading configs', configs)
+        for c_path in configs:
+            with open(os.path.join('config', c_path), 'r') as stream:
+                try:
+                    data = yaml.safe_load(stream)
+                    self.create_report(data)
+                    self.create_narrative(data)
+
+                except yaml.YAMLError as exc:
+                    print(exc)
+
+    def create_narrative(self, config):
+        """
+        Create a narrative based on the loaded config.
+        :param config: The configuration file to use for creating the narrative.
+        :return:
+        """
+        # Implement the logic to create a narrative based on the loaded config
+        profiles = config['profiles']
+        pass
+
+
+
 
 
 

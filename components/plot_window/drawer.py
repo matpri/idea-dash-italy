@@ -22,7 +22,7 @@ def render(card_id, viz_func):
     return dmc.Burger(
         id={'type': ids.BURGER, 'index': card_id},
         opened=True,
-        size='sm'
+        size='sm',
     ), dbc.Collapse(
         children=[dmc.Text("Widgets", align="left"),
                   html.Div(viz_func,

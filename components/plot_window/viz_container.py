@@ -3,6 +3,7 @@ from dash import html, dcc
 from components import ids
 from components.plot_window import drawer
 
+
 def render(card_id, profile, viz, widgets, plot):
     """
     Render the visualization container with the specified parameters.
@@ -19,13 +20,38 @@ def render(card_id, profile, viz, widgets, plot):
     """
     print('rendering viz container', card_id, profile, viz)
 
+    if type(plot) == dcc.Markdown:
+        _md = html.Div(plot, id={'index': card_id, 'type': 'MD'}, style={
+            'width': '100%',
+            'height': '100%',
+            'overflow': 'auto'
+        }
+                       )
+        _f = dcc.Graph(id={'type': ids.PLOT, 'index': card_id},
+                       style={
+                           'width': '0%',
+                           'height': '0%'
+                       }
+                       )
+    else:
+        _md = html.Div([], id={'index': card_id, 'type': 'MD'}, style={
+            'width': '0%',
+            'height': '0%',
+            'overflow': 'auto'
+        }
+                       )
+
+
+        _f = dcc.Graph(figure=plot.figure, id={'type': ids.PLOT, 'index': card_id},
+                       style={
+                           'width': '100%',
+                           'height': '100%'
+                       }
+                       )
+
     return (*drawer.render(card_id, widgets),
-            dcc.Graph(figure=plot.figure, id={'type': ids.PLOT, 'index': card_id},
-                      style={
-                          'width': '100%',
-                          'height': '100%'
-                      }
-                      ),
+            _f,
+            _md,
             html.Div(plot,
                      id={
                          'type': 'hidden_plot',

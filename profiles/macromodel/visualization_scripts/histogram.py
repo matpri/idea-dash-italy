@@ -14,7 +14,7 @@ def render_plot(type, df, scenarios, region, unit, year,variable, n_bins=20):
 
     # make histogram where colour is scenario
     fig = px.histogram(df_scen, x='value', color='scenario', title=f'{variable} in {region} in {year}', labels={'value': f'{variable} ({unit})', 'scenario': 'Scenario'}, barmode='overlay', nbins=n_bins)
-    fig.update_traces(opacity=1 / len(scenarios) if len(scenarios) > 1 else 1)
+    fig.update_traces(opacity=max(0.3,1 / len(scenarios)) if len(scenarios) > 1 else 1)
     fig.update_layout(
         xaxis_title_text=f'{variable} ({unit})',
         yaxis_title_text='Count',

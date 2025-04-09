@@ -86,82 +86,76 @@ def render(card_id):
     )
 
     widgets, plot = data_handler.get_viz(profiles[0], plots[0], card_id)
-    _b, _w, _f, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
-    layout = [
-        dbc.Collapse(
-            [
-                profile_tab,
-                html.Div(
-                    viz_tab,
-                    id={
-                        'type': 'viz-tab-container',
-                        'index': card_id
-                    })
-            ], id={'type': 'collapse-tabs', 'index': card_id},
-            is_open=True,
-        ),
-        html.Div([
-            _b,
+    _b, _w, _f, _md, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
+    layout = [dbc.Collapse(
+        [
+            profile_tab,
             html.Div(
-                [
-                    dmc.ActionIcon(
-                        html.Div(
-                            DashIconify(icon='carbon:chevron-down'),
-                            style={'text-align': 'center'}
-                        ),
-                        id={'type': 'view-tab', 'index': card_id},
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        style=hide_button_style
-                    ),
-                    dmc.ActionIcon(
-                        html.Div(
-                            DashIconify(icon='carbon:chevron-up'),
-                            style={'text-align': 'center'}
-                        ),
-                        id={'type': 'hide-tab', 'index': card_id},
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        style=view_button_style
-                    ),
-                ]
-                # center align
-                , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
-            ),
-            # export button
-            dmc.ActionIcon(
-                html.Div(
-                    DashIconify(icon='carbon:intent-request-scale-out'),
-                    style={'text-align': 'center'}
-                ),
-                id={'type': 'open_popup', 'index': card_id},
-                size='sm',
-                radius='xl',
-                variant='outline',
-                style=view_button_style
-            ),
-
-        ],
-            style={'display': 'flex',
-                   # all in one row,
-                   'justify-content': 'space-between', }
-        ),
-        # flexgroup _w and _f
+                viz_tab,
+                id={
+                    'type': 'viz-tab-container',
+                    'index': card_id
+                })
+        ], id={'type': 'collapse-tabs', 'index': card_id},
+        is_open=True,
+    ), html.Div([
+        _b,
         html.Div(
             [
-                _w,
-                _f
-            ],
-            style={'display': 'flex',
-                   'justify-content': 'space-between',
-                   'height': '90%',
-                   'width': '100%'}
+                dmc.ActionIcon(
+                    html.Div(
+                        DashIconify(icon='carbon:chevron-down'),
+                        style={'text-align': 'center'}
+                    ),
+                    id={'type': 'view-tab', 'index': card_id},
+                    size='sm',
+                    radius='xl',
+                    variant='outline',
+                    style=hide_button_style
+                ),
+                dmc.ActionIcon(
+                    html.Div(
+                        DashIconify(icon='carbon:chevron-up'),
+                        style={'text-align': 'center'}
+                    ),
+                    id={'type': 'hide-tab', 'index': card_id},
+                    size='sm',
+                    radius='xl',
+                    variant='outline',
+                    style=view_button_style
+                ),
+            ]
+            # center align
+            , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
         ),
-        _hp,
-        render_popup(card_id, _f)
-    ]
+        # export button
+        dmc.ActionIcon(
+            html.Div(
+                DashIconify(icon='carbon:intent-request-scale-out'),
+                style={'text-align': 'center'}
+            ),
+            id={'type': 'open_popup', 'index': card_id},
+            size='sm',
+            radius='xl',
+            variant='outline',
+            style=view_button_style
+        ),
+
+    ],
+        style={'display': 'flex',
+               # all in one row,
+               'justify-content': 'space-between', }
+    ), html.Div(
+        [
+            _w,
+            _f,
+            _md
+        ],
+        style={'display': 'flex',
+               'justify-content': 'space-between',
+               'height': '90%',
+               'width': '100%'}
+    ), _hp, render_popup(card_id, _f)]
 
     return layout
 

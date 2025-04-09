@@ -12,33 +12,34 @@ def render():
     tab_contents = []
     tabs = []
     for profile_name, profile in data_handler.profiles.items():
-        tabs.append(
-            dmc.Tab(
-                value=profile_name,
-                children=profile_name
+        if profile_name not in data_handler.reports.keys():
+            tabs.append(
+                dmc.Tab(
+                    value=profile_name,
+                    children=profile_name
+                )
+            )
+
+            tab_contents.append(
+                dmc.TabsPanel(
+                    value=profile_name,
+                    children=profile.settings
+                )
+            )
+
+        return dmc.Modal(
+            title='Settings',
+            opened=False,
+            id='settings-modal',
+            size='70%',
+            children=html.Div(
+                [
+                    dmc.Tabs(
+                        [
+                            dmc.TabsList(children=tabs),
+                            *tab_contents,
+                        ],
+                    ),
+                ]
             )
         )
-
-        tab_contents.append(
-            dmc.TabsPanel(
-                value=profile_name,
-                children=profile.settings
-            )
-        )
-
-    return dmc.Modal(
-        title='Settings',
-        opened=False,
-        id='settings-modal',
-        size='70%',
-        children=html.Div(
-            [
-                dmc.Tabs(
-                    [
-                        dmc.TabsList(children=tabs),
-                        *tab_contents,
-                    ],
-                ),
-            ]
-        )
-    )
