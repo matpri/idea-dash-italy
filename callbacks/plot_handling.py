@@ -8,6 +8,8 @@ def link(app):
         Output({'type': ids.PLOT, 'index': MATCH}, 'style'),
         Output({'type': 'MD', 'index': MATCH}, 'children'),
         Output({'type': 'MD', 'index': MATCH}, 'style'),
+        Output({'type': ids.BURGER, 'index': MATCH}, 'style'),
+        Output({'type': ids.DRAWER, 'index': MATCH}, 'style'),
         Input({'type': ids.FIGURE, 'index': MATCH,
                'profile': ALL, 'viz': ALL}, 'figure'),
         Input({
@@ -49,7 +51,7 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
 
     triggered_id = ctx.triggered_id
     if triggered_id is None:
-        return dash.no_update, dash.no_update, dash.no_update, dash.no_update
+        return dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
     triggered_value = ctx.triggered[0]['value']
     if triggered_id['type'] == ids.FIGURE:
@@ -57,10 +59,11 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
             'width': '100%',
             'height': '100%',
             'display': 'block',
-        }, dash.no_update, {'width': '0%', 'height': '0%', 'display': 'none'}
+        }, dash.no_update, {'width': '0%', 'height': '0%', 'display': 'none'}, {'display': 'block'}, {'width': '20%','height': '100%'}
+
     else:
         return dash.no_update, {
             'width': '0%',
             'height': '0%',
             'display': 'none',
-        }, dcc.Markdown(triggered_value), {'width': '100%', 'height': '100%', 'display': 'block', 'overflow': 'auto'}
+        }, dcc.Markdown(triggered_value), {'width': '100%', 'height': '100%', 'display': 'block', 'overflow': 'auto'}, {'opacity': '0', 'visibility': 'hidden'}, {'display': 'none'}
