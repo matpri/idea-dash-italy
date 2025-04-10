@@ -27,7 +27,9 @@ def render(card_id, profile, viz, widgets, plot):
             'overflow': 'auto'
         }
                        )
-        _f = dcc.Graph(id={'type': ids.PLOT, 'index': card_id},
+        _f = dcc.Graph(
+            figure={},
+            id={'type': ids.PLOT, 'index': card_id},
                        style={
                            'width': '0%',
                            'height': '0%'
