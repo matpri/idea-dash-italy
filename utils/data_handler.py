@@ -718,8 +718,52 @@ class DataHandler:
         :return:
         """
         # Implement the logic to create a narrative based on the loaded config
-        profiles = config['profiles']
-        pass
+        files = config['files']
+        fail = False
+        for file in files:
+            profiles = list(config['files'][file]['profiles'].keys())
+
+            print('Preloading', file)
+            f_name, extension = os.path.splitext(file)
+            if extension == '.csv':
+                df = pd.read_csv(os.path.join('data', file))
+            elif extension == '.xlsx':
+                dfs = []
+                xls = pd.ExcelFile(os.path.join('data', file))
+                for sheet in xls.sheet_names:
+                    print(sheet)
+                    _df = xls.parse(sheet)
+                    # infer types of the column names
+                    _df.columns = _df.columns.astype(str)
+                    dfs.append(_df)
+                # Combine all DataFrames into one
+                df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.pkl':
+                self.pkls[f_name] = os.path.join('data', file)
+            else:
+                fail = True
+                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                continue
+
+            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+            if not checked:
+                fail = True
+            else:
+                colors = []
+                for p in list(self.data[file]['visualizations'].keys()):
+                    colors.append(self.profiles[p].color)
+
+            selected_dict = {}
+            for profile in profiles:
+                if profile in self.data[file]['visualizations']:
+                    selected_dict[profile] = config['files'][file]['profiles'][profile]
+
+            self.data[file]['selected'] = selected_dict
+
+        if fail:
+            print(fail)
+
+        self.process_data()
 
 
 
