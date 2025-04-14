@@ -214,9 +214,9 @@ def render_generic(df_scen, p_type, _scenario, _region, _multi_scenario=None, _m
         template="simple_white",
     )
     try:
-        if 'Total' in regions:
-            df_scen_total = df_scen.groupby(['class', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
-            df_scen_total['region'] = 'Total'
+        if 'Average' in regions:
+            df_scen_total = df_scen.groupby(['class', 'time', 'scenario', 'unit']).mean(numeric_only=True).reset_index()
+            df_scen_total['region'] = 'Average'
             df_scen = pd.concat([df_scen, df_scen_total], ignore_index=True)
 
         df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
@@ -286,7 +286,7 @@ def plot(df, window_id):
     classes = df['variable'].apply(lambda x: x.split('|')[0]).unique()
 
     scenarios = df['scenario'].unique().tolist()
-    regions = ['Total'] + df['region'].unique().tolist()
+    regions = ['Average'] + df['region'].unique().tolist()
 
     generic_widget_layout = html.Div([
         dmc.Select(
