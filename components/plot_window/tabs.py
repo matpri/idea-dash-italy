@@ -212,21 +212,21 @@ def render_popup(window_id, graph):
                                         label='Title',
                                         id={'type': ids.PLOT_POPUP_TITLE, 'index': window_id},
                                         placeholder='Title',
-                                        value=figure['layout']['title']['text'],
+                                        value=figure['layout']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     dmc.TextInput(
                                         label='X-axis Label',
                                         id={'type': ids.PLOT_POPUP_X_LABEL, 'index': window_id},
                                         placeholder='X-axis Label',
-                                        value=figure['layout']['xaxis']['title']['text'],
+                                        value=figure['layout']['xaxis']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     dmc.TextInput(
                                         label='Y-axis Label',
                                         id={'type': ids.PLOT_POPUP_Y_LABEL, 'index': window_id},
                                         placeholder='Y-axis Label',
-                                        value=figure['layout']['yaxis']['title']['text'],
+                                        value=figure['layout']['yaxis']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     html.Div(

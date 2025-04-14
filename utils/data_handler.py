@@ -756,7 +756,8 @@ class DataHandler:
             selected_dict = {}
             for profile in profiles:
                 if profile in self.data[file]['visualizations']:
-                    selected_dict[profile] = config['files'][file]['profiles'][profile]
+                    if 'All' not in config['files'][file]['profiles'][profile]:
+                        selected_dict[profile] = config['files'][file]['profiles'][profile]
 
             self.data[file]['selected'] = selected_dict
 
