@@ -166,7 +166,7 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+    profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
@@ -758,6 +758,8 @@ class DataHandler:
                 if profile in self.data[file]['visualizations']:
                     if 'All' not in config['files'][file]['profiles'][profile]:
                         selected_dict[profile] = config['files'][file]['profiles'][profile]
+                    else:
+                        selected_dict[profile] = self.data[file]['visualizations'][profile]
 
             self.data[file]['selected'] = selected_dict
 
