@@ -16,7 +16,7 @@ def render(card_id):
     profiles = list(profile_options.keys())
 
     # sort keys by data_handler.profile_order
-    profiles.sort(key=lambda x: data_handler.profile_order.index(x) if x in data_handler.profile_order else 1000)
+    profiles.sort(key=lambda x: data_handler.profile_order.index(x) + len(data_handler.reports) if x in data_handler.profile_order else list(data_handler.reports.keys()).index(x) if x in data_handler.reports else 1000)
 
     if not profiles:
         return html.Div()

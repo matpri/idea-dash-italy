@@ -30,19 +30,20 @@ def render(card_id, profile, viz, widgets, plot):
         _f = dcc.Graph(
             figure={},
             id={'type': ids.PLOT, 'index': card_id},
-                       style={
-                           'width': '0%',
-                           'height': '0%'
-                       }
-                       )
+            style={
+                'width': '0%',
+                'height': '0%',
+                'display': 'none'
+            }
+        )
     else:
         _md = html.Div([], id={'index': card_id, 'type': 'MD'}, style={
             'width': '0%',
             'height': '0%',
-            'overflow': 'auto'
+            'overflow': 'auto',
+            'display': 'none'
         }
                        )
-
 
         _f = dcc.Graph(figure=plot.figure, id={'type': ids.PLOT, 'index': card_id},
                        style={
@@ -54,7 +55,7 @@ def render(card_id, profile, viz, widgets, plot):
     return (*drawer.render(card_id, widgets),
             _f,
             _md,
-            html.Div(plot,
+            html.Div(plot if type(plot) != dcc.Markdown else [],
                      id={
                          'type': 'hidden_plot',
                          'index': card_id

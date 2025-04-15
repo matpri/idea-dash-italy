@@ -465,6 +465,7 @@ class DataHandler:
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
+        print('Getting viz', profile, viz)
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data.get(profile, {}).get(viz, None), window_id)
 
     def get_viz_options(self):
