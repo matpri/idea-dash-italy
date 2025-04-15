@@ -381,7 +381,7 @@ class messageixOutput(BaseProfile):
 
     def _filter_and_group_full_df(self, full_df):
         """Filter and group the full dataframe for final output."""
-        full_df = full_df[full_df['region'].isin(['CAN', 'AB+QC'])]
+        full_df = full_df[full_df['region'].isin(['Canada', 'AB+QC'])]
         return full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
     def render_settings(self):

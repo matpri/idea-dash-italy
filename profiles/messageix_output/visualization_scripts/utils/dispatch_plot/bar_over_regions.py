@@ -74,7 +74,7 @@ def aggregate_imports(df):
 
 def subset(df, year, scenarios, aggregate, season=None):
     df_scen = df.copy(deep=True)
-    df_scen = df_scen[df_scen['region'] != 'CAN']
+    df_scen = df_scen[df_scen['region'] != 'Canada']
     regions = df_scen['region'].unique().tolist()
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
@@ -88,7 +88,7 @@ def subset(df, year, scenarios, aggregate, season=None):
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
     df_scen = df_scen[df_scen['time'] == year]
-    df_scen = df_scen[df_scen['region'] != 'CAN']
+    df_scen = df_scen[df_scen['region'] != 'Canada']
     df_scen = df_scen[df_scen['value'] != 0]
     df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum').values
 

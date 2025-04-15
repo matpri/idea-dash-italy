@@ -55,7 +55,7 @@ def plot(df, window_id):
     df_scen = df.copy(deep=True)
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
     df_scen = df_scen[
-        (df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
+        (df_scen['region'] == 'Canada' if 'Canada' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
                 df_scen['scenario'] == scenarios[0])]
     # df_scen = df_scen[df_scen['type'].isin(sectors)]
     types = ['All'] + sorted(df_scen['type'].unique().tolist())
@@ -65,7 +65,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value='CAN' if 'CAN' in regions else regions[0],
+        value='Canada' if 'Canada' in regions else regions[0],
         id={
             'type': 'messageix-resource-region-select',
             'index': window_id
@@ -190,7 +190,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'Canada' if 'Canada' in regions else regions[0],
                            years[0], scenarios[0], variables=[]),
         id={
             'type': ids.FIGURE,

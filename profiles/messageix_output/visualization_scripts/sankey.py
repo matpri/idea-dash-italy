@@ -54,7 +54,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value= 'CAN' if 'CAN' in regions else regions[0],
+        value= 'Canada' if 'Canada' in regions else regions[0],
         id={
             'type': 'messageix-sankey-region-select',
             'index': window_id

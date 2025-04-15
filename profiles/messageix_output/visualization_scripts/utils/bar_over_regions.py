@@ -68,7 +68,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
 
 
 def subset(df_scen, year, scenarios, aggregate, season=None):
-    df_scen = df_scen[df_scen['region'] != 'CAN']
+    df_scen = df_scen[df_scen['region'] != 'Canada']
     regions = df_scen['region'].unique().tolist()
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
@@ -82,7 +82,7 @@ def subset(df_scen, year, scenarios, aggregate, season=None):
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
     df_scen = df_scen[df_scen['time'] == year]
-    df_scen = df_scen[df_scen['region'] != 'CAN']
+    df_scen = df_scen[df_scen['region'] != 'Canada']
     df_scen = df_scen[df_scen['value'] != 0]
     df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum').values
     # for every variable type in the df, make sure all regions are present if necessary fill with 0
