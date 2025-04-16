@@ -609,6 +609,37 @@ class DataHandler:
                     visualizations[profile.display_name].append(viz_name)
                     selected[profile.display_name].append(viz_name)
 
+        if len(visualizations):
+            self.data[filename]['visualizations'] = visualizations
+            self.data[filename]['selected'] = selected
+            self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+                0] if not df.empty or 'scenario' in df.columns else filename
+
+            return True, "Data loaded successfully!", filename
+
+        if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+            model = model + ' Generic'
+            df['model'] = model
+            profile = create_generic_profile(df, model)
+            self.profiles[profile.display_name] = profile
+            profile_options = [profile.display_name]
+        else:
+            return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
+        self.data[filename] = {}
+
+        self.data[filename]['content'] = df
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
+        for profile_name, profile in profiles_to_check.items():
+            for viz_name, viz_dict in profile.viz_options.items():
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
+
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
