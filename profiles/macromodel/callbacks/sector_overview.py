@@ -1,5 +1,5 @@
 import dash
-from dash import Output, Input, State, ALL, dcc, MATCH
+from dash import Output, Input, State, MATCH, dcc, MATCH
 
 from components import ids
 from profiles.macromodel.visualization_scripts import sector_overview
@@ -16,56 +16,56 @@ def link(app):
     @app.callback(
         Output({
             'type': ids.FIGURE,
-            'index': ALL,
+            'index': MATCH,
             'profile':MATCH,
             'name': MATCH
         }, 'figure', allow_duplicate=True),
         Output({
             'type': 'so-region-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
             'type': 'so-year-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
             'type': 'so-download',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'data'),
         Output({
             'type': 'so-scenario-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
             'type': 'so-scenario-multi-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
             'type': 'so-unit-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output({
             'type': 'so-vartype-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         Output(
             {
                 'type': 'so-pattern-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -74,7 +74,7 @@ def link(app):
         Output(
             {
                 'type': 'so-text-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -82,56 +82,56 @@ def link(app):
         ),
         Input({
             'type': 'so-plot-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-aggregate-switch',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'checked'),
         Input({
             'type': 'so-scenario-multi-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-scenario-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-region-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-year-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-unit-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input({
             'type': 'so-vartype-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'value'),
         Input(
             {
                 'type': 'so-pattern-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -140,7 +140,7 @@ def link(app):
         Input(
             {
                 'type': 'so-text-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -148,62 +148,62 @@ def link(app):
         ),
         Input({
             'type': 'so-download-button',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'n_clicks'),
         State({
             'type': 'so-region-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
             'type': 'so-year-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
             'type': ids.FIGURE,
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'figure'),
         State({
             'type': 'so-download',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'data'),
         State({
             'type': 'so-scenario-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
             'type': 'so-scenario-multi-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
             'type': 'so-unit-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State({
             'type': 'so-vartype-select',
-            'index': ALL,
+            'index': MATCH,
             'profile': MATCH,
             'name': MATCH
         }, 'style'),
         State(
             {
                 'type': 'so-pattern-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -212,7 +212,7 @@ def link(app):
         State(
             {
                 'type': 'so-text-switch',
-                'index': ALL,
+                'index': MATCH,
                 'profile': MATCH,
                 'name': MATCH
             },
@@ -228,129 +228,117 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = 'Macromodel'
         name = name_mapping.get(trigger_id['name'])
-        print(f'updating sector_overview {name}, {model} plot')
+        print(f'updating sector_overview {name}, {model} plot', trigger_id)
         render_plot = render_func[trigger_id['name']]
 
         if 'download-button' in trigger_id['type']:
-            idx = 0
-            for i, id in enumerate(ctx.inputs_list[0]):
-                if ((id['id']['index'] == trigger_id['index']) and
-                        (id['id']['type'] == 'download-button')):
-                    idx = i
-                    break
-            _data[idx] = dcc.send_data_frame(
+            _data = dcc.send_data_frame(
                 data_handler.processed_data[model][name].to_csv, f"{name}.csv")
-            return _canvas, _r_style, _y_style, _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style
+            return _canvas, _r_style, _y_style,_data, _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style
 
-        idx = 0
-        for i, id in enumerate(ctx.inputs_list[0]):
-            if ((id['id']['index'] == trigger_id['index']) and
-                    (id['id']['type'] == 'plot-select')):
-                idx = i
-                break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
-        if _p_type[idx] == 'By Year':
-            _m_style[idx] = {'display': 'block'}
-            _r_style[idx] = {'display': 'block'}
-            _u_style[idx] = {'display': 'block'}
-            _v_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'none'}
-            _pattern_style[idx] = {'display': 'block'}
-            _text_style[idx] = {'display': 'block'}
 
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year',
+        print('plot type:', _p_type)
+        if _p_type == 'By Year':
+            _m_style = {'display': 'block'}
+            _r_style = {'display': 'block'}
+            _u_style = {'display': 'block'}
+            _v_style = {'display': 'block'}
+            _y_style = {'display': 'none'}
+            _s_style = {'display': 'none'}
+            _pattern_style = {'display': 'block'}
+            _text_style = {'display': 'block'}
+
+            if _aggregates is not None:
+                _canvas = render_plot('By Year',
                                            name,
                                            data_handler.processed_data[model][name],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _units[idx],
-                                           _vartypes[idx],
-                                           _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           _aggregates,
+                                           _scenarios,
+                                           _regions,
+                                           _units,
+                                           _vartypes,
+                                           _years, scenario=_scenario,
+                                           pattern_active=_pattern, text_active=_text)
 
-        elif _p_type[idx] == 'Trend Over Years':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _u_style[idx] = {'display': 'block'}
-            _v_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'block'}
-            _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years',
+        elif _p_type == 'Trend Over Years':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _u_style = {'display': 'block'}
+            _v_style = {'display': 'block'}
+            _y_style = {'display': 'none'}
+            _s_style = {'display': 'block'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+            if _aggregates is not None:
+                _canvas = render_plot('Trend Over Years',
                                            name,
                                            data_handler.processed_data[model][name],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _units[idx],
-                                           _vartypes[idx],
-                                           _years[idx], scenario=_scenario[idx])
-        elif _p_type[idx] == 'Trend in one Year':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _u_style[idx] = {'display': 'block'}
-            _v_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _s_style[idx] = {'display': 'block'}
-            _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend in one Year',
+                                           _aggregates,
+                                           _scenarios,
+                                           _regions,
+                                           _units,
+                                           _vartypes,
+                                           _years, scenario=_scenario)
+        elif _p_type == 'Trend in one Year':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _u_style = {'display': 'block'}
+            _v_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _s_style = {'display': 'block'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+            if _aggregates is not None:
+                _canvas = render_plot('Trend in one Year',
                                            name,
                                            data_handler.processed_data[model][name],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _units[idx],
-                                           _vartypes[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _aggregates,
+                                           _scenarios,
+                                           _regions,
+                                           _units,
+                                           _vartypes,
+                                           _years, scenario=_scenario)
 
-        elif _p_type[idx] == 'Pie Chart':
-            _m_style[idx] = {'display': 'none'}
-            _r_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _s_style[idx] = {'display': 'block'}
-            _u_style[idx] = {'display': 'block'}
-            _v_style[idx] = {'display': 'block'}
-            _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart',
+        elif _p_type == 'Pie Chart':
+            _m_style = {'display': 'none'}
+            _r_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _s_style = {'display': 'block'}
+            _u_style = {'display': 'block'}
+            _v_style = {'display': 'block'}
+            _pattern_style = {'display': 'none'}
+            _text_style = {'display': 'none'}
+            if _aggregates is not None:
+                _canvas = render_plot('Pie Chart',
                                            name,
                                            data_handler.processed_data[model][name],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _units[idx],
-                                           _vartypes[idx],
-                                           _years[idx], scenario=_scenario[idx])
+                                           _aggregates,
+                                           _scenarios,
+                                           _regions,
+                                           _units,
+                                           _vartypes,
+                                           _years, scenario=_scenario)
 
         else:
-            _m_style[idx] = {'display': 'block'}
-            _y_style[idx] = {'display': 'block'}
-            _u_style[idx] = {'display': 'block'}
-            _v_style[idx] = {'display': 'block'}
-            _r_style[idx] = {'display': 'none'}
-            _s_style[idx] = {'display': 'none'}
-            _pattern_style[idx] = {'display': 'block'}
-            _text_style[idx] = {'display': 'block'}
-            if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region',
+            _m_style = {'display': 'block'}
+            _y_style = {'display': 'block'}
+            _u_style = {'display': 'block'}
+            _v_style = {'display': 'block'}
+            _r_style = {'display': 'none'}
+            _s_style = {'display': 'none'}
+            _pattern_style = {'display': 'block'}
+            _text_style = {'display': 'block'}
+            if _aggregates is not None:
+                _canvas = render_plot('By Region',
                                            name,
                                            data_handler.processed_data[model][name],
-                                           _aggregates[idx],
-                                           _scenarios[idx],
-                                           _regions[idx],
-                                           _units[idx],
-                                           _vartypes[idx],
-                                           _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx])
+                                           _aggregates,
+                                           _scenarios,
+                                           _regions,
+                                           _units,
+                                           _vartypes,
+                                           _years, scenario=_scenario,
+                                           pattern_active=_pattern, text_active=_text)
 
-        return _canvas, _r_style, _y_style, [dash.no_update for _ in
-                                             _data], _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style
+        return _canvas, _r_style, _y_style, dash.no_update, _s_style, _m_style, _u_style, _v_style, _pattern_style, _text_style
