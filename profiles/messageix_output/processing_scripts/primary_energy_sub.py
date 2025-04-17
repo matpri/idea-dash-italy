@@ -62,9 +62,9 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Primary Energy (substitution method)|' in variable column entry
         df = df[df.variable.str.startswith("Primary Energy (substitution method)|")]
-        # canadian_total = calc_canadian(df)
+        canadian_total = calc_canadian(df)
 
-        full_data = df
+        full_data = pd.concat([canadian_total, df])
 
         full_data['type'] = full_data['variable'].str.split('|').str[1]
         # add levels which is the number of | in the variable name

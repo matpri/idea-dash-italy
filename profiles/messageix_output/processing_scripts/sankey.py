@@ -64,8 +64,8 @@ def process(selected: dict):
         df = df[df.variable.str.startswith("Sankey|")]
         # df = df.melt(id_vars=['model', 'scenario','region', 'variable','unit'], var_name='time', value_name='value')
         df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        # canadian_total = calc_canadian(df)
-        full_data = df
+        canadian_total = calc_canadian(df)
+        full_data = pd.concat([canadian_total, df])
         full_data['scenario'] = scenario_name
         full_data['source'], full_data['target'] = full_data['variable'].apply(lambda x: x.split("->")[0]), full_data['variable'].apply(lambda x: x.split("->")[1])
         dfs.append(full_data)
