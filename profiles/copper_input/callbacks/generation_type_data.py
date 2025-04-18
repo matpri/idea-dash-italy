@@ -9,7 +9,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
+            'profile': 'COPPER Input',
             'viz': 'gentype'
         }, 'figure'),
         Input({
@@ -23,7 +23,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
+            'profile': 'COPPER Input',
             'viz': 'gentype'
         }, 'figure'),
         prevent_initial_call=True

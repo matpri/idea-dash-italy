@@ -130,8 +130,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pithos_output',
-            'viz': 'new_capacity'
+            'profile': 'HEC-PITHOS',
+            'viz': 'New Capacity'
         },
         style={
             'width': '100%',

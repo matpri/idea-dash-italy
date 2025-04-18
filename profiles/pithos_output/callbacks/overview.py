@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'overview'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Overview'
         }, 'figure'),
 
         Output({
@@ -28,8 +28,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'overview'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Overview'
         }, 'figure'),
 
         State({

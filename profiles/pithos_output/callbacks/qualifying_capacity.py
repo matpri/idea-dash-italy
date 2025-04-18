@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'HEC-PITHOS',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'pithos-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'qualcap'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'pithos-qualifying-capacity-download',

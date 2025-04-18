@@ -87,6 +87,23 @@ def render(card_id):
 
     widgets, plot = data_handler.get_viz(profiles[0], plots[0], card_id)
     _b, _w, _f, _md, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
+
+    desc = 'DEFAULT'
+    for _, report in data_handler.reports.items():
+        if profiles[0] in report.descriptions:
+            desc = report.descriptions[profiles[0]].get(plots[0], None)
+
+    if desc is not None:
+        try:
+            title = _f.figure.layout.title.text
+        except:
+            title = ''
+
+        if title is None:
+            title = ''
+
+        _f.figure.update_layout(title_text=title + f"<br>{desc}")
+
     layout = [dbc.Collapse(
         [
             profile_tab,

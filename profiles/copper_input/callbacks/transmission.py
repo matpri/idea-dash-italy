@@ -10,7 +10,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
+            'profile': 'COPPER Input',
             'viz': 'transmission'
         }, 'figure'),
 
@@ -38,7 +38,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
+            'profile': 'COPPER Input',
             'viz': 'transmission'}, 'figure'),
         State({
             'type': 'copper_input-transmission-download',

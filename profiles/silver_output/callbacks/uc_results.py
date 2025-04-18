@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'uc_results'
+            'profile': 'SILVER',
+            'viz': 'UC Results'
         }, 'figure'),
         Output({
             'type': 'silver-uc_results-download',
@@ -48,8 +48,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'uc_results'
+            'profile': 'SILVER',
+            'viz': 'UC Results'
         }, 'figure'),
         State({
             'type': 'silver-uc_results-download',

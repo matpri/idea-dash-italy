@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'lifetime'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Lifetime'
         }, 'figure'),
         Output({
             'type': 'messageix-lifetime-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'lifetime'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Lifetime'
         }, 'figure'),
         State({
             'type': 'messageix-lifetime-download',

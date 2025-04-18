@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'uc_line_flow'
+            'profile': 'SILVER',
+            'viz': 'UC Line Flow'
         }, 'figure'),
         Output({
             'type': 'silver-uc_line_flow-download',
@@ -48,8 +48,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'uc_line_flow'
+            'profile': 'SILVER',
+            'viz': 'UC Line Flow'
         }, 'figure'),
         State({
             'type': 'silver-uc_line_flow-download',

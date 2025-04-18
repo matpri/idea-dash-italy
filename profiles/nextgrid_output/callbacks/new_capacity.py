@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'new_capacity'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'New Capacity'
         }, 'figure'),
         Output({
             'type': 'nextgrid-new_capacity-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'new_capacity'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'New Capacity'
         }, 'figure'),
         State({
             'type': 'nextgrid-new_capacity-download',

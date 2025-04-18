@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'gencap_cost'
+            'profile': 'Power System Models',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'energy_model-gencap_cost-region-select',
@@ -108,8 +108,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'gencap_cost'
+            'profile': 'Power System Models',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'energy_model-gencap_cost-download',

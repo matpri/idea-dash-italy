@@ -11,8 +11,8 @@ def create_link(sector):
             Output({
                 'type': 'figure',
                 'index': MATCH,
-                'profile': 'cims_output',
-                'viz': lower_sector
+                'profile': 'CIMS',
+                'viz': sector
             }, 'figure'),
             Output({
                 'type': f'cims-{lower_sector}-region-select',

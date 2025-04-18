@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'emissions'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'temoa-emissions-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'emissions'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'temoa-emissions-download',

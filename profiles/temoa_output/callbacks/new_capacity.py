@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'new_capacity'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'New Capacity'
         }, 'figure'),
         Output({
             'type': 'temoa-new_capacity-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'new_capacity'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'New Capacity'
         }, 'figure'),
         State({
             'type': 'temoa-new_capacity-download',

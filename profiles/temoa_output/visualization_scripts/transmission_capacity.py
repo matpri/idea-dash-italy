@@ -430,8 +430,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'temoa',
-            'viz': 'transmission_capacity'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Transmission Capacity'
         },
         style={
             'width': '100%',

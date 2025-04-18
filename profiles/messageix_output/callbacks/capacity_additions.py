@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'capacity_additions'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Capacity Additions'
         }, 'figure'),
         Output({
             'type': 'messageix-capacity_additions-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'capacity_additions'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Capacity Additions'
         }, 'figure'),
         State({
             'type': 'messageix-capacity_additions-download',

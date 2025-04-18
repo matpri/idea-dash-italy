@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'netnew_capacity'
+            'profile': 'COPPER',
+            'viz': 'Net New Capacity'
         }, 'figure'),
         Output({
             'type': 'copper-netnew_capacity-region-select',
@@ -100,8 +100,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'netnew_capacity'
+            'profile': 'COPPER',
+            'viz': 'Net New Capacity'
         }, 'figure'),
         State({
             'type': 'copper-netnew_capacity-download',

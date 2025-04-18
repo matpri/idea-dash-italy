@@ -310,8 +310,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'natem_output',
-            'viz': 'dispatch'
+            'profile': 'NATEM Canada',
+            'viz': 'Dispatch'
         },
         style={
             'width': '100%',

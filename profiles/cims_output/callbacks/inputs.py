@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'cims_output',
-            'viz': 'inputs'
+            'profile': 'CIMS',
+            'viz': 'Inputs'
         }, 'figure'),
         Output({
             'type': 'cims-inputs-download',
@@ -91,8 +91,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'cims_output',
-            'viz': 'inputs'
+            'profile': 'CIMS',
+            'viz': 'Inputs'
         }, 'figure'),
         State({
             'type': 'cims-inputs-download',

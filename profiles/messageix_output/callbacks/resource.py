@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'resource'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Resource'
         }, 'figure'),
         Output({
             'type': 'messageix-resource-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'resource'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Resource'
         }, 'figure'),
         State({
             'type': 'messageix-resource-download',

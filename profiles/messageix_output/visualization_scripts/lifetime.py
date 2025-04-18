@@ -195,7 +195,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'messageix_output',
-            'viz': 'lifetime'
+            'viz': 'Lifetime'
         },
         style={
             'width': '100%',

@@ -131,7 +131,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'cef',
-            'viz': 'emissions'
+            'viz': 'Emissions'
         },
         style={
             'width': '100%',

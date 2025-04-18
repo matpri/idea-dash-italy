@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'fom_cost'
+            'profile': 'PyPSA_CAN',
+            'viz': 'FOM Cost'
         }, 'figure'),
         Output({
             'type': 'pypsa_can-fom_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'fom_cost'
+            'profile': 'PyPSA_CAN',
+            'viz': 'FOM Cost'
         }, 'figure'),
         State({
             'type': 'pypsa_can-fom_cost-download',

@@ -78,8 +78,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'copper_output',
-            'viz': 'vre'
+            'profile': 'COPPER',
+            'viz': 'VRE Capacity'
         },
         style={
             'width': '100%',

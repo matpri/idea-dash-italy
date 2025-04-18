@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'primary_energy_sub'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Primary Energy (substitution method)'
         }, 'figure'),
         Output({
             'type': 'messageix-primary_energy_sub-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'primary_energy_sub'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Primary Energy (substitution method)'
         }, 'figure'),
         State({
             'type': 'messageix-primary_energy_sub-download',

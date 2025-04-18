@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'gencap_cost'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'pithos-gencap_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'gencap_cost'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'pithos-gencap_cost-download',

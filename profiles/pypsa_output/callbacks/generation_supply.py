@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'supply'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Supply'
         }, 'figure'),
         Output({
             'type': 'pypsa-supply-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'supply'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Supply'
         }, 'figure'),
         State({
             'type': 'pypsa-supply-download',

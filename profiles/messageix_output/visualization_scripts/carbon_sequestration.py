@@ -196,7 +196,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'messageix_output',
-            'viz': 'carbon_sequestration'
+            'viz': 'Carbon Sequestration'
         },
         style={
             'width': '100%',

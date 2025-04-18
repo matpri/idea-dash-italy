@@ -484,8 +484,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'cims_output',
-            'viz': 'inputs'
+            'profile': 'CIMS',
+            'viz': 'Inputs'
         },
         style={
             'width': '100%',

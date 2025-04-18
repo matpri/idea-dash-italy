@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos',
-            'viz': 'transmission_flow'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         Output({
             'type': 'pithos-transmissionflow-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos',
-            'viz': 'transmission_flow'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         State({
             'type': 'pithos-transmissionflow-scenario-select',

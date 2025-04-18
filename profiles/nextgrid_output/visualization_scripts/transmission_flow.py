@@ -430,8 +430,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'nextgrid',
-            'viz': 'transmission_flow'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Transmission Flow'
         },
         style={
             'width': '100%',

@@ -720,12 +720,13 @@ class DataHandler:
         # Implement the logic to create a report based on the loaded config
         name = config['name']
         report = config['report']
+        descriptions = config['descriptions']
 
         # open markdown file in report
         with open(os.path.join('data', report), 'r') as stream:
             try:
                 data = stream.read()
-                self.reports[name] = ReportProfile(name, data)
+                self.reports[name] = ReportProfile(name, data, descriptions)
                 if name not in self.profiles:
                     self.profiles[name] = self.reports[name]
             except Exception as exc:

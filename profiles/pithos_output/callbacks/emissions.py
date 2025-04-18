@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'emissions'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'pithos-emissions-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'emissions'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'pithos-emissions-download',

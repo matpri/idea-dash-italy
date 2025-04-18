@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'temoa-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'qualcap'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'temoa-qualifying-capacity-download',

@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'emissions'
+            'profile': 'Power System Models',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'energy_model-emissions-region-select',
@@ -108,8 +108,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'emissions'
+            'profile': 'Power System Models',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'energy_model-emissions-download',

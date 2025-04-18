@@ -11,8 +11,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'coders_input',
-            'viz': 'gencap'
+            'profile': 'CODERS Input',
+            'viz': 'Capacity'
         }, 'figure'),
         Output({
             'type': 'coders_input-gencap-download',

@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': 'figure',
             'index': ALL,
-            'profile': 'messageix_output',
-            'viz': 'sankey'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Sankey'
         }, 'figure'),
 
         Output({
@@ -41,8 +41,8 @@ def link(app):
         State({
             'type': 'figure',
             'index': ALL,
-            'profile': 'messageix_output',
-            'viz': 'sankey'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Sankey'
         }, 'figure'),
         prevent_initial_call=True
     )

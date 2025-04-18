@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'emissions'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'nextgrid-emissions-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'emissions'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'nextgrid-emissions-download',

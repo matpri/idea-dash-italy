@@ -10,7 +10,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'obps',
+            'profile': 'OBPS',
             'viz': 'standard'
         }, 'figure'),
         Output({
@@ -64,7 +64,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'obps',
+            'profile': 'OBPS',
             'viz': 'standard'
         }, 'figure'),
         State({

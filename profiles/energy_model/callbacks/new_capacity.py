@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'new_capacity'
+            'profile': 'Power System Models',
+            'viz': 'New Capacity'
         }, 'figure'),
         Output({
             'type': 'energy_model-new_capacity-region-select',
@@ -107,8 +107,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'new_capacity'
+            'profile': 'Power System Models',
+            'viz': 'New Capacity'
         }, 'figure'),
         State({
             'type': 'energy_model-new_capacity-download',

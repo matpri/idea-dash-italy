@@ -41,8 +41,8 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'region-select',
-            'name': 'financial_markets',
-            'profile': 'macromodel',
+            'name': 'Financial Markets',
+            'profile': 'Macromodel',
             'index': window_id
         },
         style={'display': 'block'}
@@ -55,8 +55,8 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'year-select',
-            'name': 'financial_markets',
-            'profile': 'macromodel',
+            'name': 'Financial Markets',
+            'profile': 'Macromodel',
             'index': window_id
         },
 
@@ -68,8 +68,8 @@ def plot(df, window_id):
         checked=True,
         id={
             'type': 'pattern-switch',
-            'name': 'financial_markets',
-            'profile': 'macromodel',
+            'name': 'Financial Markets',
+            'profile': 'Macromodel',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -80,8 +80,8 @@ def plot(df, window_id):
         checked=False,
         id={
             'type': 'text-switch',
-            'name': 'financial_markets',
-            'profile': 'macromodel',
+            'name': 'Financial Markets',
+            'profile': 'Macromodel',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -98,8 +98,8 @@ def plot(df, window_id):
             value='Trend Over Years',
             id={
                 'type': 'plot-select',
-                'name': 'financial_markets',
-                'profile': 'macromodel',
+                'name': 'Financial Markets',
+                'profile': 'Macromodel',
                 'index': window_id
             },
         ),
@@ -107,8 +107,8 @@ def plot(df, window_id):
                    checked=True,
                    id={
                        'type': 'aggregate-switch',
-                       'name': 'financial_markets',
-                       'profile': 'macromodel',
+                       'name': 'Financial Markets',
+                       'profile': 'Macromodel',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
@@ -118,8 +118,8 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'scenario-multi-select',
-                'name': 'financial_markets',
-                'profile': 'macromodel',
+                'name': 'Financial Markets',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -130,8 +130,8 @@ def plot(df, window_id):
             value=scenarios[0],
             id={
                 'type': 'scenario-select',
-                'name': 'financial_markets',
-                'profile': 'macromodel',
+                'name': 'Financial Markets',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -142,8 +142,8 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'unit-select',
-                'name': 'financial_markets',
-                'profile': 'macromodel',
+                'name': 'Financial Markets',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -151,14 +151,14 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'download-button',
-                                        'name': 'financial_markets',
-                                        'profile': 'macromodel', 'index': window_id},
+                                        'name': 'Financial Markets',
+                                        'profile': 'Macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'download',
-                         'name': 'financial_markets',
-                         'profile': 'macromodel', 'index': window_id}),
+                         'name': 'Financial Markets',
+                         'profile': 'Macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -167,8 +167,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'macromodel',
-            'name': 'financial_markets'
+            'profile': 'Macromodel',
+            'name': 'Financial Markets'
         },
         style={
             'width': '100%',

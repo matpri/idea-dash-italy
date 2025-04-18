@@ -17,8 +17,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'cims_output',
-            'viz': 'overview'
+            'profile': 'CIMS',
+            'viz': 'Overview'
         }, 'figure', allow_duplicate=True),
         Output({
             'type': 'cims-ghg-region-select',
@@ -146,8 +146,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'cims_output',
-            'viz': 'overview'
+            'profile': 'CIMS',
+            'viz': 'Overview'
         }, 'figure'),
         State({
             'type': 'cims-ghg-download',

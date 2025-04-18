@@ -91,8 +91,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pithos_output',
-            'viz': 'overview'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Overview'
         },
         style={
             'width': '100%',

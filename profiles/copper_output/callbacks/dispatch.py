@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'dispatch'
+            'profile': 'COPPER',
+            'viz': 'Dispatch'
         }, 'figure'),
         Output({
             'type': 'copper-dispatch-region-select',
@@ -96,8 +96,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'dispatch'
+            'profile': 'COPPER',
+            'viz': 'Dispatch'
         }, 'figure'),
         State({
             'type': 'copper-dispatch-download',

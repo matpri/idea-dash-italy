@@ -11,8 +11,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'copper_output',
-            'viz': 'vre'
+            'profile': 'COPPER',
+            'viz': 'VRE Capacity'
         }, 'figure'),
         Output({
             'type': 'copper_output-vre-download',

@@ -130,8 +130,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'temoa_output',
-            'viz': 'gencap'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Capacity'
         },
         style={
             'width': '100%',

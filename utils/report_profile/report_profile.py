@@ -5,13 +5,15 @@ import pandas as pd
 from dash import html, dcc
 
 class ReportProfile:
-    def __init__(self, name, report):
+    def __init__(self, name, report, descriptions=None):
         self.display_name = name
         self.name = name
         self.color = '#000000'
         self.description = 'Report Profile'
         self.viz_options = {}
         self.plot_order = ['Report']
+
+        self.descriptions = descriptions if descriptions is not None else {}
 
         def show_report(_x, _window_id):
             return None, dcc.Markdown(report,

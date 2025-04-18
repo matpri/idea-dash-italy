@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'messageix_output',
-            'viz': 'overview'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Overview'
         }, 'figure'),
 
         Output({
@@ -28,8 +28,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'messageix_output',
-            'viz': 'overview'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Overview'
         }, 'figure'),
 
         State({

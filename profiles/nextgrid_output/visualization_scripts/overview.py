@@ -91,8 +91,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'nextgrid_output',
-            'viz': 'overview'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Overview'
         },
         style={
             'width': '100%',

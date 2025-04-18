@@ -6,11 +6,11 @@ from profiles.macromodel.visualization_scripts import financial_markets, governm
 
 render_func = {
     'central_government': government.render_plot,
-    'financial_markets': financial_markets.render_plot,
-    'labour_market': labour_market.render_plot,
-    'households': households.render_plot,
-    'economy': economy.render_plot,
-    'government': government.render_plot
+    'Financial Markets': financial_markets.render_plot,
+    'Labour Market': labour_market.render_plot,
+    'Households': households.render_plot,
+    'Economy Overview': economy.render_plot,
+    'Government': government.render_plot
 }
 
 name_mapping = {
@@ -218,7 +218,7 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = 'Macromodel'
-        name = name_mapping.get(trigger_id['name'])
+        name = trigger_id['name']
         print(f'updating non_sector for some reason {name}, {model} plot')
         render_plot = render_func[trigger_id['name']]
 

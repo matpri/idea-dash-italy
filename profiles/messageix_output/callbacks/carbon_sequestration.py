@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'carbon_sequestration'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Carbon Sequestration'
         }, 'figure'),
         Output({
             'type': 'messageix-carbon_sequestration-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'carbon_sequestration'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Carbon Sequestration'
         }, 'figure'),
         State({
             'type': 'messageix-carbon_sequestration-download',

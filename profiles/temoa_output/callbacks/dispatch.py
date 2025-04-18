@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'dispatch'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Dispatch'
         }, 'figure'),
         Output({
             'type': 'temoa-dispatch-region-select',
@@ -96,8 +96,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'dispatch'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Dispatch'
         }, 'figure'),
         State({
             'type': 'temoa-dispatch-download',

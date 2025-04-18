@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
-            'viz': 'gencap'
+            'profile': 'COPPER Input',
+            'viz': 'Capacity'
         }, 'figure'),
         Output({
             'type': 'copper_input-capacity-region-select',
@@ -72,8 +72,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_input',
-            'viz': 'gencap'}, 'figure'),
+            'profile': 'COPPER Input',
+            'viz': 'Capacity'}, 'figure'),
         State({
             'type': 'copper_input-capacity-download',
             'index': ALL

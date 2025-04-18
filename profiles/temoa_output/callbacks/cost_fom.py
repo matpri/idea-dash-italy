@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'fom_cost'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'FOM Cost'
         }, 'figure'),
         Output({
             'type': 'temoa-fom_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'fom_cost'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'FOM Cost'
         }, 'figure'),
         State({
             'type': 'temoa-fom_cost-download',

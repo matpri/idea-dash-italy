@@ -162,8 +162,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'silver_output',
-            'viz': 'opf_costs'
+            'profile': 'SILVER',
+            'viz': 'OPF Costs'
         },
         style={
             'width': '100%',

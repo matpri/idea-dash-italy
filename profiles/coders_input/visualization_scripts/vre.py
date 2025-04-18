@@ -64,8 +64,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'coders_input',
-            'viz': 'vre'
+            'profile': 'CODERS Input',
+            'viz': 'VRE Capacity'
         },
         style={
             'width': '100%',

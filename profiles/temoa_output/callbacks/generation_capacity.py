@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'gencap'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Capacity'
         }, 'figure'),
         Output({
             'type': 'temoa-gencap-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa_output',
-            'viz': 'gencap'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Capacity'
         }, 'figure'),
         State({
             'type': 'temoa-gencap-download',

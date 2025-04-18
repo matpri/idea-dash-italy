@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'total_cost'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Total Cost'
         }, 'figure'),
         Output({
             'type': 'pypsa_can-total_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'total_cost'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Total Cost'
         }, 'figure'),
         State({
             'type': 'pypsa_can-total_cost-download',

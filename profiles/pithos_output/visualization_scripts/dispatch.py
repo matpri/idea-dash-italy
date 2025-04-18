@@ -310,8 +310,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pithos_output',
-            'viz': 'dispatch'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Dispatch'
         },
         style={
             'width': '100%',

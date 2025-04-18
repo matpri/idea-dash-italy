@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'NATEM Canada',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'natem-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'qualcap'
+            'profile': 'NATEM Canada',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'natem-qualifying-capacity-download',

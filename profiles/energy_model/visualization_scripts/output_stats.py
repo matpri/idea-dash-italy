@@ -171,8 +171,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'energy_model',
-            'viz': 'output_stats'
+            'profile': 'Power System Models',
+            'viz': 'Output Stats'
         },
         style={
             'width': '100%',

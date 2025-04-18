@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'map_plots'
+            'profile': 'SILVER',
+            'viz': 'Map Plots'
         }, 'figure'),
         Output({
             'type': 'silver-map_plots-download',
@@ -67,8 +67,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'map_plots'
+            'profile': 'SILVER',
+            'viz': 'Map Plots'
         }, 'figure'),
         State({
             'type': 'silver-map_plots-download',

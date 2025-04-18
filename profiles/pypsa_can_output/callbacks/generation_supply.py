@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'supply'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Supply'
         }, 'figure'),
         Output({
             'type': 'pypsa_can-supply-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'supply'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Supply'
         }, 'figure'),
         State({
             'type': 'pypsa_can-supply-download',

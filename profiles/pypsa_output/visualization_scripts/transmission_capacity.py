@@ -430,8 +430,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pypsa',
-            'viz': 'transmission_capacity'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Transmission Capacity'
         },
         style={
             'width': '100%',

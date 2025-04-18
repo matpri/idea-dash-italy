@@ -85,8 +85,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'silver_output',
-            'viz': 'opf_vre_curtailment'
+            'profile': 'SILVER',
+            'viz': 'OPF_VRE_Curtailment'
         },
         style={
             'width': '100%',

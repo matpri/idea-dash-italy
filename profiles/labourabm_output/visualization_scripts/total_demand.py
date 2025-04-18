@@ -113,8 +113,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'labourabm_output',
-            'viz': 'total_demand'
+            'profile': 'LabourABM',
+            'viz': 'Total Demand'
         },
         style={
             'width': '100%',

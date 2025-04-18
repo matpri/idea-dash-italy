@@ -47,6 +47,7 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
     These are all id structures that are used to identify plots in IDEA (COULD BE UNIFIED TO ONE ID STRUCTURE) and when a plot is updated, we need to update the plots inside the tabs.
     This is done as we need to wrap the figure for the plots' sizes to acurately update on resize.
     """
+    from main import data_handler
     ctx = callback_context
 
     triggered_id = ctx.triggered_id
@@ -55,6 +56,23 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
 
     triggered_value = ctx.triggered[0]['value']
     if triggered_id['type'] == ids.FIGURE:
+        profile = triggered_id['profile']
+        viz = triggered_id['viz']
+        desc = 'DEFAULT'
+        for _, report in data_handler.reports.items():
+            if profile in report.descriptions:
+                desc = report.descriptions[profile].get(viz, None)
+
+        # update plot title with a sub heading with description
+        if desc is not None:
+            try:
+                title = triggered_value['layout']['title']['text']
+            except:
+                title = ''
+
+            if desc not in title:
+                triggered_value['layout']['title']['text'] = title + f"<br>{desc}"
+
         return triggered_value, {
             'width': '100%',
             'height': '100%',

@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'vom_cost'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'VOM Cost'
         }, 'figure'),
         Output({
             'type': 'nextgrid-vom_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'vom_cost'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'VOM Cost'
         }, 'figure'),
         State({
             'type': 'nextgrid-vom_cost-download',

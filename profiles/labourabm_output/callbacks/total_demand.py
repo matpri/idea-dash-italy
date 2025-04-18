@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'labourabm_output',
-            'viz': 'total_demand'
+            'profile': 'LabourABM',
+            'viz': 'Total Demand'
         }, 'figure'),
         Output({
             'type': 'labourabm-total_demand-region-select',
@@ -43,8 +43,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'labourabm_output',
-            'viz': 'total_demand'
+            'profile': 'LabourABM',
+            'viz': 'Total Demand'
         }, 'figure'),
         State({
             'type': 'labourabm-total_demand-region-select',

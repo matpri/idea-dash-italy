@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'nextgrid-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'qualcap'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'nextgrid-qualifying-capacity-download',
