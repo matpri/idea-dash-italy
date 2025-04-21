@@ -58,7 +58,7 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
     if triggered_id['type'] == ids.FIGURE:
         profile = triggered_id['profile']
         viz = triggered_id['viz']
-        desc = 'DEFAULT'
+        desc = None
         for _, report in data_handler.reports.items():
             if profile in report.descriptions:
                 desc = report.descriptions[profile].get(viz, None)
@@ -71,7 +71,7 @@ def update_plot(_figs, _figs2, _fig3, _fig4, _md1, _plots):
                 title = ''
 
             if desc not in title:
-                triggered_value['layout']['title']['text'] = title + f"<br>{desc}"
+                triggered_value['layout']['title']['text'] = title + f"<br><sub>{desc}</sub>"
 
         return triggered_value, {
             'width': '100%',

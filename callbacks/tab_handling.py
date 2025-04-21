@@ -158,14 +158,12 @@ def link(app):
             if out['id']['index'] == triggered_id['index']:
                 profile = triggered_id['profile']
                 viz = triggered_value
-                desc = 'DEFAULT'
+                desc = None
                 for _, report in data_handler.reports.items():
                     if profile in report.descriptions:
                         desc = report.descriptions[profile].get(viz, None)
                 window_id = triggered_id['index']
                 widgets, plot = data_handler.get_viz(profile, viz, window_id)
-
-                print('DESC:', desc)
                 #update plot title with a sub heading with description
                 if desc is not None:
                     try:
@@ -176,7 +174,7 @@ def link(app):
                     if title is None:
                         title = ''
 
-                    plot.figure.update_layout(title_text= title + f"<br>{desc}")
+                    plot.figure.update_layout(title_text=title + f"<br><sub>{desc}</sub>")
 
                 _children[i] = widgets
                 _plots[i] = plot
