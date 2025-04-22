@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'opf_results'
+            'profile': 'SILVER',
+            'viz': 'OPF Results'
         }, 'figure'),
         Output({
             'type': 'silver-opf_results-download',
@@ -48,8 +48,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'silver_output',
-            'viz': 'opf_results'
+            'profile': 'SILVER',
+            'viz': 'OPF Results'
         }, 'figure'),
         State({
             'type': 'silver-opf_results-download',

@@ -16,8 +16,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'capital_cost'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Capital Cost'
         }, 'figure'),
         Output({
             'type': 'messageix-capital_cost-region-select',
@@ -156,8 +156,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'messageix_output',
-            'viz': 'capital_cost'
+            'profile': 'MESSAGEix-Canada',
+            'viz': 'Capital Cost'
         }, 'figure'),
         State({
             'type': 'messageix-capital_cost-download',

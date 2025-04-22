@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'overview'
+            'viz': 'Overview'
         }, 'figure'),
 
         Output({
@@ -30,7 +30,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'overview'
+            'viz': 'Overview'
         }, 'figure'),
 
         State({

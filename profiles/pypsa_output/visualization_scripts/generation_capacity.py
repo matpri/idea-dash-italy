@@ -130,8 +130,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pypsa_output',
-            'viz': 'gencap'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Capacity'
         },
         style={
             'width': '100%',

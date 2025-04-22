@@ -130,8 +130,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pypsa_output',
-            'viz': 'vom_cost'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'VOM Cost'
         },
         style={
             'width': '100%',

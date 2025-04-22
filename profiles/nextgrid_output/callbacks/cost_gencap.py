@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'gencap_cost'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'nextgrid-gencap_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid_output',
-            'viz': 'gencap_cost'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'nextgrid-gencap_cost-download',

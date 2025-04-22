@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'gencap'
+            'viz': 'Capacity'
         }, 'figure'),
         Output({
             'type': 'cef-gencap-region-select',
@@ -101,7 +101,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'gencap'
+            'viz': 'Capacity'
         }, 'figure'),
         State({
             'type': 'cef-gencap-download',

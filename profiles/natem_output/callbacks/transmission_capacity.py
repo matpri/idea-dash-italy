@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem',
-            'viz': 'transmission_capacity'
+            'profile': 'NATEM Canada',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         Output({
             'type': 'natem-transmissioncapacity-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem',
-            'viz': 'transmission_capacity'
+            'profile': 'NATEM Canada',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         State({
             'type': 'natem-transmissioncapacity-scenario-select',

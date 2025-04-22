@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'gencap_cost'
+            'profile': 'NATEM Canada',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'natem-gencap_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'gencap_cost'
+            'profile': 'NATEM Canada',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'natem-gencap_cost-download',

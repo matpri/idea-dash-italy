@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'transmission_flow'
+            'profile': 'Power System Models',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         Output({
             'type': 'energy_model-transmissionflow-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'transmission_flow'
+            'profile': 'Power System Models',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         State({
             'type': 'energy_model-transmissionflow-scenario-select',

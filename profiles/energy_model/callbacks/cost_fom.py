@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'fom_cost'
+            'profile': 'Power System Models',
+            'viz': 'FOM Cost'
         }, 'figure'),
         Output({
             'type': 'energy_model-fom_cost-region-select',
@@ -108,8 +108,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'fom_cost'
+            'profile': 'Power System Models',
+            'viz': 'FOM Cost'
         }, 'figure'),
         State({
             'type': 'energy_model-fom_cost-download',

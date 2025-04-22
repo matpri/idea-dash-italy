@@ -256,8 +256,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'silver_output',
-            'viz': 'map_plots'
+            'profile': 'SILVER',
+            'viz': 'Map Plots'
         },
         style={
             'width': '100%',

@@ -153,7 +153,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'copper_input',
+            'profile': 'COPPER Input',
             'viz': 'demand'
         },
         style={

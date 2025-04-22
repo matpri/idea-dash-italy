@@ -8,10 +8,6 @@ render_func = {
     'sector_overview': sector_overview.render_plot
 }
 
-name_mapping = {
-    'sector_overview' : 'Sector Overview'
-}
-
 def link(app):
     @app.callback(
         Output({
@@ -227,8 +223,8 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = 'Macromodel'
-        name = name_mapping.get(trigger_id['name'])
-        print(f'updating sector_overview {name}, {model} plot', trigger_id)
+        name = trigger_id['name']
+        print(f'updating sector_overview {name}, {model} plot')
         render_plot = render_func[trigger_id['name']]
 
         if 'download-button' in trigger_id['type']:

@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'gencap_cost'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'pypsa-gencap_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'gencap_cost'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'pypsa-gencap_cost-download',

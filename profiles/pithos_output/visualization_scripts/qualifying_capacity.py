@@ -140,8 +140,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pithos_output',
-            'viz': 'qualcap'
+            'profile': 'HEC-PITHOS',
+            'viz': 'Qualifying Capacity'
         },
         style={
             'width': '100%',

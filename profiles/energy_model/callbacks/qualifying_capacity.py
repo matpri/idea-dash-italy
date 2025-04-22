@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'Power System Models',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'energy_model-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'qualcap'
+            'profile': 'Power System Models',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'energy_model-qualifying-capacity-download',

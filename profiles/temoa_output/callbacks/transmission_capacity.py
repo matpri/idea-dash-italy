@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa',
-            'viz': 'transmission_capacity'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         Output({
             'type': 'temoa-transmissioncapacity-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'temoa',
-            'viz': 'transmission_capacity'
+            'profile': 'Sutubra-TEMOA',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         State({
             'type': 'temoa-transmissioncapacity-scenario-select',

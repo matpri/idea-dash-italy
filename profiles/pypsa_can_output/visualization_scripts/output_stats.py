@@ -158,8 +158,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'pypsa_can_output',
-            'viz': 'output_stats'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Output Stats'
         },
         style={
             'width': '100%',

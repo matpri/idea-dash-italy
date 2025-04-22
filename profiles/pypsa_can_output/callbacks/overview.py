@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'overview'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Overview'
         }, 'figure'),
 
         Output({
@@ -28,8 +28,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'overview'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Overview'
         }, 'figure'),
 
         State({

@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'netnew_capacity'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Net New Capacity'
         }, 'figure'),
         Output({
             'type': 'pypsa-netnew_capacity-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'netnew_capacity'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Net New Capacity'
         }, 'figure'),
         State({
             'type': 'pypsa-netnew_capacity-download',

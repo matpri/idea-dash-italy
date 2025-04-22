@@ -194,7 +194,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'messageix_output',
-            'viz': 'final_energy'
+            'viz': 'Final Energy'
         },
         style={
             'width': '100%',

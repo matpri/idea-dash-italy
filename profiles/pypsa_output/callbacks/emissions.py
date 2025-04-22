@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'emissions'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'pypsa-emissions-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'emissions'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'pypsa-emissions-download',

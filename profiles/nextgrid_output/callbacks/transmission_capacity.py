@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid',
-            'viz': 'transmission_capacity'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         Output({
             'type': 'nextgrid-transmissioncapacity-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'nextgrid',
-            'viz': 'transmission_capacity'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Transmission Capacity'
         }, 'figure'),
         State({
             'type': 'nextgrid-transmissioncapacity-scenario-select',

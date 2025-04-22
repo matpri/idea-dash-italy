@@ -16,7 +16,7 @@ def render(card_id):
     profiles = list(profile_options.keys())
 
     # sort keys by data_handler.profile_order
-    profiles.sort(key=lambda x: data_handler.profile_order.index(x) if x in data_handler.profile_order else 1000)
+    profiles.sort(key=lambda x: data_handler.profile_order.index(x) + len(data_handler.reports) if x in data_handler.profile_order else list(data_handler.reports.keys()).index(x) if x in data_handler.reports else 1000)
 
     if not profiles:
         return html.Div()
@@ -86,82 +86,93 @@ def render(card_id):
     )
 
     widgets, plot = data_handler.get_viz(profiles[0], plots[0], card_id)
-    _b, _w, _f, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
-    layout = [
-        dbc.Collapse(
-            [
-                profile_tab,
-                html.Div(
-                    viz_tab,
-                    id={
-                        'type': 'viz-tab-container',
-                        'index': card_id
-                    })
-            ], id={'type': 'collapse-tabs', 'index': card_id},
-            is_open=True,
-        ),
-        html.Div([
-            _b,
-            html.Div(
-                [
-                    dmc.ActionIcon(
-                        html.Div(
-                            DashIconify(icon='carbon:chevron-down'),
-                            style={'text-align': 'center'}
-                        ),
-                        id={'type': 'view-tab', 'index': card_id},
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        style=hide_button_style
-                    ),
-                    dmc.ActionIcon(
-                        html.Div(
-                            DashIconify(icon='carbon:chevron-up'),
-                            style={'text-align': 'center'}
-                        ),
-                        id={'type': 'hide-tab', 'index': card_id},
-                        size='sm',
-                        radius='xl',
-                        variant='outline',
-                        style=view_button_style
-                    ),
-                ]
-                # center align
-                , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
-            ),
-            # export button
-            dmc.ActionIcon(
-                html.Div(
-                    DashIconify(icon='carbon:intent-request-scale-out'),
-                    style={'text-align': 'center'}
-                ),
-                id={'type': 'open_popup', 'index': card_id},
-                size='sm',
-                radius='xl',
-                variant='outline',
-                style=view_button_style
-            ),
+    _b, _w, _f, _md, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
 
-        ],
-            style={'display': 'flex',
-                   # all in one row,
-                   'justify-content': 'space-between', }
-        ),
-        # flexgroup _w and _f
+    desc = None
+    for _, report in data_handler.reports.items():
+        if profiles[0] in report.descriptions:
+            desc = report.descriptions[profiles[0]].get(plots[0], None)
+
+    if desc is not None:
+        try:
+            title = _f.figure.layout.title.text
+        except:
+            title = ''
+
+        if title is None:
+            title = ''
+
+        _f.figure.update_layout(title_text=title + f"<br><sub>{desc}</sub>")
+
+    layout = [dbc.Collapse(
+        [
+            profile_tab,
+            html.Div(
+                viz_tab,
+                id={
+                    'type': 'viz-tab-container',
+                    'index': card_id
+                })
+        ], id={'type': 'collapse-tabs', 'index': card_id},
+        is_open=True,
+    ), html.Div([
+        _b,
         html.Div(
             [
-                _w,
-                _f
-            ],
-            style={'display': 'flex',
-                   'justify-content': 'space-between',
-                   'height': '90%',
-                   'width': '100%'}
+                dmc.ActionIcon(
+                    html.Div(
+                        DashIconify(icon='carbon:chevron-down'),
+                        style={'text-align': 'center'}
+                    ),
+                    id={'type': 'view-tab', 'index': card_id},
+                    size='sm',
+                    radius='xl',
+                    variant='outline',
+                    style=hide_button_style
+                ),
+                dmc.ActionIcon(
+                    html.Div(
+                        DashIconify(icon='carbon:chevron-up'),
+                        style={'text-align': 'center'}
+                    ),
+                    id={'type': 'hide-tab', 'index': card_id},
+                    size='sm',
+                    radius='xl',
+                    variant='outline',
+                    style=view_button_style
+                ),
+            ]
+            # center align
+            , style={'display': 'flex', 'justify-content': 'center', 'align-items': 'center'}
         ),
-        _hp,
-        render_popup(card_id, _f)
-    ]
+        # export button
+        dmc.ActionIcon(
+            html.Div(
+                DashIconify(icon='carbon:intent-request-scale-out'),
+                style={'text-align': 'center'}
+            ),
+            id={'type': 'open_popup', 'index': card_id},
+            size='sm',
+            radius='xl',
+            variant='outline',
+            style=view_button_style
+        ),
+
+    ],
+        style={'display': 'flex',
+               # all in one row,
+               'justify-content': 'space-between', }
+    ), html.Div(
+        [
+            _w,
+            _f,
+            _md
+        ],
+        style={'display': 'flex',
+               'justify-content': 'space-between',
+               'height': '90%',
+               'width': '100%'}
+    ), _hp, render_popup(card_id, _f)]
 
     return layout
 
@@ -218,21 +229,21 @@ def render_popup(window_id, graph):
                                         label='Title',
                                         id={'type': ids.PLOT_POPUP_TITLE, 'index': window_id},
                                         placeholder='Title',
-                                        value=figure['layout']['title']['text'],
+                                        value=figure['layout']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     dmc.TextInput(
                                         label='X-axis Label',
                                         id={'type': ids.PLOT_POPUP_X_LABEL, 'index': window_id},
                                         placeholder='X-axis Label',
-                                        value=figure['layout']['xaxis']['title']['text'],
+                                        value=figure['layout']['xaxis']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     dmc.TextInput(
                                         label='Y-axis Label',
                                         id={'type': ids.PLOT_POPUP_Y_LABEL, 'index': window_id},
                                         placeholder='Y-axis Label',
-                                        value=figure['layout']['yaxis']['title']['text'],
+                                        value=figure['layout']['yaxis']['title']['text'] if 'layout' in figure else '',
                                         style={'width': '100%'}
                                     ),
                                     html.Div(

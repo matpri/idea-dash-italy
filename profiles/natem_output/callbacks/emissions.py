@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'emissions'
+            'profile': 'NATEM Canada',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'natem-emissions-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'emissions'
+            'profile': 'NATEM Canada',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'natem-emissions-download',

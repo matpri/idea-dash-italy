@@ -44,8 +44,8 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'so-region-select',
-            'name': 'sector_overview',
-            'profile': 'macromodel',
+            'name': 'Sector Overview',
+            'profile': 'Macromodel',
             'index': window_id
         },
         style={'display': 'block'}
@@ -58,8 +58,8 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'so-year-select',
-            'name': 'sector_overview',
-            'profile': 'macromodel',
+            'name': 'Sector Overview',
+            'profile': 'Macromodel',
             'index': window_id
         },
 
@@ -71,8 +71,8 @@ def plot(df, window_id):
         checked=True,
         id={
             'type': 'so-pattern-switch',
-            'name': 'sector_overview',
-            'profile': 'macromodel',
+            'name': 'Sector Overview',
+            'profile': 'Macromodel',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -83,8 +83,8 @@ def plot(df, window_id):
         checked=False,
         id={
             'type': 'so-text-switch',
-            'name': 'sector_overview',
-            'profile': 'macromodel',
+            'name': 'Sector Overview',
+            'profile': 'Macromodel',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -101,8 +101,8 @@ def plot(df, window_id):
             value='By Year',
             id={
                 'type': 'so-plot-select',
-                'name': 'sector_overview',
-                'profile': 'macromodel',
+                'name': 'Sector Overview',
+                'profile': 'Macromodel',
                 'index': window_id
             },
         ),
@@ -110,8 +110,8 @@ def plot(df, window_id):
                    checked=True,
                    id={
                        'type': 'so-aggregate-switch',
-                       'name': 'sector_overview',
-                       'profile': 'macromodel',
+                       'name': 'Sector Overview',
+                       'profile': 'Macromodel',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
@@ -121,8 +121,8 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'so-scenario-multi-select',
-                'name': 'sector_overview',
-                'profile': 'macromodel',
+                'name': 'Sector Overview',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -133,8 +133,8 @@ def plot(df, window_id):
             value=scenarios[0],
             id={
                 'type': 'so-scenario-select',
-                'name': 'sector_overview',
-                'profile': 'macromodel',
+                'name': 'Sector Overview',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -145,8 +145,8 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'so-unit-select',
-                'name': 'sector_overview',
-                'profile': 'macromodel',
+                'name': 'Sector Overview',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -157,8 +157,8 @@ def plot(df, window_id):
             value=var_types[0],
             id={
                 'type': 'so-vartype-select',
-                'name': 'sector_overview',
-                'profile': 'macromodel',
+                'name': 'Sector Overview',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -166,14 +166,14 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'so-download-button',
-                                        'name': 'sector_overview',
-                                        'profile': 'macromodel', 'index': window_id},
+                                        'name': 'Sector Overview',
+                                        'profile': 'Macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'so-download',
-                         'name': 'sector_overview',
-                         'profile': 'macromodel', 'index': window_id}),
+                         'name': 'Sector Overview',
+                         'profile': 'Macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -182,8 +182,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'macromodel',
-            'name': 'sector_overview'
+            'profile': 'Macromodel',
+            'name': 'Sector Overview'
         },
         style={
             'width': '100%',

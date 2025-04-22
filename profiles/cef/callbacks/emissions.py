@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'emissions'
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'cef-emissions-region-select',
@@ -101,7 +101,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'emissions'
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'cef-emissions-download',

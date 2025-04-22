@@ -106,7 +106,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'obps',
+            'profile': 'OBPS',
             'viz': 'standard'
         },
         style={

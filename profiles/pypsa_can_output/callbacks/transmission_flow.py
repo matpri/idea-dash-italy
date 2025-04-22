@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can',
-            'viz': 'transmission_flow'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         Output({
             'type': 'pypsa_can-transmissionflow-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can',
-            'viz': 'transmission_flow'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         State({
             'type': 'pypsa_can-transmissionflow-scenario-select',

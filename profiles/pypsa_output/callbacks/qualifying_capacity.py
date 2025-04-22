@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'pypsa-qualifying-capacity-region-select',
             'index': ALL
@@ -102,8 +102,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'qualcap'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'pypsa-qualifying-capacity-download',

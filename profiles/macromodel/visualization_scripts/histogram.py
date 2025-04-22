@@ -14,7 +14,7 @@ def render_plot(type, df, scenarios, region, unit, year,variable, n_bins=20):
 
     # make histogram where colour is scenario
     fig = px.histogram(df_scen, x='value', color='scenario', title=f'{variable} in {region} in {year}', labels={'value': f'{variable} ({unit})', 'scenario': 'Scenario'}, barmode='overlay', nbins=n_bins)
-    fig.update_traces(opacity=1 / len(scenarios) if len(scenarios) > 1 else 1)
+    fig.update_traces(opacity=max(0.3,1 / len(scenarios)) if len(scenarios) > 1 else 1)
     fig.update_layout(
         xaxis_title_text=f'{variable} ({unit})',
         yaxis_title_text='Count',
@@ -37,8 +37,8 @@ def plot(df, window_id):
         value='CAN' if 'CAN' in regions else regions[0],
         id={
             'type': 'region-select',
-            'viz_type': 'histogram',
-            'profile': 'macromodel',
+            'viz_type': 'Histograms',
+            'profile': 'Macromodel',
             'index': window_id
         },
         style={'display': 'block'}
@@ -51,8 +51,8 @@ def plot(df, window_id):
         value=years[0],
         id={
             'type': 'year-select',
-            'viz_type': 'histogram',
-            'profile': 'macromodel',
+            'viz_type': 'Histograms',
+            'profile': 'Macromodel',
             'index': window_id
         },
 
@@ -68,8 +68,8 @@ def plot(df, window_id):
             value=plot_options[0],
             id={
                 'type': 'plot-select',
-                'viz_type': 'histogram',
-                'profile': 'macromodel',
+                'viz_type': 'Histograms',
+                'profile': 'Macromodel',
                 'index': window_id
             },
         ),dmc.Select(
@@ -79,8 +79,8 @@ def plot(df, window_id):
             value=variables[0],
             id={
                 'type': 'variable-select',
-                'viz_type': 'histogram',
-                'profile': 'macromodel',
+                'viz_type': 'Histograms',
+                'profile': 'Macromodel',
                 'index': window_id
             },
         ),
@@ -90,8 +90,8 @@ def plot(df, window_id):
             value=[scenarios[0]],
             id={
                 'type': 'scenario-multi-select',
-                'viz_type': 'histogram',
-                'profile': 'macromodel',
+                'viz_type': 'Histograms',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -102,8 +102,8 @@ def plot(df, window_id):
             value=units[0],
             id={
                 'type': 'unit-select',
-                'viz_type': 'histogram',
-                'profile': 'macromodel',
+                'viz_type': 'Histograms',
+                'profile': 'Macromodel',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -116,8 +116,8 @@ def plot(df, window_id):
             step=1,
             id={
                 'type': 'bins-slider',
-                'viz_type': 'histogram',
-                'profile': 'macromodel',
+                'viz_type': 'Histograms',
+                'profile': 'Macromodel',
                 'index': window_id
             },
         ),
@@ -125,14 +125,14 @@ def plot(df, window_id):
         by_year_widgets,
         by_region_widgets,
         dmc.Button('Download Data', id={'type': 'download-button',
-                                        'viz_type': 'histogram',
-                                        'profile': 'macromodel', 'index': window_id},
+                                        'viz_type': 'Histograms',
+                                        'profile': 'Macromodel', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'download',
-                         'viz_type': 'histogram',
-                         'profile': 'macromodel', 'index': window_id}),
+                         'viz_type': 'Histograms',
+                         'profile': 'Macromodel', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
@@ -143,8 +143,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'macromodel',
-            'name': 'histogram'
+            'profile': 'Macromodel',
+            'name': 'Histograms'
         },
         style={
             'width': '100%',

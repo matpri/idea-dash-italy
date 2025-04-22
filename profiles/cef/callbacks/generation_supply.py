@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'supply'
+            'viz': 'Supply'
         }, 'figure'),
         Output({
             'type': 'cef-supply-region-select',
@@ -101,7 +101,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'cef',
-            'viz': 'supply'
+            'viz': 'Supply'
         }, 'figure'),
         State({
             'type': 'cef-supply-download',

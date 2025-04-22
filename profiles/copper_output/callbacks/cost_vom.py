@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'vom_cost'
+            'profile': 'COPPER',
+            'viz': 'VOM Cost'
         }, 'figure'),
         Output({
             'type': 'copper-vom_cost-region-select',
@@ -100,8 +100,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'vom_cost'
+            'profile': 'COPPER',
+            'viz': 'VOM Cost'
         }, 'figure'),
         State({
             'type': 'copper-vom_cost-download',

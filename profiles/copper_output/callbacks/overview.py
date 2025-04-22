@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'overview'
+            'profile': 'COPPER',
+            'viz': 'Overview'
         }, 'figure'),
 
         Output({
@@ -29,8 +29,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'overview'
+            'profile': 'COPPER',
+            'viz': 'Overview'
         }, 'figure'),
 
         State({

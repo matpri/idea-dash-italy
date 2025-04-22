@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper',
-            'viz': 'transmission_flow'
+            'profile': 'COPPER',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         Output({
             'type': 'copper-transmissionflow-scenario-select',
@@ -68,8 +68,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper',
-            'viz': 'transmission_flow'
+            'profile': 'COPPER',
+            'viz': 'Transmission Flow'
         }, 'figure'),
         State({
             'type': 'copper-transmissionflow-scenario-select',

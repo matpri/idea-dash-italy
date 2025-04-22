@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'gencap'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Capacity'
         }, 'figure'),
         Output({
             'type': 'pypsa_can-gencap-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_can_output',
-            'viz': 'gencap'
+            'profile': 'PyPSA_CAN',
+            'viz': 'Capacity'
         }, 'figure'),
         State({
             'type': 'pypsa_can-gencap-download',

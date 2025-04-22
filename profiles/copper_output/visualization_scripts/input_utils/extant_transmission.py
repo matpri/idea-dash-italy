@@ -49,7 +49,7 @@ def create_widgets(df, classes, window_id):
         dmc.MultiSelect(
             label='Select Scenarios',
             data=[{'label': scenario, 'value': scenario} for scenario in t_scenarios],
-            value=t_scenarios if t_scenarios else [],
+            value=t_scenarios if len(t_scenarios) else [],
             id={
                 'type': 'copper-inputs-scenario-multi-select',
                 'index': window_id

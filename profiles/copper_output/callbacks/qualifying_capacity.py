@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'qualcap'}, 'figure'),
+            'profile': 'COPPER',
+            'viz': 'Qualifying Capacity'}, 'figure'),
         Output({
             'type': 'copper-qualifying-capacity-region-select',
             'index': ALL
@@ -103,8 +103,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'qualcap'
+            'profile': 'COPPER',
+            'viz': 'Qualifying Capacity'
         }, 'figure'),
         State({
             'type': 'copper-qualifying-capacity-download',
@@ -149,7 +149,7 @@ def link(app):
                         (id['id']['type'] == 'copper-qualifying-capacity-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Capacity'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Qualifying Capacity'].to_csv,
                                              "qualifying-capacity.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 

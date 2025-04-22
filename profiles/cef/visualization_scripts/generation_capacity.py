@@ -131,7 +131,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'cef',
-            'viz': 'gencap'
+            'viz': 'Capacity'
         },
         style={
             'width': '100%',

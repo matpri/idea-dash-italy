@@ -282,8 +282,8 @@ def create_plot(sector):
             id={
                 'type': 'figure',
                 'index': window_id,
-                'profile': 'cims_output',
-                'viz': lower_sector
+                'profile': 'CIMS',
+                'viz': sector
             },
             style={
                 'width': '100%',

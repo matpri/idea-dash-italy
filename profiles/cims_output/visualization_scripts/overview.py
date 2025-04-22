@@ -88,8 +88,8 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'cims_output',
-            'viz': 'overview'
+            'profile': 'CIMS',
+            'viz': 'Overview'
         },
         style={
             'width': '100%',

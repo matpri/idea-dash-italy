@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'dispatch'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Dispatch'
         }, 'figure'),
         Output({
             'type': 'pypsa-dispatch-region-select',
@@ -96,8 +96,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pypsa_output',
-            'viz': 'dispatch'
+            'profile': 'NRCAN-PyPsa',
+            'viz': 'Dispatch'
         }, 'figure'),
         State({
             'type': 'pypsa-dispatch-download',

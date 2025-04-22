@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'fom_cost'
+            'profile': 'NATEM Canada',
+            'viz': 'FOM Cost'
         }, 'figure'),
         Output({
             'type': 'natem-fom_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'fom_cost'
+            'profile': 'NATEM Canada',
+            'viz': 'FOM Cost'
         }, 'figure'),
         State({
             'type': 'natem-fom_cost-download',

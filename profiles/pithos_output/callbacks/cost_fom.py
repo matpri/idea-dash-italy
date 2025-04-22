@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'fom_cost'
+            'profile': 'HEC-PITHOS',
+            'viz': 'FOM Cost'
         }, 'figure'),
         Output({
             'type': 'pithos-fom_cost-region-select',
@@ -99,8 +99,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'pithos_output',
-            'viz': 'fom_cost'
+            'profile': 'HEC-PITHOS',
+            'viz': 'FOM Cost'
         }, 'figure'),
         State({
             'type': 'pithos-fom_cost-download',

@@ -7,12 +7,14 @@ import urllib.request as urllib
 import multiprocessing as mp
 from typing import Tuple, Callable
 from collections import defaultdict
+import yaml
 
 import chardet
 import pandas as pd
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
+from utils.report_profile.report_profile import ReportProfile
 from utils.constants import model_mapping, exclude_from_comparison
 
 def create_generic_profile(df, model):
@@ -164,7 +166,7 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+    profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
@@ -180,6 +182,8 @@ class DataHandler:
         self.viz = {}
         self.to_delete = []
         self.runs = pd.DataFrame()
+
+        self.reports = {}
 
     def preload_data(self, data_files):
         data_files = [file for file in data_files if file not in self.data.keys()]
@@ -461,7 +465,8 @@ class DataHandler:
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
-        return self.profiles[profile].viz_options[viz]['viz'](self.processed_data[profile][viz], window_id)
+        print('Getting viz', profile, viz)
+        return self.profiles[profile].viz_options[viz]['viz'](self.processed_data.get(profile, {}).get(viz, None), window_id)
 
     def get_viz_options(self):
         """
@@ -476,6 +481,14 @@ class DataHandler:
                 if viz.get(model) is None:
                     viz[model] = []
                 viz[model].append(viz_name)
+
+        for report_name, report in self.reports.items():
+            if viz.get(report.display_name) is None:
+                viz[report.display_name] = []
+            for name in report.viz_options.keys():
+                if name not in viz[report.display_name]:
+                    viz[report.display_name].append(name)
+
         return viz
 
     def load_profiles(self):
@@ -596,6 +609,37 @@ class DataHandler:
                     visualizations[profile.display_name].append(viz_name)
                     selected[profile.display_name].append(viz_name)
 
+        if len(visualizations):
+            self.data[filename]['visualizations'] = visualizations
+            self.data[filename]['selected'] = selected
+            self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+                0] if not df.empty or 'scenario' in df.columns else filename
+
+            return True, "Data loaded successfully!", filename
+
+        if all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time']):
+            model = model + ' Generic'
+            df['model'] = model
+            profile = create_generic_profile(df, model)
+            self.profiles[profile.display_name] = profile
+            profile_options = [profile.display_name]
+        else:
+            return False, f"Could not find the profile for {filename} and can't generate generic plots since the data is not following IAMC format", filename
+
+        profiles_to_check = {profile_name: self.profiles[profile_name] for profile_name in
+                             profile_options} if profile_options else self.profiles
+        self.data[filename] = {}
+
+        self.data[filename]['content'] = df
+        visualizations = defaultdict(list)
+        selected = defaultdict(list)
+        for profile_name, profile in profiles_to_check.items():
+            for viz_name, viz_dict in profile.viz_options.items():
+                check_func = viz_dict.get('check')
+                if check_func(df):
+                    visualizations[profile.display_name].append(viz_name)
+                    selected[profile.display_name].append(viz_name)
+
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
         self.data[filename]['scenario'] = df.scenario.unique().tolist()[
@@ -663,6 +707,102 @@ class DataHandler:
                 profile = GenericProfile(profile, classes, variables)
 
                 self.profiles[profile.display_name] = profile
+        for report_name, report in self.reports.items():
+            if report.name not in self.profiles:
+                self.profiles[report.name] = report
+
+    def create_report(self, config):
+        """
+        Create a report based on the loaded config.
+        :param config: The configuration file to use for creating the report.
+        :return:
+        """
+        # Implement the logic to create a report based on the loaded config
+        name = config['name']
+        report = config['report']
+        descriptions = config['descriptions']
+
+        # open markdown file in report
+        with open(os.path.join('data', report), 'r') as stream:
+            try:
+                data = stream.read()
+                self.reports[name] = ReportProfile(name, data, descriptions)
+                if name not in self.profiles:
+                    self.profiles[name] = self.reports[name]
+            except Exception as exc:
+                print(exc)
+
+    def load_configs(self, configs):
+        print('Loading configs', configs)
+        for c_path in configs:
+            with open(os.path.join('config', c_path), 'r') as stream:
+                try:
+                    data = yaml.safe_load(stream)
+                    self.create_report(data)
+                    self.create_narrative(data)
+
+                except yaml.YAMLError as exc:
+                    print(exc)
+
+    def create_narrative(self, config):
+        """
+        Create a narrative based on the loaded config.
+        :param config: The configuration file to use for creating the narrative.
+        :return:
+        """
+        # Implement the logic to create a narrative based on the loaded config
+        files = config['files']
+        fail = False
+        for file in files:
+            profiles = list(config['files'][file]['profiles'].keys())
+
+            print('Preloading', file)
+            f_name, extension = os.path.splitext(file)
+            if extension == '.csv':
+                df = pd.read_csv(os.path.join('data', file))
+            elif extension == '.xlsx':
+                dfs = []
+                xls = pd.ExcelFile(os.path.join('data', file))
+                for sheet in xls.sheet_names:
+                    print(sheet)
+                    _df = xls.parse(sheet)
+                    # infer types of the column names
+                    _df.columns = _df.columns.astype(str)
+                    dfs.append(_df)
+                # Combine all DataFrames into one
+                df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.pkl':
+                self.pkls[f_name] = os.path.join('data', file)
+            else:
+                fail = True
+                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                continue
+
+            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+            if not checked:
+                fail = True
+            else:
+                colors = []
+                for p in list(self.data[file]['visualizations'].keys()):
+                    colors.append(self.profiles[p].color)
+
+            selected_dict = {}
+            for profile in profiles:
+                if profile in self.data[file]['visualizations']:
+                    if 'All' not in config['files'][file]['profiles'][profile]:
+                        selected_dict[profile] = config['files'][file]['profiles'][profile]
+                    else:
+                        selected_dict[profile] = self.data[file]['visualizations'][profile]
+
+            self.data[file]['selected'] = selected_dict
+
+        if fail:
+            print(fail)
+
+        self.process_data()
+
+
+
 
 
 

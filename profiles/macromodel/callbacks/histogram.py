@@ -10,7 +10,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': MATCH,
-            'name': 'histogram'
+            'name': 'Histograms'
         }, 'figure', allow_duplicate=True),
         Output({
             'type': 'download',

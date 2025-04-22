@@ -130,8 +130,8 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'nextgrid_output',
-            'viz': 'total_cost'
+            'profile': 'ECCC-NextGrid',
+            'viz': 'Total Cost'
         },
         style={
             'width': '100%',

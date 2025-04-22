@@ -9,8 +9,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'labourabm_output',
-            'viz': 'total_unemployment'
+            'profile': 'LabourABM',
+            'viz': 'Total Unemployment'
         }, 'figure'),
         Output({
             'type': 'labourabm-total_unemployment-region-select',
@@ -43,8 +43,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'labourabm_output',
-            'viz': 'total_unemployment'
+            'profile': 'LabourABM',
+            'viz': 'Total Unemployment'
         }, 'figure'),
         State({
             'type': 'labourabm-total_unemployment-region-select',

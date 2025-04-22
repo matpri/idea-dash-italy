@@ -11,8 +11,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'coders_input',
-            'viz': 'vre'
+            'profile': 'CODERS Input',
+            'viz': 'VRE Capacity'
         }, 'figure'),
         Output({
             'type': 'coders_input-vre-download',

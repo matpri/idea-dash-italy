@@ -8,6 +8,7 @@ from components import ids
 drawer_style = glass_style.copy()
 drawer_style['height'] = '100%'
 
+
 def render(card_id, viz_func):
     """
     Render the drawer component for the visualization.
@@ -22,7 +23,8 @@ def render(card_id, viz_func):
     return dmc.Burger(
         id={'type': ids.BURGER, 'index': card_id},
         opened=True,
-        size='sm'
+        size='sm',
+        style={'display': 'block'} if viz_func is not None else {'display': 'none'},
     ), dbc.Collapse(
         children=[dmc.Text("Widgets", align="left"),
                   html.Div(viz_func,
@@ -48,5 +50,7 @@ def render(card_id, viz_func):
         style={
             'width': '20%',
             'height': '100%',
-        }
+            'display': 'block' if viz_func is not None else 'none'
+        },
+
     )

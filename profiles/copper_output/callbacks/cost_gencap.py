@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'gencap_cost'
+            'profile': 'COPPER',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         Output({
             'type': 'copper-gencap_cost-region-select',
@@ -100,8 +100,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'gencap_cost'
+            'profile': 'COPPER',
+            'viz': 'Capacity Cost'
         }, 'figure'),
         State({
             'type': 'copper-gencap_cost-download',

@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'dispatch'
+            'profile': 'NATEM Canada',
+            'viz': 'Dispatch'
         }, 'figure'),
         Output({
             'type': 'natem-dispatch-region-select',
@@ -96,8 +96,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'natem_output',
-            'viz': 'dispatch'
+            'profile': 'NATEM Canada',
+            'viz': 'Dispatch'
         }, 'figure'),
         State({
             'type': 'natem-dispatch-download',

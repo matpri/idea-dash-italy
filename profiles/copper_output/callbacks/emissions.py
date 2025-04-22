@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'emissions'
+            'profile': 'COPPER',
+            'viz': 'Emissions'
         }, 'figure'),
         Output({
             'type': 'copper-emissions-region-select',
@@ -100,8 +100,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'copper_output',
-            'viz': 'emissions'
+            'profile': 'COPPER',
+            'viz': 'Emissions'
         }, 'figure'),
         State({
             'type': 'copper-emissions-download',

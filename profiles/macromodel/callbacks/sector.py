@@ -5,13 +5,8 @@ from components import ids
 from profiles.macromodel.visualization_scripts import energy_sectors, non_energy_sectors
 
 render_func = {
-    'energy_sectors': energy_sectors.render_plot,
-    'non_energy_sectors': non_energy_sectors.render_plot
-}
-
-name_mapping = {
-    'energy_sectors' : 'Energy Sectors',
-    'non_energy_sectors' : 'Non-Energy Sectors'
+    'Energy Sectors': energy_sectors.render_plot,
+    'Non-Energy Sectors': non_energy_sectors.render_plot
 }
 
 def link(app):
@@ -217,7 +212,7 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = 'Macromodel'
-        name = name_mapping.get(trigger_id['name'])
+        name = trigger_id['name']
         print(f'updating {name}, {model} plot')
         render_plot = render_func[trigger_id['name']]
 

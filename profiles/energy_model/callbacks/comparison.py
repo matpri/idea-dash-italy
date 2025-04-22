@@ -10,8 +10,8 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'comparison'
+            'profile': 'Power System Models',
+            'viz': 'Comparison'
         }, 'figure'),
 
         Output({
@@ -45,8 +45,8 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'energy_model',
-            'viz': 'comparison'
+            'profile': 'Power System Models',
+            'viz': 'Comparison'
         }, 'figure'),
 
         State({
