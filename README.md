@@ -79,6 +79,8 @@ Enjoy exploring and analyzing data with IDEA! Please refer to the User Guide (if
   - **help**: definition of the pages in the help section
 - **callbacks**: functions linking to the app to create functionality of IDEA
 - **components**: visual components defining widgets and page layout (some include simple callbacks)
+- **data**: data that should be automatically loaded when the app starts
+- **config**: configurations for narrative profiles (for more information check the Narrative Profiles section in the [documentation](./docs/narrative-profile.md))
 - **profiles**: custom logic defined for specific data (so called model profiles)
   - "profile name"
     - callbacks

@@ -34,3 +34,4 @@ At the moment, we have custom plots for our COPPER, SILVER, MESSAGE, LabourABM, 
 - [Extending IDEA](extending-idea.md)
 - [IAMC Format](iamc-format.md)
 - [User Guide](user-guide.md)
+- [Narrative Profile Configuration Guide](narrative-profile.md)
