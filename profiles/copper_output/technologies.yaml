@@ -968,6 +968,26 @@ Electricity|Coal|w/o CCS:
     group: Fossil fuel solid
     group_color: '#b15928'
     name: Electricity|Coal|w/o CCS
+'Electricity|Coal|w/ CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal'
+'Electricity|Coal|w/o CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal'
+'Electricity|Coal|w/ CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal - Offset'
+'Electricity|Coal|w/o CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal - Offset'
 Electricity|Oil|w/o CCS:
     color: '#000000'
     group: Fossil fuel liquid
