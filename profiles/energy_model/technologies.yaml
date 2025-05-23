@@ -2946,3 +2946,23 @@ gasCG_ccs_post2025.renewable_gas_overlim:
   group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff95b7'
   name: gasCG_ccs_post2025.renewable_gas_overlim
+'Electricity|Coal|w/ CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal'
+'Electricity|Coal|w/o CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal'
+'Electricity|Coal|w/ CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal - Offset'
+'Electricity|Coal|w/o CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal - Offset'
