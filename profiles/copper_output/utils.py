@@ -221,6 +221,7 @@ cost_type = {
     "Capacity cost minus ITC": "capacity_cost_minus_ITC",
     "capacity_cost": "Capacity",
     "carbon_tax_cost": "Carbon_Tax",
+    "carbon_credit_cost": "Carbon_Tax_Credit",
     "fom_cost": "Fixed_OM",
     "fuel_cost_weighted": "Fuel",
     "Transmission_capacity_cost": "Transmission",
