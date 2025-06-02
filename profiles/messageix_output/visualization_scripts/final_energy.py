@@ -193,7 +193,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'messageix_output',
+            'profile': 'MESSAGEix-Canada',
             'viz': 'Final Energy'
         },
         style={

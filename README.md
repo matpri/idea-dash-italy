@@ -81,6 +81,7 @@ Enjoy exploring and analyzing data with IDEA! Please refer to the User Guide (if
 - **components**: visual components defining widgets and page layout (some include simple callbacks)
 - **data**: data that should be automatically loaded when the app starts
 - **config**: configurations for narrative profiles (for more information check the Narrative Profiles section in the [documentation](./docs/narrative-profile.md))
+- **technologies**: files defining the technologies used in the models allowing the user to map colors and groups to the technologies. The file needs to be the same name as the entry in the model column of the data.
 - **profiles**: custom logic defined for specific data (so called model profiles)
   - "profile name"
     - callbacks
