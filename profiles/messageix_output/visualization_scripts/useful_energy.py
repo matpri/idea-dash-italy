@@ -3,7 +3,8 @@ from dash import html, dcc
 
 from profiles.messageix_output import utils
 from components import ids
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, \
+    trend_over_years_by_variable, trend_over_years_by_scenario, \
     pie_chart, map_plot
 
 
@@ -15,27 +16,33 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
                 variables=[]):
     from profiles.messageix_output.utils import plot_settings
     print('rendering plot', type)
-    name = plot_settings['Capacity']['name']
-    unit = plot_settings['Capacity']['unit']
+    name = plot_settings['Useful Energy']['name']
+    unit = plot_settings['Useful Energy']['unit']
 
     if type == 'By Year':
-        plot_info = plot_settings['Capacity']['By Year']
+        plot_info = plot_settings['Useful Energy']['By Year']
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'], name, unit, pattern_active=pattern_active,
                                    text_active=text_active, variables=variables)
-    elif type == 'Trend Over Years':
-        plot_info = plot_settings['Capacity']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'],
-                                     plot_info['y_label'], name, unit, variables=variables)
+    elif type == 'Trend Over Years by Variable':
+        plot_info = plot_settings['Useful Energy']['Trend Over Years']
+        return trend_over_years_by_variable.plot(df, scenario, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
+    elif type == 'Trend Over Years by Scenario':
+        plot_info = plot_settings['Useful Energy']['Trend Over Years']
+        return trend_over_years_by_scenario.plot(df, scenarios, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
     elif type == 'Pie Chart':
-        plot_info = plot_settings['Capacity']['Pie Chart']
+        plot_info = plot_settings['Useful Energy']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
                               plot_info['y_label'], variables=variables)
     elif type == 'Map Plot':
-        title = plot_settings['Capacity']['Map']['title']
+        title = plot_settings['Useful Energy']['Map']['title']
         return map_plot.plot_map(df, scenario, year, title, name, unit, variables)
     else:
-        plot_info = plot_settings['Capacity']['By Region']
+        plot_info = plot_settings['Useful Energy']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'], name, unit, pattern_active=pattern_active,
                                      text_active=text_active, variables=variables)
@@ -96,9 +103,9 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
-           ]
+    ]
     parents = df_scen.type.unique().tolist()
-    parents = ['Capacity|' + parent for parent in parents]
+    parents = ['Useful Energy|' + parent for parent in parents]
     for i in range(max_depth):
         if i == 0:
             variables = parents
@@ -110,7 +117,7 @@ def plot(df, window_id):
                 data=[{'label': variable, 'value': variable} for variable in variables],
                 value=[],
                 id={
-                    'type': 'messageix-useful_energy-level-select',
+                    'type': 'messageix-useful_energy-multi-level-select',
                     'index': window_id,
                     'level': i
                 },
@@ -143,7 +150,8 @@ def plot(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in
-                  ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
+                  ['By Year', 'By Region', 'Trend Over Years by Variable', 'Trend Over Years by Scenario', 'Pie Chart',
+                   'Map Plot']],
             value='By Year',
             id={
                 'type': 'messageix-useful_energy-plot-select',

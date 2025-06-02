@@ -3,7 +3,7 @@ import pandas as pd
 from dash import html, dcc
 from components import ids
 import plotly.graph_objects as go
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years_by_variable, pie_chart
 
 
 

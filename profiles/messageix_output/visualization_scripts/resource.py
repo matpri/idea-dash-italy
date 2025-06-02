@@ -3,7 +3,8 @@ from dash import html, dcc
 
 from profiles.messageix_output import utils
 from components import ids
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, \
+    trend_over_years_by_variable, trend_over_years_by_scenario, \
     pie_chart, map_plot
 
 
@@ -23,10 +24,16 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'], name, unit, pattern_active=pattern_active,
                                    text_active=text_active, variables=variables)
-    elif type == 'Trend Over Years':
+    elif type == 'Trend Over Years by Variable':
         plot_info = plot_settings['Resource']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'],
-                                     plot_info['y_label'], name, unit, variables=variables)
+        return trend_over_years_by_variable.plot(df, scenario, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
+    elif type == 'Trend Over Years by Scenario':
+        plot_info = plot_settings['Resource']['Trend Over Years']
+        return trend_over_years_by_scenario.plot(df, scenarios, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Resource']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
@@ -67,7 +74,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='Canada' if 'Canada' in regions else regions[0],
         id={
-            'type': 'messageix-resource-region-select',
+            'type': 'messageix-capacity-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -79,7 +86,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'messageix-resource-year-select',
+            'type': 'messageix-capacity-year-select',
             'index': window_id
         },
 
@@ -92,11 +99,11 @@ def plot(df, window_id):
             data=[{'label': variable, 'value': variable} for variable in types],
             value='All',
             id={
-                'type': 'messageix-resource-type-select',
+                'type': 'messageix-capacity-type-select',
                 'index': window_id
             },
         ),
-           ]
+    ]
     parents = df_scen.type.unique().tolist()
     parents = ['Resource|' + parent for parent in parents]
     for i in range(max_depth):
@@ -110,7 +117,7 @@ def plot(df, window_id):
                 data=[{'label': variable, 'value': variable} for variable in variables],
                 value=[],
                 id={
-                    'type': 'messageix-resource-level-select',
+                    'type': 'messageix-capacity-multi-level-select',
                     'index': window_id,
                     'level': i
                 },
@@ -123,7 +130,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'messageix-resource-pattern-switch',
+            'type': 'messageix-capacity-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -133,7 +140,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'messageix-resource-text-switch',
+            'type': 'messageix-capacity-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -143,17 +150,18 @@ def plot(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in
-                  ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
+                  ['By Year', 'By Region', 'Trend Over Years by Variable', 'Trend Over Years by Scenario', 'Pie Chart',
+                   'Map Plot']],
             value='By Year',
             id={
-                'type': 'messageix-resource-plot-select',
+                'type': 'messageix-capacity-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Show Sector',
                    checked=True,
                    id={
-                       'type': 'messageix-resource-show_sector-switch',
+                       'type': 'messageix-capacity-show_sector-switch',
                        'index': window_id},
 
                    style={'display': 'none'}),
@@ -164,7 +172,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'messageix-resource-scenario-multi-select',
+                'type': 'messageix-capacity-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -174,7 +182,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'messageix-resource-scenario-select',
+                'type': 'messageix-capacity-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -182,11 +190,11 @@ def plot(df, window_id):
         *map_plot_widgets,
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'messageix-resource-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'messageix-capacity-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'messageix-resource-download', 'index': window_id}),
+        dcc.Download(id={'type': 'messageix-capacity-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
