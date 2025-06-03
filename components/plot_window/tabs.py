@@ -9,7 +9,7 @@ from components.plot_window import viz_container
 from components import ids
 
 
-def render(card_id):
+def render(card_id, custom_frame_index=-1):
     from main import data_handler
 
     profile_options = data_handler.get_viz_options()
@@ -41,6 +41,8 @@ def render(card_id):
             )
         )
 
+    pr = profiles[0] if custom_frame_index == -1 else data_handler.custom_frames[custom_frame_index][0] if data_handler.custom_frames[custom_frame_index][0] in profiles else profiles[0]
+
     profile_tab = dmc.Tabs([
         dmc.TabsList(
             [
@@ -48,12 +50,14 @@ def render(card_id):
             ]
         )
     ],
-        value=profiles[0],
+        value=pr,
         id={'type': 'profile-tabs', 'index': card_id}
     )
 
-    viz_options = profile_options[profiles[0]]
-    plots = [plot_option for plot_option in data_handler.profiles[profiles[0]].plot_order if
+
+
+    viz_options = profile_options[pr]
+    plots = [plot_option for plot_option in data_handler.profiles[pr].plot_order if
              plot_option in viz_options]
 
     viz_tab_list = []
@@ -66,14 +70,16 @@ def render(card_id):
                     withArrow=True,
                     transition="fade",
                     transitionDuration=200,
-                    label=data_handler.profiles[profiles[0]].viz_options[viz_type].get('description', ''),
+                    label=data_handler.profiles[pr].viz_options[viz_type].get('description', ''),
                     children=[viz_type]
                 ),
-                id={'type': 'viz-tab', 'index': card_id, 'profile': profiles[0],
+                id={'type': 'viz-tab', 'index': card_id, 'profile': pr,
                     'viz': viz_type},
                 value=viz_type,
             )
         )
+
+    p = plots[0] if custom_frame_index == -1 else data_handler.custom_frames[custom_frame_index][1] if data_handler.custom_frames[custom_frame_index][1] in plots else plots[0]
     viz_tab = dmc.Tabs([
         dmc.TabsList(
             [
@@ -81,17 +87,17 @@ def render(card_id):
             ]
         )
     ],
-        value=plots[0],
-        id={'type': 'viz-tabs', 'index': card_id, 'profile': profiles[0]}
+        value= p,
+        id={'type': 'viz-tabs', 'index': card_id, 'profile': pr}
     )
 
-    widgets, plot = data_handler.get_viz(profiles[0], plots[0], card_id)
-    _b, _w, _f, _md, _hp = viz_container.render(card_id, profiles[0], plots[0], widgets, plot)
+    widgets, plot = data_handler.get_viz(pr, p, card_id)
+    _b, _w, _f, _md, _hp = viz_container.render(card_id, pr, p, widgets, plot)
 
     desc = None
     for _, report in data_handler.reports.items():
-        if profiles[0] in report.descriptions:
-            desc = report.descriptions[profiles[0]].get(plots[0], None)
+        if pr in report.descriptions:
+            desc = report.descriptions[pr].get(p, None)
 
     if desc is not None:
         try:

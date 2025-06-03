@@ -90,10 +90,15 @@ if args.autosave != '':
         os.makedirs(autosave_dir)
     data_handler.save(args.autosave)  # Save the datahandler to the specified file path
 
+custom_frames = 0
+
+for _, report in data_handler.reports.items():
+    custom_frames += len(data_handler.custom_frames)
+
 app_layout = [
     html.Div([
         dlc.BoxPanel([
-            plot_canvas.render(bool(data_files) or bool(configs) or args.datahandler is not None, static),
+            plot_canvas.render(bool(data_files) or bool(configs) or args.datahandler is not None, static, custom_frames),
         ], id='test', addToDom=True),
         sidebar.render(static),
         data_modal.render(app),

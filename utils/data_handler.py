@@ -182,6 +182,7 @@ class DataHandler:
         self.viz = {}
         self.to_delete = []
         self.runs = pd.DataFrame()
+        self.custom_frames = []
 
         self.reports = {}
 
@@ -721,6 +722,9 @@ class DataHandler:
         name = config['name']
         report = config['report']
         descriptions = config['descriptions']
+        frames = config.get('frames', None)
+
+        self.custom_frames.extend([(key, value) for d in frames for key, value in d.items()] if frames is not None else [])
 
         # open markdown file in report
         with open(os.path.join('data', report), 'r') as stream:
