@@ -74,7 +74,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value='Canada' if 'Canada' in regions else regions[0],
         id={
-            'type': 'messageix-capacity-region-select',
+            'type': 'messageix-resource-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -86,7 +86,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'messageix-capacity-year-select',
+            'type': 'messageix-resource-year-select',
             'index': window_id
         },
 
@@ -99,7 +99,7 @@ def plot(df, window_id):
             data=[{'label': variable, 'value': variable} for variable in types],
             value='All',
             id={
-                'type': 'messageix-capacity-type-select',
+                'type': 'messageix-resource-type-select',
                 'index': window_id
             },
         ),
@@ -117,7 +117,7 @@ def plot(df, window_id):
                 data=[{'label': variable, 'value': variable} for variable in variables],
                 value=[],
                 id={
-                    'type': 'messageix-capacity-multi-level-select',
+                    'type': 'messageix-resource-multi-level-select',
                     'index': window_id,
                     'level': i
                 },
@@ -130,7 +130,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'messageix-capacity-pattern-switch',
+            'type': 'messageix-resource-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -140,7 +140,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'messageix-capacity-text-switch',
+            'type': 'messageix-resource-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -154,14 +154,14 @@ def plot(df, window_id):
                    'Map Plot']],
             value='By Year',
             id={
-                'type': 'messageix-capacity-plot-select',
+                'type': 'messageix-resource-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Show Sector',
                    checked=True,
                    id={
-                       'type': 'messageix-capacity-show_sector-switch',
+                       'type': 'messageix-resource-show_sector-switch',
                        'index': window_id},
 
                    style={'display': 'none'}),
@@ -172,7 +172,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'messageix-capacity-scenario-multi-select',
+                'type': 'messageix-resource-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -182,7 +182,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'messageix-capacity-scenario-select',
+                'type': 'messageix-resource-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -190,11 +190,11 @@ def plot(df, window_id):
         *map_plot_widgets,
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'messageix-capacity-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'messageix-resource-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'messageix-capacity-download', 'index': window_id}),
+        dcc.Download(id={'type': 'messageix-resource-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
