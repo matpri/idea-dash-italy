@@ -60,7 +60,7 @@ def update_chips(file, n_remove, n_click, data):
     :param file: The selected file for which to update chips
     :return: The layout containing the updated chips and scenario input
     """
-    from main import data_handler
+    from utils.data_state import data_handler
 
     ctx = dash.callback_context
 
@@ -167,7 +167,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
 
     # Handle data submission
     if triggered_input == 'submit-data':
-        from main import data_handler
+        from utils.data_state import data_handler
 
         # Update selected values for each profile
         for i, ls in enumerate(ctx.states_list[1]):
@@ -267,7 +267,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
 
     # Handle cancel action
     if triggered_input == 'cancel-data':
-        from main import data_handler
+        from utils.data_state import data_handler
         data = list(data_handler.data.keys())
 
         data_handler.to_delete = []

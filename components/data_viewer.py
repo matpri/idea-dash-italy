@@ -6,7 +6,7 @@ from components import ids
 
 
 def render():
-    from main import data_handler
+    from utils.data_state import data_handler
 
     return dmc.Modal(
         title=html.Div([

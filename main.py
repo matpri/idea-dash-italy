@@ -16,6 +16,8 @@ from components import ids, plot_canvas, sidebar
 from components.data_selection import data_modal
 from components.help import help
 from utils.data_handler import DataHandler
+from utils.data_state import data_handler
+
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
@@ -53,10 +55,9 @@ data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith(
 configs = [f for f in os.listdir('config') if f.endswith('.yaml')]
 
 # initialize data handler which will deal with all data related operations
-data_handler: DataHandler = DataHandler()
+
 if args.datahandler is not None:
     print(f"Loading datahandler from {args.datahandler}")
-    data_handler = DataHandler()
     data_handler.load(args.datahandler)
     print(f"Datahandler loaded with {len(data_handler.data)} files.")
 
@@ -136,4 +137,4 @@ if __name__ == '__main__':
     pio.to_image(fig, format="png", engine='kaleido')
     Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
-    app.run_server(host=host, port=port)  # Run the app on the specified port
+    app.run(host=host, port=port, use_reloader=False)  # Run the app on the specified port

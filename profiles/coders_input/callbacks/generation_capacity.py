@@ -29,7 +29,7 @@ def link(app):
         prevent_initial_call=True
     )
     def update_plot(aggregate, n_clicks):
-        from main import data_handler
+        from utils.data_state import data_handler
         #print("gen cap callback", aggregate)
         df = data_handler.processed_data['CODERS Input']['Capacity'].copy()
 

@@ -721,7 +721,7 @@ class DataHandler:
         # Implement the logic to create a report based on the loaded config
         name = config['name']
         report = config['report']
-        descriptions = config['descriptions']
+        descriptions = config.get('descriptions', {})
         frames = config.get('frames', None)
 
         self.custom_frames.extend([(key, value) for d in frames for key, value in d.items()] if frames is not None else [])

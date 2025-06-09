@@ -58,7 +58,7 @@ def link(app):
     )
     def update_comparison(_p_type, _scenario_a, _scenario_b, _aggregate, _region, _download, _canvas, _data):
         #print('updating comparison plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

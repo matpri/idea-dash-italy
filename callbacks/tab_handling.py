@@ -76,7 +76,7 @@ def link(app):
         Returns:
         - Updated children of the visualization tab container.
         """
-        from main import data_handler
+        from utils.data_state import data_handler
 
         profiles = data_handler.get_viz_options()
 
@@ -145,7 +145,7 @@ def link(app):
         Returns:
         - Updated children of the drawer content and hidden plots.
         """
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         if not ctx.triggered:
             print("No trigger, drawer")

@@ -84,7 +84,7 @@ def link(app):
     def update_standard(_p_type, _scenarios, _scenario, _regions, _years, _sector,
                          _download, _y_style, _canvas, _data, _s_style, _m_style):
         #print('updating standard plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

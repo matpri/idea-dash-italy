@@ -59,7 +59,7 @@ def link(app):
     )
     def update_total_unemployment(_scenarios, _occupations, _region, _download, _canvas, _regions, _data):
         #print('updating total_unemployment plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

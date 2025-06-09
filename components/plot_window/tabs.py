@@ -10,7 +10,7 @@ from components import ids
 
 
 def render(card_id, custom_frame_index=-1):
-    from main import data_handler
+    from utils.data_state import data_handler
 
     profile_options = data_handler.get_viz_options()
     profiles = list(profile_options.keys())
@@ -275,7 +275,7 @@ def render_popup(window_id, graph):
                                     )
 
                                 ],
-                                id=ids.PLOT_POPUP_WIDGETS,
+                                id={'type':ids.PLOT_POPUP_WIDGETS, 'index': window_id},
                                 style={
                                     'height': 'calc(100% - 1rem)',
                                     'background': 'rgba(255,255,255,0.4)',

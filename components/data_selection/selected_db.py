@@ -12,7 +12,6 @@ from components import ids
 from components.data_selection import viz_edit_modal
 
 def render():
-    from main import app
     layout = dmc.AccordionItem([
                     dmc.AccordionControl('Database:'),
         dmc.AccordionPanel('Load Results from Database', id=ids.DB_SELECTED)

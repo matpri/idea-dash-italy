@@ -181,7 +181,7 @@ def link(app):
                    _download, _sector, _service_sector, _service, _emission, _r_style, _y_style, _canvas, _data, _s_style, _m_style,
                    _pattern_style, _text_style):
         # print('updating ghg plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         _data = data_handler.processed_data['CIMS']['Overview']

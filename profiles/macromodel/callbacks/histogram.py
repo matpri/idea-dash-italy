@@ -103,7 +103,7 @@ def link(app):
     )
     def update_gencap_cost(_p_type, _scenarios, _variable, _regions, _years, _units, _nbins,
                            _download, _data):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = ctx.triggered_id
         model = 'Macromodel'

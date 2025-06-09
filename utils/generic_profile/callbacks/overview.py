@@ -90,7 +90,7 @@ def link(app):
         prevent_initial_call=True
     )
     def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _unit, _download, _canvas, _u_data, _data):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']

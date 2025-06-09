@@ -93,7 +93,7 @@ def link(app):
     )
     def update_map_plots(_p_type, _scenario, _ts, _date, _time, _download, _canvas, _data, _date_data, _time_marks, _max, _style):
         print('updating map_plots plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

@@ -20,6 +20,6 @@ def link(app):
         prevent_initial_call=True
     )
     def download_data(n_clicks):
-        from main import data_handler
+        from utils.data_state import data_handler
         df = data_handler.processed_data['CODERS Input']['Demand']
         return dcc.send_data_frame(df.to_csv, "demand.csv", index=False)

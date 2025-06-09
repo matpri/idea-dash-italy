@@ -340,7 +340,7 @@ def link(app):
 
                       ):
         # Importing the data handler for processing data
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

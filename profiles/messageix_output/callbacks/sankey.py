@@ -48,7 +48,7 @@ def link(app):
     )
     def update_sankey(_scenario, _regions, _years, _download, _data, _canvas):
         print('updating sankey plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

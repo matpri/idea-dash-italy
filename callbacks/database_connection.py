@@ -66,7 +66,7 @@ def connect_to_database(n_clicks, api_key, children):
 
             except Exception as e:
                 pass
-            from main import data_handler
+            from utils.data_state import data_handler
             data_handler.runs = runs
 
             checkbox_data = []
@@ -130,7 +130,7 @@ def connect_to_database(n_clicks, api_key, children):
 
 
 def get_runs(model, scenario, author, db):
-    from main import data_handler
+    from utils.data_state import data_handler
     runs = data_handler.runs
     if model != 'ALL':
         runs = runs[runs['model'] == model]

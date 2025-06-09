@@ -26,7 +26,7 @@ def link(app):
 
 
 def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, db_views):
-    from main import data_handler
+    from utils.data_state import data_handler
 
     ctx = dash.callback_context
 

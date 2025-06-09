@@ -222,7 +222,7 @@ def link(app):
     def update_gencap_cost(_p_type, _aggregates, _group_scen, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
                            _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _pattern_style,
                            _text_style, _group_style):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']

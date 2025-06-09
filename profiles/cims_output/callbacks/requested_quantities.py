@@ -192,7 +192,7 @@ def link(app):
                                     _m_style, _pattern_style, _text_style, _p_style, _service_style
                                     ):
         # print('updating requested_quantities plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

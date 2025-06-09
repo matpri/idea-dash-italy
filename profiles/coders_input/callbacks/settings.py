@@ -29,7 +29,7 @@ def link(app):
         # read yaml as dict
         settings = yaml.load(decoded, Loader=yaml.FullLoader)
 
-        from main import data_handler
+        from utils.data_state import data_handler
         data_handler.profiles['COPPER Input'].settings = settings
         return html.Div([
             html.Div('Settings Updated'),
