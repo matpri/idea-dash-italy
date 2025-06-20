@@ -11,6 +11,7 @@ import yaml
 
 import chardet
 import pandas as pd
+import zipfile
 
 import profiles
 from utils.generic_profile.generic_profile import GenericProfile
@@ -192,7 +193,46 @@ class DataHandler:
         for file in data_files:
             print('Preloading', file)
             f_name, extension = os.path.splitext(file)
-            if extension == '.csv':
+            if extension == '.zip':
+                # if the file is a zip file, extract it into a temporary directory
+                zf = zipfile.ZipFile(os.path.join('data', file))
+                temp_dir = 'temp_data'
+                if not os.path.exists(temp_dir):
+                    os.makedirs(temp_dir)
+                if not os.path.exists(os.path.join(temp_dir, f_name)):
+                    os.makedirs(os.path.join(temp_dir, f_name))
+                    zf.extractall(os.path.join(temp_dir, f_name))
+                else:
+                    # remove files in the directory
+                    for f in os.listdir(os.path.join(temp_dir, f_name)):
+                        os.remove(os.path.join(temp_dir, f_name, f))
+                    zf.extractall(os.path.join(temp_dir, f_name))
+                # read all csv and xlsx files in the temp directory
+                dfs = []
+                for _file in os.listdir(os.path.join(temp_dir, f_name)):
+                    fname = _file.split('.')[0]
+
+                    if _file.endswith('.csv'):
+                        df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
+                    elif _file.endswith('.xlsx'):
+                        xls = pd.ExcelFile(os.path.join(temp_dir, f_name, _file))
+                        sheet_names = xls.sheet_names
+                        # Read all sheets into a DataFrame list
+                        df_list = []
+                        for sheet in sheet_names:
+                            print(sheet)
+                            _df = xls.parse(sheet)
+                            # infer types of the column names
+                            _df.columns = _df.columns.astype(str)
+                            df_list.append(_df)
+                        # Combine all DataFrames into one
+                        df = pd.concat(df_list, ignore_index=True)
+                    else:
+                        continue
+                    df['filename'] = fname
+                    dfs.append(df)
+                df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.csv':
                 df = pd.read_csv(os.path.join('data', file))
             elif extension == '.xlsx':
                 dfs = []
@@ -209,7 +249,7 @@ class DataHandler:
                 self.pkls[f_name] = os.path.join('data', file)
             else:
                 fail = True
-                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
                 continue
 
             checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
@@ -332,7 +372,7 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+        self.data[filename]['scenario'] = df.scenario.dropna().unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return filename
@@ -520,7 +560,47 @@ class DataHandler:
             decoded = base64.b64decode(content_string)
 
             try:
-                if extension == 'xlsx':
+                if extension == 'zip':
+                    # if the file is a zip file, extract it into a temporary directory
+                    zf = zipfile.ZipFile(io.BytesIO(decoded))
+                    temp_dir = 'temp_data'
+                    if not os.path.exists(temp_dir):
+                        os.makedirs(temp_dir)
+                    if not os.path.exists(os.path.join(temp_dir, filename)):
+                        os.makedirs(os.path.join(temp_dir, filename))
+                        zf.extractall(os.path.join(temp_dir, filename))
+                    else:
+                        # remove files in the directory
+                        for file in os.listdir(os.path.join(temp_dir, filename)):
+                            os.remove(os.path.join(temp_dir, filename, file))
+                        zf.extractall(os.path.join(temp_dir, filename))
+                    # read all csv and xlsx files in the temp directory
+                    dfs = []
+                    for file in os.listdir(os.path.join(temp_dir, filename)):
+                        fname = file.split('.')[0]
+
+                        if file.endswith('.csv'):
+                            df = pd.read_csv(os.path.join(temp_dir, filename, file))
+                        elif file.endswith('.xlsx'):
+                            xls = pd.ExcelFile(os.path.join(temp_dir, filename, file))
+                            sheet_names = xls.sheet_names
+                            # Read all sheets into a DataFrame list
+                            df_list = []
+                            for sheet in sheet_names:
+                                print(sheet)
+                                _df = xls.parse(sheet)
+                                # infer types of the column names
+                                _df.columns = _df.columns.astype(str)
+                                df_list.append(_df)
+                            # Combine all DataFrames into one
+                            df = pd.concat(df_list, ignore_index=True)
+                        else:
+                            continue
+                        df['filename'] = fname
+                        dfs.append(df)
+                    df = pd.concat(dfs, ignore_index=True)
+
+                elif extension == 'xlsx':
                     xls = pd.ExcelFile(io.BytesIO(decoded))
                     # Get all sheet names
                     sheet_names = xls.sheet_names
@@ -555,9 +635,9 @@ class DataHandler:
 
         # make all headers lowercase
         df.columns = df.columns.str.lower()
-
+        model = None
         if 'model' in df.columns:
-            model = df.model.unique()[0]
+            model = df.model.dropna().unique()[0]
             if model not in model_mapping:
                 # check if df.columns contain all the following: model, scenario, variable, value, unit
                 if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']):
@@ -567,7 +647,6 @@ class DataHandler:
                 df = df[['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']]
                 # if unit is nan, set it to ''
                 df['unit'] = df['unit'].fillna('')
-
             else:
                 # make sure scenario is in the columns
                 if 'scenario' not in df.columns:
@@ -578,8 +657,8 @@ class DataHandler:
             while f'{filename}_{counter}' in self.data:
                 counter += 1
             filename = f'{filename}_{counter}'
-
-        model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+        if model is None:
+            model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
 
         profile_options = model_mapping.get(model, None)
@@ -613,7 +692,7 @@ class DataHandler:
         if len(visualizations):
             self.data[filename]['visualizations'] = visualizations
             self.data[filename]['selected'] = selected
-            self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+            self.data[filename]['scenario'] = df.scenario.dropna().unique().tolist()[
                 0] if not df.empty or 'scenario' in df.columns else filename
 
             return True, "Data loaded successfully!", filename
@@ -643,7 +722,7 @@ class DataHandler:
 
         self.data[filename]['visualizations'] = visualizations
         self.data[filename]['selected'] = selected
-        self.data[filename]['scenario'] = df.scenario.unique().tolist()[
+        self.data[filename]['scenario'] = df.scenario.dropna().unique().tolist()[
             0] if not df.empty or 'scenario' in df.columns else filename
 
         return True, "Data loaded successfully!", filename
@@ -762,7 +841,46 @@ class DataHandler:
 
             print('Preloading', file)
             f_name, extension = os.path.splitext(file)
-            if extension == '.csv':
+            if extension == '.zip':
+                # if the file is a zip file, extract it into a temporary directory
+                zf = zipfile.ZipFile(os.path.join('data', file))
+                temp_dir = 'temp_data'
+                if not os.path.exists(temp_dir):
+                    os.makedirs(temp_dir)
+                if not os.path.exists(os.path.join(temp_dir, f_name)):
+                    os.makedirs(os.path.join(temp_dir, f_name))
+                    zf.extractall(os.path.join(temp_dir, f_name))
+                else:
+                    # remove files in the directory
+                    for f in os.listdir(os.path.join(temp_dir, f_name)):
+                        os.remove(os.path.join(temp_dir, f_name, f))
+                    zf.extractall(os.path.join(temp_dir, f_name))
+                # read all csv and xlsx files in the temp directory
+                dfs = []
+                for _file in os.listdir(os.path.join(temp_dir, f_name)):
+                    fname = _file.split('.')[0]
+
+                    if _file.endswith('.csv'):
+                        df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
+                    elif _file.endswith('.xlsx'):
+                        xls = pd.ExcelFile(os.path.join(temp_dir, f_name, _file))
+                        sheet_names = xls.sheet_names
+                        # Read all sheets into a DataFrame list
+                        df_list = []
+                        for sheet in sheet_names:
+                            print(sheet)
+                            _df = xls.parse(sheet)
+                            # infer types of the column names
+                            _df.columns = _df.columns.astype(str)
+                            df_list.append(_df)
+                        # Combine all DataFrames into one
+                        df = pd.concat(df_list, ignore_index=True)
+                    else:
+                        continue
+                    df['filename'] = fname
+                    dfs.append(df)
+                df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.csv':
                 df = pd.read_csv(os.path.join('data', file))
             elif extension == '.xlsx':
                 dfs = []
@@ -779,7 +897,7 @@ class DataHandler:
                 self.pkls[f_name] = os.path.join('data', file)
             else:
                 fail = True
-                print(f'{file}: File type not supported, only .csv and .xlsx are supported')
+                print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
                 continue
 
             checked, message, file = self.check_content(file, df, file.split('.')[-1], False)

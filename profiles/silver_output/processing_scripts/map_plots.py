@@ -37,9 +37,10 @@ def process(selected):
     dfs = []
     for scenario, db in selected.items():
         df = db.copy()
-        df.drop(columns=['model', "unit"], inplace=True, errors='ignore')
-
+        df = df[df['model'] == 'silver']
         df['classes'] = df["variable"].apply(lambda x: x.split("|")[0])
+        df.drop(columns=['model', "unit"], inplace=True, errors='ignore')
+        df = df.dropna(axis=1, how='all')
 
         for cls in df['classes'].unique():
             # if 'Line Flow' not in cls:

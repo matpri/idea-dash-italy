@@ -8,7 +8,7 @@ def db_check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     print("Checking for UC_Results in variable column")
     try:
-        classes = df["variable"].apply(lambda x: x.split("|")[0])
+        classes = df[df['model'] == 'silver']["variable"].apply(lambda x: x.split("|")[0])
         if (classes == 'UC_VRE_Curtailment').any():
             return True
         return False
@@ -18,10 +18,9 @@ def db_check(df):
 
 
 def aggregate_db(db, scenario):
-    db.drop(columns=['model', "unit"], inplace=True)
-
-    classes = db["variable"].apply(lambda x: x.split("|")[0])
-    df = db[classes == 'UC_VRE_Curtailment']
+    classes = db[db['model'] == 'silver']["variable"].apply(lambda x: x.split("|")[0])
+    df = db[db['model']=='silver'][classes == 'UC_VRE_Curtailment']
+    df.drop(columns=['model', "unit"], inplace=True)
 
     # sum over value and group by time and variable
     df = df.groupby(['time', 'variable', 'region']).sum().reset_index()
