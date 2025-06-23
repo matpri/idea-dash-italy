@@ -19,6 +19,10 @@ def link(app):
             'index': MATCH
         }, 'data'),
         Input({
+                           'type': 'copper_output-vre-scenario-dropdown',
+            'index': MATCH
+        }, 'value'),
+        Input({
                            'type': 'copper_output-vre-variable-dropdown',
             'index': MATCH
         }, 'value'),
@@ -32,7 +36,7 @@ def link(app):
         }, 'n_clicks'),
         prevent_initial_call=True
     )
-    def update_plot(variable, year, n_clicks):
+    def update_plot(scenario,variable, year, n_clicks):
         from utils.data_state import data_handler
         #print("gen cap callback", variable)
         df = data_handler.processed_data['COPPER']['VRE Capacity'].copy()
@@ -43,4 +47,4 @@ def link(app):
             if 'vre-download-button' in prop_id:
                 #print('downloading')
                 return dash.no_update, dcc.send_data_frame(df.to_csv, "vre.csv", index=False)
-        return vre_plot(df, variable, year), dash.no_update
+        return vre_plot(df, variable, year, scenario), dash.no_update
