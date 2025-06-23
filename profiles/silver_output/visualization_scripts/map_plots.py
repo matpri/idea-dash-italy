@@ -9,6 +9,7 @@ from dash import html, dcc
 from components import ids
 import matplotlib.pyplot as plt
 
+from profiles.cims_output.processing_scripts.inputs import extant_transmission
 from profiles.silver_output.visualization_scripts.utils import total_plot, tech_plot
 
 regions = ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
@@ -65,8 +66,7 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
         fig.add_trace(trace)
 
     if 'Line Flow' not in type:
-
-        techs = scen_df['variable'].unique()
+        techs = scen_df['variable'].dropna().unique()
         scen_df['latitude'] = scen_df['latitude'].astype(float)
         scen_df['longitude'] = scen_df['longitude'].astype(float)
         scen_df['value'] = scen_df['value'].astype(float)
@@ -95,6 +95,56 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
             ))
 
     else:
+        bus_locations = df[df['filename'] == 'model inputs|bus_location']
+        existing_transmission = df[df['filename'] == 'model inputs|existing transmission']
+        bus_locations = bus_locations[bus_locations['scenario'] == scenario][['bus', 'latitude', 'longitude']]
+        existing_transmission = existing_transmission[existing_transmission['scenario'] == scenario][
+            ['name', 'to bus', 'from bus', 'pmax', 'reactance']]
+
+        # Merge bus locations with existing transmission
+        existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='from bus', right_on='bus',
+                                         how='left')
+        existing_transmission = existing_transmission.rename(
+            columns={'latitude': 'latitude_from', 'longitude': 'longitude_from'})
+        existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='to bus', right_on='bus',
+                                         how='left')
+        existing_transmission = existing_transmission.rename(
+            columns={'latitude': 'latitude_to', 'longitude': 'longitude_to'})
+        existing_transmission = existing_transmission[
+            ['name','to bus', 'from bus', 'latitude_from', 'longitude_from', 'latitude_to', 'longitude_to', 'pmax', 'reactance']]
+
+        scen_df['line'] = scen_df.apply(lambda x: f"{x['region']}-{x['variable']}", axis=1)
+        existing_transmission['line'] = existing_transmission.apply(lambda x: f"{x['from bus']}-{x['to bus']}", axis=1)
+        new_rows = []
+        scen_df['pmax'] = None
+        scen_df['reactance'] = None
+        for i, transmission in existing_transmission.iterrows():
+            if transmission['line'] in scen_df['line'].dropna().unique():
+                scen_df.loc[scen_df['line'] == transmission['line'], 'pmax'] = transmission['pmax']
+                scen_df.loc[scen_df['line'] == transmission['line'], 'reactance'] = transmission['reactance']
+            else:
+                # If the line is not in scen_df, we can add it with a value of 0
+                new_row = {
+                    'region': transmission['name'],
+                    'variable': transmission['from bus'],
+                    'latitude_from': transmission['latitude_from'],
+                    'longitude_from': transmission['longitude_from'],
+                    'latitude_to': transmission['latitude_to'],
+                    'longitude_to': transmission['longitude_to'],
+                    'value': 0,
+                    'time': selected_time,
+                    'line': transmission['line'],
+                    'pmax': transmission['pmax'],
+                    'reactance': transmission['reactance']
+                }
+                new_rows.append(new_row)
+
+        if new_rows:
+            new_rows_df = pd.DataFrame(new_rows)
+            scen_df = pd.concat([scen_df, new_rows_df], ignore_index=True)
+
+        scen_df['pmax'] = scen_df['pmax'].fillna(-1)
+
         # Initialize frames list and convert data types
         # frames = []
         scen_df['latitude_from'] = scen_df['latitude_from'].astype(float)
@@ -102,6 +152,8 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
         scen_df['longitude_from'] = scen_df['longitude_from'].astype(float)
         scen_df['longitude_to'] = scen_df['longitude_to'].astype(float)
         scen_df['value'] = scen_df['value'].astype(float)
+        scen_df['pmax'] = scen_df['pmax'].astype(float)
+        scen_df['reactance'] = scen_df['reactance'].astype(float)
         scen_df['time'] = pd.to_datetime(scen_df['time'])
 
         # Calculate min and max values for color scaling
@@ -111,10 +163,11 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
         time_df = scen_df[scen_df['time'] == selected_time]
         for i, row in time_df.iterrows():
             # Calculate color based on value
-            if max_value == min_value:
-                color = plt.cm.viridis(0)
-            else:
-                color = plt.cm.viridis((row['value'] - min_value) / (max_value - min_value))
+            # if max_value == min_value:
+            #     color = plt.cm.viridis(0)
+            # else:
+            color = plt.cm.viridis((row['value'] / row['pmax'])) if row['pmax'] != -1 else plt.cm.viridis(
+                (row['value'] - min_value) / (max_value - min_value))
             rgba_color = f'rgba({int(color[0] * 255)},{int(color[1] * 255)},{int(color[2] * 255)},{color[3]})'
 
             fig.add_trace(
@@ -123,13 +176,17 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     lon=[row['longitude_from'], row['longitude_to']],
                     mode='lines',
                     line=dict(
-                        width=1 + (row['value'] - min_value) / (max_value - min_value) * 10 if max_value != min_value else 1,
+                        width=0.01 + (row['value'] / row['pmax']) if row['pmax'] != -1 else 1 + (
+                                    row['value'] - min_value) / (
+                                                                                                        max_value - min_value) * 10 if max_value != min_value else 1,
                         color=rgba_color
                     ),
                     name=row['region'] + ' Import from ' + row['variable'],
                     showlegend=True,
                     hovertemplate='<b>' + row['region'] + ' Import from ' + row['variable'] + '</b><br>' +
                                   'Flow: ' + f'{row["value"]:.2f} MW<br>' +
+                                  'Capacity: ' + f'{row["pmax"]:.2f} MW<br>' +
+                                  'Reactance: ' + f'{row["reactance"]:.2f} Ohm<br>' +
                                   f'Time: {selected_time.strftime(time_format)}<br>' +
                                   '<extra></extra>',
                 )
@@ -164,18 +221,18 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-    scenarios = df['scenario'].unique().tolist()
-    classes = df['classes'].unique().tolist()
+    scenarios = df['scenario'].dropna().unique().tolist()
+    classes = df['classes'].dropna().unique().tolist()
 
     scen_df = df[(df['scenario'] == scenarios[0]) & (df['classes'] == classes[0])].copy()
 
-    dates = scen_df['time'].dt.strftime('%Y-%m-%d').unique().tolist()
+    dates = scen_df['time'].dt.strftime('%Y-%m-%d').dropna().unique().tolist()
     time_step = 'hourly'
 
     date = dates[0]
 
     # Get the unique values of the time column during the date and sort them
-    unique_times = sorted(scen_df[scen_df['time'].dt.strftime('%Y-%m-%d') == date]['time'].unique().tolist())
+    unique_times = sorted(scen_df[scen_df['time'].dt.strftime('%Y-%m-%d') == date]['time'].dropna().unique().tolist())
 
     date_marks = {
         i: {'label': time.strftime('%H:%M'), 'style': {'transform': 'rotate(90deg) translate(20px, -10px)'}}
@@ -236,7 +293,7 @@ def plot(df, window_id):
                      tooltip={"placement": "bottom", "always_visible": True},
                      updatemode='mouseup',
                  )],
-                    style={'display': 'block'}
+                 style={'display': 'block'}
                  ),
 
         # Add padding div

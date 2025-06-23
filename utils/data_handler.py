@@ -214,6 +214,8 @@ class DataHandler:
 
                     if _file.endswith('.csv'):
                         df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
+
+                        df['filename'] = fname
                     elif _file.endswith('.xlsx'):
                         xls = pd.ExcelFile(os.path.join(temp_dir, f_name, _file))
                         sheet_names = xls.sheet_names
@@ -224,12 +226,13 @@ class DataHandler:
                             _df = xls.parse(sheet)
                             # infer types of the column names
                             _df.columns = _df.columns.astype(str)
+
+                            _df['filename'] = fname + '|' + sheet
                             df_list.append(_df)
                         # Combine all DataFrames into one
                         df = pd.concat(df_list, ignore_index=True)
                     else:
                         continue
-                    df['filename'] = fname
                     dfs.append(df)
                 df = pd.concat(dfs, ignore_index=True)
             elif extension == '.csv':
@@ -560,7 +563,7 @@ class DataHandler:
             decoded = base64.b64decode(content_string)
 
             try:
-                if extension == 'zip':
+                if extension == '.zip':
                     # if the file is a zip file, extract it into a temporary directory
                     zf = zipfile.ZipFile(io.BytesIO(decoded))
                     temp_dir = 'temp_data'
@@ -581,6 +584,8 @@ class DataHandler:
 
                         if file.endswith('.csv'):
                             df = pd.read_csv(os.path.join(temp_dir, filename, file))
+
+                            df['filename'] = fname
                         elif file.endswith('.xlsx'):
                             xls = pd.ExcelFile(os.path.join(temp_dir, filename, file))
                             sheet_names = xls.sheet_names
@@ -591,12 +596,13 @@ class DataHandler:
                                 _df = xls.parse(sheet)
                                 # infer types of the column names
                                 _df.columns = _df.columns.astype(str)
+
+                                _df['filename'] = fname + '|' + sheet
                                 df_list.append(_df)
                             # Combine all DataFrames into one
                             df = pd.concat(df_list, ignore_index=True)
                         else:
                             continue
-                        df['filename'] = fname
                         dfs.append(df)
                     df = pd.concat(dfs, ignore_index=True)
 
