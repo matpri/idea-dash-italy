@@ -100,7 +100,7 @@ def link(app):
     def update_transmissioncapacity(_p_type, _scenarios, _scenario_group, _scenario, _years, _lines, _d_button, _canvas,
                                     _s_style, _m_style, _g_style, _y_style, _l_style, _data):
         # print('updating transmissioncapacity plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         if 'copper-transmissioncapacity-download-button' in trigger_id['type']:

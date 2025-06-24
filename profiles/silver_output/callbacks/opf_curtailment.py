@@ -67,7 +67,7 @@ def link(app):
     )
     def update_opf_vre_curtailment(_p_type, _scenarios, _scenario, _ts, _download, _canvas, _data, _s_style, _m_style):
         print('updating opf_vre_curtailment plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

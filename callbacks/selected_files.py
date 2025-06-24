@@ -26,7 +26,7 @@ def link(app):
 
 
 def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, views, db_views):
-    from main import data_handler
+    from utils.data_state import data_handler
 
     ctx = dash.callback_context
 
@@ -73,7 +73,7 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                                         variant='light',
                                         style={'margin': '2px'}))
 
-            elif extension == 'csv' or extension == 'xlsx':
+            elif extension == 'csv' or extension == 'xlsx' or extension == 'zip':
                 if file in selected_data.keys():
                     counter = 1
                     while f'{file}-{counter}' in selected_data.keys():

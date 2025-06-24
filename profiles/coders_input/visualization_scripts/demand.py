@@ -26,7 +26,7 @@ def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
         template='simple_white',
     )
     df['local_time'] = pd.to_datetime(df['local_time'])
-    df['demand_MWh'] = df['demand_MWh'].astype(float)
+    df['demand_mwh'] = df['demand_mwh'].astype(float)
     
     regions = df['province'].unique().tolist()
     for region in regions:
@@ -34,7 +34,7 @@ def plot_demand(df, title='Dispatched Electricity', x_axis_label='Time',
         fig.add_trace(
             go.Scatter(
                 x=df_region['local_time'],
-                y=df_region['demand_MWh'],
+                y=df_region['demand_mwh'],
                 mode='lines',
                 showlegend=True,
                 name=region,

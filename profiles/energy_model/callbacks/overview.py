@@ -71,7 +71,7 @@ def link(app):
     )
     def update_overview(_p_type, _groupby, _region, _fill, _scenarios, _download, _canvas, _data, _fillswitch):
         #print('updating overview plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

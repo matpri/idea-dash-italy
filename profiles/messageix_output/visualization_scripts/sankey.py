@@ -3,7 +3,7 @@ import pandas as pd
 from dash import html, dcc
 from components import ids
 import plotly.graph_objects as go
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years_by_variable, pie_chart
 
 
 
@@ -54,7 +54,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value= 'CAN' if 'CAN' in regions else regions[0],
+        value= 'Canada' if 'Canada' in regions else regions[0],
         id={
             'type': 'messageix-sankey-region-select',
             'index': window_id
@@ -101,7 +101,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'messageix_output',
+            'profile': 'MESSAGEix-Canada',
             'viz': 'Sankey'
         },
         style={

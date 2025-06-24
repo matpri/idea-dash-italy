@@ -37,9 +37,16 @@ def process(selected):
     dfs = []
     for scenario, db in selected.items():
         df = db.copy()
-        df.drop(columns=['model', "unit"], inplace=True, errors='ignore')
-
+        bus_locations = df[df.filename == 'model inputs|bus_location'].copy()
+        existing_transmission = df[df.filename == 'model inputs|existing transmission'].copy()
+        bus_locations['scenario'] = scenario
+        existing_transmission['scenario'] = scenario
+        df = df[df['model'] == 'silver']
         df['classes'] = df["variable"].apply(lambda x: x.split("|")[0])
+        df.drop(columns=['model', "unit"], inplace=True, errors='ignore')
+        df = df.dropna(axis=1, how='all')
+        dfs.append(bus_locations)
+        dfs.append(existing_transmission)
 
         for cls in df['classes'].unique():
             # if 'Line Flow' not in cls:

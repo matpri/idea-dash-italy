@@ -5,7 +5,7 @@ from components import ids
 
 
 def render(file):
-    from main import data_handler
+    from utils.data_state import data_handler
     # flatten the list of lists
     chip_groups = {}
     for profile, viz_options in data_handler.data[file]['visualizations'].items():

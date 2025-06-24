@@ -8,7 +8,7 @@ def render():
 
     :return: The rendered settings modal.
     """
-    from main import data_handler
+    from utils.data_state import data_handler
     tab_contents = []
     tabs = []
     for profile_name, profile in data_handler.profiles.items():

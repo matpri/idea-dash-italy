@@ -92,7 +92,7 @@ def subset(df, region, scenario, aggregate, season=None):
 
     df_scen = df_scen[df_scen['region'] == region]
 
-    if region == 'CAN':
+    if region == 'Canada':
         df_scen = df_scen[~df_scen['variable'].isin(['Imports', 'Exports', 'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL'])]
 
 

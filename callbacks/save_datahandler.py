@@ -13,7 +13,7 @@ def link(app):
     )(pickle_datahandler)
 
 def pickle_datahandler(value):
-    from main import data_handler
+    from utils.data_state import data_handler
     print('PICKLING DATAHANDLER to datahandler.pkl')
     bytes = data_handler.save('datahandler.pkl', temporary=True)
     data = dcc.send_bytes(bytes, 'datahandler.pkl')

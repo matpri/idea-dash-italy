@@ -109,7 +109,7 @@ def link(app):
     def dispatch_callback(plot_select, aggregate_switch, scenario_multi_select, region_select, year_select, day_select,
                           download_button, region_data, region_value, year_data, year_value, day_data, day_value,
                           figure, download):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         #print('updating dispatch plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])

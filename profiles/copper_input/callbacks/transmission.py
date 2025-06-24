@@ -50,7 +50,7 @@ def link(app):
     def update_transmission(_p_type, _scenarios, _years, _download,
                             _canvas, _data):
         #print('updating transmission plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

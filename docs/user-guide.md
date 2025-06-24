@@ -98,6 +98,15 @@ Additionally, an Overview tab will be created that colates data for each of the 
 
 These plots are only available when the data is formatted as IAMC format.
 
+If you want to define mappings for the technologies inside of the results add a yaml file to the `technologies` folder with the name of the model and the extension `.yaml`. The yaml file should contain a dictionary with the following structure:
+```yaml
+Technology:
+  color: Color when Disaggregated # Setting to '#000000' assigns a random color
+  group: Group Name
+  group_color: Color of the group # Setting to '#000000' assigns a random color
+  name: Name of the technology when disaggregated
+```
+
 
 ## Comparison Plots
 In addition to showcasing the data per model there are 2 additional tabs available for comparison plots. First, the Power Systems tab colates data from models that are part of the Power Systems profile (\<LIST of MODELS\>), this tab has Power System specific plots showcasing the results from different models similar to scenarios. Second, a Generic Comparisson tab colates data from all models and showcases generic plots based on the naming of variables, if two or more models have the same variable name the plots will showcase the results from those models in one plot.

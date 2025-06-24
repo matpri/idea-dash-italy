@@ -77,7 +77,7 @@ def link(app):
                     output[i] = open_flag
 
             if triggered_input['type'] == 'modal-submit-button':
-                from main import data_handler
+                from utils.data_state import data_handler
                 for i, ls in enumerate(ctx.states_list[1]):
                     chip = ls['id']
                     file = chip['file']

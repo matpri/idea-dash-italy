@@ -52,7 +52,7 @@ def calc_canadian(df):
     """
     # Group by period and technology and sum the values
     canadian_total = df.groupby(["time", "variable"]).sum(numeric_only=True).reset_index()
-    canadian_total["region"] = "CAN"
+    canadian_total["region"] = "Canada"
     return canadian_total
 
 
@@ -64,7 +64,7 @@ def process(selected: dict):
         df = df[df.variable.str.startswith("Primary Energy|")]
         canadian_total = calc_canadian(df)
 
-        full_data = pd.concat([df, canadian_total])
+        full_data = pd.concat([canadian_total, df])
 
         full_data['type'] = full_data['variable'].str.split('|').str[1]
         # add levels which is the number of | in the variable name

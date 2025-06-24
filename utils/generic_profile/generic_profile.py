@@ -1,7 +1,9 @@
+import os
 from random import randint
 
 import dash_mantine_components as dmc
 import pandas as pd
+import yaml
 from dash import html
 
 from utils.generic_profile import utils
@@ -28,15 +30,20 @@ class GenericProfile:
         self.display_name = name
         self.name = name
 
-        self.technologies = {}
+        if f'{name}.yaml' in os.listdir('technologies'):
+            print(f'Loading {name} technologies')
+            self.technologies = yaml.load(open(os.path.join('technologies', f'{name}.yaml'), 'r'),
+                                          Loader=yaml.FullLoader)
+        else:
+            self.technologies = {}
 
-        for variable in variables:
-            self.technologies[variable] = {
-                'color': '#000000',
-                'group': variable,
-                'group_color': '#000000',
-                'name': variable,
-            }
+            for variable in variables:
+                self.technologies[variable] = {
+                    'color': '#000000',
+                    'group': variable,
+                    'group_color': '#000000',
+                    'name': variable,
+                }
         self.update_utils()
         self.settings = self.render_settings()
 

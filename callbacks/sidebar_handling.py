@@ -172,7 +172,7 @@ def show_settings_modal(n_clicks, is_open, _children):
     :return: A tuple containing the updated value of is_open and _children.
 
     """
-    from main import data_handler
+    from utils.data_state import data_handler
     tab_contents = []
     tabs = []
     for profile_name, profile in data_handler.profiles.items():

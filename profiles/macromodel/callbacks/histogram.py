@@ -16,94 +16,94 @@ def link(app):
             'type': 'download',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'data'),
         Output({
             'type': 'unit-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Output({
             'type': 'unit-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'data'),
         Output({
             'type': 'variable-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Output({
             'type': 'variable-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'data'),
         Input({
             'type': 'plot-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'scenario-multi-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'variable-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
 
         Input({
             'type': 'region-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'year-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'unit-select',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'bins-slider',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'value'),
         Input({
             'type': 'download-button',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'n_clicks'),
 
         State({
             'type': 'download',
             'index': MATCH,
             'profile': MATCH,
-            'viz_type': 'histogram'
+            'viz_type': 'Histograms'
         }, 'data'),
 
         prevent_initial_call=True
     )
     def update_gencap_cost(_p_type, _scenarios, _variable, _regions, _years, _units, _nbins,
                            _download, _data):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = ctx.triggered_id
         model = 'Macromodel'

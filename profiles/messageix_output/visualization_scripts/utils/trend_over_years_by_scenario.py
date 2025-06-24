@@ -1,0 +1,104 @@
+import pandas as pd
+import plotly.graph_objects as go
+from dash import dcc
+
+from profiles.messageix_output import utils
+
+
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None,
+         variables='All', is_emissions=False):
+    fig = go.Figure()
+    fig.update_layout(
+        title_text=title,
+        xaxis_title=x_axis_label,
+        yaxis_title=y_axis_label,
+        template="simple_white",
+        showlegend=True
+    )
+
+    try:
+        if variables != 'All':
+            if is_emissions:
+                df_scen = df[df['variable'].str.contains('|'.join(variables))].copy(deep=True)
+            else:
+                df_scen = df[df['variable'].isin(variables)].copy(deep=True)
+        else:
+            df_scen = df.copy(deep=True)
+        df_scen = subset(df_scen, region, scenarios, aggregate, season)
+
+        for i, scen in enumerate(scenarios):
+            data = df_scen[df_scen["scenario"] == scen]
+            data = data.sort_values(by=['time'])
+
+            if aggregate:
+                color = utils.get_group_colors(scen)
+            else:
+                color = utils.get_color(scen)
+
+            fig.add_scatter(x=data["time"], y=data["value"], name=scen, mode='lines+markers', marker_color=color,
+                            hovertemplate=f'<b>{scen}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Variable: {' + '.join(variables)}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' '<br><extra></extra>')
+
+        fig.update_yaxes(showgrid=True)
+        if df_scen.empty:
+            print("No data available, since the results are all zero.")
+            fig.add_annotation(
+                x=0.5,
+                y=0.5,
+                text="No data available, since the results are all zero.",
+                showarrow=False,
+                font=dict(
+                    size=16,
+                    color="black"
+                ),
+                align="center",
+                valign="middle",
+            )
+
+    except Exception as e:
+        print(title, 'plot:', e)
+
+    fig.layout.autosize = True
+    return fig
+
+
+def subset(df_scen, region, scenarios, aggregate, season=None):
+    # Remove the years where all entries in the value column are 0
+    value_sum_per_year = df_scen.groupby('time')['value'].sum()
+    years_with_non_zero_values = value_sum_per_year[value_sum_per_year != 0].index
+    df_scen = df_scen[df_scen['time'].isin(years_with_non_zero_values)]
+    years = df_scen['time'].unique().tolist()
+
+    if season is not None:
+        df_scen = df_scen[df_scen['season'] == season]
+    # if aggregate:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
+    #     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+    # else:
+    #     df_scen['variable'] = df_scen["variable"].map(utils.names).fillna(df_scen["variable"])
+
+    df_scen = df_scen.groupby(["region", "time", 'scenario']).sum(numeric_only=True).reset_index()
+
+    df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
+
+    df_scen = df_scen[df_scen['region'] == region]
+
+    # create new column for total in can_emissions df
+    df_scen['total'] = df_scen.groupby(['time', 'scenario'])['value'].transform('sum').values
+
+    df_scen = df_scen[df_scen['value'] != 0]
+
+    df_scen = df_scen.fillna(0)
+    year_pad = []
+    for scen in df_scen.scenario.unique():
+        for year in years:
+            if not df_scen[(df_scen['scenario'] == scen) & (
+                        df_scen['time'] == year)].empty:
+                continue
+            else:
+                year_pad.append(
+                    {'region': region, 'time': year, 'scenario': scen, 'value': 0, 'total': 0},
+                    )
+    year_pad_df = pd.DataFrame(year_pad)
+    df_scen = pd.concat([df_scen, year_pad_df])
+    df_scen = df_scen.sort_values(by=['time', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
+    return df_scen

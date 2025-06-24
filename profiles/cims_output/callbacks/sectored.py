@@ -143,7 +143,7 @@ def create_link(sector):
         def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
                         text_switch, download_btn, _service, _service_style):
             print(sector)
-            from main import data_handler
+            from utils.data_state import data_handler
             ctx = dash.callback_context
             trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
             _data = data_handler.processed_data['CIMS'][sector]

@@ -5,7 +5,7 @@ from components import ids
 
 
 def render():
-    from main import data_handler
+    from utils.data_state import data_handler
     data = []
     for i, row in data_handler.runs.iterrows():
         data.append(

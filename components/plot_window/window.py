@@ -5,7 +5,7 @@ from components import ids
 from components.plot_window import tabs
 
 
-def render():
+def render(custom_frame_index=-1):
     """
     Render a new plot window with tabs.
 
@@ -20,7 +20,7 @@ def render():
 
     layout = dlc.Widget(
         html.Div(
-            tabs.render(card_id),
+            tabs.render(card_id, custom_frame_index),
             style={'height': '100%', 'width': '100%'}
         ),
         id=card_id,

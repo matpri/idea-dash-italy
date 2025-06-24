@@ -51,8 +51,8 @@ def calc_canadian(df):
         DataFrame: Formatted data with extracted information.
     """
     # Group by period and technology and sum the values
-    canadian_total = df.groupby(["time", "variable"]).sum(numeric_only=True).reset_index()
-    canadian_total["region"] = "CAN"
+    canadian_total = df.groupby(["time", "variable"]).mean(numeric_only=True).reset_index()
+    canadian_total["region"] = "Canada"
     return canadian_total
 
 def find_type(x, types):
@@ -80,7 +80,7 @@ def process(selected: dict):
         df['variable'] = df['cost_type'] + ' OM Cost|' + df['variable'].apply(lambda x: '|'.join(x.split('|')[2:]))
         df.drop(columns=['cost_type'], inplace=True)
         canadian_total = calc_canadian(df)
-        full_data = pd.concat([df, canadian_total])
+        full_data = pd.concat([canadian_total, df])
         # add levels which is the number of | in the variable name
         types = full_data['variable'].apply(lambda x: '|'.join(x.split('|')[:2])).unique()
         full_data['type'] = full_data['variable'].apply(lambda x: find_type(x, types))

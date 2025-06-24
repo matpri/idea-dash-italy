@@ -45,7 +45,7 @@ def link(app):
     )
     def update_output_stats(_years, _download, _scenarios, _canvas, _data):
         #print('updating output_stats plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

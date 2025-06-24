@@ -64,7 +64,7 @@ def link(app):
     )
     def us_demand_callback(plot_type, scenario_multi_select, _scenario, region_select, figure,
                         scenario_multi_select_style, scenario_select_style, region_select_style):
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         #print('updating us_demand plot', ctx.triggered)
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])

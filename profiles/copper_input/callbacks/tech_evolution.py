@@ -55,7 +55,7 @@ def link(app):
     def update_tech_evolution(_p_type, _scenarios, _regions, _years, _r_style, _y_style,
                         _canvas):
         #print('updating tech_evolution plot')
-        from main import data_handler
+        from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 

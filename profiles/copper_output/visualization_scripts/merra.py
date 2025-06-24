@@ -6,7 +6,7 @@ import shapely
 from dash import html, dcc
 from components import ids
 
-def vre_plot(grid, variable, year):
+def vre_plot(grid, variable, year,scenario):
     '''
     Creates a plot of VRE capacity factors as a heatmap. Using the latitude and longitude of the VRE generators in the df as the center of a square grid cell,
      the capacity factor of the VRE generator is used to color the grid cell.
@@ -15,6 +15,7 @@ def vre_plot(grid, variable, year):
     '''
     grid = grid[grid['variable'] == variable]
     grid = grid[grid['time'] == year]
+    grid = grid[grid['scenario'] == scenario]
     # convert the polygons to json
     grid['geometry_json'] = grid['geometry'].apply(lambda x: json.loads(json.dumps(shapely.geometry.mapping(x))))
     grid_geojson = json.loads(grid.to_json())
@@ -49,9 +50,16 @@ def plot(df, window_id):
     '''
     variables = df['variable'].unique()
     years = df['time'].unique()
+    scenarios = df['scenario'].unique()
 
     widget_layout = html.Div(
         [
+            dmc.Select(
+              label='Select Scenario',
+                id={'type': 'copper_output-vre-scenario-dropdown', 'index': window_id},
+                data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+                value=scenarios[0]
+            ),
             dmc.Select(
                 label='Select Variable',
                 id={'type': 'copper_output-vre-variable-dropdown', 'index': window_id},
@@ -74,7 +82,7 @@ def plot(df, window_id):
         ],
         style={'textAlign': 'center'})
     plot_layout = dcc.Graph(
-        figure=vre_plot(df, variables[0], years[0]),
+        figure=vre_plot(df, variables[0], years[0], scenarios[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,

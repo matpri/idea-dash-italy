@@ -16,6 +16,8 @@ from components import ids, plot_canvas, sidebar
 from components.data_selection import data_modal
 from components.help import help
 from utils.data_handler import DataHandler
+from utils.data_state import data_handler
+
 
 # Set up argument parser
 parser = argparse.ArgumentParser(description='Run the Dash app with optional header display.')
@@ -49,14 +51,13 @@ app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=external_stylesheets)
 
 # get all files in data folder that end either with csv or xlsx
-data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx')]
+data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx') or f.endswith('.zip')]
 configs = [f for f in os.listdir('config') if f.endswith('.yaml')]
 
 # initialize data handler which will deal with all data related operations
-data_handler: DataHandler = DataHandler()
+
 if args.datahandler is not None:
     print(f"Loading datahandler from {args.datahandler}")
-    data_handler = DataHandler()
     data_handler.load(args.datahandler)
     print(f"Datahandler loaded with {len(data_handler.data)} files.")
 
@@ -90,10 +91,15 @@ if args.autosave != '':
         os.makedirs(autosave_dir)
     data_handler.save(args.autosave)  # Save the datahandler to the specified file path
 
+custom_frames = 0
+
+for _, report in data_handler.reports.items():
+    custom_frames += len(data_handler.custom_frames)
+
 app_layout = [
     html.Div([
         dlc.BoxPanel([
-            plot_canvas.render(bool(data_files) or bool(configs) or args.datahandler is not None, static),
+            plot_canvas.render(bool(data_files) or bool(configs) or args.datahandler is not None, static, custom_frames),
         ], id='test', addToDom=True),
         sidebar.render(static),
         data_modal.render(app),
@@ -131,4 +137,4 @@ if __name__ == '__main__':
     pio.to_image(fig, format="png", engine='kaleido')
     Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
-    app.run_server(host=host, port=port)  # Run the app on the specified port
+    app.run(host=host, port=port, use_reloader=False)  # Run the app on the specified port

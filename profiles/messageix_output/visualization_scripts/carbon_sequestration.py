@@ -3,7 +3,8 @@ from dash import html, dcc
 
 from profiles.messageix_output import utils
 from components import ids
-from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, \
+from profiles.messageix_output.visualization_scripts.utils import bar_over_years, bar_over_regions, \
+    trend_over_years_by_variable, trend_over_years_by_scenario, \
     pie_chart, map_plot
 
 
@@ -23,10 +24,16 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'], name, unit, pattern_active=pattern_active,
                                    text_active=text_active, variables=variables)
-    elif type == 'Trend Over Years':
+    elif type == 'Trend Over Years by Variable':
         plot_info = plot_settings['Carbon Sequestration']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'],
-                                     plot_info['y_label'], name, unit, variables=variables)
+        return trend_over_years_by_variable.plot(df, scenario, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
+    elif type == 'Trend Over Years by Scenario':
+        plot_info = plot_settings['Carbon Sequestration']['Trend Over Years']
+        return trend_over_years_by_scenario.plot(df, scenarios, region, aggregate, plot_info['title'],
+                                                 plot_info['x_label'],
+                                                 plot_info['y_label'], name, unit, variables=variables)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Carbon Sequestration']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
@@ -55,7 +62,7 @@ def plot(df, window_id):
     df_scen = df.copy(deep=True)
     df_scen['variable'] = df_scen["variable"].map(utils.groups).fillna(df_scen["variable"])
     df_scen = df_scen[
-        (df_scen['region'] == 'CAN' if 'CAN' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
+        (df_scen['region'] == 'Canada' if 'Canada' in regions else regions[0]) & (df_scen['time'] == years[0]) & (
                 df_scen['scenario'] == scenarios[0])]
     # df_scen = df_scen[df_scen['type'].isin(sectors)]
     types = ['All'] + sorted(df_scen['type'].unique().tolist())
@@ -65,7 +72,7 @@ def plot(df, window_id):
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value='CAN' if 'CAN' in regions else regions[0],
+        value='Canada' if 'Canada' in regions else regions[0],
         id={
             'type': 'messageix-carbon_sequestration-region-select',
             'index': window_id
@@ -96,7 +103,7 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
-           ]
+    ]
     parents = df_scen.type.unique().tolist()
     parents = ['Carbon Sequestration|' + parent for parent in parents]
     for i in range(max_depth):
@@ -110,7 +117,7 @@ def plot(df, window_id):
                 data=[{'label': variable, 'value': variable} for variable in variables],
                 value=[],
                 id={
-                    'type': 'messageix-carbon_sequestration-level-select',
+                    'type': 'messageix-carbon_sequestration-multi-level-select',
                     'index': window_id,
                     'level': i
                 },
@@ -143,7 +150,8 @@ def plot(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in
-                  ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart', 'Map Plot']],
+                  ['By Year', 'By Region', 'Trend Over Years by Variable', 'Trend Over Years by Scenario', 'Pie Chart',
+                   'Map Plot']],
             value='By Year',
             id={
                 'type': 'messageix-carbon_sequestration-plot-select',
@@ -190,12 +198,12 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'Canada' if 'Canada' in regions else regions[0],
                            years[0], scenarios[0], variables=[]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'messageix_output',
+            'profile': 'MESSAGEix-Canada',
             'viz': 'Carbon Sequestration'
         },
         style={

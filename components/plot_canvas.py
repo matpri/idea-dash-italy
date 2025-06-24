@@ -5,7 +5,7 @@ from components import ids
 from components.plot_window import window
 
 
-def render(hide_welcome=True, static=False):
+def render(hide_welcome=True, static=False, num_custom_frames=0):
     if not hide_welcome:
         layout = dlc.DockPanel([
             dlc.Widget(
@@ -23,8 +23,13 @@ def render(hide_welcome=True, static=False):
             )
         ], id=ids.PLOT_CANVAS)
         return layout
-    else:
+    elif num_custom_frames == 0:
         layout = dlc.DockPanel([
             window.render()
         ], id=ids.PLOT_CANVAS)
         return layout
+    else:
+        frames = []
+        for i in range(num_custom_frames):
+            frames.append(window.render(i))
+        return dlc.DockPanel(frames, id=ids.PLOT_CANVAS)
