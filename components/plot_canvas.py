@@ -5,7 +5,12 @@ from components import ids
 from components.plot_window import window
 
 
-def render(hide_welcome=True, static=False, num_custom_frames=0):
+def render(static=False, num_custom_frames=0):
+    from utils.data_state import  data_handler
+
+    hide_welcome = bool(data_handler.processed_data)
+    print('HIDE WELCOME:', hide_welcome)
+
     if not hide_welcome:
         layout = dlc.DockPanel([
             dlc.Widget(

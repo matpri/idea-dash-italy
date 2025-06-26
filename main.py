@@ -95,27 +95,28 @@ custom_frames = 0
 
 for _, report in data_handler.reports.items():
     custom_frames += len(data_handler.custom_frames)
+def define_layout():
+    print('RELOADING')
+    app_layout = [
+        html.Div([
+            dlc.BoxPanel([
+                plot_canvas.render(static, custom_frames),
+            ], id='test', addToDom=True),
+            sidebar.render(static),
+            data_modal.render(app),
+            help.render(help_popup),
 
-app_layout = [
-    html.Div([
-        dlc.BoxPanel([
-            plot_canvas.render(bool(data_files) or bool(configs) or args.datahandler is not None, static, custom_frames),
-        ], id='test', addToDom=True),
-        sidebar.render(static),
-        data_modal.render(app),
-        help.render(help_popup),
+            # component to represent data change (hidden)
+            html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
+            html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
+            html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
+            html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
 
-        # component to represent data change (hidden)
-        html.Button('Change Data', id=ids.DATA_CHANGE, style={'display': 'none'}),
-        html.Button('Update chips', id=ids.UPDATE_CHIPS, style={'display': 'none'}),
-        html.Button('Change Settings', id=ids.SETTINGS_CHANGE, style={'display': 'none'}),
-        html.Button('Change Data', id=ids.AFTER_CHANGE, style={'display': 'none'}),
+        ], id=ids.CONTENT,
+        )
+    ]
+    return html.Div(app_layout)
 
-    ], id=ids.CONTENT,
-    )
-]
-
-app.layout = html.Div(app_layout)
 
 
 def open_browser(port:int):
@@ -137,4 +138,6 @@ if __name__ == '__main__':
     pio.to_image(fig, format="png", engine='kaleido')
     Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
+
+    app.layout = define_layout
     app.run(host=host, port=port, use_reloader=False)  # Run the app on the specified port

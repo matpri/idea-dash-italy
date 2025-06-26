@@ -2,7 +2,7 @@ from dash import html
 
 
 def render():
-    print('rendering start')
+    # print('rendering start')
     layout = html.Div([
         html.H1('Scenario Settings'),
         html.P(

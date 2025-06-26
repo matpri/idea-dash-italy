@@ -812,7 +812,7 @@ class DataHandler:
         self.custom_frames.extend([(key, value) for d in frames for key, value in d.items()] if frames is not None else [])
 
         # open markdown file in report
-        with open(os.path.join('data', report), 'r') as stream:
+        with open(report, 'r') as stream:
             try:
                 data = stream.read()
                 self.reports[name] = ReportProfile(name, data, descriptions)
@@ -840,94 +840,95 @@ class DataHandler:
         :return:
         """
         # Implement the logic to create a narrative based on the loaded config
-        files = config['files']
+        files = config.get('files', None)
         fail = False
-        for file in files:
-            profiles = list(config['files'][file]['profiles'].keys())
+        if files is not None:
+            for file in files:
+                profiles = list(config['files'][file]['profiles'].keys())
 
-            print('Preloading', file)
-            f_name, extension = os.path.splitext(file)
-            if extension == '.zip':
-                # if the file is a zip file, extract it into a temporary directory
-                zf = zipfile.ZipFile(os.path.join('data', file))
-                temp_dir = 'temp_data'
-                if not os.path.exists(temp_dir):
-                    os.makedirs(temp_dir)
-                if not os.path.exists(os.path.join(temp_dir, f_name)):
-                    os.makedirs(os.path.join(temp_dir, f_name))
-                    zf.extractall(os.path.join(temp_dir, f_name))
+                print('Preloading', file)
+                f_name, extension = os.path.splitext(file)
+                if extension == '.zip':
+                    # if the file is a zip file, extract it into a temporary directory
+                    zf = zipfile.ZipFile(file)
+                    temp_dir = 'temp_data'
+                    if not os.path.exists(temp_dir):
+                        os.makedirs(temp_dir)
+                    if not os.path.exists(os.path.join(temp_dir, f_name)):
+                        os.makedirs(os.path.join(temp_dir, f_name))
+                        zf.extractall(os.path.join(temp_dir, f_name))
+                    else:
+                        # remove files in the directory
+                        for f in os.listdir(os.path.join(temp_dir, f_name)):
+                            os.remove(os.path.join(temp_dir, f_name, f))
+                        zf.extractall(os.path.join(temp_dir, f_name))
+                    # read all csv and xlsx files in the temp directory
+                    dfs = []
+                    for _file in os.listdir(os.path.join(temp_dir, f_name)):
+                        fname = _file.split('.')[0]
+
+                        if _file.endswith('.csv'):
+                            df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
+                        elif _file.endswith('.xlsx'):
+                            xls = pd.ExcelFile(os.path.join(temp_dir, f_name, _file))
+                            sheet_names = xls.sheet_names
+                            # Read all sheets into a DataFrame list
+                            df_list = []
+                            for sheet in sheet_names:
+                                print(sheet)
+                                _df = xls.parse(sheet)
+                                # infer types of the column names
+                                _df.columns = _df.columns.astype(str)
+                                df_list.append(_df)
+                            # Combine all DataFrames into one
+                            df = pd.concat(df_list, ignore_index=True)
+                        else:
+                            continue
+                        df['filename'] = fname
+                        dfs.append(df)
+                    df = pd.concat(dfs, ignore_index=True)
+                elif extension == '.csv':
+                    df = pd.read_csv(file)
+                elif extension == '.xlsx':
+                    dfs = []
+                    xls = pd.ExcelFile(file)
+                    for sheet in xls.sheet_names:
+                        print(sheet)
+                        _df = xls.parse(sheet)
+                        # infer types of the column names
+                        _df.columns = _df.columns.astype(str)
+                        dfs.append(_df)
+                    # Combine all DataFrames into one
+                    df = pd.concat(dfs, ignore_index=True)
+                elif extension == '.pkl':
+                    self.pkls[f_name] = file
                 else:
-                    # remove files in the directory
-                    for f in os.listdir(os.path.join(temp_dir, f_name)):
-                        os.remove(os.path.join(temp_dir, f_name, f))
-                    zf.extractall(os.path.join(temp_dir, f_name))
-                # read all csv and xlsx files in the temp directory
-                dfs = []
-                for _file in os.listdir(os.path.join(temp_dir, f_name)):
-                    fname = _file.split('.')[0]
+                    fail = True
+                    print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
+                    continue
 
-                    if _file.endswith('.csv'):
-                        df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
-                    elif _file.endswith('.xlsx'):
-                        xls = pd.ExcelFile(os.path.join(temp_dir, f_name, _file))
-                        sheet_names = xls.sheet_names
-                        # Read all sheets into a DataFrame list
-                        df_list = []
-                        for sheet in sheet_names:
-                            print(sheet)
-                            _df = xls.parse(sheet)
-                            # infer types of the column names
-                            _df.columns = _df.columns.astype(str)
-                            df_list.append(_df)
-                        # Combine all DataFrames into one
-                        df = pd.concat(df_list, ignore_index=True)
-                    else:
-                        continue
-                    df['filename'] = fname
-                    dfs.append(df)
-                df = pd.concat(dfs, ignore_index=True)
-            elif extension == '.csv':
-                df = pd.read_csv(os.path.join('data', file))
-            elif extension == '.xlsx':
-                dfs = []
-                xls = pd.ExcelFile(os.path.join('data', file))
-                for sheet in xls.sheet_names:
-                    print(sheet)
-                    _df = xls.parse(sheet)
-                    # infer types of the column names
-                    _df.columns = _df.columns.astype(str)
-                    dfs.append(_df)
-                # Combine all DataFrames into one
-                df = pd.concat(dfs, ignore_index=True)
-            elif extension == '.pkl':
-                self.pkls[f_name] = os.path.join('data', file)
-            else:
-                fail = True
-                print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
-                continue
+                checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+                if not checked:
+                    fail = True
+                else:
+                    colors = []
+                    for p in list(self.data[file]['visualizations'].keys()):
+                        colors.append(self.profiles[p].color)
 
-            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
-            if not checked:
-                fail = True
-            else:
-                colors = []
-                for p in list(self.data[file]['visualizations'].keys()):
-                    colors.append(self.profiles[p].color)
+                selected_dict = {}
+                for profile in profiles:
+                    if profile in self.data[file]['visualizations']:
+                        if 'All' not in config['files'][file]['profiles'][profile]:
+                            selected_dict[profile] = config['files'][file]['profiles'][profile]
+                        else:
+                            selected_dict[profile] = self.data[file]['visualizations'][profile]
 
-            selected_dict = {}
-            for profile in profiles:
-                if profile in self.data[file]['visualizations']:
-                    if 'All' not in config['files'][file]['profiles'][profile]:
-                        selected_dict[profile] = config['files'][file]['profiles'][profile]
-                    else:
-                        selected_dict[profile] = self.data[file]['visualizations'][profile]
+                self.data[file]['selected'] = selected_dict
 
-            self.data[file]['selected'] = selected_dict
+            if fail:
+                print(fail)
 
-        if fail:
-            print(fail)
-
-        self.process_data()
+            self.process_data()
 
 
 
