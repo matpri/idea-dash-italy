@@ -1588,9 +1588,14 @@ Operational:
   name: Operational
 Carbon_Tax:
   color: '#000000'
-  group: Carbon price
+  group: Carbon tax
   group_color: '#DC267F'
-  name: Carbon Tax
+  name: Carbon tax costs
+Carbon_Tax_Credit:
+  color: '#000000'
+  group: Carbon tax
+  group_color: '#DC267F'
+  name: Carbon tax credits
 Fixed_OM:
   color: '#000000'
   group: 'FO&M costs'
@@ -1759,146 +1764,146 @@ Electricity|Steam|Industrial:
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gass'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas'
 
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
@@ -2946,3 +2951,158 @@ gasCG_ccs_post2025.renewable_gas_overlim:
   group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
   group_color: '#ff95b7'
   name: gasCG_ccs_post2025.renewable_gas_overlim
+
+'Electricity|Coal|w/ CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal'
+'Electricity|Coal|w/o CCS|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal'
+'Electricity|Coal|w/ CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Fuel: Coal - Offset'
+'Electricity|Coal|w/o CCS|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Fuel: Coal - Offset'
+
+Electricity|Coal|w/ CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/ CCS|CER Exempt
+Electricity|Coal|w/o CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/o CCS|CER Exempt
+'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal'
+'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal'
+'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal - Offset'
+'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal - Offset':
+    color: '#000000'
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal - Offset'
+
+Electricity|Gas|CC|w/ CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/ CCS|CER Exempt
+Electricity|Gas|CC|w/o CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/o CCS|CER Exempt
+Electricity|Gas|CG|w/ CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/ CCS|CER Exempt
+Electricity|Gas|CG|w/o CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CG|w/o CCS|CER Exempt
+Electricity|Gas|SC|w/o CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/o CCS|CER Exempt
+Electricity|Gas|SC|w/ CCS|CER Exempt:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/ CCS|CER Exempt
+
+'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Natural Gas'
+
+'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'

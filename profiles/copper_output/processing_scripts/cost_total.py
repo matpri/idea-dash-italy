@@ -17,11 +17,13 @@ def check(df):
     try:
         if (df.model == 'copper').any():
             if not df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
-            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
-            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")].empty:
+                "Carbon Credit Costs|") | df.variable.str.startswith("Capital Costs|") | df.variable.str.startswith(
+                "Fixed O&M Costs|") | df.variable.str.startswith("Variable O&M Costs|") | df.variable.str.startswith(
+                "Fuel Costs|")].empty:
                 return df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
-            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
-            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")]['value'].sum() > 0
+                    "Carbon Credit Costs|") | df.variable.str.startswith("Capital Costs|") | df.variable.str.startswith(
+                    "Fixed O&M Costs|") | df.variable.str.startswith("Variable O&M Costs|") | df.variable.str.startswith(
+                    "Fuel Costs|")]['value'].sum() > 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -154,13 +156,20 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     capacity_cost = capacity_cost.assign(variable='capacity_cost')
 
     # Carbon cost == where variable is "Carbon Cost" in formatted df and then add row for Canada as sum of all regions
-
     carbon_cost = formatted_cost[formatted_cost.variable.str.startswith("Carbon Costs|")].copy()
     can_carbon_cost = carbon_cost.groupby(["time", "scenario", 'unit'], as_index=False)["value"].sum(numeric_only=True)
     can_carbon_cost = can_carbon_cost.assign(region='CAN', variable='Carbon Cost')
     carbon_cost = pd.concat([carbon_cost, can_carbon_cost], ignore_index=True)
     # Rename values in variable from "Carbon Cost" to carbon_tax_cost
     carbon_cost = carbon_cost.assign(variable='carbon_tax_cost')
+
+    # Carbon credit cost == where variable is "Carbon Credit Cost" in formatted df and then add row for Canada as sum of all regions
+    carboncredit_cost = formatted_cost[formatted_cost.variable.str.startswith("Carbon Credit Costs|")].copy()
+    can_carboncredit_cost = carboncredit_cost.groupby(["time", "scenario", 'unit'], as_index=False)["value"].sum(numeric_only=True)
+    can_carboncredit_cost = can_carboncredit_cost.assign(region='CAN', variable='Carbon Credit Cost')
+    carboncredit_cost = pd.concat([carboncredit_cost, can_carboncredit_cost], ignore_index=True)
+    # Rename values in variable from "Carbon Credit Cost" to carbon_credit_cost
+    carboncredit_cost = carboncredit_cost.assign(variable='carbon_credit_cost')
 
     # FOM cost == sum across all variables for each region and time
     fom_cost = fom.groupby(["time", "region", "scenario", 'unit'], as_index=False)["value"].sum(numeric_only=True)
@@ -181,8 +190,8 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     fuel_cost_weighted = fuel_cost_weighted.assign(variable='fuel_cost_weighted')
 
     # Put all costs together in one DataFrame
-    total_costs_df = pd.concat([capacity_cost, carbon_cost, fom_cost, fuel_cost_weighted,
-                                variable_om_cost_weighted], ignore_index=True)
+    total_costs_df = pd.concat([capacity_cost, carbon_cost, carboncredit_cost, fom_cost, 
+                                fuel_cost_weighted, variable_om_cost_weighted], ignore_index=True)
     # Rearrange indexes to ["variable", "region", "time", "scenario", "value"]
     total_costs_df = total_costs_df[["variable", "region", "time", "scenario", "value", 'unit']]
     total_costs_df.variable = total_costs_df["variable"].map(utils.cost_type).fillna(total_costs_df["variable"])
@@ -205,8 +214,9 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
-            "Capital Costs|") | df.variable.str.startswith("Fixed O&M Costs|") | df.variable.str.startswith(
-            "Variable O&M Costs|") | df.variable.str.startswith("Fuel Costs|")]
+                "Carbon Credit Costs|") | df.variable.str.startswith("Capital Costs|") | df.variable.str.startswith(
+                "Fixed O&M Costs|") | df.variable.str.startswith("Variable O&M Costs|") | df.variable.str.startswith(
+                "Fuel Costs|")]
         formatted_df = format_df(df)
         gen_cap = calculate_generation_capacity(formatted_df)
         fom = calculate_fom(formatted_df)
