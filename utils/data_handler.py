@@ -805,21 +805,27 @@ class DataHandler:
         """
         # Implement the logic to create a report based on the loaded config
         name = config['name']
-        report = config['report']
+        md_reports = config['reports']
         descriptions = config.get('descriptions', {})
         frames = config.get('frames', None)
 
         self.custom_frames.extend([(key, value) for d in frames for key, value in d.items()] if frames is not None else [])
+        
+        report_dict = {}
+        
+        for report_name, report_file in md_reports.items():
+            # open markdown file in report
+            with open(report_file, 'r') as stream:
+                try:
+                    data = stream.read()
+                    report_dict[report_name] = data
 
-        # open markdown file in report
-        with open(report, 'r') as stream:
-            try:
-                data = stream.read()
-                self.reports[name] = ReportProfile(name, data, descriptions)
-                if name not in self.profiles:
-                    self.profiles[name] = self.reports[name]
-            except Exception as exc:
-                print(exc)
+                except Exception as exc:
+                    print(exc)
+
+        self.reports[name] = ReportProfile(name, report_dict, descriptions)
+        if name not in self.profiles:
+            self.profiles[name] = self.reports[name]
 
     def load_configs(self, configs):
         print('Loading configs', configs)
