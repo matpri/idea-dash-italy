@@ -126,11 +126,11 @@ def link(app):
         return _children
 
     @app.callback(
-        Output({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        Output({'type': 'hidden_plot', 'index': dash.dependencies.ALL}, 'children'),
-        Input({'type': 'viz-tabs', 'index': dash.dependencies.ALL, 'profile': dash.dependencies.ALL}, 'value'),
-        State({'type': 'drawer-content', 'index': dash.dependencies.ALL}, 'children'),
-        State({'type': 'hidden_plot', 'index': dash.dependencies.ALL}, 'children'),
+        Output({'type': 'drawer-content', 'index': dash.dependencies.MATCH}, 'children'),
+        Output({'type': 'hidden_plot', 'index': dash.dependencies.MATCH}, 'children'),
+        Input({'type': 'viz-tabs', 'index': dash.dependencies.MATCH, 'profile': dash.dependencies.ALL}, 'value'),
+        State({'type': 'drawer-content', 'index': dash.dependencies.MATCH}, 'children'),
+        State({'type': 'hidden_plot', 'index': dash.dependencies.MATCH}, 'children'),
         prevent_initial_call=True,
     )
     def update_drawer(_values, _children, _plots):
@@ -154,28 +154,28 @@ def link(app):
         print('Updating drawer')
         triggered_id = ctx.triggered_id
         triggered_value = ctx.triggered[0]['value']
-        for i, out in enumerate(ctx.outputs_list[0]):
-            if out['id']['index'] == triggered_id['index']:
-                profile = triggered_id['profile']
-                viz = triggered_value
-                desc = None
-                for _, report in data_handler.reports.items():
-                    if profile in report.descriptions:
-                        desc = report.descriptions[profile].get(viz, None)
-                window_id = triggered_id['index']
-                widgets, plot = data_handler.get_viz(profile, viz, window_id)
-                #update plot title with a sub heading with description
-                if desc is not None:
-                    try:
-                        title = plot.figure.layout.title.text
-                    except:
-                        title = ''
 
-                    if title is None:
-                        title = ''
 
-                    plot.figure.update_layout(title_text=title + f"<br><sub>{desc}</sub>")
+        profile = triggered_id['profile']
+        viz = triggered_value
+        desc = None
+        for _, report in data_handler.reports.items():
+            if profile in report.descriptions:
+                desc = report.descriptions[profile].get(viz, None)
+        window_id = triggered_id['index']
+        widgets, plot = data_handler.get_viz(profile, viz, window_id)
+        #update plot title with a sub heading with description
+        if desc is not None:
+            try:
+                title = plot.figure.layout.title.text
+            except:
+                title = ''
 
-                _children[i] = widgets
-                _plots[i] = plot
+            if title is None:
+                title = ''
+
+            plot.figure.update_layout(title_text=title + f"<br><sub>{desc}</sub>")
+
+        _children = widgets
+        _plots = plot
         return _children, _plots
