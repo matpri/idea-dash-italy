@@ -19,6 +19,8 @@ By placing model outputs csv in the `data` folder the data will be loaded automa
 
 ### Load Data
 To load data, click the "Load Data" button in the header. Either Load Data from your local machine or from the IDEA database.
+At the moment, it is possible to upload CSV, XLSX and ZIP files. The data will be processed and the plots will be generated based on the data. If the data is in the IAMC format, generic plots will be generated for each reporting variable. If the data is in a custom format, the plots will be generated based on the model profile defined in the `profiles` folder.
+When uploading a ZIP file it can either contain a single file or multiple files. If it contains multiple files, the files will be considered as part of one scenario, which we use for some more complex plots. If it contains a single file, the file will be processed and the plots will be generated for that file.
 ![Opening Data Loading Window](https://gitlab.com/sesit/idea-dash/-/raw/dev/assets/help/data_modal.gif)
 
 ### Local Files
