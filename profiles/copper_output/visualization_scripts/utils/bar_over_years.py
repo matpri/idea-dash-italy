@@ -14,13 +14,15 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         template="simple_white",
     )
 
-    has_fuel = False
     try:
         df_scen = subset(df, region, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
         num_years = df_scen.time.nunique()
         scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
+
+        legend_order = [x for x in range(len(techs)+1,1, -1)]
+        print(legend_order)
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
@@ -34,25 +36,22 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
             else:
                 color = utils.get_color(tech)
             if 'Fuel:' in tech:
-                has_fuel = True
                 tech, fuel_type = tech.split('|Fuel: ')
                 fig.add_bar(x=x, y=data["value"], name=fuel_type, customdata=data['total'],
                             marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
                             textposition='auto' if text_active else None, text=f'<b>{tech} ({fuel_type})' if text_active else None,
                             legendgroup=tech,
                             legendgrouptitle_text=tech,
-                            legendrank=2,
+                            legendrank=legend_order[i],
                             hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
             else:
                 fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'], marker_color=color,
                             marker_pattern_shape=scen_patterns if pattern_active else None,
                             legendgroup=tech,
-                            legendrank=1,
+                            legendrank=legend_order[i],
                             textposition='auto' if text_active else None, text=tech if text_active else None,
                             hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x[0]}<br>' + f'Region: {region}<br>' + 'Scenario: %{x[1]}<br>'+f'{tooltip_name}'+': %{y:.2f} '+f'{unit}'+'<br>Total: %{customdata:.2f} '+f'{unit}'+'<br><extra></extra>')
         fig.update_layout(barmode='relative')
-        if not has_fuel:
-            fig.update_layout(legend_traceorder="reversed")
         fig.update_layout(legend=dict(groupclick="toggleitem"))
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:

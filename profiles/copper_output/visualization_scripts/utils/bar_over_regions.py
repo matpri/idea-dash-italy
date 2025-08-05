@@ -19,7 +19,7 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
         df_scen = subset(df, year, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
-
+        legend_order = [x for x in range(len(techs) + 1, 1, -1)]
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
             data = data.sort_values(by=['region', 'scenario'], key=lambda x: x.map(utils.custom_sort_key))
@@ -41,16 +41,16 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
                             textposition='auto' if text_active else None,
                             text=f'<b>{tech} ({fuel_type})' if text_active else None,
                             legendgroup=tech,
-                            legendrank=2,
+                            legendrank=legend_order[i],
                             legendgrouptitle=dict(text=tech),
                             hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
             else:
                 fig.add_bar(x=x, y=data["value"], name=tech, customdata=data['total'],
                             marker_color=color, marker_pattern_shape=scen_patterns if pattern_active else None,
                             textposition='auto' if text_active else None, text=tech if text_active else None,
-                            legendrank=1,
+                            legendrank=legend_order[i],
                             hovertemplate=f'<b>{tech}</b><br><br>' + 'Region: %{x[0]}<br>' + f'Year: {year}<br>' + 'Scenario: %{x[1]}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br>Total: %{customdata:.2f} ' + f'{unit}' + '<br><extra></extra>')
-        fig.update_layout(barmode='relative', legend_traceorder="reversed")
+        fig.update_layout(barmode='relative')
         fig.update_layout(legend=dict(groupclick="toggleitem"))
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:

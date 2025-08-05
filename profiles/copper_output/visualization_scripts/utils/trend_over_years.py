@@ -18,6 +18,9 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
         df_scen = subset(df, region, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
 
+
+        legend_order = [x for x in range(len(techs) + 1, 1, -1)]
+
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
             data = data.sort_values(by=['time'])
@@ -32,11 +35,11 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
                 fig.add_scatter(x=data["time"], y=data["value"], name=fuel_type, mode='lines+markers',
                                 marker_color=color,
                                 legendgroup=tech, legendgrouptitle=dict(text=tech),
-                                legendrank=2,
+                                legendrank=legend_order[i],
                                 hovertemplate=f'<b>{tech} ({fuel_type})</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
             else:
                 fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                                legendrank=1,
+                                legendrank=legend_order[i],
                                 hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Region: {region}<br>' + f'Scenario: {scenario}<br>' + f'{tooltip_name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
         fig.update_yaxes(showgrid=True)
