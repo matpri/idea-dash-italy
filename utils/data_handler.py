@@ -210,7 +210,7 @@ class DataHandler:
                 # read all csv and xlsx files in the temp directory
                 dfs = []
                 for _file in os.listdir(os.path.join(temp_dir, f_name)):
-                    fname = _file.split('.')[0]
+                    fname = os.path.splitext(_file)[0]
 
                     if _file.endswith('.csv'):
                         df = pd.read_csv(os.path.join(temp_dir, f_name, _file))
@@ -255,7 +255,7 @@ class DataHandler:
                 print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
                 continue
 
-            checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
+            checked, message, file = self.check_content(file, df, os.path.splitext(file)[-1][1:], False)
             if not checked:
                 fail = True
             else:

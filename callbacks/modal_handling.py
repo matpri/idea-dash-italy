@@ -59,7 +59,7 @@ def link(app):
 
         # get triggered input info
         ctx = dash.callback_context
-        triggered_input = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+        triggered_input = eval(ctx.triggered[0]['prop_id'].split('.')[0]) if ctx.triggered[0]['prop_id'].count('.') < 2 else '.'.join(ctx.triggered[0]['prop_id'].split('.')[:-1])
         triggered_value = ctx.triggered[0]['value']
         if triggered_value is None:
             return dash.no_update
