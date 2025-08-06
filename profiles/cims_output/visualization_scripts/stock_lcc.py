@@ -11,11 +11,9 @@ def render_plot(type, df, representation, scenarios, region, year, scenario, pat
                 sector=None, service=None, parameter='new_stock', plot_name='New Stock'):
     print('rendering plot', type)
     from profiles.cims_output.utils import plot_settings
-    # print('rendering plot', type)
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
-    # df = process_represenation(df, representation, sector, service, parameter)
     df = process_represenation(df, representation, sector, service if isinstance(service, list) else [service], parameter)
 
     print('processed', df)
@@ -42,11 +40,6 @@ def render_plot(type, df, representation, scenarios, region, year, scenario, pat
 def process_represenation(df, representation, sector, service, parameter):
     if representation == 'By Service':
         df = df[df['parameter'] == parameter]
-        # filtered_df = df[
-        #     (df['parameter'] == parameter) &
-        #     (df['sector'] == sector) &
-        #     (df.short_path.str.startswith(service))
-        #     ]
         filtered_df = df[
             (df['parameter'] == parameter) &
             (df['sector'] == sector) &
@@ -207,10 +200,6 @@ def widgets(df, window_id):
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-stock_lcc-download', 'index': window_id}),
     ]
-
-    # return widget_layout, render_plot('By Year', df, 'By Service', [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-    #                        years[0], scenarios[0], sector=sectors[0], service=services[0],
-    #                        parameter=stock_parameters[0], plot_name=stock_parameters[0])
     return widget_layout, render_plot('By Year', df, 'By Service', [scenarios[0]],
                            'CAN' if 'CAN' in regions else regions[0],
                            years[0], scenarios[0], sector=sectors[0],
