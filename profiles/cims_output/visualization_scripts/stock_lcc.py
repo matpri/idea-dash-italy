@@ -11,11 +11,11 @@ def render_plot(type, df, representation, scenarios, region, year, scenario, pat
                 sector=None, service=None, parameter='new_stock', plot_name='New Stock'):
     print('rendering plot', type)
     from profiles.cims_output.utils import plot_settings
-    # print('rendering plot', type)
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
-    df = process_represenation(df, representation, sector, service, parameter)
+    df = process_represenation(df, representation, sector, service if isinstance(service, list) else [service], parameter)
+
     print('processed', df)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
@@ -43,8 +43,9 @@ def process_represenation(df, representation, sector, service, parameter):
         filtered_df = df[
             (df['parameter'] == parameter) &
             (df['sector'] == sector) &
-            (df.short_path.str.startswith(service))
-            ]
+            (df['short_path'].apply(lambda x: any(x.startswith(s) for s in service)))
+        ]
+
 
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
@@ -96,16 +97,17 @@ def widgets(df, window_id):
         style={'display': 'none'}
     )
 
-    by_service_widgets = dmc.Select(
-        label='Service',
+    by_service_widgets = dmc.MultiSelect(
+        label='Services',
         data=[{'label': service, 'value': service} for service in services],
-        value=services[0] if len(services) > 0 else None,
+        value=[services[0]] if len(services) > 0 else [],
         id={
             'type': 'cims-stock_lcc-service-select',
             'index': window_id
         },
         style={'display': 'block'}
     )
+
 
     by_sector_widgets = dmc.Select(
         label='Sector',
@@ -198,7 +200,8 @@ def widgets(df, window_id):
                    style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'cims-stock_lcc-download', 'index': window_id}),
     ]
-
-    return widget_layout, render_plot('By Year', df, 'By Service', [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0], scenarios[0], sector=sectors[0], service=services[0],
+    return widget_layout, render_plot('By Year', df, 'By Service', [scenarios[0]],
+                           'CAN' if 'CAN' in regions else regions[0],
+                           years[0], scenarios[0], sector=sectors[0],
+                           service=[services[0]],  # pass as list
                            parameter=stock_parameters[0], plot_name=stock_parameters[0])
