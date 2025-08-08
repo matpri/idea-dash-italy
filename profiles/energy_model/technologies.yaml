@@ -3106,3 +3106,153 @@ Electricity|Gas|SC|w/ CCS|CER Exempt:
   group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset'
+
+'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset'
+
+'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset'
+
+'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset'
+
+'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset'
+
+'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset'
+
+'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset'
+
+'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset'
+
+'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group_color: '#ff95b7'
+  name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas'
+
+'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group_color: '#ffaaa3'
+  name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas'
+
+'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group_color: '#ff4786'
+  name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas'
+
+'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas'
+
+'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas':
+  color: '#000000'
+  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas'
+
+Electricity|Gas|SC|w/ CCS|Retrofit:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/ CCS|Retrofit
+Electricity|Gas|SC|w/o CCS|Refurbished:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|SC|w/o CCS|Refurbished
+
+Electricity|Gas|CC|w/ CCS|Retrofit:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/ CCS|Retrofit
+Electricity|Gas|CC|w/o CCS|Refurbished:
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|CC|w/o CCS|Refurbished
+
+'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal':
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal'
+'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal':
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal'
+'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset':
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset'
+'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset':
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset'
+
+Electricity|Coal|w/ CCS|Retrofit:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/ CCS|Retrofit
+Electricity|Coal|w/o CCS|Refurbished:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|w/o CCS|Refurbished
