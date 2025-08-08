@@ -3256,3 +3256,45 @@ Electricity|Coal|w/o CCS|Refurbished:
     group: Fossil fuel solid
     group_color: '#b15928'
     name: Electricity|Coal|w/o CCS|Refurbished
+
+Electricity|Diesel|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Electricity|Diesel|w/o CCS
+Electricity|Diesel|w/o CCS|CER Exempt:
+  color: '#000000'
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+  name: Electricity|Diesel|w/o CCS|CER Exempt
+
+'Electricity|Diesel|w/o CCS|Fuel: Diesel':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|Fuel: Diesel'
+'Electricity|Diesel|w/o CCS|Fuel: Diesel - Offset':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|Fuel: Diesel - Offset'
+'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel'
+'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel'
+'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel - Offset':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel - Offset'
+'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel':
+  color: '#000000'
+  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group_color: '#ffaa33'
+  name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel'
