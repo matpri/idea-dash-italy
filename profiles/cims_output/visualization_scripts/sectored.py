@@ -124,7 +124,6 @@ def create_plot(sector):
         tech_services = []
         if plot_type == 'Technology Stocks':
             tech_df = df[df['plot'] == 'Technology Stocks']
-            # Filter by the current sector (from the sector tab we're in)
             tech_df = tech_df[tech_df['sector'] == sector]
             tech_services = tech_df[tech_df['technology'].notna()]['short_path'].unique().tolist()
             tech_services = [s for s in tech_services if s is not None and str(s) != 'nan']
@@ -328,7 +327,6 @@ def create_plot(sector):
             by_region_widgets,
             dmc.Button('Download Data', id={'type': f'cims-{lower_sector}-download-button', 'index': window_id},
                        variant='light',
-                       # center the button
                        style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
             dcc.Download(id={'type': f'cims-{lower_sector}-download', 'index': window_id}),
         ])
@@ -338,7 +336,7 @@ def create_plot(sector):
                 df, plot_type, 'Sankey', False, years[0], regions[0], scenarios, scenarios[0], 
                 variables[0] if variables else 'Energy Demand',
                 pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0],
-                tech_sector=sector,  # Use current sector tab name
+                tech_sector=sector,  
                 tech_service=[tech_services[0]] if tech_services else []
             ),
             id={

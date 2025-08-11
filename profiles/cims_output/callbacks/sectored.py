@@ -199,7 +199,7 @@ def create_link(sector):
                 # set _services to '' after layer index
                 _service[layer + 1:] = [''] * len(_service[layer + 1:])
     
-            # Handle Technology Stocks - use current sector tab name and filter services accordingly
+
             tech_services = dash.no_update
             if plot_type == 'Technology Stocks':
                 current_sector = sector
@@ -219,12 +219,13 @@ def create_link(sector):
                 rep_switch = (energy_rep == 'By Fuel')
                 rep_switch_label = energy_rep if energy_rep else 'By Service'
     
-
             if plot_type == 'Emissions':
                 rep_switch = (emissions_rep == 'By Emission')
                 rep_switch_label = emissions_rep if emissions_rep else 'By Service'
     
             if rep_switch_label in ('By Fuel', 'By Emission'):
+                _service_style = [{'display': 'none'}] * len(_service_style)
+            else:
                 if _empty > 0 and _empty < len(_service_style):
                     sub_df = _data.copy()
                     for i in range(_empty):
@@ -237,9 +238,6 @@ def create_link(sector):
                 if _empty < len(_service_style) - 1:
                     # make all _service_style none after the first empty string
                     _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
-    
-            else:
-                _service_style = [{'display': 'none'}] * len(_service_style)
     
             service_value = _service.copy()
             _service = [s for s in _service if s]
@@ -258,7 +256,6 @@ def create_link(sector):
             if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-energy-rep-select' or trigger_id['type'] == f'cims-{lower_sector}-emissions-rep-select':
                 plot = 'Sankey' if rep_switch_label == 'By Service' else 'By Year'
     
-            # Modified to show representation dropdowns for Energy Demand and Emissions, hide toggle for Technology Stocks
             _rep_switch_style = {'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
             _energy_rep_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
             _emissions_rep_style = {'display': 'block'} if plot_type == 'Emissions' else {'display': 'none'}
