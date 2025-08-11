@@ -85,17 +85,16 @@ def process(selected: dict):
 
 
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
+
         distributed_supply = df[(df['parameter'] == 'distributed_supply') & (df['target'].str.endswith('Electricity'))][
             ['sector', 'target', 'short_path', 'value_num']]
         distributed_supply = distributed_supply.rename(columns={'value_num': 'distributed_supply'})
+
         df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
         df = df.merge(distributed_supply, on=['sector', 'target', 'short_path'], how='left')
-
-        # subtract the distributed supply from the demand
+        df['distributed_supply'] = df['distributed_supply'].fillna(0)
         df['value_num'] = df['value_num'] - df['distributed_supply']
         df = df.drop(columns=['distributed_supply'])
-
-
 
         df = df[~df['region'].str.contains('CAN')]
         df['short_path'] = df['short_path'].fillna('')
