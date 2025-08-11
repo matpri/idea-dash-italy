@@ -84,6 +84,25 @@ def create_link(sector):
                 'type': f'cims-{lower_sector}-rep-select',
                 'index': MATCH,
             }, 'value'),
+            # Add new output for energy demand representation dropdown
+            Output({
+                'type': f'cims-{lower_sector}-energy-rep-select',
+                'index': MATCH
+            }, 'style'),
+            # Add new output for emissions representation dropdown
+            Output({
+                'type': f'cims-{lower_sector}-emissions-rep-select',
+                'index': MATCH
+            }, 'style'),
+            # Add new outputs for Technology Stocks sector and service selectors
+            Output({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'style'),
+            Output({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'data'),
             Input({
                 'type': f'cims-{lower_sector}-plot-select',
                 'index': MATCH
@@ -133,6 +152,21 @@ def create_link(sector):
                 'index': MATCH,
                 'layer': ALL
             }, 'value'),
+            # Add new input for energy demand representation dropdown
+            Input({
+                'type': f'cims-{lower_sector}-energy-rep-select',
+                'index': MATCH
+            }, 'value'),
+            # Add new input for emissions representation dropdown
+            Input({
+                'type': f'cims-{lower_sector}-emissions-rep-select',
+                'index': MATCH
+            }, 'value'),
+            # Add new inputs for Technology Stocks service selector (sector is auto-determined)
+            Input({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'value'),
             State({
                 'type': f'cims-{lower_sector}-service-select',
                 'index': MATCH,
@@ -141,7 +175,7 @@ def create_link(sector):
             prevent_initial_call=True
         )
         def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
-                        text_switch, download_btn, _service, _service_style):
+                        text_switch, download_btn, _service, energy_rep, emissions_rep, tech_service, _service_style):
             print(sector)
             from utils.data_state import data_handler
             ctx = dash.callback_context
@@ -153,7 +187,7 @@ def create_link(sector):
             if trigger_id['type'] == f'cims-{lower_sector}-download-button':
                 return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
                         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                        dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv")), layers, service_value, _service_style, dash.no_update, dash.no_update
+                        dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv")), layers, service_value, _service_style, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     
             if f'cims-{lower_sector}-service-select' in trigger_id['type']:
                 layer = trigger_id['layer']
@@ -171,6 +205,15 @@ def create_link(sector):
                 # set _services to '' after layer index
                 _service[layer + 1:] = [''] * len(_service[layer + 1:])
     
+            # Handle Technology Stocks - use current sector tab name and filter services accordingly
+            tech_services = dash.no_update
+            if plot_type == 'Technology Stocks':
+                # Use the current sector (from function parameter) instead of user selection
+                current_sector = sector
+                tech_data = _data[_data['plot'] == 'Technology Stocks']
+                tech_data = tech_data[tech_data['sector'] == current_sector]
+                tech_services = tech_data[tech_data['technology'].notna()]['short_path'].unique().tolist()
+    
             # find first empty string in _service
             try:
                 _empty = _service.index('')
@@ -178,12 +221,18 @@ def create_link(sector):
                 _empty = len(_service_style)
     
             rep_switch_label = ''
-    
+            
+            # Modified logic to handle Energy Demand with dropdown instead of toggle
             if plot_type == 'Energy Demand':
-                rep_switch_label = 'By Fuel' if rep_switch else 'By Service'
+                # Convert dropdown selection to boolean for backward compatibility
+                rep_switch = (energy_rep == 'By Fuel')
+                rep_switch_label = energy_rep if energy_rep else 'By Service'
     
+            # Modified logic to handle Emissions with dropdown instead of toggle
             if plot_type == 'Emissions':
-                rep_switch_label = 'By Emission' if rep_switch else 'By Service'
+                # Convert dropdown selection to boolean for backward compatibility
+                rep_switch = (emissions_rep == 'By Emission')
+                rep_switch_label = emissions_rep if emissions_rep else 'By Service'
     
             if rep_switch_label in ('By Fuel', 'By Emission'):
                 if _empty > 0 and _empty < len(_service_style):
@@ -216,10 +265,14 @@ def create_link(sector):
 
             _rep_options = [{'label': plot, 'value': plot} for plot in ['Sankey', 'Trend Over Years']] if rep_switch_label == 'By Service' else [{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']]
 
-            if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-rep_switch':
+            if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-energy-rep-select' or trigger_id['type'] == f'cims-{lower_sector}-emissions-rep-select':
                 plot = 'Sankey' if rep_switch_label == 'By Service' else 'By Year'
     
-            _rep_switch_style = {'display': 'block'} if plot_type in ('Energy Demand', 'Emissions') else {'display': 'none'}
+            # Modified to show representation dropdowns for Energy Demand and Emissions, hide toggle for Technology Stocks
+            _rep_switch_style = {'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
+            _energy_rep_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
+            _emissions_rep_style = {'display': 'block'} if plot_type == 'Emissions' else {'display': 'none'}
+            _tech_service_style = {'display': 'block'} if plot_type == 'Technology Stocks' else {'display': 'none'}
     
             if plot == 'By Year':
                 _m_style = {'display': 'block'}
@@ -249,8 +302,6 @@ def create_link(sector):
                 _pattern_style = {'display': 'block'}
                 _text_style = {'display': 'block'}
     
-    
-    
             df_plt = _data[_data['plot'] == plot_type]
             variables = dash.no_update
             if trigger_id['type'] == f'cims-{lower_sector}-plot-select':
@@ -258,13 +309,13 @@ def create_link(sector):
                 if variables:
                     variable = variables[0]
                 else:
-                    'Energy Demand'
+                    variable = 'Energy Demand'
     
             _canvas = render_plot(sector,_data, plot_type, plot, rep_switch, year, region, scenarios, scenario, variable,
-                                  pattern_switch, text_switch, _service)
+                                  pattern_switch, text_switch, _service, sector, tech_service)
     
             return (_canvas, _r_style, _y_style, _v_style, _rep_switch_style, _m_style, _s_style, rep_switch_label,
                     _pattern_style, _text_style, variables, variable, dash.no_update, layers, service_value, _service_style,
-                    _rep_options, plot)
+                    _rep_options, plot, _energy_rep_style, _emissions_rep_style, _tech_service_style, tech_services)
 
     return link
