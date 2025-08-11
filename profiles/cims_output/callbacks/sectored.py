@@ -199,7 +199,6 @@ def create_link(sector):
                 # set _services to '' after layer index
                 _service[layer + 1:] = [''] * len(_service[layer + 1:])
     
-
             tech_services = dash.no_update
             if plot_type == 'Technology Stocks':
                 current_sector = sector
@@ -207,7 +206,6 @@ def create_link(sector):
                 tech_data = tech_data[tech_data['sector'] == current_sector]
                 tech_services = tech_data[tech_data['technology'].notna()]['short_path'].unique().tolist()
     
-            # find first empty string in _service
             try:
                 _empty = _service.index('')
             except ValueError:
@@ -223,22 +221,39 @@ def create_link(sector):
                 rep_switch = (emissions_rep == 'By Emission')
                 rep_switch_label = emissions_rep if emissions_rep else 'By Service'
     
-            if rep_switch_label in ('By Fuel', 'By Emission'):
-                _service_style = [{'display': 'none'}] * len(_service_style)
+            if plot_type == 'Energy Demand':
+                # For Energy Demand: show layers when By Fuel is selected
+                if rep_switch_label == 'By Fuel':
+                    if _empty > 0 and _empty < len(_service_style):
+                        sub_df = _data.copy()
+                        for i in range(_empty):
+                            sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
+                        if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
+                            _empty -= 1
+        
+                    _service_style = [{'display': 'block'}] * len(_service_style)
+                    if _empty < len(_service_style) - 1:
+                        _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
+                else:
+                    _service_style = [{'display': 'none'}] * len(_service_style)
+            elif plot_type == 'Emissions':
+                # For Emissions: show layers when By Service is selected
+                if rep_switch_label == 'By Service':
+                    if _empty > 0 and _empty < len(_service_style):
+                        sub_df = _data.copy()
+                        for i in range(_empty):
+                            sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
+                        if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
+                            _empty -= 1
+        
+                    _service_style = [{'display': 'block'}] * len(_service_style)
+                    if _empty < len(_service_style) - 1:
+                        _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
+                else:
+                    # Hide layers when By Emission is selected for Emissions
+                    _service_style = [{'display': 'none'}] * len(_service_style)
             else:
-                if _empty > 0 and _empty < len(_service_style):
-                    sub_df = _data.copy()
-                    for i in range(_empty):
-                        sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
-                    if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
-                        _empty -= 1
-    
-                # make all _service_style block until the first empty string
-                _service_style = [{'display': 'block'}] * len(_service_style)
-                if _empty < len(_service_style) - 1:
-                    # make all _service_style none after the first empty string
-                    _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
-    
+                _service_style = [{'display': 'none'}] * len(_service_style)
             service_value = _service.copy()
             _service = [s for s in _service if s]
             _service = '.'.join(_service) if _service else ''
