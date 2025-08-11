@@ -3227,22 +3227,22 @@ Electricity|Gas|CC|w/o CCS|Refurbished:
 
 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal':
     color: '#000000'
-    group: Fossil fuel solid
+    group: 'Fossil fuel solid|Fuel: Coal'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal'
 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal':
     color: '#000000'
-    group: Fossil fuel solid
+    group: 'Fossil fuel solid|Fuel: Coal'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal'
 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset':
     color: '#000000'
-    group: Fossil fuel solid
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset'
 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset':
     color: '#000000'
-    group: Fossil fuel solid
+    group: 'Fossil fuel solid|Fuel: Coal - Offset'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset'
 
