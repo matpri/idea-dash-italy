@@ -84,17 +84,14 @@ def create_link(sector):
                 'type': f'cims-{lower_sector}-rep-select',
                 'index': MATCH,
             }, 'value'),
-            # Add new output for energy demand representation dropdown
             Output({
                 'type': f'cims-{lower_sector}-energy-rep-select',
                 'index': MATCH
             }, 'style'),
-            # Add new output for emissions representation dropdown
             Output({
                 'type': f'cims-{lower_sector}-emissions-rep-select',
                 'index': MATCH
             }, 'style'),
-            # Add new outputs for Technology Stocks sector and service selectors
             Output({
                 'type': f'cims-{lower_sector}-tech-service-select',
                 'index': MATCH
@@ -152,17 +149,14 @@ def create_link(sector):
                 'index': MATCH,
                 'layer': ALL
             }, 'value'),
-            # Add new input for energy demand representation dropdown
             Input({
                 'type': f'cims-{lower_sector}-energy-rep-select',
                 'index': MATCH
             }, 'value'),
-            # Add new input for emissions representation dropdown
             Input({
                 'type': f'cims-{lower_sector}-emissions-rep-select',
                 'index': MATCH
             }, 'value'),
-            # Add new inputs for Technology Stocks service selector (sector is auto-determined)
             Input({
                 'type': f'cims-{lower_sector}-tech-service-select',
                 'index': MATCH
@@ -208,7 +202,6 @@ def create_link(sector):
             # Handle Technology Stocks - use current sector tab name and filter services accordingly
             tech_services = dash.no_update
             if plot_type == 'Technology Stocks':
-                # Use the current sector (from function parameter) instead of user selection
                 current_sector = sector
                 tech_data = _data[_data['plot'] == 'Technology Stocks']
                 tech_data = tech_data[tech_data['sector'] == current_sector]
@@ -222,15 +215,12 @@ def create_link(sector):
     
             rep_switch_label = ''
             
-            # Modified logic to handle Energy Demand with dropdown instead of toggle
             if plot_type == 'Energy Demand':
-                # Convert dropdown selection to boolean for backward compatibility
                 rep_switch = (energy_rep == 'By Fuel')
                 rep_switch_label = energy_rep if energy_rep else 'By Service'
     
-            # Modified logic to handle Emissions with dropdown instead of toggle
+
             if plot_type == 'Emissions':
-                # Convert dropdown selection to boolean for backward compatibility
                 rep_switch = (emissions_rep == 'By Emission')
                 rep_switch_label = emissions_rep if emissions_rep else 'By Service'
     

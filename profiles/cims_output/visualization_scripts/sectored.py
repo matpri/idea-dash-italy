@@ -70,10 +70,8 @@ def process_represenation(p_type, by_rep, variable, df, service, tech_sector=Non
             filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario', 'context']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     elif p_type == 'Technology Stocks':
-        # Modified to work like "By Service" in overview tab
         filtered_df = df[df['parameter'] == variable]
         
-        # Filter by sector and service if provided (similar to overview tab logic)
         if tech_sector:
             filtered_df = filtered_df[filtered_df['sector'] == tech_sector]
         if tech_service:
@@ -83,7 +81,7 @@ def process_represenation(p_type, by_rep, variable, df, service, tech_sector=Non
             else:
                 filtered_df = filtered_df[filtered_df['short_path'].str.startswith(tech_service)]
         
-        # Group by technology (same as overview tab "By Service" behavior)
+        # Group by technology
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
     else:
@@ -245,7 +243,6 @@ def create_plot(sector):
 
             variable_select,
 
-            # Keep the original switch hidden for Energy Demand, Emissions, and Technology Stocks
             dmc.Switch(
                 label='By Service',
                 checked=False,
@@ -256,7 +253,6 @@ def create_plot(sector):
                 style={'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
             ),
 
-            # Add new dropdown for Energy Demand representation
             dmc.Select(
                 label='Representation',
                 data=[
@@ -271,7 +267,6 @@ def create_plot(sector):
                 style={'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
             ),
 
-            # Add new dropdown for Emissions representation
             dmc.Select(
                 label='Representation',
                 data=[
@@ -286,7 +281,6 @@ def create_plot(sector):
                 style={'display': 'block'} if plot_type == 'Emissions' else {'display': 'none'}
             ),
 
-            # Add new selector for Technology Stocks services (sector auto-determined from tab)
             dmc.MultiSelect(
                 label='Services',
                 data=[{'label': service, 'value': service} for service in tech_services],
