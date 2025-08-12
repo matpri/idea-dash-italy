@@ -84,6 +84,22 @@ def create_link(sector):
                 'type': f'cims-{lower_sector}-rep-select',
                 'index': MATCH,
             }, 'value'),
+            Output({
+                'type': f'cims-{lower_sector}-energy-rep-select',
+                'index': MATCH
+            }, 'style'),
+            Output({
+                'type': f'cims-{lower_sector}-emissions-rep-select',
+                'index': MATCH
+            }, 'style'),
+            Output({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'style'),
+            Output({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'data'),
             Input({
                 'type': f'cims-{lower_sector}-plot-select',
                 'index': MATCH
@@ -133,6 +149,18 @@ def create_link(sector):
                 'index': MATCH,
                 'layer': ALL
             }, 'value'),
+            Input({
+                'type': f'cims-{lower_sector}-energy-rep-select',
+                'index': MATCH
+            }, 'value'),
+            Input({
+                'type': f'cims-{lower_sector}-emissions-rep-select',
+                'index': MATCH
+            }, 'value'),
+            Input({
+                'type': f'cims-{lower_sector}-tech-service-select',
+                'index': MATCH
+            }, 'value'),
             State({
                 'type': f'cims-{lower_sector}-service-select',
                 'index': MATCH,
@@ -141,7 +169,7 @@ def create_link(sector):
             prevent_initial_call=True
         )
         def update_plot(plot_type, plot, region, year, variable, scenarios, scenario, rep_switch, pattern_switch,
-                        text_switch, download_btn, _service, _service_style):
+                        text_switch, download_btn, _service, energy_rep, emissions_rep, tech_service, _service_style):
             print(sector)
             from utils.data_state import data_handler
             ctx = dash.callback_context
@@ -153,7 +181,7 @@ def create_link(sector):
             if trigger_id['type'] == f'cims-{lower_sector}-download-button':
                 return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
                         dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                        dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv")), layers, service_value, _service_style, dash.no_update, dash.no_update
+                        dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv")), layers, service_value, _service_style, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
     
             if f'cims-{lower_sector}-service-select' in trigger_id['type']:
                 layer = trigger_id['layer']
@@ -171,37 +199,61 @@ def create_link(sector):
                 # set _services to '' after layer index
                 _service[layer + 1:] = [''] * len(_service[layer + 1:])
     
-            # find first empty string in _service
+            tech_services = dash.no_update
+            if plot_type == 'Technology Stocks':
+                current_sector = sector
+                tech_data = _data[_data['plot'] == 'Technology Stocks']
+                tech_data = tech_data[tech_data['sector'] == current_sector]
+                tech_services = tech_data[tech_data['technology'].notna()]['short_path'].unique().tolist()
+    
             try:
                 _empty = _service.index('')
             except ValueError:
                 _empty = len(_service_style)
     
             rep_switch_label = ''
-    
+            
             if plot_type == 'Energy Demand':
-                rep_switch_label = 'By Fuel' if rep_switch else 'By Service'
+                rep_switch = (energy_rep == 'By Fuel')
+                rep_switch_label = energy_rep if energy_rep else 'By Service'
     
             if plot_type == 'Emissions':
-                rep_switch_label = 'By Emission' if rep_switch else 'By Service'
+                rep_switch = (emissions_rep == 'By Emission')
+                rep_switch_label = emissions_rep if emissions_rep else 'By Service'
     
-            if rep_switch_label in ('By Fuel', 'By Emission'):
-                if _empty > 0 and _empty < len(_service_style):
-                    sub_df = _data.copy()
-                    for i in range(_empty):
-                        sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
-                    if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
-                        _empty -= 1
-    
-                # make all _service_style block until the first empty string
-                _service_style = [{'display': 'block'}] * len(_service_style)
-                if _empty < len(_service_style) - 1:
-                    # make all _service_style none after the first empty string
-                    _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
-    
+            if plot_type == 'Energy Demand':
+                # For Energy Demand: show layers when By Fuel is selected
+                if rep_switch_label == 'By Fuel':
+                    if _empty > 0 and _empty < len(_service_style):
+                        sub_df = _data.copy()
+                        for i in range(_empty):
+                            sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
+                        if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
+                            _empty -= 1
+        
+                    _service_style = [{'display': 'block'}] * len(_service_style)
+                    if _empty < len(_service_style) - 1:
+                        _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
+                else:
+                    _service_style = [{'display': 'none'}] * len(_service_style)
+            elif plot_type == 'Emissions':
+                # For Emissions: show layers when By Service is selected
+                if rep_switch_label == 'By Service':
+                    if _empty > 0 and _empty < len(_service_style):
+                        sub_df = _data.copy()
+                        for i in range(_empty):
+                            sub_df = sub_df[sub_df['layer_{}'.format(i)] == _service[i]]
+                        if len(sub_df['layer_{}'.format(_empty)].unique()) == 1:
+                            _empty -= 1
+        
+                    _service_style = [{'display': 'block'}] * len(_service_style)
+                    if _empty < len(_service_style) - 1:
+                        _service_style[_empty + 1:] = [{'display': 'none'}] * len(_service_style[_empty + 1:])
+                else:
+                    # Hide layers when By Emission is selected for Emissions
+                    _service_style = [{'display': 'none'}] * len(_service_style)
             else:
                 _service_style = [{'display': 'none'}] * len(_service_style)
-    
             service_value = _service.copy()
             _service = [s for s in _service if s]
             _service = '.'.join(_service) if _service else ''
@@ -216,10 +268,13 @@ def create_link(sector):
 
             _rep_options = [{'label': plot, 'value': plot} for plot in ['Sankey', 'Trend Over Years']] if rep_switch_label == 'By Service' else [{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']]
 
-            if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-rep_switch':
+            if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-energy-rep-select' or trigger_id['type'] == f'cims-{lower_sector}-emissions-rep-select':
                 plot = 'Sankey' if rep_switch_label == 'By Service' else 'By Year'
     
-            _rep_switch_style = {'display': 'block'} if plot_type in ('Energy Demand', 'Emissions') else {'display': 'none'}
+            _rep_switch_style = {'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
+            _energy_rep_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
+            _emissions_rep_style = {'display': 'block'} if plot_type == 'Emissions' else {'display': 'none'}
+            _tech_service_style = {'display': 'block'} if plot_type == 'Technology Stocks' else {'display': 'none'}
     
             if plot == 'By Year':
                 _m_style = {'display': 'block'}
@@ -249,8 +304,6 @@ def create_link(sector):
                 _pattern_style = {'display': 'block'}
                 _text_style = {'display': 'block'}
     
-    
-    
             df_plt = _data[_data['plot'] == plot_type]
             variables = dash.no_update
             if trigger_id['type'] == f'cims-{lower_sector}-plot-select':
@@ -258,13 +311,13 @@ def create_link(sector):
                 if variables:
                     variable = variables[0]
                 else:
-                    'Energy Demand'
+                    variable = 'Energy Demand'
     
             _canvas = render_plot(sector,_data, plot_type, plot, rep_switch, year, region, scenarios, scenario, variable,
-                                  pattern_switch, text_switch, _service)
+                                  pattern_switch, text_switch, _service, sector, tech_service)
     
             return (_canvas, _r_style, _y_style, _v_style, _rep_switch_style, _m_style, _s_style, rep_switch_label,
                     _pattern_style, _text_style, variables, variable, dash.no_update, layers, service_value, _service_style,
-                    _rep_options, plot)
+                    _rep_options, plot, _energy_rep_style, _emissions_rep_style, _tech_service_style, tech_services)
 
     return link

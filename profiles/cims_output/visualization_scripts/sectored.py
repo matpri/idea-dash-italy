@@ -5,7 +5,7 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 
 def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, scenario, variable, pattern_active=True,
-                text_active=False, service='Agriculture'):
+                text_active=False, service='Agriculture', tech_sector=None, tech_service=None):
     from profiles.cims_output.utils import plot_settings
     df_plt = df[
         (df['plot'] == p_type)
@@ -14,7 +14,7 @@ def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, sce
     name = plot_settings[p_type]['name']
     unit = plot_settings[p_type]['unit']
 
-    df_plt = process_represenation(p_type, by_rep, variable, df_plt, service)
+    df_plt = process_represenation(p_type, by_rep, variable, df_plt, service, tech_sector, tech_service)
 
     if p_type == 'Energy Demand':
         variable = 'Energy Demand'
@@ -42,7 +42,7 @@ def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, sce
                                      text_active=text_active)
 
 
-def process_represenation(p_type, by_rep, variable, df, service):
+def process_represenation(p_type, by_rep, variable, df, service, tech_sector=None, tech_service=None):
     if p_type == 'Emissions':
         if by_rep:
             filtered_df = df[
@@ -71,6 +71,17 @@ def process_represenation(p_type, by_rep, variable, df, service):
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     elif p_type == 'Technology Stocks':
         filtered_df = df[df['parameter'] == variable]
+        
+        if tech_sector:
+            filtered_df = filtered_df[filtered_df['sector'] == tech_sector]
+        if tech_service:
+            # Handle both single service and list of services
+            if isinstance(tech_service, list):
+                filtered_df = filtered_df[filtered_df['short_path'].apply(lambda x: any(x.startswith(s) for s in tech_service))]
+            else:
+                filtered_df = filtered_df[filtered_df['short_path'].str.startswith(tech_service)]
+        
+        # Group by technology
         filtered_df = filtered_df[['region', 'technology', 'year', 'value_num', 'scenario']]
         filtered_df = filtered_df.rename(columns={'value_num': 'value', 'technology': 'variable', 'year': 'time'})
     else:
@@ -108,6 +119,14 @@ def create_plot(sector):
 
         variables = [] if plot_type == 'Energy Demand' else df_plt[
             'parameter'].unique().tolist()
+
+        # Get services for Technology Stocks (filtered by current sector)
+        tech_services = []
+        if plot_type == 'Technology Stocks':
+            tech_df = df[df['plot'] == 'Technology Stocks']
+            tech_df = tech_df[tech_df['sector'] == sector]
+            tech_services = tech_df[tech_df['technology'].notna()]['short_path'].unique().tolist()
+            tech_services = [s for s in tech_services if s is not None and str(s) != 'nan']
 
         by_service_widgets = []
 
@@ -202,7 +221,7 @@ def create_plot(sector):
         variable_select = dmc.Select(
             label='Variable',
             data=[{'label': variable, 'value': variable} for variable in variables],
-            value=variables[0],
+            value=variables[0] if variables else '',
             id={
                 'type': f'cims-{lower_sector}-variable-select',
                 'index': window_id
@@ -230,7 +249,46 @@ def create_plot(sector):
                     'type': f'cims-{lower_sector}-rep_switch',
                     'index': window_id
                 },
-                style={'display': 'block'}
+                style={'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
+            ),
+
+            dmc.Select(
+                label='Representation',
+                data=[
+                    {'label': 'By Service', 'value': 'By Service'},
+                    {'label': 'By Fuel', 'value': 'By Fuel'}
+                ],
+                value='By Service',
+                id={
+                    'type': f'cims-{lower_sector}-energy-rep-select',
+                    'index': window_id
+                },
+                style={'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
+            ),
+
+            dmc.Select(
+                label='Representation',
+                data=[
+                    {'label': 'By Service', 'value': 'By Service'},
+                    {'label': 'By Emission', 'value': 'By Emission'}
+                ],
+                value='By Service',
+                id={
+                    'type': f'cims-{lower_sector}-emissions-rep-select',
+                    'index': window_id
+                },
+                style={'display': 'block'} if plot_type == 'Emissions' else {'display': 'none'}
+            ),
+
+            dmc.MultiSelect(
+                label='Services',
+                data=[{'label': service, 'value': service} for service in tech_services],
+                value=[tech_services[0]] if tech_services else [],
+                id={
+                    'type': f'cims-{lower_sector}-tech-service-select',
+                    'index': window_id
+                },
+                style={'display': 'block'} if plot_type == 'Technology Stocks' else {'display': 'none'}
             ),
 
             dmc.Select(
@@ -269,15 +327,17 @@ def create_plot(sector):
             by_region_widgets,
             dmc.Button('Download Data', id={'type': f'cims-{lower_sector}-download-button', 'index': window_id},
                        variant='light',
-                       # center the button
                        style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
             dcc.Download(id={'type': f'cims-{lower_sector}-download', 'index': window_id}),
         ])
 
         plot_layout = dcc.Graph(
             figure=render_plot(sector,
-                df, plot_type, 'Sankey', False, years[0], regions[0], scenarios, scenarios[0], variables[0],
-                pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0]
+                df, plot_type, 'Sankey', False, years[0], regions[0], scenarios, scenarios[0], 
+                variables[0] if variables else 'Energy Demand',
+                pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0],
+                tech_sector=sector,  
+                tech_service=[tech_services[0]] if tech_services else []
             ),
             id={
                 'type': 'figure',
