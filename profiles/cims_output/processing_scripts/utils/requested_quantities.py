@@ -84,17 +84,35 @@ def process(selected: dict):
         parent_services = pd.concat(parents)
 
 
-        # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
+        # # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
 
-        distributed_supply = df[(df['parameter'] == 'distributed_supply') & (df['target'].str.endswith('Electricity'))][
-            ['sector', 'target', 'short_path', 'value_num']]
-        distributed_supply = distributed_supply.rename(columns={'value_num': 'distributed_supply'})
+        # distributed_supply = df[(df['parameter'] == 'distributed_supply') & (df['target'].str.endswith('Electricity'))][
+        #     ['sector', 'target', 'short_path', 'value_num']]
+        # distributed_supply = distributed_supply.rename(columns={'value_num': 'distributed_supply'})
 
         df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
-        df = df.merge(distributed_supply, on=['sector', 'target', 'short_path'], how='left')
-        df['distributed_supply'] = df['distributed_supply'].fillna(0)
-        df['value_num'] = df['value_num'] - df['distributed_supply']
-        df = df.drop(columns=['distributed_supply'])
+        # df = df.merge(distributed_supply, on=['sector', 'target', 'short_path'], how='left')
+        # df['distributed_supply'] = df['distributed_supply'].fillna(0)
+        # df['value_num'] = df['value_num'] - df['distributed_supply']
+        # df = df.drop(columns=['distributed_supply'])
+
+
+        # distributed_supply = df[
+        #     (df['parameter'] == 'distributed_supply') & 
+        #     (df['target'].str.endswith('Electricity', na=False))
+        # ][['sector', 'target', 'short_path', 'value_num']].rename(columns={'value_num': 'distributed_supply_val'})
+        
+        # # Filter to requested_quantities first
+        # df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
+        
+        # # Merge and subtract for electricity targets only
+        # if not distributed_supply.empty:
+        #     df = df.merge(distributed_supply, on=['sector', 'target', 'short_path'], how='left')
+        #     # Subtract distributed_supply from value_num where it exists
+        #     electricity_mask = df['target'].str.endswith('Electricity', na=False)
+        #     df.loc[electricity_mask, 'value_num'] = df.loc[electricity_mask, 'value_num'] - df.loc[electricity_mask, 'distributed_supply_val'].fillna(0)
+        #     # Drop the helper column
+        #     df = df.drop(columns=['distributed_supply_val'])
 
         df = df[~df['region'].str.contains('CAN')]
         df['short_path'] = df['short_path'].fillna('')
