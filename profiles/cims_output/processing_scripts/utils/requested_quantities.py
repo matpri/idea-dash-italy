@@ -84,17 +84,28 @@ def process(selected: dict):
         parent_services = pd.concat(parents)
 
 
-        # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
+        elec_mask = df['target'].str.endswith('Electricity', na=False)
 
-        distributed_supply = df[(df['parameter'] == 'distributed_supply') & (df['target'].str.endswith('Electricity'))][
-            ['sector', 'target', 'short_path', 'value_num']]
-        distributed_supply = distributed_supply.rename(columns={'value_num': 'distributed_supply'})
+        id_cols = [c for c in df.columns if c not in ['parameter', 'value_num']]
 
+        df['__key'] = df[id_cols].astype(str).agg('|'.join, axis=1)
+
+
+        ds_lookup = (
+            df[elec_mask & (df['parameter'] == 'distributed_supply')]
+            .set_index('__key')['value_num']
+            .fillna(0)  # treat NaN as 0
+        )
+
+        mask_rq = elec_mask & (df['parameter'] == 'requested_quantities')
+        df.loc[mask_rq, 'value_num'] = (
+            df.loc[mask_rq, 'value_num'].fillna(0) -
+            df.loc[mask_rq, '__key'].map(ds_lookup).fillna(0)
+        )
+
+        df.drop(columns='__key', inplace=True)
         df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
-        df = df.merge(distributed_supply, on=['sector', 'target', 'short_path'], how='left')
-        df['distributed_supply'] = df['distributed_supply'].fillna(0)
-        df['value_num'] = df['value_num'] - df['distributed_supply']
-        df = df.drop(columns=['distributed_supply'])
+
 
         df = df[~df['region'].str.contains('CAN')]
         df['short_path'] = df['short_path'].fillna('')
