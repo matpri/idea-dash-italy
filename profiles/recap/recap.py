@@ -30,7 +30,7 @@ from profiles.recap.callbacks import (
 recap = ['COPPER', 'CIMS']
 
 
-class recapOutput(BaseProfile):
+class RecapOutput(BaseProfile):
     display_name = 'recap'
     name = 'recap'
     db_name = 'recap'

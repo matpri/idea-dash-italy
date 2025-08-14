@@ -410,9 +410,9 @@ class DataHandler:
                                 data_collection[profile][viz] = {}
                             data_collection[profile][viz][scenario] = data['content'].copy()
                     else:
-                        if profile != 'recap':
+                        if profile == 'Power System Models':
                             process_power_system = True
-                        else:
+                        elif profile == 'recap':
                             recap_profile = True
                 self.processed.append(fname)
 
@@ -446,7 +446,7 @@ class DataHandler:
             print('Processing', model)
             if model in exclude_from_comparison:
                 continue
-            if model == 'Power System Models' or model == 'Generic Comparison' and model =='recap':
+            if model == 'Power System Models' or model == 'Generic Comparison'or model == 'recap':
                 continue
             for viz, viz_data in viz_option.items():
                 if viz == 'Overview' or viz == 'Output Stats' or viz == 'Inputs':
