@@ -183,9 +183,25 @@ def link(app):
         # print('updating ghg plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
-        trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS']['Overview']
-        _data = _data[_data['tab'] == 'Emissions']
+        
+        # Check if callback context exists and has triggers
+        if not ctx.triggered:
+            print("No callback context triggered in ghg")
+            return dash.no_update
+            
+        try:
+            trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
+        except (IndexError, KeyError, SyntaxError) as e:
+            print(f"Error parsing trigger ID in ghg: {e}")
+            return dash.no_update
+            
+        try:
+            _data = data_handler.processed_data['CIMS']['Overview']
+            _data = _data[_data['tab'] == 'Emissions']
+        except KeyError as e:
+            print(f"Data not found for CIMS Overview Emissions: {e}")
+            return dash.no_update
+            
         services = dash.no_update
         _service_style = dash.no_update
 
