@@ -11,7 +11,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
     unit = plot_settings['Total Cost']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Total Cost']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, aggregate, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Total Cost']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)

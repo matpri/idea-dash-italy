@@ -27,6 +27,31 @@ from profiles.recap.callbacks import (
     emissions as copper_emissions_callbacks,
     settings as settings_callbacks
 )
+from profiles.recap.callbacks import (requested_quantities as requested_quantities_callbacks,
+                                            stock_lcc as stock_lcc_callbacks,
+                                            ghg as ghg_callbacks,
+                                            overview as overview_callbacks,
+                                            settings as settings_callbacks,
+                                            sectored as sectored_callbacks,
+                                            inputs as inputs_callbacks,
+
+                                            )
+from profiles.recap.processing_scripts import (
+    overview as overview_processing,
+    sectored as sectored_processing,
+    inputs as inputs_processing,
+)
+from profiles.recap.processing_scripts.utils import ghg as ghg_processing, stock_lcc as stock_lcc_processing, \
+    requested_quantities as requested_quantities_processing
+from profiles.recap.visualization_scripts import (
+    requested_quantities as emissions_viz,
+    stock_lcc as stock_lcc_viz,
+    ghg as ghg_viz,
+    
+    overview as overview_viz,
+    sectored as sectored_viz,
+    inputs as inputs_viz,
+)
 
 # Define which models this recap_2 profile will work with
 recap = ['COPPER', 'CIMS']
@@ -43,7 +68,8 @@ class RecapOutput(BaseProfile):
 
     plot_order = [
         'Total Cost',
-        'Emissions'
+        'Emissions',
+        'Overview'
     ]
     
     viz_options = {
@@ -66,6 +92,16 @@ class RecapOutput(BaseProfile):
                 'viz': copper_emissions_viz.plot,
                 'callback': copper_emissions_callbacks.link,
                 'description': 'Emissions analysis from COPPER model.'
+            },
+        'Overview':
+            {
+                'check': overview_processing.check,
+                'db_check': overview_processing.check,
+                'process': overview_processing.process,
+                'db_process': overview_processing.process,
+                'viz': overview_viz.plot,
+                'callback': overview_callbacks.link,
+                'description': 'Visualizations for a general overview of the data.'
             }
     }
 
@@ -100,46 +136,7 @@ class RecapOutput(BaseProfile):
         settings_callbacks.link(app)
         super().link(app)
 
-    # def process_data(self, data_collection):
-    #     processed_data = defaultdict(list)
 
-    #     for profile, viz_option, df in data_collection:
-    #         print(f"Processing: {profile}, {viz_option}")
-            
-    #         # Only process data from our target models and for our specific visualizations
-    #         if (profile in recap and viz_option in self.viz_options):
-    #             data = df.copy()
-                
-    #             # Add version information if available
-    #             data['version'] = data['scenario'].apply(
-    #                 lambda x: x.split('|')[-1] if '|' in x else 'v0'
-    #             )
-                
-    #             # Prefix scenario names with model name for identification
-    #             data['scenario'] = profile + '|' + data['scenario']
-                
-    #             # Time filtering for relevant years
-    #             if 'time' in data.columns:
-    #                 data = data[data['time'].isin(
-    #                     [2021, 2025, 2030, 2035, 2040, 2045, 2050, 
-    #                      '2021', '2025', '2030', '2035', '2040', '2045', '2050']
-    #                 )]
-    #                 # Convert time to numeric
-    #                 data['time'] = pd.to_numeric(data['time'])
-                    
-    #             elif 'period' in data.columns:
-    #                 data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
-                
-    #             processed_data[viz_option].append(data)
-
-    #     # Create results list
-    #     results = []
-    #     for viz_option, data_list in processed_data.items():
-    #         if data_list:  # Only process if we have data
-    #             combined_data = pd.concat(data_list, ignore_index=True)
-    #             results.append((self.display_name, viz_option, combined_data))
-
-    #     return results if results else None
     def process_data(self, data_collection):
         processed_data = defaultdict(list)
 
@@ -182,15 +179,15 @@ class RecapOutput(BaseProfile):
 
         output_stats = []
 
-        if 'Overview' in processed_data:
-            for p_data in processed_data['Overview']:
-                for c in p_data.variable.unique():
-                    if c in self.viz_options:
-                        data = p_data[p_data.variable == c]
-                        # if net new capacity make cumsum of value based on time column
-                        if 'Net New Capacity' in c or 'New Capacity' in c:
-                            data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
-                        output_stats.append(data)
+        # if 'Overview' in processed_data:
+        #     for p_data in processed_data['Overview']:
+        #         for c in p_data.variable.unique():
+        #             if c in self.viz_options:
+        #                 data = p_data[p_data.variable == c]
+        #                 # if net new capacity make cumsum of value based on time column
+        #                 if 'Net New Capacity' in c or 'New Capacity' in c:
+        #                     data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
+        #                 output_stats.append(data)
 
         results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
 
