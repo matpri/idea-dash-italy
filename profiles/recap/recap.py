@@ -34,12 +34,17 @@ from profiles.recap.callbacks import (requested_quantities as requested_quantiti
                                             settings as settings_callbacks,
                                             sectored as sectored_callbacks,
                                             inputs as inputs_callbacks,
+                                            overview_emissions as overview_emissions_callbacks,
+                                            overview_energy as overview_energy_callbacks,
 
                                             )
 from profiles.recap.processing_scripts import (
     overview as overview_processing,
     sectored as sectored_processing,
     inputs as inputs_processing,
+    overview_emissions as overview_emissions_processing,
+    overview_energy as overview_energy_processing,
+    
 )
 from profiles.recap.processing_scripts.utils import ghg as ghg_processing, stock_lcc as stock_lcc_processing, \
     requested_quantities as requested_quantities_processing
@@ -51,6 +56,8 @@ from profiles.recap.visualization_scripts import (
     overview as overview_viz,
     sectored as sectored_viz,
     inputs as inputs_viz,
+    overview_emissions as overview_emissions_viz,
+    overview_energy as overview_energy_viz,
 )
 
 # Define which models this recap_2 profile will work with
@@ -69,40 +76,66 @@ class RecapOutput(BaseProfile):
     plot_order = [
         'Total Cost',
         'Emissions',
-        'Overview'
+        'Overview Emissions',
+        # 'Overview Energy',
+        # 'Overview',
+        'Inputs',
     ]
-    
     viz_options = {
-        'Total Cost':
-            {
-                'check': copper_cost_total_processing.check,
-                'db_check': copper_cost_total_processing.check,
-                'process': copper_cost_total_processing.process,
-                'db_process': copper_cost_total_processing.process,
-                'viz': copper_cost_total_viz.plot,
-                'callback': copper_cost_total_callbacks.link,
-                'description': 'Total costs of energy production and transmission from COPPER model.'
-            },
-        'Emissions':
-            {
-                'check': copper_emissions_processing.check,
-                'db_check': copper_emissions_processing.check,
-                'process': copper_emissions_processing.process,
-                'db_process': copper_emissions_processing.process,
-                'viz': copper_emissions_viz.plot,
-                'callback': copper_emissions_callbacks.link,
-                'description': 'Emissions analysis from COPPER model.'
-            },
-        'Overview':
-            {
-                'check': overview_processing.check,
-                'db_check': overview_processing.check,
-                'process': overview_processing.process,
-                'db_process': overview_processing.process,
-                'viz': overview_viz.plot,
-                'callback': overview_callbacks.link,
-                'description': 'Visualizations for a general overview of the data.'
-            }
+        'Total Cost': {
+            'check': copper_cost_total_processing.check,
+            'db_check': copper_cost_total_processing.check,
+            'process': copper_cost_total_processing.process,
+            'db_process': copper_cost_total_processing.process,
+            'viz': copper_cost_total_viz.plot,
+            'callback': copper_cost_total_callbacks.link,
+            'description': 'Total costs of energy production and transmission from COPPER model.'
+        },
+        'Emissions': {
+            'check': copper_emissions_processing.check,
+            'db_check': copper_emissions_processing.check,
+            'process': copper_emissions_processing.process,
+            'db_process': copper_emissions_processing.process,
+            'viz': copper_emissions_viz.plot,
+            'callback': copper_emissions_callbacks.link,
+            'description': 'Emissions analysis from COPPER model.'
+        },
+        # 'Overview': {
+        #     'check': overview_processing.check,
+        #     'db_check': overview_processing.check,
+        #     'process': overview_processing.process,
+        #     'db_process': overview_processing.process,
+        #     'viz': overview_viz.plot,
+        #     'callback': overview_callbacks.link,
+        #     'description': 'Visualizations for a general overview of the data.'
+        # },
+        'Inputs':{
+            'check': inputs_processing.check,
+            'db_check': inputs_processing.check,
+            'process': inputs_processing.process,
+            'db_process': inputs_processing.process,
+            'viz': inputs_viz.plot,
+            'callback': inputs_callbacks.link,
+            'description': 'Visualizations of the input data.'
+        },
+        'Overview Emissions': {
+            'check': overview_emissions_processing.check,
+            'db_check': overview_emissions_processing.check,
+            'process': overview_emissions_processing.process,
+            'db_process': overview_emissions_processing.process,
+            'viz': overview_emissions_viz.plot,
+            'callback': overview_emissions_callbacks.link,
+            'description': 'Emissions-specific overview visualization.'
+        },
+        # 'Overview Energy': {
+        #     'check': overview_energy_processing.check,
+        #     'db_check': overview_energy_processing.check,
+        #     'process': overview_energy_processing.process,
+        #     'db_process': overview_energy_processing.process,
+        #     'viz': overview_energy_viz.plot,
+        #     'callback': overview_energy_callbacks.link,
+        #     'description': 'Energy demand-specific overview visualization.'
+        # }
     }
 
     def __init__(self):

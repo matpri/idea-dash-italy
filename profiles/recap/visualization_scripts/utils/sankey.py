@@ -1,6 +1,6 @@
 
 import plotly.graph_objects as go
-from profiles.cims_output.utils import get_color
+from profiles.recap.utils import get_color
 
 
 def plot(df, scenario, region, year, title, name):
