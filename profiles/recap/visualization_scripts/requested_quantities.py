@@ -139,10 +139,14 @@ def widgets(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['year'].unique().tolist()
+
     sectors = df['sector'].unique().tolist()
     sectors = [sector for sector in sectors if
                sector is not None and sector != '' and sector != math.nan and isinstance(sector, str)]
-    services = df[(df['technology'].isna()) & (df['sector'] == sectors[0])]['short_path'].unique().tolist()
+    # sectors = ['Electricity']
+    # services = df[(df['technology'].isna()) & (df['sector'] == sectors[0])]['short_path'].unique().tolist()
+    services = df[(df['technology'].isna()) & (df['sector'] == 'Electricity')]['short_path'].unique().tolist()
+
     fuels = df[(df['technology'].isna())]['context'].unique().tolist()
 
     # get max depth which is the number of layers in the short_path
@@ -174,8 +178,9 @@ def widgets(df, window_id):
 
     by_fuel_widgets = dmc.Select(
         label='Fuel',
-        data=[{'label': fuel, 'value': fuel} for fuel in fuels],
-        value=fuels[0],
+        data=[{'label': fuel, 'value': fuel} for fuel in ['Electricity']],
+        # value=fuels[0],
+        value='Electricity',
         id={
             'type': 'recap-requested_quantities-fuel-select',
             'index': window_id
@@ -263,7 +268,8 @@ def widgets(df, window_id):
     widget_layout = [
         dmc.Select(
             label='Result Representation',
-            data=[{'label': plot, 'value': plot} for plot in ['By Fuel', 'By Service', 'By Sector']],
+            # data=[{'label': plot, 'value': plot} for plot in ['By Fuel', 'By Service', 'By Sector']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Sector']],
             value='By Sector',
             id={
                 'type': 'recap-requested_quantities-representation-select',
@@ -277,7 +283,7 @@ def widgets(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in
-                  ['Sankey', 'By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+                  [ 'By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
                 'type': 'recap-requested_quantities-plot-select',
