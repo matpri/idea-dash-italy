@@ -32,7 +32,9 @@ def plot(df, window_id):
     '''
     scenarios = df['scenario'].unique().tolist()
 
-    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    # base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = list(set([scenario.split('|')[1] if '|' in scenario else scenario for scenario in scenarios]))
+
     base_scenarios = ['ALL'] + base_scenarios
 
     regions = df['region'].unique().tolist()

@@ -400,7 +400,7 @@ class DataHandler:
         for fname, data in self.data.items():
             if not fname in self.processed:
                 for profile, viz_options in data['selected'].items():
-                    if profile != 'Power System Models' and profile != 'recap':
+                    if profile != 'Power System Models':
                         scenario = data['scenario']
 
                         for viz in viz_options:
@@ -425,10 +425,10 @@ class DataHandler:
             if power_system_results is not None:
                 results.extend(power_system_results)
 
-        if recap_profile:
-            recap_profile_result=self.profiles['recap'].process_data(results)
-            if recap_profile_result is not None:
-                results.extend(recap_profile_result)
+        # if recap_profile:
+        #     recap_profile_result=self.profiles['recap'].process_data(results)
+        #     if recap_profile_result is not None:
+        #         results.extend(recap_profile_result)
 
 
         for profile, viz, processed_data in results:

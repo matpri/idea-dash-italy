@@ -1,33 +1,38 @@
 import pandas as pd
+
 from profiles.recap.processing_scripts.utils import ghg
 
 def check(df):
     """
-    Check if emissions data is present in the DataFrame.
-    
+    Check if 'cost' is present in the 'variable' column.
+
     Args:
         df (DataFrame): The DataFrame to check.
-    
+
     Returns:
-        bool: True if emissions data is found, False otherwise.
+        bool: True if the specified prefix is found, False otherwise.
     """
+    #print("Checking for cost in variable column")
     try:
         if ghg.check(df):
             return True
+
         return False
     except Exception as e:
         print("cost check", e)
         return False
 
+
 def process(data):
     """
-    Process emission data from multiple scenarios for the Emissions overview.
-    
+    Process emission data from multiple scenarios based on the 'folders' dictionary.
+
     Parameters:
-        data (dict): Dictionary containing scenario names as keys and DataFrames as values.
-    
+        folders (dict): Dictionary containing scenario names as keys and folder paths as values.
+        target_dir (str): Target directory.
+
     Returns:
-        pd.DataFrame: Processed DataFrame containing only emissions data with 'tab' column set to 'Emissions'.
+        pd.DataFrame: Processed DataFrame.
     """
     dfs = []
     for scenario_name, db in data.items():

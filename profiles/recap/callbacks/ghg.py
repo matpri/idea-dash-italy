@@ -18,7 +18,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'recap',
-            'viz': 'Overview'
+            'viz': 'Overview Emissions'
         }, 'figure', allow_duplicate=True),
         Output({
             'type': 'recap-ghg-region-select',
@@ -147,7 +147,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'recap',
-            'viz': 'Overview'
+            'viz': 'Overview Emissions'
         }, 'figure'),
         State({
             'type': 'recap-ghg-download',
@@ -184,7 +184,7 @@ def link(app):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['recap']['Overview']
+        _data = data_handler.processed_data['recap']['Overview Emissions']
         _data = _data[_data['tab'] == 'Emissions']
 
         services = dash.no_update
