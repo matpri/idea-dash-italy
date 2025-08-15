@@ -59,7 +59,7 @@ from profiles.recap.visualization_scripts import (
 )
 
 # Define which models this recap_2 profile will work with
-recap = ['COPPER', 'CIMS']
+recap = ['COPPER', 'CIM2']
 
 
 class RecapOutput(BaseProfile):

@@ -24,7 +24,7 @@ def create_check(sector):
         """
         # print("Checking for emissions in variable column")
         try:
-            if (df.model == 'CIMS').any():
+            if (df.model == 'CIM2').any():
                 if (df.sector == sector).any():
                     df = df[df.sector == sector]
                     if stock_lcc.check(df):

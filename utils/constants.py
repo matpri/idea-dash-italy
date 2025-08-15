@@ -8,7 +8,8 @@ model_mapping = {
     'NRCan-PyPsa': ['NRCan-PyPsa', 'Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN', 'Power System Models'],
     'Sutubra-TEMOA': ['Sutubra-TEMOA', 'Power System Models'],
-    'CIMS': ['CIMS', 'recap']
+    'CIMS': ['CIMS'],
+    'CIM2': ['recap']
 }
 
 exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel',

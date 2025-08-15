@@ -18,7 +18,7 @@ def check(df):
     """
     #print("Checking for emissions in variable column")
     try:
-        if (df.model == 'CIMS').any():
+        if (df.model == 'CIM2').any():
             if df.variable.str.startswith("Input|").any():
                 return True
         return False
