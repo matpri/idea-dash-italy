@@ -33,6 +33,7 @@ from profiles.recap.callbacks import (requested_quantities as requested_quantiti
                                             settings as settings_callbacks,
                                             sectored as sectored_callbacks,
                                             inputs as inputs_callbacks,
+                                            credits as credits_callbacks,
                                             overview_emissions as overview_emissions_callbacks,
                                             overview_energy as overview_energy_callbacks,
 
@@ -41,6 +42,7 @@ from profiles.recap.processing_scripts import (
     overview as overview_processing,
     sectored as sectored_processing,
     inputs as inputs_processing,
+    credits as credits_processing,
     overview_emissions as overview_emissions_processing,
     overview_energy as overview_energy_processing,
     
@@ -56,6 +58,7 @@ from profiles.recap.visualization_scripts import (
     inputs as inputs_viz,
     overview_emissions as overview_emissions_viz,
     overview_energy as overview_energy_viz,
+    credits as credits_viz
 )
 
 # Define which models this recap_2 profile will work with
@@ -77,6 +80,7 @@ class RecapOutput(BaseProfile):
         'Overview Emissions',
         'Overview Energy',
         'Inputs',
+        'Credits'
     ]
     viz_options = {
         'Total Cost': {
@@ -96,6 +100,15 @@ class RecapOutput(BaseProfile):
             'viz': copper_emissions_viz.plot,
             'callback': copper_emissions_callbacks.link,
             'description': 'Emissions analysis from COPPER model.'
+        },
+        'Credits': {  
+            'check': credits_processing.check,
+            'db_check': credits_processing.check,
+            'process': credits_processing.process,
+            'db_process': credits_processing.process,
+            'viz': credits_viz.plot,
+            'callback': credits_callbacks.link,
+            'description': 'Credit supply, demand, and net balance analysis by sector.'
         },
 
         'Inputs':{

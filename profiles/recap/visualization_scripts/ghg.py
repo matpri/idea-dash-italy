@@ -15,28 +15,7 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     df = process_represenation(df, representation, sector, service, emissions_list)
-    # if type == 'By Year':
-    #     plot_info = plot_settings[plot_name]['By Year']
-    #     return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
-    #                                plot_info['y_label'],
-    #                                name, unit, pattern_active=pattern_active,
-    #                                text_active=text_active)
-    # elif type == 'Trend Over Years':
-    #     plot_info = plot_settings[plot_name]['Trend Over Years']
-    #     return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'],
-    #                                  plot_info['y_label'],
-    #                                  name, unit)
-    # elif type == 'Pie Chart':
-    #     plot_info = plot_settings[plot_name]['Pie Chart']
-    #     return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
-    #                           plot_info['y_label'],
-    #                           )
-    # else:
-    #     plot_info = plot_settings[plot_name]['By Region']
-    #     return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
-    #                                  plot_info['y_label'],
-    #                                  name, unit, pattern_active=pattern_active,
-    #                                  text_active=text_active)
+
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
         # Note: ghg doesn't use aggregate parameter, so we pass False

@@ -712,3 +712,14 @@ Overview Energy:
     unit: GJ
     x_label: Year
     y_label: Energy Demand
+Credits:
+  name: "Credits"
+  unit: "Credits"
+  By Year:
+    title: "Credits by Sector (By Year)"
+    x_label: "Year"
+    y_label: "Credits"
+  Trend Over Years:
+    title: "Credits by Sector (Trend Over Years)"
+    x_label: "Year"
+    y_label: "Credits"
