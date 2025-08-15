@@ -14,7 +14,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'recap-overview-demand',
+            'type': 'recap-overview-emission-demand',
             'index': ALL
         }, 'style'),
         Output({
@@ -26,7 +26,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         Output({
-            'type': 'recap-demand-update',
+            'type': 'recap-demand-update-new',
             'index': ALL
         }, 'value'),
         Output({
@@ -42,7 +42,7 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'recap-overview-demand',
+            'type': 'recap-overview-emission-demand',
             'index': ALL
         }, 'style'),
         State({
@@ -54,7 +54,7 @@ def link(app):
             'index': ALL
         }, 'value'),
         State({
-            'type': 'recap-demand-update',
+            'type': 'recap-demand-update-new',
             'index': ALL
         }, 'value'),
         State({

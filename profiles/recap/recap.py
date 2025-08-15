@@ -75,8 +75,7 @@ class RecapOutput(BaseProfile):
         'Total Cost',
         'Emissions',
         'Overview Emissions',
-        # 'Overview Energy',
-        # 'Overview',
+        'Overview Energy',
         'Inputs',
     ]
     viz_options = {
@@ -98,15 +97,7 @@ class RecapOutput(BaseProfile):
             'callback': copper_emissions_callbacks.link,
             'description': 'Emissions analysis from COPPER model.'
         },
-        # 'Overview': {
-        #     'check': overview_processing.check,
-        #     'db_check': overview_processing.check,
-        #     'process': overview_processing.process,
-        #     'db_process': overview_processing.process,
-        #     'viz': overview_viz.plot,
-        #     'callback': overview_callbacks.link,
-        #     'description': 'Visualizations for a general overview of the data.'
-        # },
+
         'Inputs':{
             'check': inputs_processing.check,
             'db_check': inputs_processing.check,
@@ -125,15 +116,15 @@ class RecapOutput(BaseProfile):
             'callback': overview_emissions_callbacks.link,
             'description': 'Emissions-specific overview visualization.'
         },
-        # 'Overview Energy': {
-        #     'check': overview_energy_processing.check,
-        #     'db_check': overview_energy_processing.check,
-        #     'process': overview_energy_processing.process,
-        #     'db_process': overview_energy_processing.process,
-        #     'viz': overview_energy_viz.plot,
-        #     'callback': overview_energy_callbacks.link,
-        #     'description': 'Energy demand-specific overview visualization.'
-        # }
+        'Overview Energy': {
+            'check': overview_energy_processing.check,
+            'db_check': overview_energy_processing.check,
+            'process': overview_energy_processing.process,
+            'db_process': overview_energy_processing.process,
+            'viz': overview_energy_viz.plot,
+            'callback': overview_energy_callbacks.link,
+            'description': 'Energy demand-specific overview visualization.'
+        }
     }
 
     def __init__(self):
@@ -167,72 +158,7 @@ class RecapOutput(BaseProfile):
         settings_callbacks.link(app)
         super().link(app)
 
-    # Update your process_data method to handle the new Overview plots
-    # def process_data(self, data_collection):
-    #     processed_data = defaultdict(list)
 
-    #     for profile, viz_option, df in data_collection:
-    #         print(profile, viz_option)
-    #         if (profile in recap and viz_option in self.viz_options):
-    #             data = df.copy()
-    #             data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
-    #             data['scenario'] = profile + '|' + data['scenario']
-                
-    #             if not viz_option in ['Overview', 'Overview Emissions', 'Overview Energy', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
-    #                 unique_regions = set(data['region'].unique())
-
-    #                 # Check if both 'A' and 'B' are in the unique values
-    #                 if {'AB', 'QC'}.issubset(unique_regions):
-    #                     ab_qc = data[data.region.isin(['AB', 'QC'])]
-    #                     # drop nan columns
-    #                     ab_qc = ab_qc.dropna(axis=1, how='all')
-    #                     columns = ab_qc.columns
-    #                     columns = columns.drop('region')
-    #                     columns = columns.drop('value').tolist()
-
-    #                     # Perform groupby operation
-    #                     ab_qc = ab_qc.groupby(columns).sum().reset_index()
-    #                     ab_qc['region'] = 'AB+QC'
-    #                     data = pd.concat([data, ab_qc])
-
-    #             if 'time' in data.columns:
-    #                 data = data[data['time'].isin(
-    #                     [2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045',
-    #                     '2050'])]
-    #                 # make time into int
-    #                 data['time'] = pd.to_numeric(data['time'])
-
-    #             elif 'period' in data.columns:
-    #                 data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
-                
-    #             processed_data[viz_option].append(data)
-
-    #     # Handle Overview data - process it once and create separate entries for emissions and energy
-    #     if 'Overview' in processed_data:
-    #         overview_data = processed_data['Overview']
-    #         # Create entries for the new overview plots
-    #         processed_data['Overview Emissions'] = overview_data.copy()
-    #         # processed_data['Overview Energy'] = overview_data.copy()
-    #         # Remove the original Overview from processed_data if you don't want it
-    #         del processed_data['Overview']
-
-    #     results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
-    #     # for viz_option, data in processed_data.items():
-    #     #     print(self.display_name, viz_option)
-
-    #     dfs = []
-    #     for _, viz_option, df in results:
-    #         if viz_option not in ['Overview', 'Overview Emissions', 'Overview Energy']:
-    #             data = df.copy()
-    #             data['variable'] = viz_option + '|' + data['variable']
-    #             dfs.append(data)
-        
-    #     if len(dfs) > 0:
-    #         full_df = pd.concat(dfs)
-    #         results.extend([(self.display_name, 'Comparison', full_df), (self.display_name, 'Comparison Matrix', full_df)])
-    #         return results
-
-    #     return None
 
     def process_data(self, data_collection):
         print('Base collective preprocess')
@@ -242,74 +168,7 @@ class RecapOutput(BaseProfile):
         processed_data = [data_processing_task(*arg) for arg in args]
 
         return processed_data
-    # def process_data(self, data_collection):
-    #     processed_data = defaultdict(list)
 
-    #     for profile, viz_option, df in data_collection:
-    #         print(profile, viz_option)
-    #         if (profile in recap and viz_option in self.viz_options):
-    #             data = df.copy()
-    #             data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
-    #             data['scenario'] = profile + '|' + data['scenario']
-    #             if not viz_option in ['Overview', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
-    #                 unique_regions = set(data['region'].unique())
-
-    #                 # Check if both 'A' and 'B' are in the unique values
-    #                 if {'AB', 'QC'}.issubset(unique_regions):
-    #                     ab_qc = data[data.region.isin(['AB', 'QC'])]
-    #                     # drop nan columns
-    #                     ab_qc = ab_qc.dropna(axis=1, how='all')
-    #                     columns = ab_qc.columns
-    #                     columns = columns.drop('region')
-    #                     columns = columns.drop('value').tolist()
-
-    #                     # Perform groupby operation
-    #                     ab_qc = ab_qc.groupby(columns).sum().reset_index()
-    #                     ab_qc['region'] = 'AB+QC'
-    #                     data = pd.concat([data, ab_qc])
-
-    #             if 'time' in data.columns:
-    #                 data = data[data['time'].isin(
-    #                     [2021, 2025, 2030, 2035, 2040, 2045, 2050, '2021', '2025', '2030', '2035', '2040', '2045',
-    #                      '2050'])]
-
-    #                 # make time into int
-    #                 data['time'] = pd.to_numeric(data['time'])
-
-
-
-    #             elif 'period' in data.columns:
-    #                 data = data[data['period'].isin([2021, 2025, 2030, 2035, 2040, 2045, 2050])]
-    #             processed_data[viz_option].append(data)
-
-    #     output_stats = []
-
-    #     # if 'Overview' in processed_data:
-    #     #     for p_data in processed_data['Overview']:
-    #     #         for c in p_data.variable.unique():
-    #     #             if c in self.viz_options:
-    #     #                 data = p_data[p_data.variable == c]
-    #     #                 # if net new capacity make cumsum of value based on time column
-    #     #                 if 'Net New Capacity' in c or 'New Capacity' in c:
-    #     #                     data['value'] = data.groupby(['region', 'scenario'])['value'].cumsum()
-    #     #                 output_stats.append(data)
-
-    #     results = [(self.display_name, viz_option, pd.concat(data)) for viz_option, data in processed_data.items()]
-
-    #     dfs = []
-    #     for _, viz_option, df in results:
-    #         if viz_option != 'Overview':
-    #             data = df.copy()
-    #             data['variable'] = viz_option + '|' + data['variable']
-    #             dfs.append(data)
-    #     if len(dfs) > 0:
-    #         full_df = pd.concat(dfs)
-
-    #         results.extend([(self.display_name, 'Comparison', full_df), (self.display_name, 'Comparison Matrix', full_df)])
-
-    #         return results
-
-    #     return None
 
     def render_settings(self):
         layout = html.Div(

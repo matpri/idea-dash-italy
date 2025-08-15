@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'recap',
-            'viz': 'Overview'
+            'viz': 'Overview Energy'
         }, 'figure', allow_duplicate=True),
         Output({
             'type': 'recap-requested_quantities-region-select',
@@ -146,7 +146,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': MATCH,
             'profile': 'recap',
-            'viz': 'Overview'
+            'viz': 'Overview Energy'
         }, 'figure'),
         State({
             'type': 'recap-requested_quantities-download',
@@ -196,7 +196,7 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
-        _data = data_handler.processed_data['recap']['Overview']
+        _data = data_handler.processed_data['recap']['Overview Energy']
         _data = _data[_data['tab'] == 'Energy Demand']
 
         layers = [dash.no_update] * len(_service_style)
