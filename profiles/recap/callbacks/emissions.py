@@ -182,8 +182,11 @@ def link(app):
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
+                # scenarios = [scenario for scenario in unique_scenarios if
+                #              scenario.split('|')[1] == _scenario_group[idx]]
+                scenarios = [scenario for scenario in unique_scenarios if 
+             ('|' in scenario and scenario.split('|')[1] == _scenario_group[idx]) or 
+             ('|' not in scenario and scenario == _scenario_group[idx])]
                 scens += scenarios
 
             if _aggregates[idx] is not None:

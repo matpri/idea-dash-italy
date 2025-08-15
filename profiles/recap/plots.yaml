@@ -705,10 +705,10 @@ Overview Emissions:
     x_label: Year
     y_label: Net Emissions
 
-# Overview Energy:
-#   Energy Demand:
-#     title: Energy Demand
-#     name: Energy Demand
-#     unit: GJ
-#     x_label: Year
-#     y_label: Energy Demand
+Overview Energy:
+  Energy Demand:
+    title: Energy Demand
+    name: Energy Demand
+    unit: GJ
+    x_label: Year
+    y_label: Energy Demand

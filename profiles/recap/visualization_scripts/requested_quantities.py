@@ -24,20 +24,21 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
         df = process_represenation(df, representation, sector, service, fuel)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
+        # Note: requested_quantities doesn't use aggregate parameter, so we pass False
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'],
-                                   name, unit, pattern_active=pattern_active,
+                                   name, unit, aggregate=False, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings[plot_name]['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'],
+        # Note: requested_quantities doesn't use aggregate parameter, so we pass False
+        return trend_over_years.plot(df, scenario, region, False, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit)
     elif type == 'Pie Chart':
         plot_info = plot_settings[plot_name]['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
-                              plot_info['y_label'],
-                              )
+        return pie_chart.plot(df, scenario, region, year, False, plot_info['title'], plot_info['x_label'],
+                              plot_info['y_label'])
     elif type == 'Sankey':
         by_fuel = df[(df['year'] == year) & (df['region'] == region)].copy()
         # drop where context == Total
@@ -94,7 +95,7 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
 
     else:
         plot_info = plot_settings[plot_name]['By Region']
-        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
+        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
