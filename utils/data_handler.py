@@ -167,7 +167,7 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'recap', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+    profile_order = ['Power System Models', 'Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
@@ -412,8 +412,7 @@ class DataHandler:
                     else:
                         if profile == 'Power System Models':
                             process_power_system = True
-                        elif profile == 'recap':
-                            recap_profile = True
+
                 self.processed.append(fname)
 
         results = []
@@ -424,13 +423,6 @@ class DataHandler:
             power_system_results=self.profiles['Power System Models'].process_data(results)
             if power_system_results is not None:
                 results.extend(power_system_results)
-
-        # if recap_profile:
-        #     recap_profile_result=self.profiles['recap'].process_data(results)
-        #     if recap_profile_result is not None:
-        #         results.extend(recap_profile_result)
-
-
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -446,7 +438,7 @@ class DataHandler:
             print('Processing', model)
             if model in exclude_from_comparison:
                 continue
-            if model == 'Power System Models' or model == 'Generic Comparison'or model == 'recap':
+            if model == 'Power System Models' or model == 'Generic Comparison'or model == 'Summary':
                 continue
             for viz, viz_data in viz_option.items():
                 if viz == 'Overview' or viz == 'Output Stats' or viz == 'Inputs':

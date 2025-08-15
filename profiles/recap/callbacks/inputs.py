@@ -10,7 +10,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'recap',
+            'profile': 'Summary',
             'viz': 'Inputs'
         }, 'figure'),
         Output({
@@ -91,7 +91,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'recap',
+            'profile': 'Summary',
             'viz': 'Inputs'
         }, 'figure'),
         State({
@@ -140,7 +140,7 @@ def link(app):
                         (id['id']['type'] == 'recap-inputs-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['recap']['Inputs'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Summary']['Inputs'].to_csv,
                                              "inputs.csv")
             return (
                 _canvas, _data, _cost_style, _policy_style, _generic_style, _generic_byscenario_style,
@@ -179,7 +179,7 @@ def link(app):
             _generic_byregion_style[idx] = {'display': 'none'}
 
         # Render the plot based on the selected inputs
-        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['recap']['Inputs'], _c_type=_c_select[idx],
+        _canvas[idx] = render_plot(_p_type[idx], data_handler.processed_data['Summary']['Inputs'], _c_type=_c_select[idx],
                                    _c_scenario=_c_scenario[idx], _c_region=_c_region[idx], _c_sector=_c_sector[idx],
                                    _policy_scenarios=_policy_scenarios[idx], _policy_region=_policy_region[idx],
                                    _region=_region[idx], _scenario=_scenario[idx], _multi_region=_region_multi[idx],

@@ -679,7 +679,7 @@ Overview:
     unit: tCO2e
     x_label: Year
     y_label: Net Emissions
-Overview Emissions:
+Sector Emissions:
   Avoided Emissions:
     title: Avoided Emissions
     name: Avoided Emissions
@@ -705,7 +705,7 @@ Overview Emissions:
     x_label: Year
     y_label: Net Emissions
 
-Overview Energy:
+Electricity Demand:
   Energy Demand:
     title: Energy Demand
     name: Energy Demand

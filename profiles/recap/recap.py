@@ -66,18 +66,18 @@ recap = ['COPPER', 'CIM2']
 
 
 class RecapOutput(BaseProfile):
-    display_name = 'recap'
-    name = 'recap'
+    display_name = 'Summary'
+    name = 'Summary'
     db_name = 'recap'
     color = 'blue 8'
     description = (
-        'recap profile combining key visualizations from COPPER and CIMS models. '
+        'Summary profile combining key visualizations from COPPER and CIMS models. '
         'Provides essential cost and emissions analysis for quick overview and comparison.')
 
     plot_order = [
         'Total Cost',
-        'Overview Emissions',
-        'Overview Energy',
+        'Sector Emissions',
+        'Electricity Demand',
         'Inputs',
         'Credits'
     ]
@@ -110,7 +110,7 @@ class RecapOutput(BaseProfile):
             'callback': inputs_callbacks.link,
             'description': 'Visualizations of the input data.'
         },
-        'Overview Emissions': {
+        'Sector Emissions': {
             'check': overview_emissions_processing.check,
             'db_check': overview_emissions_processing.check,
             'process': overview_emissions_processing.process,
@@ -119,7 +119,7 @@ class RecapOutput(BaseProfile):
             'callback': overview_emissions_callbacks.link,
             'description': 'Emissions-specific overview visualization.'
         },
-        'Overview Energy': {
+        'Electricity Demand': {
             'check': overview_energy_processing.check,
             'db_check': overview_energy_processing.check,
             'process': overview_energy_processing.process,

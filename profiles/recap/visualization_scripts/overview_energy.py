@@ -88,8 +88,8 @@ def plot(df, window_id):
         id={
             'type': 'figure',
             'index': window_id,
-            'profile': 'recap',
-            'viz': 'Overview Energy'
+            'profile': 'Summary',
+            'viz': 'Electricity Demand'
         },
         style={
             'width': '100%',

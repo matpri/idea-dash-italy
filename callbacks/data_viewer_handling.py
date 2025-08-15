@@ -16,7 +16,7 @@ profile_modules = {
     'ESMIA-PITHOS': 'profiles.pithos_output',
     'NRCAN-PyPsa': 'profiles.pypsa_output',
     'Power System Models': 'profiles.energy_model',
-    'recap': 'profiles.recap',
+    'Summary': 'profiles.recap',
 }
 
 def link(app):

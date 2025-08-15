@@ -11,7 +11,7 @@ def create_link(sector):
             Output({
                 'type': 'figure',
                 'index': MATCH,
-                'profile': 'recap',
+                'profile': 'Summary',
                 'viz': sector
             }, 'figure'),
             Output({
@@ -174,7 +174,7 @@ def create_link(sector):
             from utils.data_state import data_handler
             ctx = dash.callback_context
             trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-            _data = data_handler.processed_data['recap'][sector]
+            _data = data_handler.processed_data['Summary'][sector]
             layers = [dash.no_update] * len(_service_style)
             service_value = _service.copy()
     

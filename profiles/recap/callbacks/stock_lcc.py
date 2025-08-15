@@ -10,7 +10,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'recap',
+            'profile': 'Summary',
             'viz': 'Overview'
         }, 'figure', allow_duplicate=True),
         Output({
@@ -134,7 +134,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'recap',
+            'profile': 'Summary',
             'viz': 'Overview'
         }, 'figure'),
         State({
@@ -186,7 +186,7 @@ def link(app):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['recap']['Overview']
+        _data = data_handler.processed_data['Summary']['Overview']
         _data = _data[_data['tab'] == 'Technology Stocks']
 
         if 'recap-stock_lcc-download-button' in trigger_id['type']:

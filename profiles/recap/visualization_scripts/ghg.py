@@ -100,8 +100,8 @@ def widgets(df, window_id):
     services = df[(df['sector'] == sectors[0])]['short_path'].unique().tolist()
     emissions_list = df[df['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
 
-    plot_types = ['Net Emissions', 'Avoided Emissions', 'Negative Emissions', 'Emitted Emissions', 'Emissions Costs']
-
+    # plot_types = ['Net Emissions', 'Avoided Emissions', 'Negative Emissions', 'Emitted Emissions', 'Emissions Costs']
+    plot_types = ['Net Emissions']
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],

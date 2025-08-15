@@ -1,6 +1,6 @@
 model_mapping = {
     'silver' : ['SILVER'],
-    'copper': ['COPPER', 'Power System Models', 'recap'],
+    'copper': ['COPPER', 'Power System Models', 'Summary'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid', 'Power System Models'],
     'NATEM_Canad': ['NATEM Canada', 'Power System Models'],
@@ -9,8 +9,8 @@ model_mapping = {
     'PyPSA_CAN': ['PyPSA_CAN', 'Power System Models'],
     'Sutubra-TEMOA': ['Sutubra-TEMOA', 'Power System Models'],
     'CIMS': ['CIMS'],
-    'CIM2': ['recap']
+    'CIM2': ['Summary']
 }
 
 exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel',
-                           'COPPER', 'HEC-PITHOS', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra-TEMOA', 'recap']
+                           'COPPER', 'HEC-PITHOS', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra-TEMOA', 'Summary']

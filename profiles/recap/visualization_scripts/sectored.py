@@ -342,7 +342,7 @@ def create_plot(sector):
             id={
                 'type': 'figure',
                 'index': window_id,
-                'profile': 'recap',
+                'profile': 'Summary',
                 'viz': sector
             },
             style={
