@@ -188,7 +188,7 @@ def widgets(df, window_id):
     widget_layout = [
         dmc.Select(
             label='Result Representation',
-            data=[{'label': plot, 'value': plot} for plot in ['By Emission','By Service', 'By Sector']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Emission']],
             value='By Emission',
             id={
                 'type': 'recap-ghg-representation-select',

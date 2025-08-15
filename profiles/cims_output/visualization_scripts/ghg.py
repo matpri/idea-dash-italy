@@ -185,7 +185,7 @@ def widgets(df, window_id):
     widget_layout = [
         dmc.Select(
             label='Result Representation',
-            data=[{'label': plot, 'value': plot} for plot in ['By Emission']],
+            data=[{'label': plot, 'value': plot} for plot in ['By Emission','By Service', 'By Sector']],
             value='By Emission',
             id={
                 'type': 'cims-ghg-representation-select',

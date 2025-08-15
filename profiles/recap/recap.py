@@ -76,7 +76,6 @@ class RecapOutput(BaseProfile):
 
     plot_order = [
         'Total Cost',
-        'Emissions',
         'Overview Emissions',
         'Overview Energy',
         'Inputs',
@@ -91,15 +90,6 @@ class RecapOutput(BaseProfile):
             'viz': copper_cost_total_viz.plot,
             'callback': copper_cost_total_callbacks.link,
             'description': 'Total costs of energy production and transmission from COPPER model.'
-        },
-        'Emissions': {
-            'check': copper_emissions_processing.check,
-            'db_check': copper_emissions_processing.check,
-            'process': copper_emissions_processing.process,
-            'db_process': copper_emissions_processing.process,
-            'viz': copper_emissions_viz.plot,
-            'callback': copper_emissions_callbacks.link,
-            'description': 'Emissions analysis from COPPER model.'
         },
         'Credits': {  
             'check': credits_processing.check,
