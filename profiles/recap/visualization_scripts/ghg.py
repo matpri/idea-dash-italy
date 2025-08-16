@@ -246,7 +246,7 @@ def widgets(df, window_id):
         dcc.Download(id={'type': 'recap-ghg-download', 'index': window_id}),
     ]
 
-    return widget_layout, render_plot('By Emission', 'By Year', df, [scenarios[0]],
+    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]],
                                       'CAN' if 'CAN' in regions else regions[0],
                                       years[0], scenarios[0], sector=sectors[0], service=services[0],
                                       emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
