@@ -20,8 +20,8 @@ def convert_credits_to_iamc(df, unit="$"):
         temp = temp[["model", "scenario", "region", "time", "variable", "value"]]
         temp["unit"] = unit
         temp["variable"] = "Credits|" + temp["variable"]
-        # (Might need to be changed) Divide all values by 100 to maitain order of magnitude
-        # temp["value"] = temp["value"] / 100
+        # (Might need to be changed) multiply all values by 100 to maitain order of magnitude
+        temp["value"] = temp["value"] *100
 
         # Making supply negative to match COPPER format
         mask = temp["variable"].str.contains("Credit Supply", case=False, na=False)
