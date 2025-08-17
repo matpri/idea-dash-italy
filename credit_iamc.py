@@ -21,7 +21,7 @@ def convert_credits_to_iamc(df, unit="$"):
         temp["unit"] = unit
         temp["variable"] = "Credits|" + temp["variable"]
         # (Might need to be changed) multiply all values by 100 to maitain order of magnitude
-        temp["value"] = temp["value"] *100
+        temp["value"] = temp["value"] *1
 
         # Making supply negative to match COPPER format
         mask = temp["variable"].str.contains("Credit Supply", case=False, na=False)
@@ -117,7 +117,7 @@ def summarize_carbon_credits_ignore_model(df, iamc_df, unit="$"):
     print(f"\nSummary for IAMC update: {updated_count} rows updated, {added_count} rows added.\n")
     return iamc_df
 
-folder_path = r"C:\Users\bipas\Downloads\idea-data\idea" #Change to enter path of the folder containing the idea files (NOT the filename itself)
+folder_path = r"/Users/ahoyle/idea-dash/data" #Change to enter path of the folder containing the idea files (NOT the filename itself)
 folder = Path(folder_path)
 
 csv_files = list(folder.glob("*.csv"))
