@@ -11,6 +11,7 @@ from profiles.base_profile.base_profile import BaseProfile, data_processing_task
 # Import COPPER processing scripts for Total Cost and Emissions
 from profiles.recap.processing_scripts import (
     cost_total as copper_cost_total_processing,
+    generation_supply as generation_supply_processing,
     emissions as copper_emissions_processing
 )
 from profiles.recap import utils
@@ -18,6 +19,8 @@ from profiles.recap import utils
 # Import COPPER visualization scripts for Total Cost and Emissions
 from profiles.recap.visualization_scripts import (
     cost_total as copper_cost_total_viz,
+    generation_supply as generation_supply_viz,
+    generation_capacity as generation_capacity_viz,
     emissions as copper_emissions_viz
 )
 
@@ -25,6 +28,7 @@ from profiles.recap.visualization_scripts import (
 from profiles.recap.callbacks import (
     cost_total as copper_cost_total_callbacks,
     emissions as copper_emissions_callbacks,
+    generation_capacity as generation_capacity_callbacks,
     settings as settings_callbacks
 )
 from profiles.recap.callbacks import (requested_quantities as requested_quantities_callbacks,
@@ -36,11 +40,12 @@ from profiles.recap.callbacks import (requested_quantities as requested_quantiti
                                             credits as credits_callbacks,
                                             overview_emissions as overview_emissions_callbacks,
                                             overview_energy as overview_energy_callbacks,
-
+                                            generation_supply as generation_supply_callbacks,
                                             )
 from profiles.recap.processing_scripts import (
     overview as overview_processing,
     sectored as sectored_processing,
+    generation_capacity as generation_capacity_processing,
     inputs as inputs_processing,
     credits as credits_processing,
     overview_emissions as overview_emissions_processing,
@@ -78,6 +83,8 @@ class RecapOutput(BaseProfile):
         'Total Cost',
         'Sector Emissions',
         'Electricity Demand',
+        'Capacity',
+        'Supply',
         'Inputs',
         'Credits'
     ]
@@ -90,6 +97,25 @@ class RecapOutput(BaseProfile):
             'viz': copper_cost_total_viz.plot,
             'callback': copper_cost_total_callbacks.link,
             'description': 'Total costs of energy production and transmission from COPPER model.'
+        },
+        'Capacity':{
+            'check': generation_capacity_processing.check,
+            'db_check': generation_capacity_processing.check,
+            'process': generation_capacity_processing.process,
+            'db_process': generation_capacity_processing.process,
+            'viz': generation_capacity_viz.plot,
+            'callback': generation_capacity_callbacks.link,
+            'description': 'Capacity of each technology in the model.'
+        },
+        'Supply':
+        {
+            'check': generation_supply_processing.check,
+            'db_check': generation_supply_processing.check,
+            'process': generation_supply_processing.process,
+            'db_process': generation_supply_processing.process,
+            'viz': generation_supply_viz.plot,
+            'callback': generation_supply_callbacks.link,
+            'description': 'Generation supply of each technology in the model.'
         },
         'Credits': {  
             'check': credits_processing.check,

@@ -723,3 +723,42 @@ Credits:
     title: "Credits by Sector (Trend Over Years)"
     x_label: "Year"
     y_label: "Credits"
+Capacity:
+  name: Capacity
+  unit: GW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+Supply:
+    name: Supply
+    unit: TWh
+    By Year:
+        title: Supply by Year
+        x_label: Year
+        y_label: Supply (TWh)
+
+    Trend Over Years:
+        title: Supply by Year
+        x_label: Year
+        y_label:  Supply (TWh)
+    Pie Chart:
+        title: Supply
+        x_label:
+        y_label:
+    By Region:
+        title: Supply by Region
+        x_label: Region
+        y_label: Supply (TWh)
