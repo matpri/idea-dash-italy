@@ -31,13 +31,14 @@ def plot(df, window_id):
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
     scenarios = df['scenario'].unique().tolist()
-    regions = df['region'].unique().tolist()
+    # regions = df['region'].unique().tolist()
+    regions = ['SK'] if 'SK' in df['region'].unique() else df['region'].unique().tolist()
     years = df['time'].unique().tolist()
 
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
-        value= 'CAN' if 'CAN' in regions else regions[0],
+        value= 'SK' if 'SK' in regions else regions[0],
         id={
             'type': 'recap-gencap-region-select',
             'index': window_id
@@ -125,7 +126,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('By Year', df, True, [scenarios[0]], 'SK' if 'SK' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
             'type': ids.FIGURE,
