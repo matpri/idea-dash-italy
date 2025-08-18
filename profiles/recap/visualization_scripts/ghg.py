@@ -153,7 +153,7 @@ def widgets(df, window_id):
             'index': window_id
         })
 
-    sectors = ['All'] + sectors
+    sectors = ['All']
     by_sector_widgets = dmc.Select(
         label='Sector',
         data=[{'label': sector, 'value': sector} for sector in sectors],
