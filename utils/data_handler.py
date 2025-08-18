@@ -167,7 +167,7 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+    profile_order = ['Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):

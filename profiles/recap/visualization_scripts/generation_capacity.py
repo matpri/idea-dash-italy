@@ -7,19 +7,19 @@ from profiles.recap.visualization_scripts.utils import bar_over_years, bar_over_
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.recap.utils import plot_settings
     #print('rendering plot', type)
-    name = plot_settings['Capacity']['name']
-    unit = plot_settings['Capacity']['unit']
+    name = plot_settings['Electricity Capacity']['name']
+    unit = plot_settings['Electricity Capacity']['unit']
     if type == 'By Year':
-        plot_info = plot_settings['Capacity']['By Year']
+        plot_info = plot_settings['Electricity Capacity']['By Year']
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
-        plot_info = plot_settings['Capacity']['Trend Over Years']
+        plot_info = plot_settings['Electricity Capacity']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Pie Chart':
-        plot_info = plot_settings['Capacity']['Pie Chart']
+        plot_info = plot_settings['Electricity Capacity']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
-        plot_info = plot_settings['Capacity']['By Region']
+        plot_info = plot_settings['Electricity Capacity']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
 
 
@@ -132,7 +132,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Capacity'
+            'viz': 'Electricity Capacity'
         },
         style={
             'width': '100%',

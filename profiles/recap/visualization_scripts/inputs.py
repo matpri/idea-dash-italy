@@ -489,7 +489,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Inputs'
+            'viz': 'Electricity Prices'
         },
         style={
             'width': '100%',

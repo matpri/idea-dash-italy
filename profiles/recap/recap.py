@@ -16,7 +16,7 @@ from profiles.recap.processing_scripts import (
 )
 from profiles.recap import utils
 
-# Import COPPER visualization scripts for Total Cost and Emissions
+# Import COPPER visualization scripts for Electricity Total Cost and Emissions
 from profiles.recap.visualization_scripts import (
     cost_total as copper_cost_total_viz,
     generation_supply as generation_supply_viz,
@@ -24,7 +24,7 @@ from profiles.recap.visualization_scripts import (
     emissions as copper_emissions_viz
 )
 
-# Import COPPER callback scripts for Total Cost and Emissions
+# Import COPPER callback scripts for Electricity Total Cost and Emissions
 from profiles.recap.callbacks import (
     cost_total as copper_cost_total_callbacks,
     emissions as copper_emissions_callbacks,
@@ -80,25 +80,25 @@ class RecapOutput(BaseProfile):
         'Provides essential cost and emissions analysis for quick overview and comparison.')
 
     plot_order = [
-        'Total Cost',
-        'Sector Emissions',
+        'Electricity Total Cost',
+        'Economy-wide Emissions',
         'Electricity Demand',
-        'Capacity',
+        'Electricity Capacity',
         'Supply',
-        'Inputs',
-        'Credits'
+        'Electricity Prices',
+        'Economy-wide Carbon Credits'
     ]
     viz_options = {
-        'Total Cost': {
+        'Electricity Total Cost': {
             'check': copper_cost_total_processing.check,
             'db_check': copper_cost_total_processing.check,
             'process': copper_cost_total_processing.process,
             'db_process': copper_cost_total_processing.process,
             'viz': copper_cost_total_viz.plot,
             'callback': copper_cost_total_callbacks.link,
-            'description': 'Total costs of energy production and transmission from COPPER model.'
+            'description': 'Electricity Total Costs of energy production and transmission from COPPER model.'
         },
-        'Capacity':{
+        'Electricity Capacity':{
             'check': generation_capacity_processing.check,
             'db_check': generation_capacity_processing.check,
             'process': generation_capacity_processing.process,
@@ -117,7 +117,7 @@ class RecapOutput(BaseProfile):
             'callback': generation_supply_callbacks.link,
             'description': 'Generation supply of each technology in the model.'
         },
-        'Credits': {  
+        'Economy-wide Carbon Credits': {  
             'check': credits_processing.check,
             'db_check': credits_processing.check,
             'process': credits_processing.process,
@@ -127,7 +127,7 @@ class RecapOutput(BaseProfile):
             'description': 'Credit supply, demand, and net balance analysis by sector.'
         },
 
-        'Inputs':{
+        'Electricity Prices':{
             'check': inputs_processing.check,
             'db_check': inputs_processing.check,
             'process': inputs_processing.process,
@@ -136,7 +136,7 @@ class RecapOutput(BaseProfile):
             'callback': inputs_callbacks.link,
             'description': 'Visualizations of the input data.'
         },
-        'Sector Emissions': {
+        'Economy-wide Emissions': {
             'check': overview_emissions_processing.check,
             'db_check': overview_emissions_processing.check,
             'process': overview_emissions_processing.process,

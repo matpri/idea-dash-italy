@@ -11,26 +11,26 @@ regions_list = [
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.recap.utils import plot_settings
     #print('rendering plot', type)
-    name = plot_settings['Supply']['name']
-    unit = plot_settings['Supply']['unit']
+    name = plot_settings['Electricity Supply']['name']
+    unit = plot_settings['Electricity Supply']['unit']
     #print(df.head())
     if type == 'By Year':
-        plot_info = plot_settings['Supply']['By Year']
+        plot_info = plot_settings['Electricity Supply']['By Year']
         if region == 'CAN':
             df = df[~df['end_node'].isin(regions_list)]
         return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
-        plot_info = plot_settings['Supply']['Trend Over Years']
+        plot_info = plot_settings['Electricity Supply']['Trend Over Years']
         if region == 'CAN':
             df = df[~df['end_node'].isin(regions_list)]
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Pie Chart':
         if region == 'CAN':
             df = df[~df['end_node'].isin(regions_list)]
-        plot_info = plot_settings['Supply']['Pie Chart']
+        plot_info = plot_settings['Electricity Supply']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
-        plot_info = plot_settings['Supply']['By Region']
+        plot_info = plot_settings['Electricity Supply']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
 
 
@@ -143,7 +143,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Supply'
+            'viz': 'Electricity Supply'
         },
         style={
             'width': '100%',

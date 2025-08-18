@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'Summary',
-            'viz': 'Total Cost'
+            'viz': 'Electricity Total Cost'
         }, 'figure'),
         Output({
             'type': 'recap-total_cost-region-select',
@@ -109,7 +109,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'Summary',
-            'viz': 'Total Cost'
+            'viz': 'Electricity Total Cost'
         }, 'figure'),
         State({
             'type': 'recap-total_cost-download',
@@ -157,7 +157,7 @@ def link(app):
                         (id['id']['type'] == 'recap-total_cost-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Summary']['Total Cost'].to_csv, "total_cost.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Summary']['Electricity Total Cost'].to_csv, "total_cost.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, _pattern_style, _text_style
 
         idx = 0
@@ -178,7 +178,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
 
-            df = data_handler.processed_data['Summary']['Total Cost']
+            df = data_handler.processed_data['Summary']['Electricity Total Cost']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':
@@ -206,7 +206,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Summary']['Total Cost'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Summary']['Electricity Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -221,7 +221,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Summary']['Total Cost'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Summary']['Electricity Total Cost'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -236,7 +236,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
 
-            df = data_handler.processed_data['Summary']['Total Cost']
+            df = data_handler.processed_data['Summary']['Electricity Total Cost']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':

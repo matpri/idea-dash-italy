@@ -134,10 +134,10 @@ def link(app):
             df = data_handler.processed_data['COPPER']['Transmission Flow']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
-            if _scenario_group[idx] != 'ALL':
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
-                scens += scenarios
+            # if _scenario_group[idx] != 'ALL':
+            #     scenarios = [scenario for scenario in unique_scenarios if
+            #                  scenario.split('|')[1] == _scenario_group[idx]]
+            #     scens += scenarios
 
             _g_style[idx] = {'display': 'block'}
             _m_style[idx] = {'display': 'block'}
@@ -154,10 +154,10 @@ def link(app):
             df = data_handler.processed_data['COPPER']['Transmission Flow']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
-            if _scenario_group[idx] != 'ALL':
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
-                scens += scenarios
+            # if _scenario_group[idx] != 'ALL':
+            #     scenarios = [scenario for scenario in unique_scenarios if
+            #                  scenario.split('|')[1] == _scenario_group[idx]]
+            #     scens += scenarios
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _g_style[idx] = {'display': 'block'}

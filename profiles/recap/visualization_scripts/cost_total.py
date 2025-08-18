@@ -7,19 +7,19 @@ from profiles.recap.visualization_scripts.utils import bar_over_years, bar_over_
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
     from profiles.recap.utils import plot_settings
     #print('rendering plot', type)
-    name = plot_settings['Total Cost']['name']
-    unit = plot_settings['Total Cost']['unit']
+    name = plot_settings['Electricity Total Cost']['name']
+    unit = plot_settings['Electricity Total Cost']['unit']
     if type == 'By Year':
-        plot_info = plot_settings['Total Cost']['By Year']
+        plot_info = plot_settings['Electricity Total Cost']['By Year']
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, aggregate, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
-        plot_info = plot_settings['Total Cost']['Trend Over Years']
+        plot_info = plot_settings['Electricity Total Cost']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
     elif type == 'Pie Chart':
-        plot_info = plot_settings['Total Cost']['Pie Chart']
+        plot_info = plot_settings['Electricity Total Cost']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
-        plot_info = plot_settings['Total Cost']['By Region']
+        plot_info = plot_settings['Electricity Total Cost']['By Region']
         return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
 
 
@@ -149,7 +149,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Total Cost'
+            'viz': 'Electricity Total Cost'
         },
         style={
             'width': '100%',

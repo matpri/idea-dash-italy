@@ -6,7 +6,7 @@ from components import ids
 
 def link(app):
     @app.callback(
-        Output({'type': ids.FIGURE, 'index': MATCH, 'profile': 'Summary', 'viz': 'Credits'}, 'figure'),
+        Output({'type': ids.FIGURE, 'index': MATCH, 'profile': 'Summary', 'viz': 'Economy-wide Carbon Credits'}, 'figure'),
         Output({'type': 'recap-credits-download', 'index': MATCH}, 'data'),
         Output({'type': 'recap-credits-by-year-widgets', 'index': MATCH}, 'style'),
         Output({'type': 'recap-credits-trend-widgets', 'index': MATCH}, 'style'),
@@ -27,7 +27,7 @@ def link(app):
         Input({'type': 'recap-credits-download-button', 'index': MATCH}, 'n_clicks'),
         
         # States
-        State({'type': ids.FIGURE, 'index': MATCH, 'profile': 'Summary', 'viz': 'Credits'}, 'figure'),
+        State({'type': ids.FIGURE, 'index': MATCH, 'profile': 'Summary', 'viz': 'Economy-wide Carbon Credits'}, 'figure'),
         State({'type': 'recap-credits-download', 'index': MATCH}, 'data'),
         State({'type': 'recap-credits-by-year-widgets', 'index': MATCH}, 'style'),
         State({'type': 'recap-credits-trend-widgets', 'index': MATCH}, 'style'),
@@ -52,7 +52,7 @@ def link(app):
         # Handle download button click
         if 'recap-credits-download-button' in trigger_id['type']:
             download_data = dcc.send_data_frame(
-                data_handler.processed_data['Summary']['Credits'].to_csv,
+                data_handler.processed_data['Summary']['Economy-wide Carbon Credits'].to_csv,
                 "credits.csv"
             )
             return (
@@ -60,7 +60,7 @@ def link(app):
             )
         
         # Get the data
-        credits_data = data_handler.processed_data['Summary']['Credits']
+        credits_data = data_handler.processed_data['Summary']['Economy-wide Carbon Credits']
         
         # Update widget visibility based on plot type
         if plot_type == 'By Year':

@@ -89,7 +89,7 @@ def plot(df, window_id):
             'type': 'figure',
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Sector Emissions'
+            'viz': 'Economy-wide Emissions'
         },
         style={
             'width': '100%',

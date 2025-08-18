@@ -103,7 +103,7 @@ def plot(df, window_id):
                 'type': ids.FIGURE,
                 'index': window_id,
                 'profile': 'Summary',
-                'viz': 'Credits'
+                'viz': 'Economy-wide Carbon Credits'
             }
         )
         
@@ -225,7 +225,7 @@ def plot(df, window_id):
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Credits'
+            'viz': 'Economy-wide Carbon Credits'
         },
         style={
             'width': '100%',

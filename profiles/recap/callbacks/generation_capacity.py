@@ -11,7 +11,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'Summary',
-            'viz': 'Capacity'
+            'viz': 'Electricity Capacity'
         }, 'figure'),
         Output({
             'type': 'recap-gencap-region-select',
@@ -101,7 +101,7 @@ def link(app):
             'type': ids.FIGURE,
             'index': ALL,
             'profile': 'Summary',
-            'viz': 'Capacity'
+            'viz': 'Electricity Capacity'
         }, 'figure'),
         State({
             'type': 'recap-gencap-download',
@@ -145,7 +145,7 @@ def link(app):
                         (id['id']['type'] == 'recap-gencap-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Summary']['Capacity'].to_csv, "gencap.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Summary']['Electricity Capacity'].to_csv, "gencap.csv")
             return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style
 
         idx = 0
@@ -166,7 +166,7 @@ def link(app):
             _text_style[idx] = {'display': 'block'}
 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Year', data_handler.processed_data['Summary']['Capacity'],
+                _canvas[idx] = render_plot('By Year', data_handler.processed_data['Summary']['Electricity Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -181,7 +181,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Summary']['Capacity'],
+                _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Summary']['Electricity Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -194,7 +194,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'} 
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Summary']['Capacity'],
+                _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Summary']['Electricity Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
@@ -208,7 +208,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
             if _aggregates[idx] is not None:
-                _canvas[idx] = render_plot('By Region', data_handler.processed_data['Summary']['Capacity'],
+                _canvas[idx] = render_plot('By Region', data_handler.processed_data['Summary']['Electricity Capacity'],
                                            _aggregates[idx],
                                            _scenarios[idx],
                                            _regions[idx],
