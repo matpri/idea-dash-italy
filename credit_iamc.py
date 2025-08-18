@@ -13,6 +13,7 @@ def convert_credits_to_iamc(df, unit="$"):
         ("net_balance", "Net Balance"),
     ]:
         temp = df.copy()
+        temp[var_col] = temp[var_col].fillna(0)
         temp["variable"] = temp["sector"].apply(lambda s: f"{var_name}|{s}")
         temp = temp.rename(columns={"year": "time", var_col: "value"})
         temp["model"] = "CIM2"
@@ -20,8 +21,8 @@ def convert_credits_to_iamc(df, unit="$"):
         temp = temp[["model", "scenario", "region", "time", "variable", "value"]]
         temp["unit"] = unit
         temp["variable"] = "Credits|" + temp["variable"]
-        # (Might need to be changed) multiply all values by 100 to maitain order of magnitude
-        temp["value"] = temp["value"] *100
+        # (Might need to be changed) Divide all values by 100 to maitain order of magnitude
+        # temp["value"] = temp["value"] / 100
 
         # Making supply negative to match COPPER format
         mask = temp["variable"].str.contains("Credit Supply", case=False, na=False)
@@ -117,7 +118,7 @@ def summarize_carbon_credits_ignore_model(df, iamc_df, unit="$"):
     print(f"\nSummary for IAMC update: {updated_count} rows updated, {added_count} rows added.\n")
     return iamc_df
 
-folder_path = r"C:\Users\bipas\Downloads\idea-data\idea" #Change to enter path of the folder containing the idea files (NOT the filename itself)
+folder_path = r"C:\Users\bipas\Downloads\idea-data\final" #Change to enter path of the folder containing the idea files (NOT the filename itself)
 folder = Path(folder_path)
 
 csv_files = list(folder.glob("*.csv"))
@@ -129,16 +130,29 @@ source_dict = {sf.name.replace("_output_summary_IDEA_SK.csv", ""): sf for sf in 
 
 for tf in target_files:
     scenario_name = tf.name.replace("_credit_balance.csv", "")
-    if scenario_name not in source_dict:
-        print(f"Skipping {tf.name}: no matching source file found")
-        continue
+    if scenario_name in source_dict:
+        source_file = source_dict[scenario_name]
+    else:
+        # --- Fallback: substring match ---
+        possible_matches = [sf for key, sf in source_dict.items() if scenario_name in key]
 
-    source_file = source_dict[scenario_name]
+        if not possible_matches:
+            print(f"Skipping {tf.name}: no matching source file found (even by substring).")
+            continue
+        elif len(possible_matches) > 1:
+            print(f"Warning: Multiple source files match target '{tf.name}' by substring:")
+            for pm in possible_matches:
+                print(f"   - {pm.name}")
+            print("Skipping due to ambiguity.")
+            continue
+        else:
+            source_file = possible_matches[0]
+            print(f"Note: Using substring match for '{tf.name}' → matched with '{source_file.name}'")
 
+    # --- Load files ---
     print(f"\nProcessing scenario '{scenario_name}':")
     print(f"  Target file: {tf.name}")
     print(f"  Source file: {source_file.name}")
-
     target_df = pd.read_csv(tf)
     source_df = pd.read_csv(source_file)
 

@@ -30,7 +30,7 @@ import pandas as pd
 from pathlib import Path
 
 # Path to folder containing all files
-folder_path = r"C:\Users\bipas\Downloads\idea-data\idea" #Change to enter path of the folder containing the idea files (NOT the filename itself)
+folder_path = r"C:\Users\bipas\Downloads\idea-data\final" #Change to enter path of the folder containing the idea files (NOT the filename itself)
 folder = Path(folder_path)
 
 csv_files = list(folder.glob("*.csv"))
