@@ -84,7 +84,7 @@ class RecapOutput(BaseProfile):
         'Economy-wide Emissions',
         'Electricity Demand',
         'Electricity Capacity',
-        'Supply',
+        'Electricity Supply',
         'Electricity Prices',
         'Economy-wide Carbon Credits'
     ]
@@ -107,7 +107,7 @@ class RecapOutput(BaseProfile):
             'callback': generation_capacity_callbacks.link,
             'description': 'Capacity of each technology in the model.'
         },
-        'Supply':
+        'Electricity Supply':
         {
             'check': generation_supply_processing.check,
             'db_check': generation_supply_processing.check,

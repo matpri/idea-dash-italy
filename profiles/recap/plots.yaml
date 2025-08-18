@@ -112,8 +112,8 @@ Energy Demand:
     title: Energy Demand by Region
     x_label: Region
     y_label: Energy Demand
-Supply:
-    name: Supply
+Electricity Supply:
+    name: Electricity Supply
     unit: TWh
     By Year:
         title: Supply by Year
