@@ -364,6 +364,8 @@ def plot(df, window_id):
     if 'Policy' in classes:
         policy_scenarios = df[df['variable'].str.startswith('Policy')]['scenario'].unique()
         policy_regions = df[df['variable'].str.startswith('Policy')]['region'].unique()
+        if "SK" in policy_regions:
+            policy_regions = ["SK"]
 
     policy_widget_layout = html.Div([
         dmc.MultiSelect(
@@ -400,6 +402,8 @@ def plot(df, window_id):
         costs = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[1]).unique()
         c_sector = df[df['variable'].str.startswith('Cost')]['variable'].apply(lambda x: x.split('|')[2]).unique()
         c_regions = df[df['variable'].str.startswith('Cost')]['region'].unique()
+        if "SK" in c_regions:
+            c_regions = ["SK"]
         c_scenarios = df[df['variable'].str.startswith('Cost')]['scenario'].unique()
 
     cost_widget_layout = html.Div([
