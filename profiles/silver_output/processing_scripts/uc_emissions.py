@@ -14,7 +14,7 @@ def check(df):
                 return True
         else:
             classes = df['data'].keys()
-            if 'UC Emissions' in classes:
+            if 'UC_Emissions' in classes:
                 return True
         return False
     except Exception as e:
@@ -41,9 +41,26 @@ def process(selected):
     dfs = []
     for scenario, db in selected.items():
         if type(db) is pd.DataFrame:
-            continue
-        df_processed = aggregate_db(db.copy(), scenario)
+            df_processed = aggregate_db(db.copy(), scenario)
+        else:
+            gens = db['data']['generator']
+            time = db['data']['ts']
+            data = db['data']['UC_Emissions']
+            print(f"Processing {scenario} with {len(gens)} generators and {len(time)} time steps")
+            records = {'time': [], 'variable': [], 'value': []}
+            for gen in data.keys():
+                if gen != 'unit':
+                    for t_idx, val in enumerate(data[gen]):
+                        records['time'].append(time[t_idx])
+                        records['variable'].append(gens[gen]['type'])
+                        records['value'].append(val)
 
+            df = pd.DataFrame.from_dict(records)
+            df['time'] = pd.to_datetime(df['time'])
+            df['period'] = df['time'].dt.year.astype(int)
+            df['region'] = 'N/A'  # No region info in this format
+            df['scenario'] = scenario
+            df_processed = df[['time', 'variable', 'value', 'region', 'scenario']]
         dfs.append(df_processed)
 
     return pd.concat(dfs)

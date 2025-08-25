@@ -250,7 +250,7 @@ class DataHandler:
                 # Combine all DataFrames into one
                 df = pd.concat(dfs, ignore_index=True)
             elif extension == '.json':
-                with open(file, 'r') as f:
+                with open(os.path.join('data', file), 'r') as f:
                     df = json.load(f)
             elif extension == '.pkl':
                 self.pkls[f_name] = os.path.join('data', file)
@@ -624,11 +624,9 @@ class DataHandler:
                         df_list.append(_df)
                     # Combine all DataFrames into one
                     df = pd.concat(df_list, ignore_index=True)
-                elif extension == '.json':
+                elif extension == 'json':
                     with io.StringIO(decoded.decode('utf-8')) as f:
                         df = json.load(f)
-                        model = df['model']
-
                 else:
                     # Detect the encoding using chardet
                     detected_encoding = chardet.detect(decoded)['encoding']
@@ -670,6 +668,8 @@ class DataHandler:
 
                 if model is None:
                     model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
+        else:
+            model = df.get('model', None)
 
         if filename in self.data:
             counter = 1
@@ -709,8 +709,12 @@ class DataHandler:
         if len(visualizations):
             self.data[filename]['visualizations'] = visualizations
             self.data[filename]['selected'] = selected
-            self.data[filename]['scenario'] = df.scenario.dropna().unique().tolist()[
-                0] if not df.empty or 'scenario' in df.columns else filename
+            if type(df) is pd.DataFrame:
+                self.data[filename]['scenario'] = df.scenario.dropna().unique().tolist()[
+                    0] if not df.empty or 'scenario' in df.columns else filename
+
+            else:
+                self.data[filename]['scenario'] = df.get('scenario', filename)
 
             return True, "Data loaded successfully!", filename
 

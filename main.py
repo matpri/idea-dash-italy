@@ -51,7 +51,7 @@ app = dash.Dash(__name__, suppress_callback_exceptions=True,
                 external_stylesheets=external_stylesheets)
 
 # get all files in data folder that end either with csv or xlsx
-data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx') or f.endswith('.zip')]
+data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx') or f.endswith('.zip') or f.endswith('.json')]
 configs = [f for f in os.listdir('config') if f.endswith('.yaml')]
 
 # initialize data handler which will deal with all data related operations
