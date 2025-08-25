@@ -143,8 +143,8 @@ def link(app):
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['CIMS']['Inputs'].to_csv,
                                              "inputs.csv")
             return (
-                _canvas, _data, _cost_style, _policy_style, _generic_style, _generic_byscenario_style,
-                _generic_byregion_style
+                dash.no_update, _data, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
+                dash.no_update
             )
 
         # Determine the index of the plot select input

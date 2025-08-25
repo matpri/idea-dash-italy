@@ -191,7 +191,7 @@ def link(app):
 
         if 'cims-ghg-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv, "ghg.csv")
-            return _canvas, _r_style, _y_style, _service_style, _service, services,  _data, _s_style, _m_style, _pattern_style, _text_style, dash.no_update
+            return dash.no_update, dash.no_update, dash.no_update, dash.no_update,dash.no_update, dash.no_update, _data, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
 
         emissions_list = _data[_data['parameter'].str.contains('emissions')]['parameter'].unique().tolist()

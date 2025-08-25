@@ -179,9 +179,10 @@ def create_link(sector):
             service_value = _service.copy()
     
             if trigger_id['type'] == f'cims-{lower_sector}-download-button':
-                return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                        dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
-                        dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv")), layers, service_value, _service_style, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+                return (dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update,
+                        dash.no_update, dash.no_update, dash.no_update, dash.no_update, dcc.send_data_frame(_data.to_csv, f"{lower_sector}.csv"), layers, service_value, _service_style,
+                    dash.no_update, plot, dash.no_update, dash.no_update, dash.no_update, dash.no_update)
+
     
             if f'cims-{lower_sector}-service-select' in trigger_id['type']:
                 layer = trigger_id['layer']

@@ -188,7 +188,7 @@ def link(app):
     )
     def update_requested_quantities(_update, _representation, _p_type, _scenarios, _scenario, _regions, _years,
                                     _pattern, _text,
-                                    _download, _sector, _service, _fuel, _r_style, _y_style, _canvas, _data, _s_style,
+                                    _download, _sector, _service, _fuel, _r_style, _y_style, _canvas, _download_data, _s_style,
                                     _m_style, _pattern_style, _text_style, _p_style, _service_style
                                     ):
         # print('updating requested_quantities plot')
@@ -202,8 +202,8 @@ def link(app):
         layers = [dash.no_update] * len(_service_style)
         service_value = _service.copy()
         if 'cims-requested_quantities-download-button' in trigger_id['type']:
-            _data = dcc.send_data_frame(_data.to_csv, "requested_quantities.csv")
-            return _canvas, _r_style, _y_style, _data,  _s_style, _m_style, _pattern_style, _text_style, _p_style, layers, service_value
+            _download_data = dcc.send_data_frame(_data.to_csv, "requested_quantities.csv")
+            return _canvas, _r_style, _y_style, dash.no_update, dash.no_update, _service_style, _download_data, _s_style, _m_style, _pattern_style, _text_style, _p_style, layers, service_value
 
         if 'cims-requested_quantities-sector-select' in trigger_id['type']:
             _data = _data[_data['sector'] == _sector]

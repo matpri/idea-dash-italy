@@ -192,7 +192,7 @@ def link(app):
         if 'cims-stock_lcc-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv,
                                         "stock_lcc.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _pattern_style, _text_style, _service_style, _sector_style
+            return dash.no_update, dash.no_update, dash.no_update,  dash.no_update, _data, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
 
         if _rep == 'By Sector':
             _sector_style = {'display': 'none'}
