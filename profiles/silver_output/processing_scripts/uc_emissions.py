@@ -8,9 +8,14 @@ def check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     print("Checking for dispatch, *out and transmission in variable column")
     try:
-        classes = df[df['model'] == 'silver']["variable"].apply(lambda x: x.split("|")[0])
-        if (classes == 'UC Emissions').any():
-            return True
+        if type(df) is pd.DataFrame:
+            classes = df[df['model'] == 'silver']["variable"].apply(lambda x: x.split("|")[0])
+            if (classes == 'UC Emissions').any():
+                return True
+        else:
+            classes = df['data'].keys()
+            if 'UC Emissions' in classes:
+                return True
         return False
     except Exception as e:
         print("dispatch check", e)
@@ -35,6 +40,8 @@ def aggregate_db(db, scenario):
 def process(selected):
     dfs = []
     for scenario, db in selected.items():
+        if type(db) is pd.DataFrame:
+            continue
         df_processed = aggregate_db(db.copy(), scenario)
 
         dfs.append(df_processed)

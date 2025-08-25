@@ -8,6 +8,7 @@ import multiprocessing as mp
 from typing import Tuple, Callable
 from collections import defaultdict
 import yaml
+import json
 
 import chardet
 import pandas as pd
@@ -248,6 +249,9 @@ class DataHandler:
                     dfs.append(_df)
                 # Combine all DataFrames into one
                 df = pd.concat(dfs, ignore_index=True)
+            elif extension == '.json':
+                with open(file, 'r') as f:
+                    df = json.load(f)
             elif extension == '.pkl':
                 self.pkls[f_name] = os.path.join('data', file)
             else:
@@ -620,6 +624,11 @@ class DataHandler:
                         df_list.append(_df)
                     # Combine all DataFrames into one
                     df = pd.concat(df_list, ignore_index=True)
+                elif extension == '.json':
+                    with io.StringIO(decoded.decode('utf-8')) as f:
+                        df = json.load(f)
+                        model = df['model']
+
                 else:
                     # Detect the encoding using chardet
                     detected_encoding = chardet.detect(decoded)['encoding']
@@ -636,35 +645,37 @@ class DataHandler:
         else:
             df = content
 
-        # remove all rows with all nan values
-        df = df.dropna(how='all')
+        if not extension == 'json':
+            # remove all rows with all nan values
+            df = df.dropna(how='all')
 
-        # make all headers lowercase
-        df.columns = df.columns.str.lower()
-        model = None
-        if 'model' in df.columns:
-            model = df.model.dropna().unique()[0]
-            if model not in model_mapping:
-                # check if df.columns contain all the following: model, scenario, variable, value, unit
-                if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']):
-                    diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
-                    print(f"Columns missing in {filename}", diff)
-                    return False, f"These Columns were expected: {diff}", filename
-                df = df[['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']]
-                # if unit is nan, set it to ''
-                df['unit'] = df['unit'].fillna('')
-            else:
-                # make sure scenario is in the columns
-                if 'scenario' not in df.columns:
-                    return False, "Scenario column is missing from the data.", filename
+            # make all headers lowercase
+            df.columns = df.columns.str.lower()
+            model = None
+            if 'model' in df.columns:
+                model = df.model.dropna().unique()[0]
+                if model not in model_mapping:
+                    # check if df.columns contain all the following: model, scenario, variable, value, unit
+                    if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']):
+                        diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
+                        print(f"Columns missing in {filename}", diff)
+                        return False, f"These Columns were expected: {diff}", filename
+                    df = df[['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']]
+                    # if unit is nan, set it to ''
+                    df['unit'] = df['unit'].fillna('')
+                else:
+                    # make sure scenario is in the columns
+                    if 'scenario' not in df.columns:
+                        return False, "Scenario column is missing from the data.", filename
+
+                if model is None:
+                    model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
         if filename in self.data:
             counter = 1
             while f'{filename}_{counter}' in self.data:
                 counter += 1
             filename = f'{filename}_{counter}'
-        if model is None:
-            model = df.model.unique()[0] if not df.empty and 'model' in df.columns else filename
 
 
         profile_options = model_mapping.get(model, None)
@@ -888,6 +899,7 @@ class DataHandler:
                                 df_list.append(_df)
                             # Combine all DataFrames into one
                             df = pd.concat(df_list, ignore_index=True)
+
                         else:
                             continue
                         df['filename'] = fname
@@ -908,6 +920,9 @@ class DataHandler:
                     df = pd.concat(dfs, ignore_index=True)
                 elif extension == '.pkl':
                     self.pkls[f_name] = file
+                elif extension == '.json':
+                    with open(file, 'r') as f:
+                        df = json.load(f)
                 else:
                     fail = True
                     print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
