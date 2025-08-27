@@ -146,10 +146,10 @@ Transmission Capacity:
   Year Plot:
     title: Transmission Flow by Year
     x_label: Years
-    y_label: Flow (GW)
+    y_label: Flow (GhW)
 Transmission Flow:
   name: Transmission Flow
-  unit: Flow (GW)
+  unit: Flow (GWh)
   Map Plot:
     title: Transmission Flow by Line
     x_label:
@@ -157,11 +157,11 @@ Transmission Flow:
   Bar Plot:
     title: Transmission Flow by Line
     x_label: Line
-    y_label: Flow (GW)
+    y_label: Flow (GWh)
   Year Plot:
     title: Transmission Flow by Year
     x_label: Years
-    y_label: Flow (GW)
+    y_label: Flow (GWh)
 Electricity Total Cost:
   name: Cost
   unit: Billion $
