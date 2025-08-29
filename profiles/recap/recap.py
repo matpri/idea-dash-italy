@@ -80,12 +80,12 @@ class RecapOutput(BaseProfile):
         'Provides essential cost and emissions analysis for quick overview and comparison.')
 
     plot_order = [
-        'Electricity Total Cost',
         'Economy-wide Emissions',
         'Electricity Demand',
+        'Electricity Prices',
         'Electricity Capacity',
         'Electricity Supply',
-        'Electricity Prices',
+        'Electricity Total Cost',
         'Economy-wide Carbon Credits'
     ]
     viz_options = {
