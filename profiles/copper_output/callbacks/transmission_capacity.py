@@ -21,10 +21,6 @@ def link(app):
             'index': ALL
         }, 'style'),
         Output({
-            'type': 'copper-transmissioncapacity-scenario-group-select',
-            'index': ALL
-        }, 'style'),
-        Output({
             'type': 'copper-transmissioncapacity-year-select',
             'index': ALL
         }, 'style'),
@@ -42,10 +38,6 @@ def link(app):
         }, 'value'),
         Input({
             'type': 'copper-transmissioncapacity-scenario-multi-select',
-            'index': ALL
-        }, 'value'),
-        Input({
-            'type': 'copper-transmissioncapacity-scenario-group-select',
             'index': ALL
         }, 'value'),
 
@@ -80,10 +72,6 @@ def link(app):
             'index': ALL
         }, 'style'),
         State({
-            'type': 'copper-transmissioncapacity-scenario-group-select',
-            'index': ALL
-        }, 'style'),
-        State({
             'type': 'copper-transmissioncapacity-year-select',
             'index': ALL
         }, 'style'),
@@ -97,8 +85,8 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_transmissioncapacity(_p_type, _scenarios, _scenario_group, _scenario, _years, _lines, _d_button, _canvas,
-                                    _s_style, _m_style, _g_style, _y_style, _l_style, _data):
+    def update_transmissioncapacity(_p_type, _scenarios, _scenario, _years, _lines, _d_button, _canvas,
+                                    _s_style, _m_style, _y_style, _l_style, _data):
         # print('updating transmissioncapacity plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -111,7 +99,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['COPPER']['Transmission Capacity'].to_csv, "transmissioncapacity.csv")
-            return _canvas, _s_style, _m_style, _g_style, _y_style, _l_style, _data
+            return _canvas, _s_style, _m_style, _y_style, _l_style, _data
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -121,7 +109,6 @@ def link(app):
         if _p_type[idx] == 'Map Plot':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _g_style[idx] = {'display': 'none'}
             _y_style[idx] = {'display': 'block'}
             _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Map Plot',
@@ -134,12 +121,7 @@ def link(app):
             df = data_handler.processed_data['COPPER']['Transmission Capacity']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
-            if _scenario_group[idx] != 'ALL':
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
-                scens += scenarios
 
-            _g_style[idx] = {'display': 'block'}
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
             _y_style[idx] = {'display': 'block'}
@@ -154,13 +136,8 @@ def link(app):
             df = data_handler.processed_data['COPPER']['Transmission Capacity']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
-            if _scenario_group[idx] != 'ALL':
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
-                scens += scenarios
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
-            _g_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'none'}
             _l_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Per Year Bar Plot',
@@ -172,7 +149,6 @@ def link(app):
         elif _p_type[idx] == 'Trends Over Years':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _g_style[idx] = {'display': 'none'}
             _y_style[idx] = {'display': 'none'}
             _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Trends Over Years',
@@ -182,4 +158,4 @@ def link(app):
                                         _lines[idx]
                                        )
 
-        return _canvas, _s_style, _m_style, _g_style, _y_style, _l_style, _data
+        return _canvas, _s_style, _m_style, _y_style, _l_style, _data

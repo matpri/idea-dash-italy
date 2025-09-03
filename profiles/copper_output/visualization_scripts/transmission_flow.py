@@ -384,16 +384,6 @@ def plot(df, window_id):
             style={'display': 'none'}
         ),
         dmc.Select(
-            label='Scenario Group',
-            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
-            value=[scenarios[0]],
-            id={
-                'type': 'copper-transmissionflow-scenario-group-select',
-                'index': window_id,
-            },
-            style={'display': 'none'}
-        ),
-        dmc.Select(
             label='Year',
             data=[{'label': year, 'value': year} for year in years],
             value=years[0],
