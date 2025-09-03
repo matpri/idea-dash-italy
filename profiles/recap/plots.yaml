@@ -119,7 +119,6 @@ Electricity Supply:
         title: Supply by Year
         x_label: Year
         y_label: Supply (TWh)
-
     Trend Over Years:
         title: Supply by Year
         x_label: Year

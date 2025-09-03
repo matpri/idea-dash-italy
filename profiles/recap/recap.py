@@ -126,7 +126,6 @@ class RecapOutput(BaseProfile):
             'callback': credits_callbacks.link,
             'description': 'Credit supply, demand, and net balance analysis by sector.'
         },
-
         'Electricity Prices':{
             'check': inputs_processing.check,
             'db_check': inputs_processing.check,
