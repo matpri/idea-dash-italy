@@ -10,8 +10,9 @@ geojson==3.1.0
 dash_daq
 geopandas
 pandas
+plotly==5.24.1
 PyYAML
 openpyxl
 matplotlib
 chardet
-kaleido
+kaleido==0.1.*

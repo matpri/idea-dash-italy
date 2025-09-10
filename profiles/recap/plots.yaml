@@ -93,14 +93,32 @@ Qualifying Capacity:
     title: Qualifying Capacity by Region
     x_label: Region
     y_label: Qualifying Capacity (GW)
-Supply:
-    name: Supply
+Energy Demand:
+  name: Energy Demand
+  unit: GJ
+  By Year:
+    title: Energy Demand by Year
+    x_label: Year
+    y_label: Energy Demand
+  Trend Over Years:
+    title: Energy Demand by Year
+    x_label: Year
+    y_label: Energy Demand
+  Pie Chart:
+    title: Energy Demand
+    x_label:
+    y_label:
+  By Region:
+    title: Energy Demand by Region
+    x_label: Region
+    y_label: Energy Demand
+Electricity Supply:
+    name: Electricity Supply
     unit: TWh
     By Year:
         title: Supply by Year
         x_label: Year
         y_label: Supply (TWh)
-
     Trend Over Years:
         title: Supply by Year
         x_label: Year
@@ -127,7 +145,7 @@ Transmission Capacity:
   Year Plot:
     title: Transmission Flow by Year
     x_label: Years
-    y_label: Flow (GWh)
+    y_label: Flow (GhW)
 Transmission Flow:
   name: Transmission Flow
   unit: Flow (GWh)
@@ -143,7 +161,7 @@ Transmission Flow:
     title: Transmission Flow by Year
     x_label: Years
     y_label: Flow (GWh)
-Total Cost:
+Electricity Total Cost:
   name: Cost
   unit: Billion $
   By Year:
@@ -406,8 +424,340 @@ Output Stats:
       title: Variable O&M Cost
       x_label: Year
       y_label: Variable O&M Cost (Billion $)
+    
+Technology Stocks:
+  name: Technology Stocks
+  unit:
+  By Year:
+    title: Technology Stocks by Year
+    x_label: Year
+    y_label: Stock
+  Trend Over Years:
+    title: Technology Stocks by Year
+    x_label: Year
+    y_label: Stock
+  Pie Chart:
+    title: Technology Stocks
+    x_label:
+    y_label:
+  By Region:
+    title: Technology Stocks by Region
+    x_label: Region
+    y_label: Stock
+  
+New Stock:
+  name: New Stock
+  unit:
+  By Year:
+    title: New Stock by Year
+    x_label: Year
+    y_label: New Stock
+  Trend Over Years:
+    title: New Stock by Year
+    x_label: Year
+    y_label: New Stock
+  Pie Chart:
+    title: New Stock
+    x_label:
+    y_label:
+  By Region:
+    title: New Stock by Region
+    x_label: Region
+    y_label: New Stock
+Added Retrofit Stock:
+  name: Added Retrofit Stock
+  unit:
+  By Year:
+    title: Added Retrofit Stock by Year
+    x_label: Year
+    y_label: Added Retrofit Stock
+  Trend Over Years:
+    title: Added Retrofit Stock by Year
+    x_label: Year
+    y_label: Added Retrofit Stock
+  Pie Chart:
+    title: Added Retrofit Stock
+    x_label:
+    y_label:
+  By Region:
+    title: Added Retrofit Stock by Region
+    x_label: Region
+    y_label: Added Retrofit Stock
+Retrofit Stock:
+  name: Retrofit Stock
+  unit:
+  By Year:
+    title: Retrofit Stock by Year
+    x_label: Year
+    y_label: Retrofit Stock
+  Trend Over Years:
+    title: Retrofit Stock by Year
+    x_label: Year
+    y_label: Retrofit Stock
+  Pie Chart:
+    title: Retrofit Stock
+    x_label:
+    y_label:
+  By Region:
+    title: Retrofit Stock by Region
+    x_label: Region
+    y_label: Retrofit Stock
+Total Stock:
+  name: Total Stock
+  unit:
+  By Year:
+    title: Total Stock by Year
+    x_label: Year
+    y_label: Total Stock
+  Trend Over Years:
+    title: Total Stock by Year
+    x_label: Year
+    y_label: Total Stock
+  Pie Chart:
+    title: Total Stock
+    x_label:
+    y_label:
+  By Region:
+    title: Total Stock by Region
+    x_label: Region
+    y_label: Total Stock
+Net Emissions:
+  name: Net Emissions
+  unit: tCO2e
+  By Year:
+    title: Net Emissions by Year
+    x_label: Year
+    y_label: Net Emissions
+  Trend Over Years:
+    title: Net Emissions by Year
+    x_label: Year
+    y_label: Net Emissions
+  Pie Chart:
+    title: Net Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Net Emissions by Region
+    x_label: Region
+    y_label: Net Emissions
+Avoided Emissions:
+  name: Avoided Emissions
+  unit: tCO2e
+  By Year:
+    title: Avoided Emissions by Year
+    x_label: Year
+    y_label: Avoided Emissions
+  Trend Over Years:
+    title: Avoided Emissions by Year
+    x_label: Year
+    y_label: Avoided Emissions
+  Pie Chart:
+    title: Avoided Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Avoided Emissions by Region
+    x_label: Region
+    y_label: Avoided Emissions
+Negative Emissions:
+  name: Negative Emissions
+  unit: tCO2e
+  By Year:
+    title: Negative Emissions by Year
+    x_label: Year
+    y_label: Negative Emissions
+  Trend Over Years:
+    title: Negative Emissions by Year
+    x_label: Year
+    y_label: Negative Emissions
+  Pie Chart:
+    title: Negative Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Negative Emissions by Region
+    x_label: Region
+    y_label: Negative Emissions
+Emitted Emissions:
+  name: Emitted Emissions
+  unit: tCO2e
+  By Year:
+    title: Emitted Emissions by Year
+    x_label: Year
+    y_label: Emitted Emissions
+  Trend Over Years:
+    title: Emitted Emissions by Year
+    x_label: Year
+    y_label: Emitted Emissions
+  Pie Chart:
+    title: Emitted Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Emitted Emissions by Region
+    x_label: Region
+    y_label: Emitted Emissions
+Emissions Costs:
+  name: Emissions Costs
+  unit: $
+  By Year:
+    title: Emissions Costs by Year
+    x_label: Year
+    y_label: Emissions Costs
+  Trend Over Years:
+    title: Emissions Costs by Year
+    x_label: Year
+    y_label: Emissions Costs
+  Pie Chart:
+    title: Emissions Cost
+    x_label:
+    y_label:
+  By Region:
+    title: Emissions Cost by Region
+    x_label: Region
+    y_label: Emissions Cost
 
+Overview:
+  Energy Demand:
+    title: Energy Demand
+    name: Energy Demand
+    unit: GJ
+    x_label: Year
+    y_label: Energy Demand
+  New Stock:
+    title: New Stock
+    name: New Stock
+    unit:
+    x_label: Year
+    y_label: New Stock
+  Added Retrofit Stock:
+    title: Added Retrofit Stock
+    name: Added Retrofit Stock
+    unit:
+    x_label: Year
+    y_label: Added Retrofit Stock
+  Retrofit Stock:
+    title: Retrofit Stock
+    name: Retrofit Stock
+    unit:
+    x_label: Year
+    y_label: Retrofit Stock
+  Total Stock:
+    title: Total Stock
+    name: Total Stock
+    unit:
+    x_label: Year
+    y_label: Total Stock
+  Avoided Emissions:
+    title: Avoided Emissions
+    name: Avoided Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Avoided Emissions
+  Negative Emissions:
+    title: Negative Emissions
+    name: Negative Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Negative Emissions
+  Emitted Emissions:
+    title: Emitted Emissions
+    name: Emitted Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Emitted Emissions
+  Emissions Costs:
+    title: Emissions Costs
+    name: Emissions Costs
+    unit: $
+    x_label: Year
+    y_label: Emissions Cost
+  Net Emissions:
+    title: Net Emissions
+    name: Net Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Net Emissions
+Economy-wide Emissions:
+  Avoided Emissions:
+    title: Avoided Emissions
+    name: Avoided Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Avoided Emissions
+  Negative Emissions:
+    title: Negative Emissions
+    name: Negative Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Negative Emissions
+  Emitted Emissions:
+    title: Emitted Emissions
+    name: Emitted Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Emitted Emissions
+  Net Emissions:
+    title: Net Emissions
+    name: Net Emissions
+    unit: tCO2e
+    x_label: Year
+    y_label: Net Emissions
 
+Electricity Demand:
+  Energy Demand:
+    title: Energy Demand
+    name: Energy Demand
+    unit: GJ
+    x_label: Year
+    y_label: Energy Demand
+Economy-wide Carbon Credits:
+  name: "Credits"
+  unit: "Credits"
+  By Year:
+    title: "Credits by Sector (By Year)"
+    x_label: "Year"
+    y_label: "Credits"
+  Trend Over Years:
+    title: "Credits by Sector (Trend Over Years)"
+    x_label: "Year"
+    y_label: "Credits"
+Electricity Capacity:
+  name: Electricity Capacity
+  unit: GW
+  By Year:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Trend Over Years:
+    title: Capacity by Year
+    x_label: Year
+    y_label: Capacity (GW)
+  Pie Chart:
+    title: Capacity
+    x_label:
+    y_label:
+  By Region:
+    title: Capacity by Region
+    x_label: Region
+    y_label: Capacity (GW)
+Supply:
+    name: Supply
+    unit: TWh
+    By Year:
+        title: Supply by Year
+        x_label: Year
+        y_label: Supply (TWh)
 
-
-
+    Trend Over Years:
+        title: Supply by Year
+        x_label: Year
+        y_label:  Supply (TWh)
+    Pie Chart:
+        title: Supply
+        x_label:
+        y_label:
+    By Region:
+        title: Supply by Region
+        x_label: Region
+        y_label: Supply (TWh)

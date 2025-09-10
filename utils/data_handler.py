@@ -167,7 +167,7 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+    profile_order = ['Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
@@ -396,6 +396,7 @@ class DataHandler:
         # Collect data from all selected profiles
         data_collection = {}
         process_power_system = False
+        recap_profile = False
         for fname, data in self.data.items():
             if not fname in self.processed:
                 for profile, viz_options in data['selected'].items():
@@ -409,7 +410,9 @@ class DataHandler:
                                 data_collection[profile][viz] = {}
                             data_collection[profile][viz][scenario] = data['content'].copy()
                     else:
-                        process_power_system = True
+                        if profile == 'Power System Models':
+                            process_power_system = True
+
                 self.processed.append(fname)
 
         results = []
@@ -420,8 +423,6 @@ class DataHandler:
             power_system_results=self.profiles['Power System Models'].process_data(results)
             if power_system_results is not None:
                 results.extend(power_system_results)
-
-
         for profile, viz, processed_data in results:
             if self.processed_data.get(profile) is None:
                 self.processed_data[profile] = {}
@@ -437,7 +438,7 @@ class DataHandler:
             print('Processing', model)
             if model in exclude_from_comparison:
                 continue
-            if model == 'Power System Models' or model == 'Generic Comparison':
+            if model == 'Power System Models' or model == 'Generic Comparison'or model == 'Summary':
                 continue
             for viz, viz_data in viz_option.items():
                 if viz == 'Overview' or viz == 'Output Stats' or viz == 'Inputs':
