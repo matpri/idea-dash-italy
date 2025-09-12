@@ -227,7 +227,7 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']
         name = trigger_id['name']
-        print(f'updating {name}, {model} plot')
+        # print(f'updating {name}, {model} plot')
 
         if 'generic-download-button' in trigger_id['type']:
             idx = 0
@@ -247,10 +247,10 @@ def link(app):
                 idx = i
                 break
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        # print('idx:', idx, 'plot type:', _p_type[idx])
         profile = data_handler.profiles[model]
         patterns = [profile.pattern_from_key(key) for key in _scenarios[idx]]
-        print('patterns:', patterns)
+        # print('patterns:', patterns)
 
 
 

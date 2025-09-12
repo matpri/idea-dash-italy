@@ -12,7 +12,7 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
                 pattern_list=None):
     if pattern_list is None:
         pattern_list = []
-    print('rendering plot', type)
+    # print('rendering plot', type)
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,

@@ -6,7 +6,7 @@ from utils.generic_profile.visualization_scripts.overview import render_plot
 
 
 def link(app):
-    print('linking overview')
+    # print('linking overview')
 
     @app.callback(
         Output({
@@ -95,7 +95,7 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']
         name = 'Overview'
-        print(f'updating {name}, {model} plot')
+        # print(f'updating {name}, {model} plot')
 
         if 'download-button' in trigger_id['type']:
             idx = 0
@@ -119,7 +119,7 @@ def link(app):
                 break
         if not trigger_id['type'] == 'unit-select':
             _unit[idx] = _u_data[idx][0]['value']
-        print('scen', _scenarios)
+        # print('scen', _scenarios)
         df = data_handler.processed_data[model][name].copy()
         _groupby_model = False
         _groupby_scenario = False
@@ -135,7 +135,7 @@ def link(app):
             _groupby_version = _grouping[idx] == 3
             _f = _fill[idx]
 
-        print('idx:', idx, 'plot type:', _p_type[idx])
+        # print('idx:', idx, 'plot type:', _p_type[idx])
         _canvas[idx] = render_plot(_p_type[idx],
                                    df,
                                    _groupby_model,

@@ -19,7 +19,7 @@ def data_processing_task(profile_name, viz, data, processing_func):
     # try:
     data_out = processing_func(data)
     # except Exception as e:
-    #     print(f"Error processing data for {profile_name} - {viz}: {e}")
+    #     # print(f"Error processing data for {profile_name} - {viz}: {e}")
     #     data_out = pd.DataFrame()
 
     return profile_name, viz, data_out
@@ -31,7 +31,7 @@ class GenericProfile:
         self.name = name
 
         if f'{name}.yaml' in os.listdir('technologies'):
-            print(f'Loading {name} technologies')
+            # print(f'Loading {name} technologies')
             self.technologies = yaml.load(open(os.path.join('technologies', f'{name}.yaml'), 'r'),
                                           Loader=yaml.FullLoader)
         else:
@@ -69,9 +69,9 @@ class GenericProfile:
                 'db_process': generic_processing.create_process(class_name),
                 'viz': plot,
             }
-        print(self.viz_options.keys())
+        # print(self.viz_options.keys())
         if 'Overview' not in self.viz_options.keys():
-            print('creating overview')
+            # print('creating overview')
             self.viz_options['Overview'] = {
                 'check': lambda x: True,
                 'db_check': lambda x: True,
@@ -82,7 +82,7 @@ class GenericProfile:
             }
 
         if 'Output Stats' not in self.viz_options.keys():
-            print('creating output stats')
+            # print('creating output stats')
             self.viz_options['Output Stats'] = {
                 'check': lambda x: True,
                 'db_check': lambda x: True,

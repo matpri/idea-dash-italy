@@ -41,7 +41,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         fig.update_layout(barmode='relative')
         fig.update_yaxes(showgrid=True)
         if df_scen.empty:
-            print("No data available, since the results are all zero.")
+            # print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,

@@ -11,7 +11,7 @@ from components import ids
 
 def get_contrasting_font_color(rgb_color):
     """Get a contrasting font color (black or white) based on the background color brightness."""
-    print(rgb_color)
+    # print(rgb_color)
     r, g, b = [int(x) for x in rgb_color[4:-1].split(',')]
     brightness = (r * 299 + g * 587 + b * 114) / 1000  # Brightness formula for RGB
     return '#ffffff' if brightness < 128 else '#000000'

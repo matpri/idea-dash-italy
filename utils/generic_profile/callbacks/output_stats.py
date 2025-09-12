@@ -6,7 +6,7 @@ from utils.generic_profile.visualization_scripts.output_stats import render_plot
 
 
 def link(app):
-    print('linking output_stats')
+    # print('linking output_stats')
 
     @app.callback(
         Output({
@@ -71,7 +71,7 @@ def link(app):
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
         model = trigger_id['model']
         name = 'Output Stats'
-        print(f'updating {name}, {model} plot')
+        # print(f'updating {name}, {model} plot')
 
         if 'download-button' in trigger_id['type']:
             idx = 0
@@ -102,7 +102,7 @@ def link(app):
         else:
             df = df[df.scenario.isin(_scenarios[idx])]
 
-        print('idx:', idx, 'plot type:', _years[idx])
+        # print('idx:', idx, 'plot type:', _years[idx])
         _canvas[idx] = render_plot(
             _p_type[idx],
             df,

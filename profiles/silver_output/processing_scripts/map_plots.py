@@ -20,6 +20,9 @@ def check(df):
         if not ('latitude' in df.columns or 'longitude' in df.columns):
             return False
 
+        if not 'filename' in df.columns:
+            return False
+
         if (df.model == 'silver').any():
             valid = False
             for check_func in check_funcs:

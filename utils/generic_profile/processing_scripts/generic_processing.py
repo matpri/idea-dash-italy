@@ -3,14 +3,14 @@ import pandas as pd
 
 def create_check(name, model):
     def check(df):
-        print(f"Checking for {name} in variable column")
+        # print(f"Checking for {name} in variable column")
         try:
             if (df.model == model).any():
                 if df.variable.str.startswith(f"{name}|").any():
                     return df[df.variable.str.startswith(f"{name}|")]['value'].sum() != 0
             return False
         except Exception as e:
-            print("cost check", e)
+            print("generic check", e)
         return False
     return check
 

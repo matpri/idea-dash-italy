@@ -90,7 +90,7 @@ def get_version_pattern(model):
 
 def render_plot(p_type, df, group_by_model, group_by_scenario, group_by_version, unit, fill=True):
     from profiles.energy_model.utils import plot_settings
-    # print('rendering plot', p_type)
+    # # print('rendering plot', p_type)
     df = df[
         (df.variable == p_type) & (df.unit == unit)
         ].copy()
@@ -199,7 +199,7 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
 
         fig.update_yaxes(showgrid=True)
         if df.empty:
-            # print("No data available, since the results are all zero.")
+            # # print("No data available, since the results are all zero.")
             fig.add_annotation(
                 x=0.5,
                 y=0.5,
@@ -227,7 +227,7 @@ def create_overview_plot(model, is_comparison=False):
         :param window_id: window id to use when registering components to dash
         :return: html.Div([widgets]), dcc.Graph(plot)
         '''
-        # print('plotting overview')
+        # # print('plotting overview')
         classes = df['variable'].unique().tolist()
 
         units = df[df['variable'] == classes[0]]['unit'].unique().tolist()

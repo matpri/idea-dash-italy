@@ -18,7 +18,7 @@ def link(app):
         prevent_initial_call=True,
     )
     def update_tech_settings(tech):
-        print('updating tech settings', tech)
+        # print('updating tech settings', tech)
 
         # get profile from the callback context
         ctx = dash.callback_context
@@ -37,7 +37,7 @@ def link(app):
         prevent_initial_call=True
     )
     def tech_update(n_clicks, names, groups, colors, group_colors, disabled):
-        print('updating tech settings', n_clicks, names, groups, colors, group_colors, disabled)
+        # print('updating tech settings', n_clicks, names, groups, colors, group_colors, disabled)
         ctx = dash.callback_context
 
         if not ctx.triggered:
@@ -45,7 +45,7 @@ def link(app):
 
         trigger = ctx.triggered[0]['prop_id'].split('.')[0]
         trigger_id = ctx.triggered_id
-        print('trigger:', trigger, trigger_id)
+        # print('trigger:', trigger, trigger_id)
         idx = 0
         for i, out in enumerate(ctx.outputs_list):
             if out['id']['index'] == trigger_id['index']:
