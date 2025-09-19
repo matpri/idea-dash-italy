@@ -32,6 +32,7 @@ parser.add_argument('--host', type=str, default='127.0.0.1',
 parser.add_argument('--port', type=str, default='8050',
                     help='Set the host port to run the server on, default: 8050')
 parser.add_argument('--autosave', type=str, default='', help='Set to path including file name to automatically pickle the datahandler after preloading data from the data folder to the path + fname set in the arg.')
+parser.add_argument('--mute', action='store_true', help='Set to mute all print statements.')
 args = parser.parse_args()  # Parse the arguments
 
 
@@ -41,6 +42,18 @@ args = parser.parse_args()  # Parse the arguments
 # Convert string to boolean
 static = args.static.lower() == 'true'
 help_popup = args.help_popup.lower() == 'true'
+if args.mute:
+    # mute all print statements even those in other files
+    import sys
+    class NullWriter:
+        def write(self, arg):
+            pass
+
+        def flush(self):
+            pass
+    sys.stdout = NullWriter()
+    sys.stderr = NullWriter()
+
 print("Initializing the Dash app...")  # Debugging statement
 # setting up the app
 external_stylesheets = [

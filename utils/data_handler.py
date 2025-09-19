@@ -96,7 +96,7 @@ def get_vre_capacity_factors(api_key):
     tables = ['wind_capacity_factor', 'solar_capacity_factor']
     dfs = []
     for table in tables:
-        # print(table)
+        print(table)
         data = pd.read_csv(f'http://206.12.95.102/{table}?year=2021&key={api_key}', index_col=0)
         data = data.reset_index()
         data['variable'] = table
@@ -191,7 +191,7 @@ class DataHandler:
         data_files = [file for file in data_files if file not in self.data.keys()]
         fail = False
         for file in data_files:
-            # print('Preloading', file)
+            print('Preloading', file)
             f_name, extension = os.path.splitext(file)
             if extension == '.zip':
                 # if the file is a zip file, extract it into a temporary directory
@@ -222,7 +222,7 @@ class DataHandler:
                         # Read all sheets into a DataFrame list
                         df_list = []
                         for sheet in sheet_names:
-                            # print(sheet)
+                            print(sheet)
                             _df = xls.parse(sheet)
                             # infer types of the column names
                             _df.columns = _df.columns.astype(str)
@@ -241,7 +241,7 @@ class DataHandler:
                 dfs = []
                 xls = pd.ExcelFile(os.path.join('data', file))
                 for sheet in xls.sheet_names:
-                    # print(sheet)
+                    print(sheet)
                     _df = xls.parse(sheet)
                     # infer types of the column names
                     _df.columns = _df.columns.astype(str)
@@ -252,7 +252,7 @@ class DataHandler:
                 self.pkls[f_name] = os.path.join('data', file)
             else:
                 fail = True
-                # print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
+                print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
                 continue
 
             checked, message, file = self.check_content(file, df, os.path.splitext(file)[-1][1:], False)
@@ -281,7 +281,7 @@ class DataHandler:
         :param db: str: The selected database, either 'MMCW' or 'results', where MMCW requires a different URL and special access
         :return:
         """
-        # print('Selecting run', profile, scenario, author, db)
+        print('Selecting run', profile, scenario, author, db)
         if scenario == 'CEF2023':
             tables = ["benchmark_prices", "butane", "crude_oil_production", "electricity_capacity",
                       "electricity_capacity_technology", "electricity_generation", "electricity_generation_technology",
@@ -303,19 +303,19 @@ class DataHandler:
             df.value = pd.to_numeric(df.value, errors='coerce')
             df['model'] = 'cef'
         elif scenario == 'CODERS2024':
-            # print('Getting Generators...')
+            print('Getting Generators...')
             generators = get_generators(self.api_key)
             # print(generators.head())
-            # print('Getting Transmission...')
+            print('Getting Transmission...')
             transmission = get_transmission(self.api_key)
             # print(transmission.head())
-            # print('Getting VRE Capacity Factors...')
+            print('Getting VRE Capacity Factors...')
             vre_capacity_factors = get_vre_capacity_factors(self.api_key)
             # print(vre_capacity_factors.head())
-            # print('Getting Demand...')
+            print('Getting Demand...')
             demand = get_demand(self.api_key)
             # print(demand.head())
-            # print('Data Pulled Successfully!')
+            print('Data Pulled Successfully!')
             generators['type'] = 'Generation Capacity'
             transmission['type'] = 'Transmission'
             demand['type'] = 'Demand'
@@ -434,7 +434,7 @@ class DataHandler:
         classes = []
         variables = []
         for model, viz_option in self.processed_data.items():
-            # print('Processing', model)
+            print('Processing', model)
             if model in exclude_from_comparison:
                 continue
             if model == 'Power System Models' or model == 'Generic Comparison':
@@ -505,11 +505,11 @@ class DataHandler:
             self.processed_data['Generic Comparison']['Overview'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
             self.processed_data['Generic Comparison']['Output Stats'] = full_df[['base_scenario', 'scenario', 'variable', 'time', 'value', 'region', 'unit', 'version']]
 
-        # print("processed", self.processed_data)
+        print("processed", self.processed_data)
 
 
     def get_viz(self, profile: str, viz: str, window_id: str):
-        # print('Getting viz', profile, viz)
+        print('Getting viz', profile, viz)
         return self.profiles[profile].viz_options[viz]['viz'](self.processed_data.get(profile, {}).get(viz, None), window_id)
 
     def get_viz_options(self):
@@ -592,7 +592,7 @@ class DataHandler:
                             # Read all sheets into a DataFrame list
                             df_list = []
                             for sheet in sheet_names:
-                                # print(sheet)
+                                print(sheet)
                                 _df = xls.parse(sheet)
                                 # infer types of the column names
                                 _df.columns = _df.columns.astype(str)
@@ -613,7 +613,7 @@ class DataHandler:
                     # Read all sheets into a DataFrame list
                     df_list = []
                     for sheet in sheet_names:
-                        # print(sheet)
+                        print(sheet)
                         _df = xls.parse(sheet)
                         # infer types of the column names
                         _df.columns = _df.columns.astype(str)
@@ -623,14 +623,14 @@ class DataHandler:
                 else:
                     # Detect the encoding using chardet
                     detected_encoding = chardet.detect(decoded)['encoding']
-                    # print(f"Detected encoding: {detected_encoding}")
+                    print(f"Detected encoding: {detected_encoding}")
 
                     # Use the detected encoding to decode the file content
                     df = pd.read_csv(io.StringIO(decoded.decode(detected_encoding)))
             except pd.errors.EmptyDataError:
                 df = pd.DataFrame()
             except UnicodeDecodeError as e:
-                # print(f"Decoding error: {e}")
+                print(f"Decoding error: {e}")
                 # Fallback to a common alternative encoding (ISO-8859-1)
                 df = pd.read_csv(io.StringIO(decoded.decode('ISO-8859-1')))
         else:
@@ -648,7 +648,7 @@ class DataHandler:
                 # check if df.columns contain all the following: model, scenario, variable, value, unit
                 if not all(col in df.columns for col in ['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']):
                     diff = {'model', 'scenario', 'variable', 'value', 'region', 'time'} - set(df.columns)
-                    # print(f"Columns missing in {filename}", diff)
+                    print(f"Columns missing in {filename}", diff)
                     return False, f"These Columns were expected: {diff}", filename
                 df = df[['model', 'scenario', 'variable', 'value', 'region', 'time', 'unit']]
                 # if unit is nan, set it to ''
@@ -828,7 +828,7 @@ class DataHandler:
             self.profiles[name] = self.reports[name]
 
     def load_configs(self, configs):
-        # print('Loading configs', configs)
+        print('Loading configs', configs)
         for c_path in configs:
             with open(os.path.join('config', c_path), 'r') as stream:
                 try:
@@ -852,7 +852,7 @@ class DataHandler:
             for file in files:
                 profiles = list(config['files'][file]['profiles'].keys())
 
-                # print('Preloading', file)
+                print('Preloading', file)
                 f_name, extension = os.path.splitext(file)
                 if extension == '.zip':
                     # if the file is a zip file, extract it into a temporary directory
@@ -881,7 +881,7 @@ class DataHandler:
                             # Read all sheets into a DataFrame list
                             df_list = []
                             for sheet in sheet_names:
-                                # print(sheet)
+                                print(sheet)
                                 _df = xls.parse(sheet)
                                 # infer types of the column names
                                 _df.columns = _df.columns.astype(str)
@@ -899,7 +899,7 @@ class DataHandler:
                     dfs = []
                     xls = pd.ExcelFile(file)
                     for sheet in xls.sheet_names:
-                        # print(sheet)
+                        print(sheet)
                         _df = xls.parse(sheet)
                         # infer types of the column names
                         _df.columns = _df.columns.astype(str)
@@ -910,7 +910,7 @@ class DataHandler:
                     self.pkls[f_name] = file
                 else:
                     fail = True
-                    # print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
+                    print(f'{file}: File type not supported, only .zip, .csv and .xlsx are supported')
                     continue
 
                 checked, message, file = self.check_content(file, df, file.split('.')[-1], False)
