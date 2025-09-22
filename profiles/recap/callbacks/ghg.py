@@ -1,7 +1,7 @@
 import dash
 from dash import Output, Input, State, MATCH, dcc
 
-from profiles.cims_output.visualization_scripts.ghg import render_plot
+from profiles.recap.visualization_scripts.ghg import render_plot
 from components import ids
 
 emissions_mapping = {
@@ -17,160 +17,160 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'CIMS',
-            'viz': 'Overview'
+            'profile': 'Summary',
+            'viz': 'Economy-wide Emissions'
         }, 'figure', allow_duplicate=True),
         Output({
-            'type': 'cims-ghg-region-select',
+            'type': 'recap-ghg-region-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-ghg-year-select',
+            'type': 'recap-ghg-year-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-ghg-service-widgets',
+            'type': 'recap-ghg-service-widgets',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-ghg-service-select',
+            'type': 'recap-ghg-service-select',
             'index': MATCH
         }, 'data'),
         Output({
-            'type': 'cims-ghg-service-select',
+            'type': 'recap-ghg-service-select',
             'index': MATCH
         }, 'value'),
         Output({
-            'type': 'cims-ghg-download',
+            'type': 'recap-ghg-download',
             'index': MATCH
         }, 'data'),
         Output({
-            'type': 'cims-ghg-scenario-select',
+            'type': 'recap-ghg-scenario-select',
             'index': MATCH
         }, 'style'),
         Output({
-            'type': 'cims-ghg-scenario-multi-select',
+            'type': 'recap-ghg-scenario-multi-select',
             'index': MATCH
         }, 'style'),
         Output(
             {
-                'type': 'cims-ghg-pattern-switch',
+                'type': 'recap-ghg-pattern-switch',
                 'index': MATCH
             },
             'style'
         ),
         Output(
             {
-                'type': 'cims-ghg-text-switch',
+                'type': 'recap-ghg-text-switch',
                 'index': MATCH
             },
             'style'
         ),
         Output(
             {
-                'type': 'cims-ghg-sector-select',
+                'type': 'recap-ghg-sector-select',
                 'index': MATCH
             },
             'style'
         ),
         Input({
-            'type': 'cims-emissions-update',
+            'type': 'recap-emissions-update',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-representation-select',
+            'type': 'recap-ghg-representation-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-plot-select',
+            'type': 'recap-ghg-plot-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-scenario-multi-select',
+            'type': 'recap-ghg-scenario-multi-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-scenario-select',
+            'type': 'recap-ghg-scenario-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-region-select',
+            'type': 'recap-ghg-region-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-year-select',
+            'type': 'recap-ghg-year-select',
             'index': MATCH
         }, 'value'),
         Input(
             {
-                'type': 'cims-ghg-pattern-switch',
+                'type': 'recap-ghg-pattern-switch',
                 'index': MATCH
             },
             'checked'
         ),
         Input(
             {
-                'type': 'cims-ghg-text-switch',
+                'type': 'recap-ghg-text-switch',
                 'index': MATCH
             },
             'checked'
         ),
         Input({
-            'type': 'cims-ghg-download-button',
+            'type': 'recap-ghg-download-button',
             'index': MATCH
         }, 'n_clicks'),
         Input({
-            'type': 'cims-ghg-sector-select',
+            'type': 'recap-ghg-sector-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-service-sector-select',
+            'type': 'recap-ghg-service-sector-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-service-select',
+            'type': 'recap-ghg-service-select',
             'index': MATCH
         }, 'value'),
         Input({
-            'type': 'cims-ghg-emission-select',
+            'type': 'recap-ghg-emission-select',
             'index': MATCH
         }, 'value'),
         State({
-            'type': 'cims-ghg-region-select',
+            'type': 'recap-ghg-region-select',
             'index': MATCH
         }, 'style'),
         State({
-            'type': 'cims-ghg-year-select',
+            'type': 'recap-ghg-year-select',
             'index': MATCH
         }, 'style'),
         State({
             'type': ids.FIGURE,
             'index': MATCH,
-            'profile': 'CIMS',
-            'viz': 'Overview'
+            'profile': 'Summary',
+            'viz': 'Economy-wide Emissions'
         }, 'figure'),
         State({
-            'type': 'cims-ghg-download',
+            'type': 'recap-ghg-download',
             'index': MATCH
         }, 'data'),
         State({
-            'type': 'cims-ghg-scenario-select',
+            'type': 'recap-ghg-scenario-select',
             'index': MATCH
         }, 'style'),
         State({
-            'type': 'cims-ghg-scenario-multi-select',
+            'type': 'recap-ghg-scenario-multi-select',
             'index': MATCH
         }, 'style'),
         State(
             {
-                'type': 'cims-ghg-pattern-switch',
+                'type': 'recap-ghg-pattern-switch',
                 'index': MATCH
             },
             'style'
         ),
         State(
             {
-                'type': 'cims-ghg-text-switch',
+                'type': 'recap-ghg-text-switch',
                 'index': MATCH
             },
             'style'
@@ -184,22 +184,22 @@ def link(app):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
-        _data = data_handler.processed_data['CIMS']['Overview']
+        _data = data_handler.processed_data['Summary']['Economy-wide Emissions']
         _data = _data[_data['tab'] == 'Emissions']
 
         services = dash.no_update
         _service_style = dash.no_update
 
-        if 'cims-ghg-download-button' in trigger_id['type']:
+        if 'recap-ghg-download-button' in trigger_id['type']:
             _data = dcc.send_data_frame(_data.to_csv, "ghg.csv")
-            return dash.no_update, dash.no_update, dash.no_update, dash.no_update,dash.no_update, dash.no_update, _data, dash.no_update, dash.no_update, dash.no_update, dash.no_update, dash.no_update
+            return _canvas, _r_style, _y_style, _service_style, _service, services,  _data, _s_style, _m_style, _pattern_style, _text_style, dash.no_update
 
 
         emissions_list = _data[_data['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
         to_use = emissions_mapping[_emission]
         emissions_list = [e_type for e_type in emissions_list if e_type in to_use]
 
-        if 'cims-ghg-service-sector-select' in trigger_id['type']:
+        if 'recap-ghg-service-sector-select' in trigger_id['type']:
             _data = _data[_data['sector'] == _service_sector]
             services = _data[_data.parameter.isin(emissions_list)]['short_path'].unique().tolist()
             _service = services[0]
