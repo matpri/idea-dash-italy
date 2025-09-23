@@ -2,7 +2,7 @@ import pandas as pd
 
 from profiles.silver_output.processing_scripts import opf_emissions, opf_results, opf_curtailment, opf_costs, price_opf, uc_emissions,  uc_curtailment, uc_results
 
-check_funcs = [opf_emissions.db_check, opf_results.db_check, opf_curtailment.db_check, opf_costs.check, price_opf.check, uc_emissions.check, uc_curtailment.db_check, uc_results.check]
+check_funcs = [opf_emissions.check, opf_results.check, opf_curtailment.check, opf_costs.check, price_opf.check, uc_emissions.check, uc_curtailment.check, uc_results.check]
 
 def check(df):
     """
