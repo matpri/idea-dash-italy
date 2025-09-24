@@ -74,7 +74,7 @@ def process(selected):
             df['scenario'] = scenario
             df_processed = df[['time', 'variable', 'value', 'region', 'scenario']]
 
-            dfs.append(df_processed)
+        dfs.append(df_processed)
 
     return pd.concat(dfs)
 

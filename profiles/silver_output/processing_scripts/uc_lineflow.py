@@ -41,16 +41,6 @@ def aggregate_db(db, scenario):
 def process(selected):
     dfs = []
     for scenario, db in selected.items():
-        df_processed = aggregate_db(db.copy(), scenario)
-
-        dfs.append(df_processed)
-
-    return pd.concat(dfs)
-
-
-def process(selected):
-    dfs = []
-    for scenario, db in selected.items():
         if type(db) is pd.DataFrame:
             df_processed = aggregate_db(db.copy(), scenario)
         else:
