@@ -76,19 +76,21 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
 
         for tech in techs:
             tech_df = scen_df[(scen_df['variable'] == tech)]
+            tech_df['size'] = tech_df['value'].apply(lambda x: max(x, 0)/30)  # Set negative values to 0 for sizing
             fig.add_trace(go.Scattergeo(
                 lon=tech_df['longitude'],
                 lat=tech_df['latitude'],
                 text=tech_df['variable'],
                 name=tech,
+                customdata=tech_df['value'],
                 mode='markers',
                 marker=dict(
-                    size=tech_df['value'] / 30,
+                    size=tech_df['size'],
                     opacity=0.8,
                     line=dict(width=0)
                 ),
                 hovertemplate='<b>%{text}</b><br>' +
-                              'Capacity: %{marker.size:.2f} MW<br>' +
+                              'Capacity: %{customdata:.2f} MW<br>' +
                               f'Time: {selected_time.strftime(time_format)}<br>' +
                               '<extra></extra>',
                 showlegend=True
@@ -157,8 +159,8 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
         scen_df['time'] = pd.to_datetime(scen_df['time'])
 
         # Calculate min and max values for color scaling
-        min_value = scen_df['value'].min()
-        max_value = scen_df['value'].max()
+        min_value = scen_df['value'].abs().min()
+        max_value = scen_df['value'].abs().max()
 
         time_df = scen_df[scen_df['time'] == selected_time]
         for i, row in time_df.iterrows():
@@ -166,7 +168,7 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
             # if max_value == min_value:
             #     color = plt.cm.viridis(0)
             # else:
-            color = plt.cm.viridis((row['value'] / row['pmax'])) if row['pmax'] != -1 else plt.cm.viridis(
+            color = plt.cm.viridis((row['value'] / row['pmax'])) if row['pmax'] != -1 and row['pmax'] != 0 else plt.cm.viridis(
                 (row['value'] - min_value) / (max_value - min_value))
             rgba_color = f'rgba({int(color[0] * 255)},{int(color[1] * 255)},{int(color[2] * 255)},{color[3]})'
 
@@ -176,14 +178,15 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     lon=[row['longitude_from'], row['longitude_to']],
                     mode='lines',
                     line=dict(
-                        width=0.01 + (row['value'] / row['pmax']) if row['pmax'] != -1 else 1 + (
-                                    row['value'] - min_value) / (
+                        width=0.01 + (abs(row['value']) / row['pmax']) if row['pmax'] != -1 and row['pmax'] != 0
+                        else 1 + (
+                                    abs(row['value']) - min_value) / (
                                                                                                         max_value - min_value) * 10 if max_value != min_value else 1,
                         color=rgba_color
                     ),
-                    name=row['region'] + ' Import from ' + row['variable'],
+                    name=str(row['region']) + ' Import from ' + str(row['variable']),
                     showlegend=True,
-                    hovertemplate='<b>' + row['region'] + ' Import from ' + row['variable'] + '</b><br>' +
+                    hovertemplate='<b>' + str(row['region']) + ' Import from ' + str(row['variable']) + '</b><br>' +
                                   'Flow: ' + f'{row["value"]:.2f} MW<br>' +
                                   'Capacity: ' + f'{row["pmax"]:.2f} MW<br>' +
                                   'Reactance: ' + f'{row["reactance"]:.2f} Ohm<br>' +
