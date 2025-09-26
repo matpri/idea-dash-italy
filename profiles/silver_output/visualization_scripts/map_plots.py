@@ -24,6 +24,24 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
     scen_df = df[(df['scenario'] == scenario) & (df['classes'] == type)].copy()
     scen_df['time'] = pd.to_datetime(scen_df['time'])
     scen_df = scen_df.dropna(axis=1, how='all')
+    if scen_df.empty:
+        fig = go.Figure()
+        fig.update_layout(
+            template="simple_white",
+        )
+        fig.add_annotation(
+            x=0.5,
+            y=0.5,
+            text="No data available, select another scenario or plot type.",
+            showarrow=False,
+            font=dict(
+                size=16,
+                color="black"
+            ),
+            align="center",
+            valign="middle",
+        )
+        return fig
     # groupby time based on time_size
     time_format = '%Y-%m-%d %H:%M:%S'
     if time_size == 'daily':

@@ -107,7 +107,7 @@ def link(app):
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['Map Plots'].to_csv, "map_plots.csv")
             return _canvas, _data
 
-        if 'silver-map_plots-time_step-select' in trigger_id['type']:
+        if 'silver-map_plots-time_step-select' in trigger_id['type'] or 'silver-map_plots-scenario-select' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
                 if ((id['id']['index'] == trigger_id['index']) and
