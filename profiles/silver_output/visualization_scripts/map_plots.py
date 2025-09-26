@@ -97,55 +97,60 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
             ))
 
     else:
-        bus_locations = df[df['filename'] == 'model inputs|bus_location']
-        existing_transmission = df[df['filename'] == 'model inputs|existing transmission']
-        bus_locations = bus_locations[bus_locations['scenario'] == scenario][['bus', 'latitude', 'longitude']]
-        existing_transmission = existing_transmission[existing_transmission['scenario'] == scenario][
-            ['name', 'to bus', 'from bus', 'pmax', 'reactance']]
+        sub_df = df[(df['scenario'] == scenario)].copy()
+        sub_df = sub_df.dropna(axis=1, how='all')
+        if 'filename' in sub_df.columns:
+            bus_locations = sub_df[sub_df['filename'] == 'model inputs|bus_location']
+            existing_transmission = sub_df[sub_df['filename'] == 'model inputs|existing transmission']
+            bus_locations = bus_locations[bus_locations['scenario'] == scenario][['bus', 'latitude', 'longitude']]
+            existing_transmission = existing_transmission[existing_transmission['scenario'] == scenario][
+                ['name', 'to bus', 'from bus', 'pmax', 'reactance']]
 
-        # Merge bus locations with existing transmission
-        existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='from bus', right_on='bus',
-                                         how='left')
-        existing_transmission = existing_transmission.rename(
-            columns={'latitude': 'latitude_from', 'longitude': 'longitude_from'})
-        existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='to bus', right_on='bus',
-                                         how='left')
-        existing_transmission = existing_transmission.rename(
-            columns={'latitude': 'latitude_to', 'longitude': 'longitude_to'})
-        existing_transmission = existing_transmission[
-            ['name','to bus', 'from bus', 'latitude_from', 'longitude_from', 'latitude_to', 'longitude_to', 'pmax', 'reactance']]
+            # Merge bus locations with existing transmission
+            existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='from bus', right_on='bus',
+                                             how='left')
+            existing_transmission = existing_transmission.rename(
+                columns={'latitude': 'latitude_from', 'longitude': 'longitude_from'})
+            existing_transmission = pd.merge(existing_transmission, bus_locations, left_on='to bus', right_on='bus',
+                                             how='left')
+            existing_transmission = existing_transmission.rename(
+                columns={'latitude': 'latitude_to', 'longitude': 'longitude_to'})
+            existing_transmission = existing_transmission[
+                ['name','to bus', 'from bus', 'latitude_from', 'longitude_from', 'latitude_to', 'longitude_to', 'pmax', 'reactance']]
 
         scen_df['line'] = scen_df.apply(lambda x: f"{x['region']}-{x['variable']}", axis=1)
-        existing_transmission['line'] = existing_transmission.apply(lambda x: f"{x['from bus']}-{x['to bus']}", axis=1)
-        new_rows = []
         scen_df['pmax'] = None
         scen_df['reactance'] = None
-        for i, transmission in existing_transmission.iterrows():
-            if transmission['line'] in scen_df['line'].dropna().unique():
-                scen_df.loc[scen_df['line'] == transmission['line'], 'pmax'] = transmission['pmax']
-                scen_df.loc[scen_df['line'] == transmission['line'], 'reactance'] = transmission['reactance']
-            else:
-                # If the line is not in scen_df, we can add it with a value of 0
-                new_row = {
-                    'region': transmission['name'],
-                    'variable': transmission['from bus'],
-                    'latitude_from': transmission['latitude_from'],
-                    'longitude_from': transmission['longitude_from'],
-                    'latitude_to': transmission['latitude_to'],
-                    'longitude_to': transmission['longitude_to'],
-                    'value': 0,
-                    'time': selected_time,
-                    'line': transmission['line'],
-                    'pmax': transmission['pmax'],
-                    'reactance': transmission['reactance']
-                }
-                new_rows.append(new_row)
+        if 'filename' in sub_df.columns:
+            existing_transmission['line'] = existing_transmission.apply(lambda x: f"{x['from bus']}-{x['to bus']}", axis=1)
+            new_rows = []
+            for i, transmission in existing_transmission.iterrows():
+                if transmission['line'] in scen_df['line'].dropna().unique():
+                    scen_df.loc[scen_df['line'] == transmission['line'], 'pmax'] = transmission['pmax']
+                    scen_df.loc[scen_df['line'] == transmission['line'], 'reactance'] = transmission['reactance']
+                else:
+                    # If the line is not in scen_df, we can add it with a value of 0
+                    new_row = {
+                        'region': transmission['name'],
+                        'variable': transmission['from bus'],
+                        'latitude_from': transmission['latitude_from'],
+                        'longitude_from': transmission['longitude_from'],
+                        'latitude_to': transmission['latitude_to'],
+                        'longitude_to': transmission['longitude_to'],
+                        'value': 0,
+                        'time': selected_time,
+                        'line': transmission['line'],
+                        'pmax': transmission['pmax'],
+                        'reactance': transmission['reactance']
+                    }
+                    new_rows.append(new_row)
 
-        if new_rows:
-            new_rows_df = pd.DataFrame(new_rows)
-            scen_df = pd.concat([scen_df, new_rows_df], ignore_index=True)
+            if new_rows:
+                new_rows_df = pd.DataFrame(new_rows)
+                scen_df = pd.concat([scen_df, new_rows_df], ignore_index=True)
 
         scen_df['pmax'] = scen_df['pmax'].fillna(-1)
+        scen_df['reactance'] = scen_df['reactance'].fillna(-1)
 
         # Initialize frames list and convert data types
         # frames = []
@@ -172,6 +177,9 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                 (row['value'] - min_value) / (max_value - min_value))
             rgba_color = f'rgba({int(color[0] * 255)},{int(color[1] * 255)},{int(color[2] * 255)},{color[3]})'
 
+            cap_hover = 'Capacity: ' + f'{row["pmax"]:.2f} MW<br>' if row['pmax'] != -1 else ''
+            reactance_hover = 'Reactance: ' + f'{row["reactance"]:.2f} Ohm<br>' if row['reactance'] != -1 else ''
+
             fig.add_trace(
                 go.Scattergeo(
                     lat=[row['latitude_from'], row['latitude_to']],
@@ -188,8 +196,8 @@ def render_plot(type, df, scenario, selected_time, time_size='hourly'):
                     showlegend=True,
                     hovertemplate='<b>' + str(row['region']) + ' Import from ' + str(row['variable']) + '</b><br>' +
                                   'Flow: ' + f'{row["value"]:.2f} MW<br>' +
-                                  'Capacity: ' + f'{row["pmax"]:.2f} MW<br>' +
-                                  'Reactance: ' + f'{row["reactance"]:.2f} Ohm<br>' +
+                                   cap_hover +
+                                  reactance_hover +
                                   f'Time: {selected_time.strftime(time_format)}<br>' +
                                   '<extra></extra>',
                 )
