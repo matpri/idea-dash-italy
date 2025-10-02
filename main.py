@@ -11,7 +11,7 @@ from dash import html
 
 from callbacks import modal_handling, tab_handling, burger_handling, sidebar_handling, data_viewer_handling, \
     plot_handling, help_handling, save_datahandler, selected_files, database_connection, data_modal as data_modal_callback,\
-    export_fig, plot_popup
+    export_fig, plot_popup, download_modal
 from components import ids, plot_canvas, sidebar
 from components.data_selection import data_modal
 from components.help import help
@@ -73,6 +73,7 @@ if args.datahandler is not None:
     print(f"Loading datahandler from {args.datahandler}")
     data_handler.load(args.datahandler)
     print(f"Datahandler loaded with {len(data_handler.data)} files.")
+    print(data_handler.processed_data)
 
 # link profile callbacks to app
 data_handler.link(app)
@@ -89,6 +90,7 @@ database_connection.link(app)
 data_modal_callback.link(app)
 export_fig.link(app)
 plot_popup.link(app)
+download_modal.link(app)
 
 print('CONFIGS', configs)
 data_handler.load_configs(configs)

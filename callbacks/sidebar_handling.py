@@ -73,6 +73,16 @@ def link(app):
     )(show_settings_modal)
 
     app.callback(
+        Output('download-modal', 'opened'),
+        Output('download-scenario-select', 'data'),
+        Output('download-scenario-select', 'value'),
+        Input('download-data-button', 'n_clicks'),
+        State('download-modal', 'opened'),
+        State('download-scenario-select', 'value'),
+        prevent_initial_call=True,
+    )(show_download_modal)
+
+    app.callback(
         Output(ids.SETTINGS_CHANGE, 'n_clicks'),
         Input('settings-modal', 'opened'),
         State(ids.SETTINGS_CHANGE, 'n_clicks'),
@@ -159,6 +169,36 @@ def edit_cards(add_clicks, delete_click, trash_click, cancel_click, d_change, s_
         for widget in widgets:
             updated_widgets.append(window.render())
         return updated_widgets, is_open
+
+def show_download_modal(n_clicks, is_open, scenario_selected):
+    """
+    Show download modal.
+
+    :param n_clicks: The number of times the modal is clicked.
+    :param is_open: Boolean value indicating if the modal is open or closed.
+
+
+    :return: A tuple containing the updated value of is_open and _children.
+
+    """
+    print('show_download_modal')
+    from utils.data_state import data_handler
+    scenarios = []
+    processed_data = data_handler.processed_data
+    for profile in processed_data.keys():
+        for viz, data in processed_data[profile].items():
+            data_scenarios = data.scenario.unique()
+            for scenario in data_scenarios:
+                if scenario not in scenarios:
+                    scenarios.append(scenario)
+
+    if scenario_selected not in scenarios:
+        scenario_selected = None
+
+
+    if n_clicks:
+        return not is_open, scenarios, scenario_selected
+    return is_open, dash.no_update, dash.no_update
 
 
 def show_settings_modal(n_clicks, is_open, _children):

@@ -7,7 +7,7 @@ from dash import Output, Input, State, html, dcc
 from dash_iconify import DashIconify
 from assets.styles import button_style, hide_button_style, view_button_style
 
-from components import data_viewer, settings, ids
+from components import data_viewer, settings, ids, download
 from components.plot_window import window
 
 HEIGHT = 48
@@ -65,6 +65,22 @@ def render(static):
                     radius='xl',
                     variant='outline',
                     id='trash-button',
+                    className='my-button',
+                    style=button_style
+                )
+            ]
+        ),
+        dmc.Tooltip(
+            label="Download Data",
+            position="right",
+            offset=3,
+            children=[
+                dmc.ActionIcon(
+                    DashIconify(icon='carbon:download'),
+                    size='lg',
+                    radius='xl',
+                    variant='outline',
+                    id='download-data-button',
                     className='my-button',
                     style=button_style
                 )
@@ -176,7 +192,7 @@ def render(static):
                 ],
                 position={'top': '27%', 'left': 0} if not static else {'top': '42%', 'left': 0},
                 width={"base": 62},
-                height=432 if not static else 224,
+                height=486 if not static else 278,
                 fixed=True,
                 zIndex=9999,
                 style={
@@ -195,6 +211,7 @@ def render(static):
 
             data_viewer.render(),
             settings.render(),
+            download.render(),
             dbc.Popover(
                 target='trash-button',
                 children=[
