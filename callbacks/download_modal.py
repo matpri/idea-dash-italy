@@ -138,14 +138,6 @@ def toggle_selection(scenario):
         children=[
             dmc.TabsList(children=tabs),
             *tab_contents,
-            dmc.Button(
-                'Download Selected',
-                id='download-selected-button',
-                n_clicks=0,
-                disabled=True,  # Initially disabled until scenario is selected
-                style={'marginTop': '10px'}
-            ),
-            dcc.Download(id='download-data')  # Add download component
         ],
     )
 

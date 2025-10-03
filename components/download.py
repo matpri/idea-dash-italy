@@ -1,5 +1,5 @@
 import dash_mantine_components as dmc
-from dash import html
+from dash import html, dcc
 
 
 def render():
@@ -24,19 +24,35 @@ def render():
         id='download-modal',
         size='70%',
         children=html.Div(
-            [
-                dmc.Select(
-                    id='download-scenario-select',
-                    label='Select Scenario',
-                    placeholder='Select Scenario',
-                    searchable=True,
-                    nothingFound='No options found',
-                    data=scenarios,
-                    style={'width': '50%'}
-                ),
-                html.Div(id='scenario-download-container', children=[
-
-                ])
-            ]
+            dmc.LoadingOverlay(
+                [
+                    html.Div([
+                        dmc.Select(
+                            id='download-scenario-select',
+                            label='Select Scenario',
+                            placeholder='Select Scenario',
+                            searchable=True,
+                            nothingFound='No options found',
+                            data=scenarios,
+                            style={'width': '50%'}
+                        ),
+                        dmc.Button(
+                            'Download Selected',
+                            id='download-selected-button',
+                            n_clicks=0,
+                            disabled=True,  # Initially disabled until scenario is selected
+                            style={'marginTop': '10px'}
+                        ),
+                        dcc.Download(id='download-data')  # Add download component
+                    ],
+                        style={'marginTop': '10px', 'marginBottom': '10px', 'display': 'flex',
+                               'flexDirection': 'column',
+                               'alignItems': 'flex-start'}
+                    ),
+                    dmc.Divider(),
+                    html.Div(id='scenario-download-container', children=[
+                    ])
+                ]
+            )
         )
     )
