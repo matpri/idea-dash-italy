@@ -6,6 +6,9 @@ from dash import html
 import pandas as pd
 import io
 import base64
+import xlsxwriter
+from concurrent.futures import ThreadPoolExecutor
+import threading
 
 def link(app):
     app.callback(
@@ -40,33 +43,48 @@ def download_selected_data(n_clicks, chip_values, chip_ids, scenario):
     from utils.data_state import data_handler
     processed_data = data_handler.processed_data
 
-    # Create Excel writer object in memory
+    # Pre-filter all data by scenario once
+    scenario_filtered_data = {}
+    for profile in processed_data:
+        scenario_filtered_data[profile] = {}
+        for viz, data in processed_data[profile].items():
+            if 'scenario' in data.columns:
+                filtered = data[data['scenario'] == scenario]
+                if not filtered.empty:
+                    scenario_filtered_data[profile][viz] = filtered
+
+    # Create Excel writer object in memory using xlsxwriter (faster)
     output = io.BytesIO()
 
-    with pd.ExcelWriter(output, engine='openpyxl') as writer:
-        # Iterate through chip groups and their selected values
-        for i, (values, chip_id) in enumerate(zip(chip_values, chip_ids)):
-            if not values:  # Skip if no chips are selected in this group
-                continue
+    # Collect all sheets to write
+    sheets_to_write = []
+    for values, chip_id in zip(chip_values, chip_ids):
+        if not values:  # Skip if no chips are selected in this group
+            continue
 
-            profile = chip_id['profile']
+        profile = chip_id['profile']
 
-            # Get data for each selected visualization
-            for viz in values:
-                if profile in processed_data and viz in processed_data[profile]:
-                    data = processed_data[profile][viz]
-                    # Filter by scenario
-                    filtered_data = data[data['scenario'] == scenario]
+        # Get data for each selected visualization
+        for viz in values:
+            if (profile in scenario_filtered_data and
+                    viz in scenario_filtered_data[profile]):
 
-                    # Create sheet name as profile|viz
-                    sheet_name = f"{profile}|{viz}"
-                    print(sheet_name)
-                    # Excel sheet names have a 31 character limit
-                    if len(sheet_name) > 31:
-                        sheet_name = sheet_name[:31]
+                filtered_data = scenario_filtered_data[profile][viz]
 
-                    # Write data to sheet
-                    filtered_data.to_excel(writer, sheet_name=sheet_name, index=False)
+                # Create sheet name as profile|viz
+                sheet_name = f"{profile}|{viz}"
+                # Excel sheet names have a 31 character limit
+                if len(sheet_name) > 31:
+                    sheet_name = sheet_name[:31]
+
+                sheets_to_write.append((sheet_name, filtered_data))
+
+    # Use xlsxwriter for better performance
+    with pd.ExcelWriter(output, engine='xlsxwriter') as writer:
+       # Write sheets sequentially (xlsxwriter doesn't support concurrent writing)
+       for sheet_name, filtered_data in sheets_to_write:
+           print('Writing sheet:', sheet_name)
+           filtered_data.to_excel(writer, sheet_name=sheet_name, index=False)
 
     output.seek(0)
 
