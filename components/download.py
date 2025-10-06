@@ -27,10 +27,10 @@ def render():
             dmc.LoadingOverlay(
                 [
                     html.Div([
-                        dmc.Select(
+                        dmc.MultiSelect(
                             id='download-scenario-select',
-                            label='Select Scenario',
-                            placeholder='Select Scenario',
+                            label='Select Scenario(s)',
+                            placeholder='Select Scenario(s)',
                             searchable=True,
                             nothingFound='No options found',
                             data=scenarios,
