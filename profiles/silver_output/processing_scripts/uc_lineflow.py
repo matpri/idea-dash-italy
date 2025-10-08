@@ -44,7 +44,7 @@ def process(selected):
         if type(db) is pd.DataFrame:
             df_processed = aggregate_db(db.copy(), scenario)
         else:
-            uc_results_var = [k for k in db['data'].keys() if k.startswith('UC_Results')][0]
+            uc_results_var = [k for k in db['data'].keys() if k.startswith('UC_Line_Flow')][0]
             time = db['data']['ts']
             data = db['data'][uc_results_var]
             records = {'time': [], 'region': [], 'value': []}
@@ -60,6 +60,7 @@ def process(selected):
             df['period'] = df['time'].dt.year.astype(int)
             df['scenario'] = scenario
             df_processed = df[['time', 'region', 'value', 'scenario']]
+            df_processed['variable'] = 'UC Line Flow|' + df_processed['variable']
 
         dfs.append(df_processed)
 
