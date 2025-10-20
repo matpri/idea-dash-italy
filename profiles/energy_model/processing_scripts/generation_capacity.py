@@ -29,7 +29,7 @@ def check(df):
             return nextgrid_generation_capacity.check(df)
         elif df.model.unique()[0] == "NATEM_Canad":
             return natem_generation_capacity.check(df)
-        elif df.model.unique()[0] == "HEC-PITHOS":
+        elif df.model.unique()[0] == "PITHOS":
             return pithos_generation_capacity.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_generation_capacity.check(df)
@@ -58,7 +58,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "NATEM_Canad":
             df = natem_generation_capacity.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "HEC-PITHOS":
+        elif db.model.unique()[0] == "PITHOS":
             df = pithos_generation_capacity.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":

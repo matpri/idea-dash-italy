@@ -28,7 +28,7 @@ def check(df):
             return nextgrid_cost_gencap.check(df)
         elif df.model.unique()[0] == "NATEM_Canad":
             return natem_cost_gencap.check(df)
-        elif df.model.unique()[0] == "HEC-PITHOS":
+        elif df.model.unique()[0] == "PITHOS":
             return pithos_cost_gencap.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_cost_gencap.check(df)
@@ -56,7 +56,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "NATEM_Canad":
             df = natem_cost_gencap.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "HEC-PITHOS":
+        elif db.model.unique()[0] == "PITHOS":
             df = pithos_cost_gencap.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":

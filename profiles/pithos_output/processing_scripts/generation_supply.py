@@ -18,7 +18,7 @@ def check(df):
     """
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
             if (classes == 'Supply').any() or (classes == 'Total transmission flow').any():
                 return True
@@ -53,7 +53,7 @@ def aggregate_db(db, scenario):
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
-    # aggregate the dim_name based on the tech_agg_HEC-PITHOS dictionary
+    # aggregate the dim_name based on the tech_agg_PITHOS dictionary
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # make period an int
@@ -155,7 +155,7 @@ def process(selected):
 
 if __name__ == '__main__':
     # Get all the csv files in the directory
-    file = 'HEC-PITHOS_high_techcost.xlsx'
+    file = 'PITHOS_high_techcost.xlsx'
 
     xls = pd.ExcelFile(file)
     # Get all sheet names
@@ -168,5 +168,5 @@ if __name__ == '__main__':
     df.columns = df.columns.str.lower()
 
     # Process the data
-    processed_data = process({'HEC-PITHOS_high_techcost': df})
+    processed_data = process({'PITHOS_high_techcost': df})
 

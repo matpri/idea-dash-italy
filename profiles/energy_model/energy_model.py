@@ -64,8 +64,8 @@ from profiles.energy_model.visualization_scripts import (
     comparison as comparison_viz,
 )
 
-power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
-                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
 
 
 class energy_modelsOutput(BaseProfile):

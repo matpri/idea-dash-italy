@@ -16,7 +16,7 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             if df.variable.str.startswith("FO&M costs|").any():
                 return df[df.variable.str.startswith("FO&M costs|")]['value'].sum() != 0
         return False

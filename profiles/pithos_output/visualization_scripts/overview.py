@@ -91,7 +91,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'HEC-PITHOS',
+            'profile': 'PITHOS',
             'viz': 'Overview'
         },
         style={

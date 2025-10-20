@@ -64,12 +64,12 @@ def data_processing_task(profile_name, viz, data, processing_func):
     return profile_name, viz, data_out
 
 class PyPsaOutput(BaseProfile):
-    display_name ='HEC-PITHOS'
-    name = 'HEC-PITHOS'
+    display_name ='PITHOS'
+    name = 'PITHOS'
     db_name = 'pithos'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (HEC-PITHOS) framework is an electricity system planning model. \n'
+        'The Canadian Opportunities for Planning and Production of Electricity Resources (PITHOS) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [

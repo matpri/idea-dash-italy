@@ -30,7 +30,7 @@ def link(app):
         settings = yaml.load(decoded, Loader=yaml.FullLoader)
 
         from utils.data_state import data_handler
-        data_handler.profiles['HEC-PITHOS'].settings = settings
+        data_handler.profiles['PITHOS'].settings = settings
         return html.Div([
             html.Div('Settings Updated'),
             html.Div(f'Using {filename}'),
