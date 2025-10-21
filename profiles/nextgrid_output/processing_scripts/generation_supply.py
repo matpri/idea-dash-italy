@@ -164,4 +164,5 @@ def process(selected):
     full_data = pd.concat(dfs)
 
     full_data['time'] = full_data['time'].astype(int)
+    full_data['value'] = full_data['value'].astype(float) / 1000000
     return full_data

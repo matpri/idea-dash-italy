@@ -27,5 +27,5 @@ model_mapping = {
     'CIM2': ['Summary']
 }
 
-exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel',
+exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel', 'ECCC-NextGrid',
                            'COPPER', 'PITHOS', 'PaCES', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra-TEMOA', 'Summary']

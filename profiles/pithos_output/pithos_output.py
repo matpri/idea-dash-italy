@@ -87,7 +87,7 @@ class PyPsaOutput(BaseProfile):
         'Capacity Cost',
         'FOM Cost',
         'VOM Cost',
-        'Dispatch'
+        # 'Dispatch'
     ]
     viz_options = {
         'Overview':
@@ -222,16 +222,16 @@ class PyPsaOutput(BaseProfile):
                 'description': 'Variable operating and maintenance costs of energy production and transmission in the model.'
 
             },
-        'Dispatch':
-            {
-                'check': dispatch_processing.check,
-                'db_check': dispatch_processing.check,
-                'process': dispatch_processing.process,
-                'db_process': dispatch_processing.process,
-                'viz': dispatch_viz.plot,
-                'callback': dispatch_callbacks.link,
-                'description': 'Dispatch of each technology in the model.'
-            },
+        # 'Dispatch':
+        #     {
+        #         'check': dispatch_processing.check,
+        #         'db_check': dispatch_processing.check,
+        #         'process': dispatch_processing.process,
+        #         'db_process': dispatch_processing.process,
+        #         'viz': dispatch_viz.plot,
+        #         'callback': dispatch_callbacks.link,
+        #         'description': 'Dispatch of each technology in the model.'
+        #     },
         'Output Stats':
             {
                 'check': overview_processing.check,

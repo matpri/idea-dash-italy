@@ -20,7 +20,7 @@ def check(df):
     try:
         if (df.model == 'PITHOS').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Supply').any() or (classes == 'Total transmission flow').any():
+            if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,7 +45,7 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Supply']
+    supply_df = db[classes == 'Dispatch']
     supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     supply_df['period'] = supply_df['time'].astype(int)
@@ -59,7 +59,7 @@ def aggregate_db(db, scenario):
     # make period an int
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Total transmission flow']
+    transmission_df = db[classes == 'Transmission flow']
     transmission_df = transmission_df.dropna(axis=1, how='all')
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
