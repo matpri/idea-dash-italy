@@ -18,8 +18,8 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'NATEM_Canad').any():
-            if df.variable.str.startswith("Operational|VO&M costs|").any():
+        if (df.model == 'NATEM_Canada').any():
+            if df.variable.str.startswith("VO&M costs|").any():
                 return df[df.variable.str.startswith("Operational|VO&M costs|")]['value'].sum() != 0
         return False
     except Exception as e:

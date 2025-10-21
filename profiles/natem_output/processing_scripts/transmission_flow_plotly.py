@@ -19,7 +19,7 @@ def check(df):
             if df.variable.str.startswith("Transmission flow|").any():
                 test_df = df.copy()
                 test_df['variable'] = test_df['variable'].apply(lambda x: x.split("|")[1])
-                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("To ")[1])
+                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("-")[1])
                 test_df = test_df[test_df.region != test_df.variable]
                 return test_df.value.sum() != 0
         return False
@@ -174,7 +174,7 @@ def process(selected):
         trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
-        trs["variable"] = trs.variable.apply(lambda x: x.split("To ")[1])
+        trs["variable"] = trs.variable.apply(lambda x: x.split("- ")[1])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()

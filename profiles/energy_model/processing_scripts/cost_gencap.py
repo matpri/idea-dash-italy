@@ -26,7 +26,7 @@ def check(df):
             return copper_cost_gencap.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_cost_gencap.check(df)
-        elif df.model.unique()[0] == "NATEM_Canad":
+        elif df.model.unique()[0] == "NATEM_Canada":
             return natem_cost_gencap.check(df)
         elif df.model.unique()[0] == "PITHOS":
             return pithos_cost_gencap.check(df)
@@ -53,7 +53,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "ECCC-NextGrid":
             df = nextgrid_cost_gencap.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "NATEM_Canad":
+        elif db.model.unique()[0] == "NATEM_Canada":
             df = natem_cost_gencap.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "PITHOS":

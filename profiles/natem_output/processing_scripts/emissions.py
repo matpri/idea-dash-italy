@@ -16,7 +16,7 @@ def check(df):
     """
     #print("Checking for emissions in variable column")
     try:
-        if (df.model == 'NATEM_Canad').any():
+        if (df.model == 'NATEM_Canada').any():
             if df.variable.str.startswith("Emissions|").any():
                 return True
         return False
@@ -65,8 +65,11 @@ def process(selected: dict):
         df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         # formatted_df = aggregate_technologies(formatted_df)
-        canadian_total = calc_canadian(formatted_df)
-        full_data = pd.concat([formatted_df, canadian_total])
+        if 'CAN' not in formatted_df['region'].values:
+            canadian_total = calc_canadian(formatted_df)
+            full_data = pd.concat([formatted_df, canadian_total])
+        else:
+            full_data = formatted_df
         full_data['scenario'] = scenario_name
         dfs.append(full_data)
     full_df = pd.concat(dfs)

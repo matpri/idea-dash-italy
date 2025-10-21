@@ -15,9 +15,9 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'NATEM_Canad').any():
-            if df.variable.str.contains("Operational|").any() or df.variable.str.contains("Capital|").any():
-                return df[df.variable.str.contains("Operational|")]['value'].sum() != 0 or df[df.variable.str.contains("Capital|")]['value'].sum() != 0
+        if (df.model == 'NATEM_Canada').any():
+            if df.variable.str.contains("Cost\|").any():
+                return df[df.variable.str.contains("Cost\|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -81,7 +81,7 @@ def calculate_fom(df):
 
     """
 
-    fom_df = df[df.variable.str.startswith("Operational|FO&M costs|")].copy()
+    fom_df = df[df.variable.str.startswith("FOM_Cost|")].copy()
     fom_df['variable'] = fom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
@@ -198,15 +198,15 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("Operational|") | df.variable.str.contains("Capital|")]
-        formatted_df = format_df(df)
-        gen_cap = calculate_generation_capacity(formatted_df)
-        fom = calculate_fom(formatted_df)
-        vom = calculate_vom(formatted_df)
-        total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
-        total_cost['scenario'] = scenario_name
-        dfs.append(total_cost)
+        df = df[df.variable.str.contains("Cost\|")]
+        # formatted_df = format_df(df)
+        # gen_cap = calculate_generation_capacity(formatted_df)
+        # fom = calculate_fom(formatted_df)
+        # vom = calculate_vom(formatted_df)
+        # total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
+        df['scenario'] = scenario_name
+        dfs.append(df)
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
-    full_df['value'] = full_df['value'].div(1e9)
+    # full_df['value'] = full_df['value'].div(1e9)
     return full_df

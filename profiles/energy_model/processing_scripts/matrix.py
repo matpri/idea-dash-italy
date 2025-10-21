@@ -28,7 +28,7 @@ def check(df):
             return copper_matrix.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_matrix.check(df)
-        elif df.model.unique()[0] == "NATEM_Canad":
+        elif df.model.unique()[0] == "NATEM_Canada":
             return natem_matrix.check(df)
         elif df.model.unique()[0] == "PITHOS":
             return pithos_matrix.check(df)
@@ -56,7 +56,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "ECCC-NextGrid":
             df = nextgrid_matrix.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "NATEM_Canad":
+        elif db.model.unique()[0] == "NATEM_Canada":
             df = natem_matrix.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "PITHOS":
