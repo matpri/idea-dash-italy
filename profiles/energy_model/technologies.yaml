@@ -1058,6 +1058,11 @@ Electricity|Gas|SC|Backup|w/ CCS:
   group: Fossil fuel gas
   group_color: '#ff6b6b'
   name: Electricity|Gas|SC|Backup|w/ CCS
+Electricity|Storage|Battery:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: Electricity|Storage|Battery
 Electricity|Storage|Battery|Lithium:
   color: '#000000'
   group: Storage
@@ -1078,6 +1083,11 @@ Electricity|Biomass:
   group: Biomass
   group_color: '#33a02c'
   name: Electricity|Biomass
+Electricity|Coal:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Electricity|Coal
 Electricity|Coal|IGCC:
   color: '#000000'
   group: Fossil fuel solid
@@ -1093,6 +1103,11 @@ Electricity|Gas|CC:
   group: Fossil fuel gas
   group_color: '#ff6b6b'
   name: Electricity|Gas|CC
+Electricity|Gas|Steam|Industrial|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|Steam|Industrial|w/o CCS
 Electricity|Gas|CG:
   color: '#000000'
   group: Fossil fuel gas
@@ -1248,7 +1263,7 @@ Electricity|Storage|Flywheel:
   group: Storage
   group_color: '#6a3d9a'
   name: Electricity|Storage|Flywheel
-Electricity|Wind||Onshore|Centralized:
+Electricity|Wind|Onshore|Centralized:
   color: '#000000'
   group: Wind
   group_color: '#b2df8a'
@@ -1263,6 +1278,16 @@ Electricity|Wind|Offshore|Centralized:
   group: Wind
   group_color: '#b2df8a'
   name: Electricity|Wind|Offshore|Centralized
+Electricity|Wind|Offshore|Floating:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Floating
+Electricity|Wind|Offshore|Fixed:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Fixed
 Electricity|Wind|Offshore|Decentralized:
   color: '#000000'
   group: Wind
