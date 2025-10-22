@@ -611,7 +611,7 @@ class DataHandler:
                         dfs.append(df)
                     df = pd.concat(dfs, ignore_index=True)
 
-                elif extension == 'xlsx':
+                elif extension == '.xlsx':
                     xls = pd.ExcelFile(io.BytesIO(decoded))
                     # Get all sheet names
                     sheet_names = xls.sheet_names
@@ -625,7 +625,7 @@ class DataHandler:
                         df_list.append(_df)
                     # Combine all DataFrames into one
                     df = pd.concat(df_list, ignore_index=True)
-                elif extension == 'json':
+                elif extension == '.json':
                     with io.StringIO(decoded.decode('utf-8')) as f:
                         df = json.load(f)
                 else:
@@ -644,7 +644,7 @@ class DataHandler:
         else:
             df = content
 
-        if not extension == 'json':
+        if not extension == '.json':
             # remove all rows with all nan values
             df = df.dropna(how='all')
 
