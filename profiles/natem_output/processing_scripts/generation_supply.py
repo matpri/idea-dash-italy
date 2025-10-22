@@ -67,7 +67,7 @@ def aggregate_db(db, scenario):
     transmission_df = db[classes == 'Transmission flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     # replace to with ''
-    transmission_df['variable'] = transmission_df['variable'].str.replace('To ', '')
+    transmission_df['variable'] = transmission_df['variable'].str.replace('-', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object

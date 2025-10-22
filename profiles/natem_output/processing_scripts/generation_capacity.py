@@ -60,19 +60,21 @@ def process(dbs: dict):
     for scenario_name, db in dbs.items():
         df = db.copy()
         prov_df = df[df.variable.str.startswith("Total generation capacity|")]
-        prov_df['value'] = prov_df['value'].astype(float)
-        if 'CAN' not in prov_df['region'].values:
-            canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
-            canada_df['region'] = 'CAN'
-            canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        prov_df['value'] = prov_df['value'].astype(float) / 1000  # Convert from MW to GW
+        # if 'CAN' not in prov_df['region'].values:
+        #     canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        #     canada_df['region'] = 'CAN'
+        #     canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        prov_df = prov_df.groupby(['region', 'time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+        prov_df['scenario'] = scenario_name
 
-        if 'CAN' not in prov_df['region'].values:
-            gen_cap = process_gencap(prov_df, canada_df, scenario_name)
-        else:
-            gen_cap = process_gencap(prov_df, pd.DataFrame(), scenario_name)
+        # if 'CAN' not in prov_df['region'].values:
+        #     gen_cap = process_gencap(prov_df, canada_df, scenario_name)
+        # else:
+        #     gen_cap = process_gencap(prov_df, pd.DataFrame(), scenario_name)
 
-        gen_caps.append(gen_cap)
+        gen_caps.append(prov_df)
 
     full_net_new_cap = pd.concat(gen_caps)
     full_net_new_cap['time'] = full_net_new_cap['time'].astype(int)
