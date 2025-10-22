@@ -20,7 +20,7 @@ def check(df):
     try:
         if (df.model == 'NATEM_Canada').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Generation').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Dispatch').any() or (classes == 'Transmission Flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,7 +45,7 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Generation']
+    supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     # supply_df['time'] = pd.to_datetime(supply_df['time'])
@@ -64,10 +64,10 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Transmission flow']
-    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    transmission_df = db[classes == 'Transmission Flow']
+    transmission_df['variable'] = transmission_df['variable'].apply(lambda x: x.split("|")[1])
     # replace to with ''
-    transmission_df['variable'] = transmission_df['variable'].str.replace('-', '')
+    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split("-")[1])
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object

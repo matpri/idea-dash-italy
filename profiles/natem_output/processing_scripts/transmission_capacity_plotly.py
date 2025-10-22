@@ -180,6 +180,7 @@ def process(selected):
         df = db.copy()
         df = df[df.variable.str.startswith("Total transmission capacity|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("-")[1])
+        df['variable'] = df['variable'].apply(lambda x: x.split("|")[0])
         df = df.rename(columns={"time": "period"})
         df = df.sort_values(by=['period'])
         times = df['period'].unique().tolist()
