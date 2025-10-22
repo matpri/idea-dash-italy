@@ -20,7 +20,7 @@ def check(df):
     try:
         if (df.model == 'PaCES').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Supply').any() or (classes == 'Total transmission flow').any():
+            if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,7 +45,7 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Supply']
+    supply_df = db[classes == 'Dispatch']
     supply_df = supply_df.dropna(axis=1, how='all')
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     supply_df['period'] = supply_df['time'].astype(int)
@@ -59,67 +59,76 @@ def aggregate_db(db, scenario):
     # make period an int
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Total transmission flow']
-    transmission_df = transmission_df.dropna(axis=1, how='all')
-    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
-    transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
-    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
+    transmission_df = db[classes == 'Transmission flow']
+    if not transmission_df.empty:
 
-    transmission_df['period'] = transmission_df['time'].astype(int)
-    transmission_df.drop(columns=['time'], inplace=True)
+        transmission_df = transmission_df.dropna(axis=1, how='all')
+        transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+        transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
+        transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
-    # drop all the 0 values
-    # transmission_df = transmission_df[transmission_df.value != 0]
-    transmission_df['value'] = transmission_df['value'] * -1
+        transmission_df['period'] = transmission_df['time'].astype(int)
+        transmission_df.drop(columns=['time'], inplace=True)
 
-    # aggregate df values by region, variable, time, hour
-    transmission_df = transmission_df.groupby(["region", "variable", "period"]).sum().reset_index()
-    # rename from and variable based on utils.province_short
-    transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
-    transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
+        # drop all the 0 values
+        # transmission_df = transmission_df[transmission_df.value != 0]
+        transmission_df['value'] = transmission_df['value'] * -1
 
-    # drop rows where region == variable
-    transmission_df = transmission_df[transmission_df.region != transmission_df.variable]
+        # aggregate df values by region, variable, time, hour
+        transmission_df = transmission_df.groupby(["region", "variable", "period"]).sum().reset_index()
+        # rename from and variable based on utils.province_short
+        transmission_df["region"] = transmission_df.region.map(utils.province_short).fillna(transmission_df['region'])
+        transmission_df["variable"] = transmission_df.variable.map(utils.province_short).fillna(transmission_df['variable'])
 
-    # create a dataframe where the region and variable are swapped and the value is -1* the value
-    transmission_df_swap = transmission_df.copy()
-    transmission_df_swap["region"] = transmission_df["variable"]
-    transmission_df_swap["variable"] = transmission_df["region"]
-    transmission_df_swap["value"] = -1 * transmission_df["value"]
+        # drop rows where region == variable
+        transmission_df = transmission_df[transmission_df.region != transmission_df.variable]
 
-    transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
-    transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
-    # rename region entries based on utils.province_short
-    transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
-    dim_names = []
-    for index, row in transmission_df.iterrows():
-        if row['value'] < 0:
-            dim_names.append(f"Exports to {row['variable']}")
-        else:
-            dim_names.append(f"Imports from {row['variable']}")
-    transmission_df['end_node'] = transmission_df['variable']
-    transmission_df['variable'] = dim_names
-    transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
-    # change value from MWh to TWh
-    transmission_df['value'] = transmission_df['value'] / 1000000
-    # expand value to an entire year by multiplying by 365/12
+        # create a dataframe where the region and variable are swapped and the value is -1* the value
+        transmission_df_swap = transmission_df.copy()
+        transmission_df_swap["region"] = transmission_df["variable"]
+        transmission_df_swap["variable"] = transmission_df["region"]
+        transmission_df_swap["value"] = -1 * transmission_df["value"]
 
-    # only keep the periods that are in the supply_df
-    transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
+        transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
+        transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
+        # rename region entries based on utils.province_short
+        transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
+        dim_names = []
+        for index, row in transmission_df.iterrows():
+            if row['value'] < 0:
+                dim_names.append(f"Exports to {row['variable']}")
+            else:
+                dim_names.append(f"Imports from {row['variable']}")
+        transmission_df['end_node'] = transmission_df['variable']
+        transmission_df['variable'] = dim_names
+        transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
+        # change value from MWh to TWh
+        transmission_df['value'] = transmission_df['value'] / 1000000
+        # expand value to an entire year by multiplying by 365/12
 
-    #only keep the regions that are in the supply_df
-    transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+        # only keep the periods that are in the supply_df
+        transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
 
-    df = pd.concat([supply_df, transmission_df])
+        #only keep the regions that are in the supply_df
+        transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
+
+        df = pd.concat([supply_df, transmission_df])
+    else:
+        df = supply_df
     # df = df[df.value != 0]
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
-    # can_df remove all variables that start with Import or Export
-    can_df = can_df[~can_df.variable.str.startswith('Imports from')]
-    can_df = can_df[~can_df.variable.str.startswith('Exports to')]
-    can_df['region'] = 'CAN'
+    if not transmission_df.empty:
+        can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
+        # can_df remove all variables that start with Import or Export
+        can_df = can_df[~can_df.variable.str.startswith('Imports from')]
+        can_df = can_df[~can_df.variable.str.startswith('Exports to')]
+        can_df['region'] = 'CAN'
+    else:
+        can_df = df.copy()
+        can_df = df.groupby(['variable', 'period', 'scenario']).sum(numeric_only=True).reset_index()
+        can_df['region'] = 'CAN'
     df = pd.concat([df, can_df], ignore_index=True)
 
     # sort by dim_name and period
