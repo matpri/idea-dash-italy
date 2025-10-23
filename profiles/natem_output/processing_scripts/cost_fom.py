@@ -103,6 +103,6 @@ def process(data):
         dfs.append(df)
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
-    # full_df['value'] = full_df['value'].div(1e9)
+    full_df['value'] = full_df['value'].mul(1e6)
     
     return full_df
