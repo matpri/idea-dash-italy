@@ -5,7 +5,7 @@ from components import ids
 from profiles.natem_output.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 regions_list = [
-    'to BC', 'to AB', 'to SK', 'to MB', 'to ON', 'to QC', 'to NB', 'to NS', 'to PE', 'to NL', 'to YT', 'to NT', 'to NU',
+    'Exports to BC', 'Exports to AB', 'Exports to SK', 'Exports to MB', 'Exports to ON', 'Exports to QC', 'Exports to NB', 'Exports to NS', 'Exports to PE', 'Exports to NL', 'Exports to YT', 'Exports to NT', 'Exports to NU',
     'BC', 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL', 'YT', 'NT', 'NU',
 ]
 def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):

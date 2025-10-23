@@ -163,7 +163,7 @@ def process(selected):
         # all times - 1 hour delta
         trs['period'] = trs['time'].astype(int)
 
-        trs['value'] = trs['value'] / 1000
+        trs['value'] = trs['value']/ 3.6
         # drop time
         trs = trs.drop(columns=['time'])
         # group by region, variable, period

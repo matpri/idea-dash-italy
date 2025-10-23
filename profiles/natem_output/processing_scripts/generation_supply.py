@@ -129,12 +129,17 @@ def aggregate_db(db, scenario):
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
-    # can_df remove all variables that start with Import or Export
-    can_df = can_df[~can_df.variable.str.startswith('Imports from')]
-    can_df = can_df[~can_df.variable.str.startswith('Exports to')]
-    can_df['region'] = 'CAN'
-    df = pd.concat([df, can_df], ignore_index=True)
+    # can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
+    # # can_df remove all variables that start with Import or Export
+    # can_df = can_df[~can_df.variable.str.startswith('Imports from')]
+    # can_df = can_df[~can_df.variable.str.startswith('Exports to')]
+    # can_df['region'] = 'CAN'
+    # df = pd.concat([df, can_df], ignore_index=True)
+
+    # for CAN region remove any rows where variable starts with Imports or Exports
+    if 'CAN' in df['region'].values:
+        df = df[~((df['region'] == 'CAN') & (df['variable'].str.startswith('Imports from')))]
+        df = df[~((df['region'] == 'CAN') & (df['variable'].str.startswith('Exports to')))]
 
     # sort by dim_name and period
     df = df.sort_values(by=['variable', 'period'])
