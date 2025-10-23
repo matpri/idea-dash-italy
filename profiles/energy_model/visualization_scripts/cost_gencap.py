@@ -4,23 +4,23 @@ from components import ids
 from profiles.energy_model.visualization_scripts.utils import bar_over_years, bar_over_regions, trend_over_years, pie_chart
 
 
-def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False):
+def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_active=True, text_active=False, report_type='Total'):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     name = plot_settings['Capacity Cost']['name']
     unit = plot_settings['Capacity Cost']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Capacity Cost']['By Year']
-        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_years.plot(df, scenarios, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active, report_type=report_type)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Capacity Cost']['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, report_type=report_type)
     elif type == 'Pie Chart':
         plot_info = plot_settings['Capacity Cost']['Pie Chart']
         return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'])
     else:
         plot_info = plot_settings['Capacity Cost']['By Region']
-        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, pattern_active=pattern_active, text_active=text_active, report_type=report_type)
 
 
 def plot(df, window_id):
@@ -92,6 +92,16 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
+        dmc.Select(
+            label='Report Type',
+            data=[{'label': report_type, 'value': report_type} for report_type in ['Total', 'Relative Change', 'Relative Makeup']],
+            value='Total',
+            id={
+                'type': 'energy_model-gencap_cost-report-type-select',
+                'index': window_id
+            },
+            style={'display': 'block'}
+        ),
         dmc.Switch('Aggregate',
                    checked=True,
                    id={
@@ -141,7 +151,7 @@ def plot(df, window_id):
 
     plot_layout = dcc.Graph(
         figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                           years[0],scenarios[0]),
+                           years[0],scenarios[0], report_type='Total'),
         id={
             'type': ids.FIGURE,
             'index': window_id,

@@ -25,6 +25,12 @@ def link(app):
             'type': 'energy_model-overview-plot-select',
             'index': ALL
         }, 'value'),
+        Input(
+            {
+                'type': 'energy_model-overview-relative',
+                'index': ALL,
+            }, 'checked'
+        ),
         Input({
             'type': 'energy_model-overview-groupby-toggle',
             'index': ALL
@@ -40,7 +46,6 @@ def link(app):
                 'type': 'energy_model-overview-fill-switch',
                 'index': ALL,
             }, 'checked'
-
         ),
         Input({
             'type': 'energy_model-overview-scenario-group-select',
@@ -69,7 +74,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _groupby, _region, _fill, _scenarios, _download, _canvas, _data, _fillswitch):
+    def update_overview(_p_type, _relative, _groupby, _region, _fill, _scenarios, _download, _canvas, _data, _fillswitch):
         #print('updating overview plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -103,7 +108,7 @@ def link(app):
             df = df[df['scenario'].str.contains(_scenarios[idx])]
 
         _canvas[idx] = render_plot(_p_type[idx], df,
-                                   _groupby_model, _groupby_scenario, _groupby_version, _region[idx]=='CAN', _fill[idx])
+                                   _groupby_model, _groupby_scenario, _groupby_version, _region[idx]=='CAN', _fill[idx], _relative[idx])
 
         _fillswitch[idx] = {'display': 'none'}
         if _groupby[idx] > 0:

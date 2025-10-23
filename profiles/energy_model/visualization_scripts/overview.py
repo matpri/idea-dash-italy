@@ -79,7 +79,7 @@ def get_version_pattern(model):
         version_patterns[model] = patterns[len(version_patterns) % len(patterns)]
     return version_patterns[model]
 
-def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True):
+def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True, relative=False):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
@@ -88,6 +88,16 @@ def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, c
         df = df[df.region == 'CAN']
     else:
         df = df[df.region == 'AB+QC']
+
+    if relative:
+        scenarios = df['scenario'].unique().tolist()
+        for scenario in scenarios:
+            data = df[df.scenario == scenario]
+            base_value = data[data.time == data.time.min()]['value'].values
+            if len(base_value) > 0 and base_value[0] != 0:
+                df.loc[df.scenario == scenario, 'value'] = data['value'] / base_value[0]
+            else:
+                df.loc[df.scenario == scenario, 'value'] = 0
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
@@ -228,6 +238,14 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
+        dmc.Switch(
+            label='Relative Values',
+            checked=False,
+            id={
+                'type': 'energy_model-overview-relative',
+                'index': window_id,
+            },
+        ),
         dmc.Select(
             label='Group By',
             value=1,
@@ -281,7 +299,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, True, False, False),
+        figure=render_plot(classes[0], df, True, False, False, False),
         id={
             'type': ids.FIGURE,
             'index': window_id,

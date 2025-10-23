@@ -5,7 +5,7 @@ from profiles.energy_model import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, report_type='Total'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -17,7 +17,44 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     try:
         df_scen = subset(df, year, scenarios, aggregate, season)
         scenarios.sort()
-        techs = df_scen.variable.unique().tolist()
+        df_scen_time = df_scen[df_scen['time'] == year]
+        techs = df_scen_time.variable.unique().tolist()
+
+        if report_type == 'Relative Change':
+            for tech in techs:
+                tech_data = df_scen[df_scen["variable"] == tech]
+                for scen in scenarios:
+                    tech_data_scen = tech_data[tech_data['scenario'] == scen].sort_values(by=['time'])
+                    regions = tech_data_scen['region'].unique().tolist()
+                    for reg in regions:
+                        tech_data_scen_reg = tech_data_scen[tech_data_scen['region'] == reg]
+                        if not tech_data_scen_reg.empty:
+                            base_value = tech_data_scen_reg.iloc[0]['value']
+                            idx = 0
+                            while idx < len(tech_data_scen_reg) and base_value == 0:
+                                base_value = tech_data_scen_reg.iloc[idx]['value']
+                                idx += 1
+                            if base_value != 0:
+                                df_scen.loc[(df_scen["variable"] == tech) & (df_scen['scenario'] == scen) & (df_scen['region'] == reg), 'value'] = (tech_data_scen_reg['value'] / base_value)
+                            else:
+                                df_scen.loc[(df_scen["variable"] == tech) & (df_scen['scenario'] == scen) & (df_scen['region'] == reg), 'value'] = 0
+            y_axis_label += ' (%)'
+        elif report_type == 'Relative Makeup':
+            df_scen = df_scen[df_scen['time'] == year]
+            for scen in scenarios:
+                scen_data = df_scen[df_scen['scenario'] == scen]
+                regions = scen_data['region'].unique().tolist()
+                for reg in regions:
+                    scen_data_reg = scen_data[scen_data['region'] == reg]
+                    total_per_region = scen_data_reg['value'].sum()
+                    if total_per_region != 0:
+                        df_scen.loc[(df_scen['scenario'] == scen) & (df_scen['region'] == reg), 'value'] = (scen_data_reg['value'] / total_per_region)
+                    else:
+                        df_scen.loc[(df_scen['scenario'] == scen) & (df_scen['region'] == reg), 'value'] = 0
+            y_axis_label += ' (%)'
+
+        df_scen = df_scen[df_scen['time'] == year]
+        df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum')
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
@@ -84,10 +121,8 @@ def subset(df, year, scenarios, aggregate, season=None):
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
-    df_scen = df_scen[df_scen['time'] == year]
     df_scen = df_scen[df_scen['region'] != 'CAN']
     df_scen = df_scen[df_scen['value'] != 0]
-    df_scen['total'] = df_scen.groupby(['region', 'scenario'])['value'].transform('sum').values
     # for every variable type in the df, make sure all regions are present if necessary fill with 0
     region_pad = []
     for var in df_scen.variable.unique():
