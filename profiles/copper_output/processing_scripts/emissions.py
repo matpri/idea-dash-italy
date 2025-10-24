@@ -36,6 +36,7 @@ def format_df(df):
         DataFrame: Formatted data with extracted information.
     """
     df['region'] = df['region'].map(utils.province_short).fillna(df['region'])
+    df['region'] = df['region'].apply(lambda x: x.split('.')[0])
     df = df.groupby(['region', 'variable', 'time', 'scenario', 'unit']).sum(numeric_only=True).reset_index()
     return df
 

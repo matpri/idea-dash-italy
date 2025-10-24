@@ -263,6 +263,12 @@ def render_plot(type, df, scenarios, year, line):
     from profiles.energy_model.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
+    df = df.copy()
+    df['short_region'] = df['short_region'].apply(lambda x: x.split('.')[0])
+    df['short_variable'] = df['short_variable'].apply(lambda x: x.split('.')[0])
+    df['region'] = df['region'].apply(lambda x: x.split('.')[0])
+    df['variable'] = df['variable'].apply(lambda x: x.split('.')[0])
+    df['line'] = df['short_region'] + ' -> ' + df['short_variable']
     print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Flow']['Map Plot']
