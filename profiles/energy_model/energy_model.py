@@ -282,22 +282,7 @@ class energy_modelsOutput(BaseProfile):
                 data = df.copy()
                 data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
                 data['scenario'] = profile + '|' + data['scenario']
-                if not viz_option in ['Overview', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
-                    unique_regions = set(data['region'].unique())
-
-                    # Check if both 'A' and 'B' are in the unique values
-                    if {'AB', 'QC'}.issubset(unique_regions):
-                        ab_qc = data[data.region.isin(['AB', 'QC'])]
-                        # drop nan columns
-                        ab_qc = ab_qc.dropna(axis=1, how='all')
-                        columns = ab_qc.columns
-                        columns = columns.drop('region')
-                        columns = columns.drop('value').tolist()
-
-                        # Perform groupby operation
-                        ab_qc = ab_qc.groupby(columns).sum().reset_index()
-                        ab_qc['region'] = 'AB+QC'
-                        data = pd.concat([data, ab_qc])
+                
 
                 if 'time' in data.columns:
                     data = data[data['time'].isin(

@@ -79,15 +79,12 @@ def get_version_pattern(model):
         version_patterns[model] = patterns[len(version_patterns) % len(patterns)]
     return version_patterns[model]
 
-def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True, relative=False):
+def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, fill=True, relative=False):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
 
-    if can:
-        df = df[df.region == 'CAN']
-    else:
-        df = df[df.region == 'AB+QC']
+    df = df[df.region == 'CAN']
 
     if relative:
         scenarios = df['scenario'].unique().tolist()
@@ -269,18 +266,6 @@ def plot(df, window_id):
                 'index': window_id,
             },
             style={'display': 'block'}
-        ),
-        dmc.Select(
-            label='Region',
-            value='CAN',
-            data=[
-                {'label': 'CAN', 'value': 'CAN'},
-                {'label': 'AB+QC', 'value': 'AB+QC'},
-            ],
-            id={
-                'type': 'energy_model-overview-region-toggle',
-                'index': window_id,
-            },
         ),
         dmc.Switch(
             label='Fill Area',
