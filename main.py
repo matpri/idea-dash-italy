@@ -155,4 +155,4 @@ if __name__ == '__main__':
       # Initialize orca to avoid error when exporting figures
 
     app.layout = define_layout
-    app.run(host=host, port=str(port), use_reloader=False, debug=True)  # Run the app on the specified port
+    app.run(host=host, port=str(port), use_reloader=False)  # Run the app on the specified port
