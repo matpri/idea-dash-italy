@@ -19,8 +19,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'NATEM_Canada').any():
-            if df.variable.str.startswith("VO&M costs|").any():
-                return df[df.variable.str.startswith("Operational|VO&M costs|")]['value'].sum() != 0
+            if df.variable.str.startswith("ACT_Cost").any():
+                return df[df.variable.str.startswith("ACT_Cost")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -99,13 +99,14 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Operational|VO&M costs|")]
-        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+        df = df[df.variable.str.startswith("ACT_Cost")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
 
         # replace all variables that start with To with Transmission
         df['variable'] = df['variable'].apply(lambda x: 'Transmission' if x.startswith('To') else x)
-        formatted_df = format_df(df)
-        df = calculate_fom(formatted_df)
+
+        df = df.groupby(['region', 'variable', 'time', 'scenario']).sum(numeric_only=True).reset_index()
+
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)

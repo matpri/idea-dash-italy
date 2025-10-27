@@ -199,6 +199,13 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.contains("Cost\|")]
+        df['variable'] = df['variable'].apply(lambda x: x.split("|")[0])
+        df['variable'] = df['variable'].map({
+            'ACT_Cost': 'VO&M Cost',
+            'INV_Cost': 'Capital Cost',
+            'FOM_Cost': 'FO&M Cost',
+        }).fillna(df['variable'])
+        df = df.groupby(['region', 'variable', 'time']).sum(numeric_only=True).reset_index()
         # formatted_df = format_df(df)
         # gen_cap = calculate_generation_capacity(formatted_df)
         # fom = calculate_fom(formatted_df)
