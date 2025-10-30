@@ -141,6 +141,7 @@ def to_color_plotly(min_value):
     return func
 
 def transmission_plot(df, scenario, year, title):
+    df = df[df['short_region'] != df['short_variable']]
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
 
     min_value = df['value'].min()

@@ -144,6 +144,7 @@ def to_color_plotly(min_value):
 def transmission_plot(df, scenario, year, title):
     df = df[df['scenario'] == scenario]
     max_value = df['value'].max()
+    df = df[df['short_region'] != df['short_variable']]
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
     df['norm_value'] = df['value'] / max_value
     df['norm_value'] = df['norm_value'].fillna(0)
