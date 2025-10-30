@@ -74,6 +74,6 @@ def process(selected: dict):
         dfs.append(full_data)
     full_df = pd.concat(dfs)
     full_df['time'] = full_df['time'].astype(int)
-    full_df['value'] = full_df['value'] * 1000000
+    # full_df['value'] = full_df['value'] * 1000000
     #print("Emissions processed")
     return full_df
