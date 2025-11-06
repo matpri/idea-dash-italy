@@ -60,8 +60,8 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['time'].dt.year
     sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
     unique_dates = sub_supply['time'].dt.date.unique()
-    if 'Representative Day Scaling Factor' in classes.unique():
-        scaler = db[classes == 'Representative Day Scaling Factor']['value'].iloc[0]
+    if 'Simulation Setting|Representative Day Scaling Factor' in db["variable"].unique():
+        scaler = db[classes == 'Simulation Setting|Representative Day Scaling Factor']['value'].iloc[0]
     else:
         scaler = 365 / len(unique_dates)
 
