@@ -17,11 +17,11 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIMS').any():
-            if (df.parameter == 'requested_quantities').any():
+            if (df.parameter == 'quantity_requested').any():
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        print("requested_quantities check", e)
         return False
 
 
@@ -69,7 +69,7 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
 
-        requested_services = df[(df['parameter'] == 'service requested')].copy()
+        requested_services = df[(df['parameter'] == 'service_request')].copy()
 
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
@@ -92,19 +92,19 @@ def process(selected: dict):
 
 
         ds_lookup = (
-            df[elec_mask & (df['parameter'] == 'distributed_supply')]
-            .set_index('__key')['value_num']
+            df[elec_mask & (df['parameter'] == 'quantity_distributed')]
+            .set_index('__key')['value_num'].astype(float)
             .fillna(0)  # treat NaN as 0
         )
 
-        mask_rq = elec_mask & (df['parameter'] == 'requested_quantities')
+        mask_rq = elec_mask & (df['parameter'] == 'quantity_requested')
         df.loc[mask_rq, 'value_num'] = (
-            df.loc[mask_rq, 'value_num'].fillna(0) -
-            df.loc[mask_rq, '__key'].map(ds_lookup).fillna(0)
+            df.loc[mask_rq, 'value_num'].astype(float).fillna(0) -
+            df.loc[mask_rq, '__key'].map(ds_lookup).astype(float).fillna(0)
         )
 
         df.drop(columns='__key', inplace=True)
-        df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
+        df = df[(df['parameter'] == 'quantity_requested') & (df['technology'].isna())]
 
 
         df = df[~df['region'].str.contains('CAN')]
