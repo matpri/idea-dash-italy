@@ -17,7 +17,7 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIMS').any():
-            if (df.parameter == 'quantity_requested').any():
+            if (df.parameter == 'quantity_requested').any() or (df.parameter == 'requested_quantities').any():
                 return True
         return False
     except Exception as e:
@@ -70,7 +70,10 @@ def process(selected: dict):
         df = db.copy()
 
         requested_services = df[(df['parameter'] == 'service_request')].copy()
-
+        v1 = True
+        if requested_services.empty:
+            v1 = False
+            requested_services = df[(df['parameter'] == 'service requested')].copy()
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
         sectors = requested_services['sector'].unique()
@@ -90,24 +93,38 @@ def process(selected: dict):
 
         df['__key'] = df[id_cols].astype(str).agg('|'.join, axis=1)
 
+        if v1:
+            ds_lookup = (
+                df[elec_mask & (df['parameter'] == 'quantity_distributed')]
+                .set_index('__key')['value_num'].astype(float)
+                .fillna(0)  # treat NaN as 0
+            )
 
-        ds_lookup = (
-            df[elec_mask & (df['parameter'] == 'quantity_distributed')]
-            .set_index('__key')['value_num'].astype(float)
-            .fillna(0)  # treat NaN as 0
-        )
+            mask_rq = elec_mask & (df['parameter'] == 'quantity_requested')
+            df.loc[mask_rq, 'value_num'] = (
+                df.loc[mask_rq, 'value_num'].astype(float).fillna(0) -
+                df.loc[mask_rq, '__key'].map(ds_lookup).astype(float).fillna(0)
+            )
 
-        mask_rq = elec_mask & (df['parameter'] == 'quantity_requested')
-        df.loc[mask_rq, 'value_num'] = (
-            df.loc[mask_rq, 'value_num'].astype(float).fillna(0) -
-            df.loc[mask_rq, '__key'].map(ds_lookup).astype(float).fillna(0)
-        )
+            df.drop(columns='__key', inplace=True)
+            df = df[(df['parameter'] == 'quantity_requested') & (df['technology'].isna())]
+        else:
+            ds_lookup = (
+                df[elec_mask & (df['parameter'] == 'distributed_supply')]
+                .set_index('__key')['value_num']
+                .fillna(0)  # treat NaN as 0
+            )
 
-        df.drop(columns='__key', inplace=True)
-        df = df[(df['parameter'] == 'quantity_requested') & (df['technology'].isna())]
+            mask_rq = elec_mask & (df['parameter'] == 'requested_quantities')
+            df.loc[mask_rq, 'value_num'] = (
+                    df.loc[mask_rq, 'value_num'].fillna(0) -
+                    df.loc[mask_rq, '__key'].map(ds_lookup).fillna(0)
+            )
 
+            df.drop(columns='__key', inplace=True)
+            df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
 
-        df = df[~df['region'].str.contains('CAN')]
+            df = df[~df['region'].str.contains('CAN')]
         df['short_path'] = df['short_path'].fillna('')
         layers = df['short_path'].apply(lambda x: len(x.split('.'))).max()
 
