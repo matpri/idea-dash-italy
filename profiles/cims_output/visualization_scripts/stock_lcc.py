@@ -8,7 +8,7 @@ from profiles.cims_output.visualization_scripts.utils import bar_over_years, bar
 
 
 def render_plot(type, df, representation, scenarios, region, year, scenario, pattern_active=True, text_active=False,
-                sector=None, service=None, parameter='new_stock', plot_name='New Stock'):
+                sector=None, service=None, parameter='stock_new', plot_name='New Stock'):
     print('rendering plot', type)
     from profiles.cims_output.utils import plot_settings
     name = plot_settings[plot_name]['name']

@@ -147,4 +147,5 @@ def process(selected: dict):
             df.at[i, 'parent_service'] = row['parent_service'].replace(prefix, '')
         dfs.append(df)
     full_df = pd.concat(dfs)
+    full_df['value_num'] = full_df['value_num'].astype(float)
     return full_df

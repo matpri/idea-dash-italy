@@ -35,4 +35,5 @@ def process(selected: dict):
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)
+    full_df['value_num'] = full_df['value_num'].astype(float)
     return full_df
