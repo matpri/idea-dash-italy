@@ -21,7 +21,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        print("requested_quantities check", e)
         return False
 
 
@@ -69,7 +69,7 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
 
-        requested_services = df[(df['parameter'] == 'service requested')].copy()
+        requested_services = df[(df['parameter'] == 'service_requested')].copy()
 
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
