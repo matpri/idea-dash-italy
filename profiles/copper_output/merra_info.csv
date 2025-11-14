@@ -1679,9 +1679,9 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2508,New Brunswick.a,45,-66.875,New Brunswick,8.4097887,11439,545.26,2181.02
 2509,New Brunswick.a,44.5,-66.875,New Brunswick,22.1654648,2734,2750.17,0
 251,British Columbia.a,49,-125.625,British Columbia,3.0545173,1853,0,2527.79
-2510,Nova Scotia.a,44,-66.875,Nova Scotia,76.6817625,0,2773.86,0
-2511,Nova Scotia.a,43.5,-66.875,Nova Scotia,71.7454482,0,2797.33,0
-2512,Nova Scotia.a,43,-66.875,Nova Scotia,146.5085232,0,2820.59,0
+2510,Nova Scotia.a,44,-66.875,Nova Scotia,76.6817625,0,0,0
+2511,Nova Scotia.a,43.5,-66.875,Nova Scotia,71.7454482,0,0,0
+2512,Nova Scotia.a,43,-66.875,Nova Scotia,146.5085232,0,0,0
 2513,Quebec.b,59.5,-66.25,Quebec,678.7699901,0,1950.85,0
 2514,Quebec.b,59,-66.25,Quebec,624.7092722,0,1781.97,198
 2515,Quebec.b,58.5,-66.25,Quebec,570.9427573,956,803.57,1205.36
@@ -1715,11 +1715,11 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2540,New Brunswick.a,46,-66.25,New Brunswick,1.9786086,5768,0,2677.86
 2541,New Brunswick.a,45.5,-66.25,New Brunswick,15.6892602,17068,0,2431.95
 2542,New Brunswick.a,45,-66.25,New Brunswick,17.5379727,116033,1090.51,1635.77
-2543,Nova Scotia.a,44.5,-66.25,Nova Scotia,28.7251245,2001,2200.14,550.03
-2544,Nova Scotia.a,44,-66.25,Nova Scotia,18.0235865,14920,554.77,2219.09
-2545,Nova Scotia.a,43.5,-66.25,Nova Scotia,39.3847946,24947,1118.93,1678.4
-2546,Nova Scotia.a,43,-66.25,Nova Scotia,71.302761,725,2820.59,0
-2547,Nova Scotia.a,42.5,-66.25,Nova Scotia,120.8166301,0,2843.64,0
+2543,Nova Scotia.a,44.5,-66.25,Nova Scotia,28.7251245,2001,0,550.03
+2544,Nova Scotia.a,44,-66.25,Nova Scotia,18.0235865,14920,0,2219.09
+2545,Nova Scotia.a,43.5,-66.25,Nova Scotia,39.3847946,24947,0,1678.4
+2546,Nova Scotia.a,43,-66.25,Nova Scotia,71.302761,725,0,0
+2547,Nova Scotia.a,42.5,-66.25,Nova Scotia,120.8166301,0,0,0
 2548,Quebec.b,59.5,-65.625,Quebec,671.9083974,0,0,1170.51
 2549,Quebec.b,59,-65.625,Quebec,617.1382731,0,0,1583.97
 255,British Columbia.a,58.5,-125,British Columbia,135.4148394,0,0,2008.93
@@ -1752,13 +1752,13 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2574,New Brunswick.a,46.5,-65.625,New Brunswick,24.919038,10602,0,2653.35
 2575,New Brunswick.a,46,-65.625,New Brunswick,9.2278846,6334,0,2677.86
 2576,New Brunswick.a,45.5,-65.625,New Brunswick,7.8807196,17754,0,2702.17
-2577,Nova Scotia.a,45,-65.625,Nova Scotia,28.951064,1497,2181.02,545.26
-2578,Nova Scotia.a,44.5,-65.625,Nova Scotia,7.4869982,21393,550.03,2200.14
+2577,Nova Scotia.a,45,-65.625,Nova Scotia,28.951064,1497,0,545.26
+2578,Nova Scotia.a,44.5,-65.625,Nova Scotia,7.4869982,21393,0,2200.14
 2579,Nova Scotia.a,44,-65.625,Nova Scotia,13.2234123,0,0,2496.47
 258,British Columbia.a,57,-125,British Columbia,106.4913081,0,0,2094.91
-2580,Nova Scotia.a,43.5,-65.625,Nova Scotia,2.6884249,12979,839.2,1958.13
-2581,Nova Scotia.a,43,-65.625,Nova Scotia,58.1631781,0,2820.59,0
-2582,Nova Scotia.a,42.5,-65.625,Nova Scotia,113.7578075,0,2843.64,0
+2580,Nova Scotia.a,43.5,-65.625,Nova Scotia,2.6884249,12979,0,1958.13
+2581,Nova Scotia.a,43,-65.625,Nova Scotia,58.1631781,0,0,0
+2582,Nova Scotia.a,42.5,-65.625,Nova Scotia,113.7578075,0,0,0
 2583,Quebec.b,59.5,-65,Quebec,667.1669777,0,0,1950.85
 2584,Quebec.b,59,-65,Quebec,611.897525,0,0,1979.97
 2585,Quebec.b,58.5,-65,Quebec,556.6931813,0,0,2008.93
@@ -1792,11 +1792,11 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 261,British Columbia.a,55.5,-125,British Columbia,75.5933261,0,0,2179.44
 2610,New Brunswick.a,46,-65,New Brunswick,2.3470487,172146,803.36,1874.5
 2611,New Brunswick.a,45.5,-65,New Brunswick,31.8589196,16580,810.65,1891.52
-2612,Nova Scotia.a,45,-65,Nova Scotia,3.9724641,24980,1363.14,1363.14
+2612,Nova Scotia.a,45,-65,Nova Scotia,3.9724641,24980,0,1363.14
 2613,Nova Scotia.a,44.5,-65,Nova Scotia,10.337414,30733,0,2750.17
-2614,Nova Scotia.a,44,-65,Nova Scotia,16.259445,35478,554.77,2219.09
-2615,Nova Scotia.a,43.5,-65,Nova Scotia,24.2514274,10422,2237.87,559.47
-2616,Nova Scotia.a,43,-65,Nova Scotia,78.5875291,0,2820.59,0
+2614,Nova Scotia.a,44,-65,Nova Scotia,16.259445,35478,0,2219.09
+2615,Nova Scotia.a,43.5,-65,Nova Scotia,24.2514274,10422,0,559.47
+2616,Nova Scotia.a,43,-65,Nova Scotia,78.5875291,0,0,0
 2617,Quebec.b,59.5,-64.375,Quebec,664.5915072,0,0,975.42
 2618,Newfoundland and Labrador.b,59,-64.375,Newfoundland and Labrador,609.0476215,0,0,1583.97
 2619,Quebec.b,58.5,-64.375,Quebec,553.5144581,0,0,2008.93
@@ -1829,10 +1829,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2643,Prince Edward Island.a,46.5,-64.375,Prince Edward Island,20.3269142,14807,1857.34,796
 2644,New Brunswick.a,46,-64.375,New Brunswick,10.6743943,34060,1606.72,1071.15
 2645,Nova Scotia.a,45.5,-64.375,Nova Scotia,9.3761514,23054,0,2431.95
-2646,Nova Scotia.a,45,-64.375,Nova Scotia,0.4247127,33703,817.88,1908.39
-2647,Nova Scotia.a,44.5,-64.375,Nova Scotia,5.9782963,10789,275.02,2475.15
-2648,Nova Scotia.a,44,-64.375,Nova Scotia,34.071604,2396,2773.86,0
-2649,Nova Scotia.a,43.5,-64.375,Nova Scotia,65.4464791,0,2797.33,0
+2646,Nova Scotia.a,45,-64.375,Nova Scotia,0.4247127,33703,0,1908.39
+2647,Nova Scotia.a,44.5,-64.375,Nova Scotia,5.9782963,10789,0,2475.15
+2648,Nova Scotia.a,44,-64.375,Nova Scotia,34.071604,2396,0,0
+2649,Nova Scotia.a,43.5,-64.375,Nova Scotia,65.4464791,0,0,0
 265,British Columbia.a,53.5,-125,British Columbia,61.6022451,1607,0,2289.83
 2650,Newfoundland and Labrador.b,59.5,-63.75,Newfoundland and Labrador,664.2073963,0,1950.85,0
 2651,Newfoundland and Labrador.b,59,-63.75,Newfoundland and Labrador,608.622385,0,1385.98,593.99
@@ -1864,11 +1864,11 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2675,Prince Edward Island.a,47,-63.75,Prince Edward Island,19.3377367,0,2628.63,0
 2676,Prince Edward Island.a,46.5,-63.75,Prince Edward Island,8.8421058,1191,2653.35,0
 2677,Prince Edward Island.a,46,-63.75,Prince Edward Island,19.0230888,72243,1338.93,1338.93
-2678,Nova Scotia.a,45.5,-63.75,Nova Scotia,24.2226242,24089,1080.87,1621.3
-2679,Nova Scotia.a,45,-63.75,Nova Scotia,16.3628608,53539,272.63,2453.65
+2678,Nova Scotia.a,45.5,-63.75,Nova Scotia,24.2226242,24089,0,1621.3
+2679,Nova Scotia.a,45,-63.75,Nova Scotia,16.3628608,53539,0,2453.65
 268,British Columbia.a,52,-125,British Columbia,163.18519,616,0,2370.79
-2680,Nova Scotia.a,44.5,-63.75,Nova Scotia,16.8502101,440027,825.05,1925.12
-2681,Nova Scotia.a,44,-63.75,Nova Scotia,68.7332456,0,2773.86,0
+2680,Nova Scotia.a,44.5,-63.75,Nova Scotia,16.8502101,440027,0,1925.12
+2681,Nova Scotia.a,44,-63.75,Nova Scotia,68.7332456,0,0,0
 2682,Newfoundland and Labrador.b,59,-63.125,Newfoundland and Labrador,610.626916,0,1979.97,0
 2683,Newfoundland and Labrador.b,58.5,-63.125,Newfoundland and Labrador,555.2763857,0,1607.15,401.79
 2684,Newfoundland and Labrador.b,58,-63.125,Newfoundland and Labrador,499.9805013,0,815.1,1222.65
@@ -1899,10 +1899,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2706,Prince Edward Island.a,47,-63.125,Prince Edward Island,70.7896613,0,2628.63,0
 2707,Prince Edward Island.a,46.5,-63.125,Prince Edward Island,23.2424261,0,2653.35,0
 2708,Prince Edward Island.a,46,-63.125,Prince Edward Island,24.7610177,35820,803.36,1874.5
-2709,Nova Scotia.a,45.5,-63.125,Nova Scotia,4.06286,31795,1621.3,1080.87
+2709,Nova Scotia.a,45.5,-63.125,Nova Scotia,4.06286,31795,0,1080.87
 271,British Columbia.a,50.5,-125,British Columbia,51.7032976,2737,0,2205.12
 2710,Nova Scotia.a,45,-63.125,Nova Scotia,18.9490255,6157,0,2726.28
-2711,Nova Scotia.a,44.5,-63.125,Nova Scotia,31.6901041,10,1650.1,1100.07
+2711,Nova Scotia.a,44.5,-63.125,Nova Scotia,31.6901041,10,0,1100.07
 2712,Nova Scotia.a,44,-63.125,Nova Scotia,83.3589047,0,0,2773.86
 2713,Newfoundland and Labrador.b,58,-62.5,Newfoundland and Labrador,505.5091748,0,2037.75,0
 2714,Newfoundland and Labrador.b,57.5,-62.5,Newfoundland and Labrador,451.0503094,0,619.92,1446.48
@@ -1931,10 +1931,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2735,Quebec.a,47,-62.5,Quebec,62.2472933,0,2365.77,262.86
 2736,Prince Edward Island.a,46.5,-62.5,Prince Edward Island,13.278021,0,2653.35,0
 2737,Prince Edward Island.a,46,-62.5,Prince Edward Island,10.8109676,5206,2142.29,535.57
-2738,Nova Scotia.a,45.5,-62.5,Nova Scotia,14.0566576,22005,1351.09,1351.09
+2738,Nova Scotia.a,45.5,-62.5,Nova Scotia,14.0566576,22005,0,1351.09
 2739,Nova Scotia.a,45,-62.5,Nova Scotia,1.9095939,2161,0,2453.65
 274,British Columbia.a,49,-125,British Columbia,31.0965977,46366,0,1769.45
-2740,Nova Scotia.a,44.5,-62.5,Nova Scotia,48.2748409,0,2200.14,550.03
+2740,Nova Scotia.a,44.5,-62.5,Nova Scotia,48.2748409,0,0,550.03
 2741,Newfoundland and Labrador.b,57.5,-61.875,Newfoundland and Labrador,475.5578129,0,1859.77,206.64
 2742,Newfoundland and Labrador.b,57,-61.875,Newfoundland and Labrador,420.7030363,0,1466.43,628.47
 2743,Newfoundland and Labrador.b,56.5,-61.875,Newfoundland and Labrador,366.0720454,847,1486.27,636.97
@@ -1960,10 +1960,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2761,Quebec.a,47.5,-61.875,Quebec,117.3898095,464,2603.72,0
 2762,Quebec.a,47,-61.875,Quebec,62.6295231,12190,2365.77,262.86
 2763,Prince Edward Island.a,46.5,-61.875,Prince Edward Island,15.7064218,0,2653.35,0
-2764,Nova Scotia.a,46,-61.875,Nova Scotia,44.7453956,4865,2142.29,535.57
-2765,Nova Scotia.a,45.5,-61.875,Nova Scotia,15.2766805,13514,1351.09,1351.09
-2766,Nova Scotia.a,45,-61.875,Nova Scotia,42.0182508,4585,1090.51,1635.77
-2767,Nova Scotia.a,44.5,-61.875,Nova Scotia,69.0841708,0,2750.17,0
+2764,Nova Scotia.a,46,-61.875,Nova Scotia,44.7453956,4865,0,535.57
+2765,Nova Scotia.a,45.5,-61.875,Nova Scotia,15.2766805,13514,0,1351.09
+2766,Nova Scotia.a,45,-61.875,Nova Scotia,42.0182508,4585,0,1635.77
+2767,Nova Scotia.a,44.5,-61.875,Nova Scotia,69.0841708,0,0,0
 2768,Newfoundland and Labrador.b,57,-61.25,Newfoundland and Labrador,415.9927798,0,2094.91,0
 2769,Newfoundland and Labrador.b,56.5,-61.25,Newfoundland and Labrador,360.5767427,0,2123.25,0
 277,British Columbia.a,59.5,-124.375,British Columbia,128.704755,0,0,1950.85
@@ -1986,12 +1986,12 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2785,Quebec.a,48.5,-61.25,Quebec,197.1830658,0,2553.3,0
 2786,Quebec.a,48,-61.25,Quebec,154.7788437,0,2578.61,0
 2787,Quebec.a,47.5,-61.25,Quebec,99.8805483,0,2603.72,0
-2788,Nova Scotia.a,47,-61.25,Nova Scotia,46.6679085,0,2628.63,0
-2789,Nova Scotia.a,46.5,-61.25,Nova Scotia,24.8209015,0,1592.01,1061.34
+2788,Nova Scotia.a,47,-61.25,Nova Scotia,46.6679085,0,0,0
+2789,Nova Scotia.a,46.5,-61.25,Nova Scotia,24.8209015,0,0,1061.34
 279,British Columbia.a,58.5,-124.375,British Columbia,100.0635131,0,0,2008.93
-2790,Nova Scotia.a,46,-61.25,Nova Scotia,9.4655643,9975,535.57,2142.29
-2791,Nova Scotia.a,45.5,-61.25,Nova Scotia,11.1178994,8201,1621.3,1080.87
-2792,Nova Scotia.a,45,-61.25,Nova Scotia,42.1992101,0,2453.65,272.63
+2790,Nova Scotia.a,46,-61.25,Nova Scotia,9.4655643,9975,0,2142.29
+2791,Nova Scotia.a,45.5,-61.25,Nova Scotia,11.1178994,8201,0,1080.87
+2792,Nova Scotia.a,45,-61.25,Nova Scotia,42.1992101,0,0,272.63
 2793,Newfoundland and Labrador.b,56.5,-60.625,Newfoundland and Labrador,357.3158353,0,2123.25,0
 2794,Newfoundland and Labrador.b,56,-60.625,Newfoundland and Labrador,301.7988774,0,2151.43,0
 2795,Newfoundland and Labrador.b,55.5,-60.625,Newfoundland and Labrador,246.318206,0,1961.5,217.94
@@ -2014,10 +2014,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 281,British Columbia.a,57.5,-124.375,British Columbia,161.793566,0,0,2066.41
 2810,Quebec.a,48,-60.625,Quebec,107.0228967,0,2578.61,0
 2811,Quebec.a,47.5,-60.625,Quebec,101.8467934,0,2603.72,0
-2812,Nova Scotia.a,47,-60.625,Nova Scotia,54.0889564,0,2628.63,0
-2813,Nova Scotia.a,46.5,-60.625,Nova Scotia,14.618702,2673,1857.34,796
-2814,Nova Scotia.a,46,-60.625,Nova Scotia,15.578331,94797,1338.93,1338.93
-2815,Nova Scotia.a,45.5,-60.625,Nova Scotia,26.53382,5131,1351.09,1351.09
+2812,Nova Scotia.a,47,-60.625,Nova Scotia,54.0889564,0,0,0
+2813,Nova Scotia.a,46.5,-60.625,Nova Scotia,14.618702,2673,0,796
+2814,Nova Scotia.a,46,-60.625,Nova Scotia,15.578331,94797,0,1338.93
+2815,Nova Scotia.a,45.5,-60.625,Nova Scotia,26.53382,5131,0,1351.09
 2816,Newfoundland and Labrador.b,56,-60,Newfoundland and Labrador,302.1997002,0,2151.43,0
 2817,Newfoundland and Labrador.b,55.5,-60,Newfoundland and Labrador,246.8154115,0,2179.44,0
 2818,Newfoundland and Labrador.b,55,-60,Newfoundland and Labrador,191.5545947,0,1765.84,441.46
@@ -2038,10 +2038,10 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2831,Newfoundland and Labrador.a,48.5,-60,Newfoundland and Labrador,71.6152607,0,2553.3,0
 2832,Newfoundland and Labrador.a,48,-60,Newfoundland and Labrador,62.4580175,0,2578.61,0
 2833,Newfoundland and Labrador.a,47.5,-60,Newfoundland and Labrador,70.1509004,0,2603.72,0
-2834,Nova Scotia.a,47,-60,Nova Scotia,42.4737278,0,2628.63,0
-2835,Nova Scotia.a,46.5,-60,Nova Scotia,28.841496,0,2653.35,0
-2836,Nova Scotia.a,46,-60,Nova Scotia,6.6083372,0,2410.08,267.79
-2837,Nova Scotia.a,45.5,-60,Nova Scotia,59.6579792,0,2431.95,270.22
+2834,Nova Scotia.a,47,-60,Nova Scotia,42.4737278,0,0,0
+2835,Nova Scotia.a,46.5,-60,Nova Scotia,28.841496,0,0,0
+2836,Nova Scotia.a,46,-60,Nova Scotia,6.6083372,0,0,267.79
+2837,Nova Scotia.a,45.5,-60,Nova Scotia,59.6579792,0,0,270.22
 2838,Newfoundland and Labrador.b,55.5,-59.375,Newfoundland and Labrador,253.8391225,0,2179.44,0
 2839,Newfoundland and Labrador.b,55,-59.375,Newfoundland and Labrador,200.6334388,365,1986.57,220.73
 284,British Columbia.a,56,-124.375,British Columbia,101.4293902,0,0,1506
@@ -2062,9 +2062,9 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 2853,Newfoundland and Labrador.a,48,-59.375,Newfoundland and Labrador,26.2820599,1949,2062.88,515.72
 2854,Newfoundland and Labrador.a,47.5,-59.375,Newfoundland and Labrador,18.8893819,6738,781.12,1822.6
 2855,Newfoundland and Labrador.a,47,-59.375,Newfoundland and Labrador,4.9413466,0,2628.63,0
-2856,Nova Scotia.a,46.5,-59.375,Nova Scotia,55.4323146,0,2653.35,0
-2857,Nova Scotia.a,46,-59.375,Nova Scotia,40.0945654,0,2677.86,0
-2858,Nova Scotia.a,45.5,-59.375,Nova Scotia,83.1714881,0,2702.17,0
+2856,Nova Scotia.a,46.5,-59.375,Nova Scotia,55.4323146,0,0,0
+2857,Nova Scotia.a,46,-59.375,Nova Scotia,40.0945654,0,0,0
+2858,Nova Scotia.a,45.5,-59.375,Nova Scotia,83.1714881,0,0,0
 2859,Newfoundland and Labrador.b,55.5,-58.75,Newfoundland and Labrador,266.8740156,0,2179.44,0
 286,British Columbia.a,55,-124.375,British Columbia,25.6072192,0,0,2207.29
 2860,Newfoundland and Labrador.b,55,-58.75,Newfoundland and Labrador,217.0862929,0,2207.29,0
@@ -2983,7 +2983,8 @@ grid_cell,ba,lat,lon,pr,distance_to_grid,population,surface_area_ofs,surface_are
 997,Saskatchewan.a,54,-104.375,Saskatchewan,78.6100133,0,0,2036.24
 998,Saskatchewan.a,53.5,-104.375,Saskatchewan,29.6711028,1219,0,2060.85
 999,Saskatchewan.a,53,-104.375,Saskatchewan,26.345982,6915,0,2085.29
-2985,Nova Scotia.a,46.2621,-60.03126,Nova Scotia,3,0,1285,0
+2985,Nova Scotia.a,46.2621,-60.03126,Nova Scotia,110,0,1285,0
 2986,Nova Scotia.a,44.8895,-61.33208,Nova Scotia,55,0,3125,0
-2987,Nova Scotia.a,43.9636,-60.57042,Nova Scotia,172,0,2289,0
-2988,Nova Scotia.a,43.3889,-61.18173,Nova Scotia,216,0,5850,0
+2987,Nova Scotia.a,43.9636,-60.57042,Nova Scotia,110,0,2289,0
+2988,Nova Scotia.a,43.3889,-61.18173,Nova Scotia,165,0,5850,0
+2989,Nova Scotia.a,43.157171,-62.191707,Nova Scotia,165,0,13170,0
