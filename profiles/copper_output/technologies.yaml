@@ -928,6 +928,16 @@ Electricity|Wind|Onshore:
     group: Wind
     group_color: '#b2df8a'
     name: Electricity|Wind|Onshore
+Electricity|Wind|Offshore|Refurbished:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Refurbished
+Electricity|Wind|Onshore|Refurbished:
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Onshore|Refurbished
 Electricity|Solar:
     color: '#000000'
     group: Solar
@@ -938,6 +948,11 @@ Electricity|Solar|PV|Open Land:
     group: Solar
     group_color: '#ffff99'
     name: Electricity|Solar|PV|Open Land
+Electricity|Solar|PV|Open Land|Refurbished:
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Electricity|Solar|PV|Open Land|Refurbished
 Electricity|Geothermal:
     color: '#000000'
     group: Geothermal
