@@ -9,16 +9,16 @@ from utils.generic_profile.visualization_scripts.utils import bar_over_years, ba
 
 def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True,
                 text_active=False,
-                pattern_list=None):
+                pattern_list=None, report_type='Total'):
     if pattern_list is None:
         pattern_list = []
     # print('rendering plot', type)
     if type == 'By Year':
         return bar_over_years.plot(df, scenarios, region, aggregate, name, "Year", name, name, unit,
                                    pattern_active=pattern_active,
-                                   text_active=text_active, pattern_list=pattern_list)
+                                   text_active=text_active, pattern_list=pattern_list, report_type=report_type)
     elif type == 'Trend Over Years':
-        return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit)
+        return trend_over_years.plot(df, scenario, region, aggregate, name, "Year", name, name, unit, report_type=report_type)
     elif type == 'Trend in one Year':
         return trend_over_year.plot(df, scenario, region, year, aggregate, name, "Year", name, name, unit)
     elif type == 'Pie Chart':
@@ -26,7 +26,7 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
     else:
         return bar_over_regions.plot(df, scenarios, aggregate, year, name, "Region", name, name, unit,
                                      pattern_active=pattern_active,
-                                     text_active=text_active, pattern_list=pattern_list)
+                                     text_active=text_active, pattern_list=pattern_list, report_type=report_type)
 
 
 def create_generic_plots(model, name, profile, is_comparison=False):
@@ -137,6 +137,18 @@ def create_generic_plots(model, name, profile, is_comparison=False):
                     'index': window_id
                 },
             ),
+            dmc.Select(
+                label='Report Type',
+                data=[{'label': report_type, 'value': report_type} for report_type in ['Total', 'Relative Change', 'Relative Makeup']],
+                value='Total',
+                id={
+                    'type': 'generic-report-type-select',
+                    'name': name,
+                    'model': model,
+                    'index': window_id
+                },
+                style={'display': 'block'}
+            ),
             dmc.Switch('Aggregate',
                        checked=True,
                        id={
@@ -202,7 +214,7 @@ def create_generic_plots(model, name, profile, is_comparison=False):
 
         plot_layout = dcc.Graph(
             figure=render_plot('By Year', name, df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                               units[0], years[0], scenarios[0], pattern_list=patterns),
+                               units[0], years[0], scenarios[0], pattern_list=patterns, report_type='Total'),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,

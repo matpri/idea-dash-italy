@@ -76,8 +76,23 @@ def link(app):
             },
             'style'
         ),
+        Output(
+            {
+                'type': 'generic-report-type-select',
+                'index': ALL,
+                'model': MATCH,
+                'name': MATCH
+            },
+            'style'
+        ),
         Input({
             'type': 'generic-plot-select',
+            'index': ALL,
+            'model': MATCH,
+            'name': MATCH
+        }, 'value'),
+        Input({
+            'type': 'generic-report-type-select',
             'index': ALL,
             'model': MATCH,
             'name': MATCH
@@ -217,11 +232,20 @@ def link(app):
             },
             'style'
         ),
+        State(
+            {
+                'type': 'generic-report-type-select',
+                'index': ALL,
+                'model': MATCH,
+                'name': MATCH
+            },
+            'style'
+        ),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _aggregates, _group_scen, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
+    def update_gencap_cost(_p_type, _report_type, _aggregates, _group_scen, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
                            _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _pattern_style,
-                           _text_style, _group_style):
+                           _text_style, _group_style, _report_style):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -238,7 +262,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(
                 data_handler.processed_data[model][name].to_csv, f"{name}.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style, _report_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -262,6 +286,7 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            _report_style[idx] = {'display': 'block'}
             if _group_style is not None and len(_group_scen) > 0:
                 _group_style[idx] = {'display': 'block'}
 
@@ -280,7 +305,8 @@ def link(app):
                                            _regions[idx],
                                            _units[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns)
+                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns,
+                                           report_type=_report_type[idx])
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
@@ -290,6 +316,7 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            _report_style[idx] = {'display': 'block'}
             if _group_style is not None and len(_group_scen) > 0:
                 _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
@@ -300,7 +327,8 @@ def link(app):
                                            _scenarios[idx],
                                            _regions[idx],
                                            _units[idx],
-                                           _years[idx], scenario=_scenario[idx], pattern_list=patterns)
+                                           _years[idx], scenario=_scenario[idx], pattern_list=patterns,
+                                           report_type=_report_type[idx])
         elif _p_type[idx] == 'Trend in one Year':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
@@ -309,6 +337,7 @@ def link(app):
             _s_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            _report_style[idx] = {'display': 'none'}
             if _group_style is not None and len(_group_scen) > 0:
                 _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
@@ -329,6 +358,7 @@ def link(app):
             _u_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
+            _report_style[idx] = {'display': 'none'}
             if _group_style is not None and len(_group_scen) > 0:
                 _group_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
@@ -349,6 +379,7 @@ def link(app):
             _s_style[idx] = {'display': 'none'}
             _pattern_style[idx] = {'display': 'block'}
             _text_style[idx] = {'display': 'block'}
+            _report_style[idx] = {'display': 'block'}
             if _group_style is not None and len(_group_scen) > 0:
                 _group_style[idx] = {'display': 'block'}
 
@@ -366,7 +397,8 @@ def link(app):
                                            _regions[idx],
                                            _units[idx],
                                            _years[idx], scenario=_scenario[idx],
-                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns)
+                                           pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns,
+                                           report_type=_report_type[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in
-                                             _data], _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style
+                                             _data], _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style, _report_style

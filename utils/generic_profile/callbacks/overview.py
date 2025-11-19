@@ -58,6 +58,12 @@ def link(app):
             'viz': 'overview'
         }, 'checked'),
         Input({
+            'type': 'report-type-switch',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'overview'
+        }, 'checked'),
+        Input({
             'type': 'unit-select',
             'index': ALL,
             'model': MATCH,
@@ -89,7 +95,7 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _unit, _download, _canvas, _u_data, _data):
+    def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _report_type, _unit, _download, _canvas, _u_data, _data):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -136,13 +142,19 @@ def link(app):
             _f = _fill[idx]
 
         # print('idx:', idx, 'plot type:', _p_type[idx])
+        # Convert switch boolean to report_type string
+        _report_t = 'Total'
+        if _report_type is not None and _report_type != []:
+            _report_t = 'Relative Change' if _report_type[idx] else 'Total'
+
         _canvas[idx] = render_plot(_p_type[idx],
                                    df,
                                    _groupby_model,
                                    _groupby_scenario,
                                    _groupby_version,
                                    _unit[idx],
-                                   fill=_f
+                                   fill=_f,
+                                   report_type=_report_t
                                    )
 
         return _canvas, [dash.no_update for _ in

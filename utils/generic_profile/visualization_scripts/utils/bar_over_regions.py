@@ -5,7 +5,7 @@ from utils.generic_profile import utils
 from dash import dcc
 
 
-def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None):
+def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, pattern_list=None, report_type='Total'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f" ({', '.join(scenarios)})" if len(scenarios) else title,
@@ -18,6 +18,39 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
         df_scen = subset(df, year, scenarios, unit, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
+
+        # Apply report type transformations
+        if report_type == 'Relative Change':
+            # Reset index to avoid duplicate label issues
+            df_scen = df_scen.reset_index(drop=True)
+            for tech in techs:
+                for scen in scenarios:
+                    mask = (df_scen["variable"] == tech) & (df_scen['scenario'] == scen)
+                    tech_data_scen = df_scen[mask].sort_values(by=['region']).copy()
+                    if not tech_data_scen.empty:
+                        base_value = tech_data_scen.iloc[0]['value']
+                        idx = 0
+                        while idx < len(tech_data_scen) and base_value == 0:
+                            base_value = tech_data_scen.iloc[idx]['value']
+                            idx += 1
+                        if base_value != 0:
+                            df_scen.loc[mask, 'value'] = (df_scen.loc[mask, 'value'] / base_value) * 100
+                        else:
+                            df_scen.loc[mask, 'value'] = 0
+            fig.update_layout(yaxis_title='Relative Change (%)' if unit == 'NA' else f'Relative Change (%, base: {unit})')
+        elif report_type == 'Relative Makeup':
+            # Reset index to avoid duplicate label issues
+            df_scen = df_scen.reset_index(drop=True)
+            for scen in scenarios:
+                for region in df_scen['region'].unique():
+                    mask = (df_scen['scenario'] == scen) & (df_scen['region'] == region)
+                    region_data = df_scen[mask]
+                    total = region_data['value'].sum()
+                    if total != 0:
+                        df_scen.loc[mask, 'value'] = (df_scen.loc[mask, 'value'] / total) * 100
+                    else:
+                        df_scen.loc[mask, 'value'] = 0
+            fig.update_layout(yaxis_title='Relative Makeup (%)')
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
