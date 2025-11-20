@@ -86,6 +86,26 @@ def scale_time_data(df):
     # only keep year and turn it into an int
     return df
 
+def filter_variables(df):
+    """
+    Filter the Dataframe to remove variables if their string is a substring of another variable in the DataFrame, for the same scenario, region and time.
+
+    :param df:
+    :return:
+    """
+    to_remove = set()
+    for scenario in df['scenario'].unique():
+        for year in df['time'].unique():
+            for region in df['region'].unique():
+                sub_df = df[(df['scenario'] == scenario) & (df['time'] == year) & (df['region'] == region)]
+                variables = sub_df['variable'].tolist()
+                for var in variables:
+                    for other_var in variables:
+                        if var != other_var and var in other_var:
+                            to_remove.add((scenario, year, region, var))
+    mask = df.apply(lambda row: (row['scenario'], row['time'], row['region'], row['variable']) not in to_remove, axis=1)
+    return df[mask]
+
 def create_process(name):
     def process(data):
         """
@@ -107,7 +127,9 @@ def create_process(name):
                 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
 
+
             df['scenario'] = scenario_name
+            df = filter_variables(df)
             dfs.append(df)
         full_df = pd.concat(dfs)
         return full_df
