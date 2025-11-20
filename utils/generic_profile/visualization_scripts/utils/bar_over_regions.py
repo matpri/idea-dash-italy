@@ -104,12 +104,18 @@ def subset(df, year, scenarios, unit, aggregate, season=None):
     regions = df_scen['region'].unique().tolist()
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+    # If the dataframe has been preprocessed for detail-level reduction, skip remapping.
+    if '_detail_reduced' in df_scen.columns and df_scen['_detail_reduced'].any():
+        # already reduced; do not remap variable names
+        pass
     else:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
+        if aggregate:
+            df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
+            df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+        else:
+            df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
+    # Ensure data is grouped by the expected grouping (idempotent if already grouped)
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'].isin(scenarios)]
@@ -134,4 +140,3 @@ def subset(df, year, scenarios, unit, aggregate, season=None):
     df_scen = pd.concat([df_scen, region_pad_df])
     df_scen = df_scen.sort_values(by=['region', 'variable'], key=lambda x: x.map(utils.custom_sort_key))
     return df_scen
-
