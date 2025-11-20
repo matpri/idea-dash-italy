@@ -19,8 +19,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'NATEM_Canada').any():
-            if df.variable.str.startswith("ACT_Cost").any():
-                return df[df.variable.str.startswith("ACT_Cost")]['value'].sum() != 0
+            if df.variable.str.startswith("ACT_Cost").any() or df.variable.str.startswith("Fuel Cost"):
+                return df[df.variable.str.startswith("ACT_Cost") | df.variable.str.startswith("Fuel Cost")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -99,8 +99,8 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("ACT_Cost")]
-        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        df = df[df.variable.str.startswith("ACT_Cost") | df.variable.str.startswith("Fuel_Cost")]
+        # df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
 
         # replace all variables that start with To with Transmission
         df['variable'] = df['variable'].apply(lambda x: 'Transmission' if x.startswith('To') else x)

@@ -204,6 +204,7 @@ def process(data):
             'ACT_Cost': 'VO&M Cost',
             'INV_Cost': 'Capital Cost',
             'FOM_Cost': 'FO&M Cost',
+            'Fuel_Cost': 'Fuel Cost'
         }).fillna(df['variable'])
         df = df.groupby(['region', 'variable', 'time']).sum(numeric_only=True).reset_index()
         # formatted_df = format_df(df)

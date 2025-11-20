@@ -155,7 +155,7 @@ def process(selected):
     for scenario_name, df in selected.items():
         trs = df.copy()
         trs = trs[trs.variable.str.startswith("Transmission flow|")]
-        trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
+        trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[-1])
         trs['period'] = trs['time'].astype(int)
 
         trs['value'] = trs['value']
