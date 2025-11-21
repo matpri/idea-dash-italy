@@ -14,7 +14,7 @@
   group: Fossil fuel solid
   group_color: '#b15928'
 'Energy production|Secondary production|Electricity production|Other renewables|Hydrogen|Electricity|Centralized electricity':
-  group: HydrogenGreen
+  group: Hydrogen
   group_color: '#1f78b4'
 'Energy production|Secondary production|Electricity production|Nuclear|Small modular reactor|Electricity|Centralized electricity':
   group: Nuclear
@@ -149,7 +149,7 @@
   group: Nuclear
   group_color: '#ff7f00'
 'Energy production|Secondary production|Electricity production|Other renewables|Hydrogen':
-  group: HydrogenGreen
+  group: Hydrogen
   group_color: '#1f78b4'
 'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas':
   group: Biomass
@@ -179,7 +179,7 @@
   group: Hydro
   group_color: '#a6cee3'
 'Other renewables|Hydrogen':
-  group: HydrogenGreen
+  group: Hydrogen
   group_color: '#1f78b4'
 'Solar|Decentralized PV':
   group: Solar

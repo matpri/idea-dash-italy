@@ -199,6 +199,7 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.contains("Total costs")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
         can_df = df.groupby(["region", "scenario", "variable", 'time'], as_index=False).sum()
         can_df['region'] = 'CAN'
         total_cost = pd.concat([df, can_df], ignore_index=True)

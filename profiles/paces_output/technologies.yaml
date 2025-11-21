@@ -1665,3 +1665,27 @@ Fixed O&M:
   group: 'VO&M costs + Fuel costs'
   group_color: '#9d2ed1'
   name: 'VO&M costs + Fuel costs'
+
+"Electricity|Hydro|ROR":
+  color: '#000000'
+  group: Hydro
+  group_color: '#a6cee3'
+  name: Electricity|Hydro|ROR
+
+"Electricity|Diesel|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Diesel|w/o CCS
+
+"Electricity|Biogas|w/o CCS":
+    color: '#000000'
+    group: Biogas
+    group_color: '#5d7aff'
+    name: Electricity|Biogas|w/o CCS
+
+"Electricity|Oil|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|w/o CCS
