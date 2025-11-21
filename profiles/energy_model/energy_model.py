@@ -67,6 +67,16 @@ from profiles.energy_model.visualization_scripts import (
 power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
                        'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
 
+technologies_paths = [
+    './profiles/copper_output/technologies.yaml'
+    './profiles/natem_output/technologies.yaml'
+    './profiles/nextgrid_output/technologies.yaml'
+    './profiles/pypsa_can_output/technologies.yaml'
+    './profiles/pypsa_output/technologies.yaml'
+    './profiles/pithos_output/technologies.yaml'
+    './profiles/temoa_output/technologies.yaml'
+]
+
 
 class energy_modelsOutput(BaseProfile):
     display_name = 'Power System Models'
@@ -262,7 +272,13 @@ class energy_modelsOutput(BaseProfile):
 
     def __init__(self):
         super().__init__()
-        self.technologies = yaml.load(open('./profiles/energy_model/technologies.yaml', 'r'), Loader=yaml.FullLoader)
+        all_techs = {}
+
+        for path in technologies_paths:
+            techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
+            all_techs.update(techs)
+
+        self.technologies = all_techs
         self.plots = yaml.load(open('./profiles/energy_model/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
         self.settings = self.render_settings()
