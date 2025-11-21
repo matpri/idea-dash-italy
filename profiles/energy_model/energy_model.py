@@ -68,12 +68,12 @@ power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
                        'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
 
 technologies_paths = [
-    './profiles/copper_output/technologies.yaml'
-    './profiles/natem_output/technologies.yaml'
-    './profiles/nextgrid_output/technologies.yaml'
-    './profiles/pypsa_can_output/technologies.yaml'
-    './profiles/pypsa_output/technologies.yaml'
-    './profiles/pithos_output/technologies.yaml'
+    './profiles/copper_output/technologies.yaml',
+    './profiles/natem_output/technologies.yaml',
+    './profiles/nextgrid_output/technologies.yaml',
+    './profiles/pypsa_can_output/technologies.yaml',
+    './profiles/pypsa_output/technologies.yaml',
+    './profiles/pithos_output/technologies.yaml',
     './profiles/temoa_output/technologies.yaml'
 ]
 
@@ -273,6 +273,10 @@ class energy_modelsOutput(BaseProfile):
     def __init__(self):
         super().__init__()
         all_techs = {}
+
+        # print current working directory
+        import os
+        print("Current working directory: ", os.getcwd())
 
         for path in technologies_paths:
             techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
