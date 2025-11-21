@@ -282,6 +282,13 @@ class energy_modelsOutput(BaseProfile):
             techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
             all_techs.update(techs)
 
+        all_techs['Electricity|Offset Emissions'] =  {
+                'name': 'Electricity Offset Emissions',
+                'color': '#808080',
+                'group': 'Emissions Offsets',
+                'group_color': '#808080'
+            }
+
         self.technologies = all_techs
         self.plots = yaml.load(open('./profiles/energy_model/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
