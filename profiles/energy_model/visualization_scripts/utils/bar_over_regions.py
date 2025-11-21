@@ -17,7 +17,15 @@ def plot(df, scenarios, aggregate, year, title, x_axis_label, y_axis_label, tool
     try:
         df_scen = subset(df, year, scenarios, aggregate, season)
         scenarios.sort()
+
+
         df_scen_time = df_scen[df_scen['time'] == year]
+
+
+        # remove territories if they exist
+        regions_to_keep = [reg for reg in df_scen_time['region'].unique().tolist() if reg not in ['YT', 'NT', 'NU']]
+        df_scen = df_scen[df_scen['region'].isin(regions_to_keep)]
+
         techs = df_scen_time.variable.unique().tolist()
 
         if report_type == 'Relative Change':

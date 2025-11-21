@@ -86,6 +86,9 @@ def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, f
 
     df = df[df.region == 'CAN']
 
+    # remove 2021 data
+    df = df[df['time'] != 2021]
+
     if relative:
         scenarios = df['scenario'].unique().tolist()
         for scenario in scenarios:

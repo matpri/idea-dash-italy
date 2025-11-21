@@ -18,6 +18,10 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         df_scen = subset(df, region, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
+
+        # remove 2021 data
+        df_scen = df_scen[df_scen['time'] != 2021]
+
         num_years = df_scen.time.nunique()
         scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
 
