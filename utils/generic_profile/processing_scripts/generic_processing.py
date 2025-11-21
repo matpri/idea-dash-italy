@@ -121,14 +121,17 @@ def create_process(name):
         dfs = []
         for scenario_name, db in data.items():
             df = db.copy()
+            df = df[df['variable'].notna()]
+            df['variable'] = df['variable'].apply(lambda x: x + '|' if '|' not in x else x)
             df = df[df.variable.str.startswith(f"{name}|")]
             df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
             if 'time' in df.columns and df['time'].dtype == object:
                 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
 
-
-            df['scenario'] = scenario_name
+            scenarios_in_df = df['scenario'].unique()
+            if len(scenarios_in_df) == 1 and scenarios_in_df[0] != scenario_name:
+                df['scenario'] = scenario_name
             df = filter_variables(df)
             dfs.append(df)
         full_df = pd.concat(dfs)
