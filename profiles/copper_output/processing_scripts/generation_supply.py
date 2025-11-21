@@ -115,8 +115,13 @@ def aggregate_db(db, scenario):
 
     transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
     transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
+    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
     # rename region entries based on utils.province_short
     transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
+    transmission_df['variable'] = transmission_df['variable'].map(utils.province_short).fillna(transmission_df['variable'])
+
+    # drop where region == variable again
+    transmission_df = transmission_df[transmission_df.region != transmission_df.variable]
     dim_names = []
     for index, row in transmission_df.iterrows():
         if row['value'] < 0:
