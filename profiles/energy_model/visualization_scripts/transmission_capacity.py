@@ -381,6 +381,16 @@ def plot(df, window_id):
             },
             style={'display': 'none'}
         ),
+        dmc.MultiSelect(
+            label='Version',
+            data=[],
+            value=[],
+            id={
+                'type': 'energy_model-transmissioncapacity-version-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
         dmc.Select(
             label='Year',
             data=[{'label': year, 'value': year} for year in years],

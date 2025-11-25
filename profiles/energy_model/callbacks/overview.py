@@ -21,6 +21,18 @@ def link(app):
             'type': 'energy_model-overview-fill-switch',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'energy_model-overview-version-select',
+            'index': ALL
+        }, 'style'),
+        Output({
+            'type': 'energy_model-overview-version-select',
+            'index': ALL
+        }, 'value'),
+        Output({
+            'type': 'energy_model-overview-version-select',
+            'index': ALL
+        }, 'data'),
         Input({
             'type': 'energy_model-overview-plot-select',
             'index': ALL
@@ -45,6 +57,10 @@ def link(app):
             'type': 'energy_model-overview-scenario-group-select',
             'index': ALL
         }, 'value'),
+        Input({
+            'type': 'energy_model-overview-version-select',
+            'index': ALL
+        }, 'value'),
 
         Input({
             'type': 'energy_model-overview-download-button',
@@ -65,10 +81,14 @@ def link(app):
             'type': 'energy_model-overview-fill-switch',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'energy_model-overview-version-select',
+            'index': ALL
+        }, 'style'),
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _relative, _groupby, _fill, _scenarios, _download, _canvas, _data, _fillswitch):
+    def update_overview(_p_type, _relative, _groupby, _fill, _scenarios, _version_values, _download, _canvas, _data, _fillswitch, _v_style):
         #print('updating overview plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -83,7 +103,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Overview'].to_csv,
                                              "overview.csv")
-            return _canvas, _data, _fillswitch
+            return _canvas, _data, _fillswitch, _v_style
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -108,4 +128,4 @@ def link(app):
         if _groupby[idx] > 0:
             _fillswitch[idx] = {'display': 'block'}
 
-        return _canvas, [dash.no_update for _ in _data], _fillswitch
+        return _canvas, [dash.no_update for _ in _data], _fillswitch, [dash.no_update for _ in _v_style]

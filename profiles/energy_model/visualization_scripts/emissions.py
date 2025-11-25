@@ -130,6 +130,16 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
+        dmc.MultiSelect(
+            label='Version',
+            data=[],
+            value=[],
+            id={
+                'type': 'energy_model-emissions-version-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
         dmc.Select(
             label='Scenario',
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],

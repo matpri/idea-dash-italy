@@ -33,6 +33,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
+    base_scenarios = [scenario for scenario in scenarios if '|' not in scenario]
 
     by_year_widgets = dmc.Select(
         label='Region',

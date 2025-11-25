@@ -270,6 +270,16 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
+        dmc.MultiSelect(
+            label='Version',
+            data=[],
+            value=[],
+            id={
+                'type': 'energy_model-overview-version-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
         dmc.Switch(
             label='Fill Area',
             checked=True,
