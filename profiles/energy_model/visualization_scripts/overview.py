@@ -278,7 +278,7 @@ def plot(df, window_id):
                 'type': 'energy_model-overview-version-select',
                 'index': window_id,
             },
-            style={'display': 'none'}
+            style={'display': 'block'}
         ),
         dmc.Switch(
             label='Fill Area',

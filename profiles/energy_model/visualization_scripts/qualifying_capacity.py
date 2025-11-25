@@ -33,7 +33,9 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
-    base_scenarios = [scenario for scenario in scenarios if '|' not in scenario]
+
+    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
+    base_scenarios = ['ALL'] + base_scenarios
 
     by_year_widgets = dmc.Select(
         label='Region',
@@ -115,6 +117,26 @@ def plot(df, window_id):
                 'index': window_id,
             },
             style={'display': 'block'}
+        ),
+        dmc.Select(
+            label='Scenario Group',
+            data=[{'label': sg, 'value': sg} for sg in base_scenarios],
+            value=base_scenarios[0],
+            id={
+                'type': 'energy_model-qualifying-capacity-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'block'}
+        ),
+        dmc.MultiSelect(
+            label='Version',
+            data=[],
+            value=[],
+            id={
+                'type': 'energy_model-qualifying-capacity-version-select',
+                'index': window_id
+            },
+            style={'display': 'none'}
         ),
         dmc.Select(
             label='Scenario',
