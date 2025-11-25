@@ -19,6 +19,7 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
 
+
         # remove 2021 data
         df_scen = df_scen[df_scen['time'] != 2021]
 
