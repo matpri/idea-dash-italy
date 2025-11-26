@@ -166,6 +166,24 @@
 'Energy production|Secondary production|Electricity production|Oil':
   group: Fossil fuel liquid
   group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Oil|Offset emissions':
+  group: Offset emissions
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Oil|Free emissions':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Natural gas|Offset emissions':
+  group: Offset emissions
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Free emissions':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Coal|Offset emissions':
+  group: Offset emissions
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Coal|Free emissions':
+  group: Fossil fuel solid
+  group_color: '#b15928'
 'Wind|On-shore wind':
   group: Wind
   group_color: '#b2df8a'
