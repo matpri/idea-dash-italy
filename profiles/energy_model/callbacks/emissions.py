@@ -4,7 +4,6 @@ from dash import Output, Input, State, ALL, dcc
 from profiles.energy_model.visualization_scripts.emissions import render_plot
 
 from components import ids
-
 def link(app):
     @app.callback(
         Output({
@@ -252,6 +251,11 @@ def link(app):
             if _scenario_group[idx] != 'ALL':
                 scenarios = [scenario for scenario in unique_scenarios if
                              scenario.split('|')[1] == _scenario_group[idx]]
+
+                if len(v_values[idx]) > 0:
+                    # filter scenarios by version
+                    scenarios = [scenario for scenario in scenarios if
+                                 scenario.split('|')[2] in v_values[idx]]
                 scens += scenarios
 
             if _aggregates[idx] is not None:
@@ -271,6 +275,7 @@ def link(app):
             _pattern_style[idx] = {'display': 'none'}
             _text_style[idx] = {'display': 'none'}
             _report_type_style[idx] = {'display': 'block'}
+            v_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Trend Over Years', data_handler.processed_data['Power System Models']['Emissions'],
                                            _aggregates[idx],
@@ -285,8 +290,9 @@ def link(app):
             _r_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
             _pattern_style[idx] = {'display': 'none'}
-            _text_style[idx] = {'display': 'none'} 
+            _text_style[idx] = {'display': 'none'}
             _report_type_style[idx] = {'display': 'none'}
+            v_style[idx] = {'display': 'none'}
             if _aggregates[idx] is not None:
                 _canvas[idx] = render_plot('Pie Chart', data_handler.processed_data['Power System Models']['Emissions'],
                                            _aggregates[idx],
@@ -320,3 +326,5 @@ def link(app):
                                            pattern_active=_pattern[idx], text_active=_text[idx], report_type=_report_type[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _g_style, v_style, v_values, v_data, _pattern_style, _text_style, _report_type_style
+
+
