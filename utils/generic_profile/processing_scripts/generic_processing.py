@@ -122,6 +122,7 @@ def create_process(name):
         for scenario_name, db in data.items():
             df = db.copy()
             df = df[df['variable'].notna()]
+            df['value'] = pd.to_numeric(df['value'], errors='coerce').fillna(0)
             df['variable'] = df['variable'].apply(lambda x: x + '|' if '|' not in x else x)
             df = df[df.variable.str.startswith(f"{name}|")]
             df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
