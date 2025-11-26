@@ -69,7 +69,7 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
 
-        requested_services = df[(df['parameter'] == 'service_requested')].copy()
+        requested_services = df[(df['parameter'] == 'service_requested')|(df['parameter'] == 'service requested')].copy()
 
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
