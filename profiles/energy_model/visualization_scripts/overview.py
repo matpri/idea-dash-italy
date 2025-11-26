@@ -224,6 +224,7 @@ def plot(df, window_id):
     classes = df['variable'].unique().tolist()
 
     scenarios = df['scenario'].unique().tolist()
+    versions = sorted({s.split('|')[2] for s in scenarios if len(s.split('|')) > 2})
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
     base_scenarios = ['ALL'] + base_scenarios
@@ -272,7 +273,7 @@ def plot(df, window_id):
         ),
         dmc.MultiSelect(
             label='Version',
-            data=[],
+            data=[{'label': version, 'value': version} for version in versions],
             value=[],
             id={
                 'type': 'energy_model-overview-version-select',

@@ -27,7 +27,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['ALL'] + base_scenarios
+    base_scenarios = ['', 'ALL'] + base_scenarios
 
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
