@@ -236,10 +236,10 @@ def process(data):
         'Fixed_OM': 'FO&M costs',
         'Carbon_Tax': 'Carbon price',
         'Fixed O&M Costs': 'FO&M costs',
-        'Fuel': 'Fuel Cost',
+        'Fuel': 'Fuel costs',
         'Carbon_Tax_Credit': 'Carbon credit'
     }).fillna(full_df['variable'])
 
     # replace any variable that starts with Fuel with Fuel Cost
-    full_df['variable'] = full_df['variable'].apply(lambda x: 'Fuel Cost' if x.startswith('Fuel') else x)
+    full_df['variable'] = full_df['variable'].apply(lambda x: 'Fuel costs' if x.startswith('Fuel') else x)
     return full_df
