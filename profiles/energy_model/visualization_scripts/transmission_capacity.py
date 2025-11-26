@@ -333,7 +333,7 @@ def plot(df, window_id):
     '''
     scenarios = df['scenario'].unique().tolist()
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['ALL'] + base_scenarios
+    base_scenarios = ['', 'ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
     years.sort()
