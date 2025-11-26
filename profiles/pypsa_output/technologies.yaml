@@ -1715,11 +1715,11 @@ Fixed O&M:
     group_color: '#b2df8a'
     name: Electricity|Wind|Offshore|Fixed
 
-"Electricity|Hydro|Cascaded":
+"Electricity|Hydro|Cascade":
     color: '#000000'
     group: Hydro
     group_color: '#a6cee3'
-    name: Electricity|Hydro|Cascaded
+    name: Electricity|Hydro|Cascade
 
 "Electricity|Diesel|w/o CCS":
     color: '#000000'

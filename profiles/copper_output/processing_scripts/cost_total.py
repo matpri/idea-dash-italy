@@ -223,9 +223,23 @@ def process(data):
         vom = calculate_vom(formatted_df)
         total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
         total_cost['scenario'] = scenario_name
+
         dfs.append(total_cost)
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
     full_df['value'] = full_df['value'].div(1e9)
     full_df['region'] = full_df['region'].apply(lambda x: x.split('.')[0])
+    full_df['variable'] = full_df['variable'].map({
+        'VO&M Cost': 'VO&M costs',
+        'Variable_OM': 'VO&M costs',
+        'Variable O&M Costs': 'VO&M costs',
+        'Fixed_OM': 'FO&M costs',
+        'Carbon_Tax': 'Carbon price',
+        'Fixed O&M Costs': 'FO&M costs',
+        'Fuel': 'Fuel Cost',
+        'Carbon_Tax_Credit': 'Carbon credit'
+    }).fillna(full_df['variable'])
+
+    # replace any variable that starts with Fuel with Fuel Cost
+    full_df['variable'] = full_df['variable'].apply(lambda x: 'Fuel Cost' if x.startswith('Fuel') else x)
     return full_df

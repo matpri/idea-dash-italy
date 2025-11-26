@@ -201,10 +201,10 @@ def process(data):
         df = df[df.variable.str.contains("Cost\|")]
         df['variable'] = df['variable'].apply(lambda x: x.split("|")[0])
         df['variable'] = df['variable'].map({
-            'ACT_Cost': 'VO&M Cost',
-            'INV_Cost': 'Capital Cost',
-            'FOM_Cost': 'FO&M Cost',
-            'Fuel_Cost': 'Fuel Cost'
+            'ACT_Cost': 'VO&M costs',
+            'INV_Cost': 'Capacity',
+            'FOM_Cost': 'FO&M costs',
+            'Fuel_Cost': 'Fuel costs'
         }).fillna(df['variable'])
         df = df.groupby(['region', 'variable', 'time']).sum(numeric_only=True).reset_index()
         # formatted_df = format_df(df)

@@ -248,7 +248,7 @@
   group: Fossil fuel gas
   group_color: '#ff6b6b'
 'Natural gas|Natural Gas w/ CCS - Combine Heat and power':
-  group: Fossil fuel gas with CCS
+  group: Fossil fuel gas
   group_color: '#ffaaa3'
 'Other renewables|Geothermal':
   group: Geothermal
@@ -259,3 +259,6 @@
 'Steam|Steam':
   group: Steam
   group_color: '#937de6'
+'Fossil fuel gas with CCS':
+    group: Fossil fuel gas
+    group_color: '#ffaaa3'
