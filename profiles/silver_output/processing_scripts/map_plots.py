@@ -1,8 +1,11 @@
 import pandas as pd
 
-from profiles.silver_output.processing_scripts import opf_emissions, opf_results, opf_curtailment, opf_costs, price_opf, uc_emissions,  uc_curtailment, uc_results
+from profiles.silver_output.processing_scripts import opf_emissions, opf_results, opf_curtailment, opf_costs, price_opf, \
+    uc_emissions, uc_curtailment, uc_results
 
-check_funcs = [opf_emissions.check, opf_results.check, opf_curtailment.check, opf_costs.check, price_opf.check, uc_emissions.check, uc_curtailment.check, uc_results.check]
+check_funcs = [opf_emissions.check, opf_results.check, opf_curtailment.check, opf_costs.check, price_opf.check,
+               uc_emissions.check, uc_curtailment.check, uc_results.check]
+
 
 def check(df):
     """
@@ -14,23 +17,20 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    #print("Checking for transmission in variable column")
+    # print("Checking for transmission in variable column")
     try:
         # make sure latitude and longitude columns are present
         if ('latitude' in df.columns or 'longitude' in df.columns):
-            return True
+            if not 'filename' in df.columns:
+                return False
 
-
-        if not 'filename' in df.columns:
-            return False
-
-        if (df.model == 'silver').any():
-            valid = False
-            for check_func in check_funcs:
-                valid = check_func(df)
-                if valid:
-                    break
-            return valid
+            if (df.model == 'silver').any():
+                valid = False
+                for check_func in check_funcs:
+                    valid = check_func(df)
+                    if valid:
+                        break
+                return valid
         return False
     except Exception as e:
         print("transmission check", e)
