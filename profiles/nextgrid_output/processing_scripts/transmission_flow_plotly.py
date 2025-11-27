@@ -155,7 +155,7 @@ def process(selected):
     for scenario_name, df in selected.items():
         trs = df.copy()
         trs = trs[trs.variable.str.startswith("Transmission flow|")]
-        trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
+        trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[-1])
         trs['period'] = trs['time'].astype(int)
 
         trs['value'] = trs['value']
@@ -174,6 +174,7 @@ def process(selected):
     prov_cord = pd.read_csv('./profiles/natem_output/visualization_scripts/utils/arrow_coords.csv')
     full_t['region'] = full_t['region'].map(utils.province_long)
     full_t['variable'] = full_t['variable'].map(utils.province_long)
+    full_t['value'] = full_t['value'].astype(float) / -1000  # convert to GW
 
     full_t['short_region'] = full_t['region'].map(utils.province_short)
     full_t['short_variable'] = full_t['variable'].map(utils.province_short)

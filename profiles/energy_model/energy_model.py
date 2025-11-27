@@ -64,8 +64,18 @@ from profiles.energy_model.visualization_scripts import (
     comparison as comparison_viz,
 )
 
-power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'HEC-PITHOS',
-                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures']
+power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
+
+technologies_paths = [
+    './profiles/copper_output/technologies.yaml',
+    './profiles/natem_output/technologies.yaml',
+    './profiles/nextgrid_output/technologies.yaml',
+    './profiles/pypsa_can_output/technologies.yaml',
+    './profiles/pypsa_output/technologies.yaml',
+    './profiles/pithos_output/technologies.yaml',
+    './profiles/temoa_output/technologies.yaml'
+]
 
 
 class energy_modelsOutput(BaseProfile):
@@ -262,7 +272,24 @@ class energy_modelsOutput(BaseProfile):
 
     def __init__(self):
         super().__init__()
-        self.technologies = yaml.load(open('./profiles/energy_model/technologies.yaml', 'r'), Loader=yaml.FullLoader)
+        all_techs = {}
+
+        # print current working directory
+        import os
+        print("Current working directory: ", os.getcwd())
+
+        for path in technologies_paths:
+            techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
+            all_techs.update(techs)
+
+        all_techs['Electricity|Offset Emissions'] =  {
+                'name': 'Electricity Offset Emissions',
+                'color': '#808080',
+                'group': 'Emissions Offsets',
+                'group_color': '#808080'
+            }
+
+        self.technologies = all_techs
         self.plots = yaml.load(open('./profiles/energy_model/plots.yaml', 'r'), Loader=yaml.FullLoader)
         self.update_utils()
         self.settings = self.render_settings()
@@ -282,22 +309,7 @@ class energy_modelsOutput(BaseProfile):
                 data = df.copy()
                 data['version'] = data['scenario'].apply(lambda x: x.split('|')[-1] if '|' in x else 'v0')
                 data['scenario'] = profile + '|' + data['scenario']
-                if not viz_option in ['Overview', 'Output Stats', 'Transmission Capacity', 'Transmission Flow']:
-                    unique_regions = set(data['region'].unique())
-
-                    # Check if both 'A' and 'B' are in the unique values
-                    if {'AB', 'QC'}.issubset(unique_regions):
-                        ab_qc = data[data.region.isin(['AB', 'QC'])]
-                        # drop nan columns
-                        ab_qc = ab_qc.dropna(axis=1, how='all')
-                        columns = ab_qc.columns
-                        columns = columns.drop('region')
-                        columns = columns.drop('value').tolist()
-
-                        # Perform groupby operation
-                        ab_qc = ab_qc.groupby(columns).sum().reset_index()
-                        ab_qc['region'] = 'AB+QC'
-                        data = pd.concat([data, ab_qc])
+                
 
                 if 'time' in data.columns:
                     data = data[data['time'].isin(

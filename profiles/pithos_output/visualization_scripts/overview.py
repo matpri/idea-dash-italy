@@ -7,10 +7,7 @@ def render_plot(type, df, can=True):
     from profiles.pithos_output.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
-    if can:
-        df = df[df.region == 'CAN']
-    else:
-        df = df[df.region == 'AB+QC']
+    df = df[df.region == 'CAN']
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
@@ -91,7 +88,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'HEC-PITHOS',
+            'profile': 'PITHOS',
             'viz': 'Overview'
         },
         style={

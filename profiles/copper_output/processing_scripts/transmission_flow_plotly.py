@@ -126,7 +126,8 @@ def preprocess(transmission, scenario="CER"):
     transmission["period"] = transmission.period.astype(str)
     transmission["scenario"] = scenario
     transmission["value"] = transmission.value / 1000000
-    transmission["value"] = transmission["value"] * 365 / len(unique_dates)
+    scaler = 365 / len(unique_dates)
+    transmission["value"] = transmission["value"] * scaler
     # prov_cord has columns from_lon, from_lat, to_lon, to_lat and region, variable add the correct from_lon, from_lat, to_lon, to_lat to transmission based on region and variable
     # Merge prov_cord into transmission
     transmission = pd.merge(transmission, prov_cord, how='inner', left_on=['region', 'variable'],
@@ -164,7 +165,11 @@ def process(selected):
         unique_dates = sub_transmission['time'].dt.date.unique()
 
         trs['value'] = trs['value'] / 1000
-        trs['value'] = trs['value'] * 365 / len(unique_dates)
+        if 'Simulation Setting|Representative Day Scaling Factor' in df["variable"].unique():
+            scaler = df[df.variable == 'Simulation Setting|Representative Day Scaling Factor']['value'].iloc[0]
+        else:
+            scaler = 365 / len(unique_dates)
+        trs['value'] = trs['value'] * scaler
         # drop time
         trs = trs.drop(columns=['time'])
         # group by region, variable, period

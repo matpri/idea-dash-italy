@@ -28,6 +28,10 @@ UC Results:
     title: UC Results by Plant
     x_label: Year
     y_label: MW
+  Seasonal:
+    title: Seasonal UC Results
+    y_label: Season
+    x_label: MW
 UC Emissions:
   name: UC Emissions
   unit: tCO2
@@ -43,6 +47,10 @@ UC Emissions:
     title: UC Emissions by Plant
     x_label: Year
     y_label: tCO2
+  Seasonal:
+    title: Seasonal UC Emissions
+    y_label: Season
+    x_label: tCO2
 UC_VRE_Curtailment:
   name: UC VRE Curtailment
   unit: tCO2
@@ -73,6 +81,10 @@ OPF Results:
     title: OPF Results by Plant
     x_label: Year
     y_label: MW
+  Seasonal:
+    title: Seasonal OPF Results
+    y_label: Season
+    x_label: MW
 OPF Emissions:
   name: OPF Emissions
   unit: tCO2
@@ -80,6 +92,10 @@ OPF Emissions:
     title: Total OPF Emissions
     x_label: Year
     y_label: tCO2
+  Seasonal:
+    title: Seasonal OPF Emissions
+    y_label: Season
+    x_label: tCO2
   By Technology:
     title: OPF Emissions by Technology
     x_label: Year

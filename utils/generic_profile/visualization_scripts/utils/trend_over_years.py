@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.copper_output import utils
 
 
-def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, report_type='Total'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title + f' ({scenario})',
@@ -17,6 +17,37 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     try:
         df_scen = subset(df, region, scenario, unit, aggregate, season)
         techs = df_scen.variable.unique().tolist()
+
+        # Apply report type transformations
+        if report_type == 'Relative Change':
+            # Reset index to avoid duplicate label issues
+            df_scen = df_scen.reset_index(drop=True)
+            for tech in techs:
+                mask = df_scen["variable"] == tech
+                tech_data = df_scen[mask].sort_values(by=['time']).copy()
+                if not tech_data.empty:
+                    base_value = tech_data.iloc[0]['value']
+                    idx = 0
+                    while idx < len(tech_data) and base_value == 0:
+                        base_value = tech_data.iloc[idx]['value']
+                        idx += 1
+                    if base_value != 0:
+                        df_scen.loc[mask, 'value'] = (df_scen.loc[mask, 'value'] / base_value) * 100
+                    else:
+                        df_scen.loc[mask, 'value'] = 0
+            fig.update_layout(yaxis_title='Relative Change (%)' if unit == 'NA' else f'Relative Change (%, base: {unit})')
+        elif report_type == 'Relative Makeup':
+            # Reset index to avoid duplicate label issues
+            df_scen = df_scen.reset_index(drop=True)
+            for year in df_scen['time'].unique():
+                mask = df_scen['time'] == year
+                year_data = df_scen[mask]
+                total = year_data['value'].sum()
+                if total != 0:
+                    df_scen.loc[mask, 'value'] = (df_scen.loc[mask, 'value'] / total) * 100
+                else:
+                    df_scen.loc[mask, 'value'] = 0
+            fig.update_layout(yaxis_title='Relative Makeup (%)')
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]
@@ -69,12 +100,17 @@ def subset(df, region, scenario, unit, aggregate, season=None):
 
     if season is not None:
         df_scen = df_scen[df_scen['season'] == season]
-    if aggregate:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
-        df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+    # If the dataframe has been preprocessed for detail-level reduction, skip remapping.
+    if '_detail_reduced' in df_scen.columns and df_scen['_detail_reduced'].any():
+        pass
     else:
-        df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
+        if aggregate:
+            df_scen['variable'] = df_scen["variable"].map(utils.get_group).fillna(df_scen["variable"])
+            df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+        else:
+            df_scen['variable'] = df_scen["variable"].map(utils.get_name).fillna(df_scen["variable"])
 
+    # Ensure data is grouped by the expected grouping (idempotent if already grouped)
     df_scen = df_scen.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
     df_scen = df_scen[df_scen['scenario'] == scenario]

@@ -61,6 +61,7 @@ def process(selected):
             df['period'] = df['time'].dt.year.astype(int)
             df['scenario'] = scenario
             df_processed = df[['time', 'region', 'value', 'scenario']]
+            df_processed['variable'] = 'OPF Line Flow|' + df_processed['variable']
 
         dfs.append(df_processed)
 

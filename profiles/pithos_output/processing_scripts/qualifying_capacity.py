@@ -15,7 +15,7 @@ def check(df):
     """
     #print("Checking for gen cap in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             if df.variable.str.startswith("Qualifying capacity|").any():
                 return True
         return False

@@ -24,11 +24,15 @@ def link(app):
             'type': 'silver-opf_emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        Output({
+            'type': 'silver-opf_emissions-time_step-select',
+            'index': ALL
+        }, 'style'),
+
         Input({
             'type': 'silver-opf_emissions-plot-select',
             'index': ALL
         }, 'value'),
-        
         Input({
             'type': 'silver-opf_emissions-scenario-multi-select',
             'index': ALL
@@ -45,6 +49,7 @@ def link(app):
             'type': 'silver-opf_emissions-download-button',
             'index': ALL
         }, 'n_clicks'),
+
         State({
             'type': ids.FIGURE,
             'index': ALL,
@@ -63,9 +68,13 @@ def link(app):
             'type': 'silver-opf_emissions-scenario-multi-select',
             'index': ALL
         }, 'style'),
+        State({
+            'type': 'silver-opf_emissions-time_step-select',
+            'index': ALL
+        }, 'style'),
         prevent_initial_call=True
     )
-    def update_opf_emissions(_p_type, _scenarios, _scenario,_ts,  _download, _canvas, _data, _s_style, _m_style):
+    def update_opf_emissions(_p_type, _scenarios, _scenario, _ts, _download, _canvas, _data, _s_style, _m_style, _ts_style):
         print('updating opf_emissions plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -78,7 +87,8 @@ def link(app):
                         (id['id']['type'] == 'silver-opf_emissions-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['OPF Emissions'].to_csv, "opf_emissions.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['SILVER']['OPF Emissions'].to_csv,
+                                             "opf_emissions.csv")
             return _canvas, _data, _s_style, _m_style
 
         idx = 0
@@ -93,17 +103,29 @@ def link(app):
         if _p_type[idx] == 'Total':
             _m_style[idx] = {'display': 'block'}
             _s_style[idx] = {'display': 'none'}
+            _ts_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Total', data_handler.processed_data['SILVER']['OPF Emissions'],
                                        _scenarios[idx], time_size=_ts[idx])
         elif _p_type[idx] == 'By Plant':
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
+            _ts_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('By Plant',
                                        data_handler.processed_data['SILVER']['OPF Emissions'],
                                        _scenario[idx], time_size=_ts[idx])
+        elif _p_type[idx] == 'Seasonal':
+            _m_style[idx] = {'display': 'none'}
+            _s_style[idx] = {'display': 'block'}
+            _ts_style[idx] = {'display': 'none'}
+            _canvas[idx] = render_plot('Seasonal',
+                                       data_handler.processed_data['SILVER']['OPF Emissions'],
+                                       _scenario[idx], time_size=_ts[idx])
+
         else:
             _m_style[idx] = {'display': 'none'}
             _s_style[idx] = {'display': 'block'}
-            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER']['OPF Emissions'], _scenario[idx], time_size=_ts[idx])
+            _ts_style[idx] = {'display': 'block'}
+            _canvas[idx] = render_plot('By Technology', data_handler.processed_data['SILVER']['OPF Emissions'],
+                                       _scenario[idx], time_size=_ts[idx])
 
-        return _canvas, [dash.no_update for _ in _data], _s_style, _m_style
+        return _canvas, [dash.no_update for _ in _data], _s_style, _m_style, _ts_style

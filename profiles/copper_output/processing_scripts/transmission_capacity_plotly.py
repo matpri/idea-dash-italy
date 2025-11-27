@@ -185,9 +185,11 @@ def process(selected):
         # rename time to period
         # sort by region, variable, period
         df["region"], df['sub_region'] = df.region.apply(lambda x: x.split(".")[0]), df.region.apply(lambda x: x.split(".")[1])
+        df["variable"], df['sub_variable'] = df.variable.apply(lambda x: x.split(".")[0]), df.variable.apply(lambda x: x.split(".")[1])
         # where variable == region, add sub_region to region and sub_variable to variable
         df.loc[df['variable'] == df['region'], 'region'] = df['region'] + '.' + df['sub_region']
-        df.loc[df['variable'] == df['region'].apply(lambda x: x.split(".")[0]), 'variable'] = df.apply(lambda x: x['variable'] + '.a' if x['sub_region'] == 'b' else x['variable'] + '.b', axis=1)
+        df.loc[df['variable'] == df['region'], 'variable'] = df['variable'] + '.' + df['sub_variable']
+        df = df.drop(columns=['sub_region', 'sub_variable'])
         df = df.groupby(["region", "variable", "period", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
 
         # cum_ls = []

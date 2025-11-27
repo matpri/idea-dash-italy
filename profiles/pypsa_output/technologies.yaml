@@ -1703,3 +1703,50 @@ Fixed O&M:
   group: 'VO&M costs + Fuel costs'
   group_color: '#9d2ed1'
   name: 'VO&M costs + Fuel costs'
+
+"Electricity|Wind|Offshore|Floating":
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Floating
+"Electricity|Wind|Offshore|Fixed":
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Electricity|Wind|Offshore|Fixed
+
+"Electricity|Hydro|Cascaded":
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|Cascaded
+
+"Electricity|Diesel|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Diesel|w/o CCS
+
+Electricity|Offset emissions|Gas|CC|w/o CCS:
+  color: '#000000'
+  group: Offset emissions
+  group_color: '#000000'
+  name: Electricity|Offset emissions|Gas|CC|w/o CCS
+
+Electricity|Offset emissions|Gas|CT|w/o CCS:
+  color: '#000000'
+  group: Offset emissions
+  group_color: '#000000'
+  name: Electricity|Offset emissions|Gas|CT|w/o CCS
+
+Electricity|Offset emissions|Oil|w/o CCS:
+  color: '#000000'
+  group: Offset emissions
+  group_color: '#000000'
+  name: Electricity|Offset emissions|Oil|w/o CCS
+
+Electricity|Offset emissions|Diesel|w/o CCS:
+  color: '#000000'
+  group: Offset emissions
+  group_color: '#000000'
+  name: Electricity|Offset emissions|Diesel|w/o CCS

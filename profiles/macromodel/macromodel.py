@@ -210,7 +210,9 @@ class Macromodel(BaseProfile):
                 dfs.append(filtered_data)
 
             # Combine all dataframes into a single dataframe
+
             full_df = pd.concat(dfs, ignore_index=True)
+            full_df = full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
             # only keep CAN
             full_df = full_df[full_df['region'] == 'CAN']
@@ -264,17 +266,6 @@ class Macromodel(BaseProfile):
         df = data[~data.variable.str.contains('Import|Export')]
         df['variable'] = viz_option
         return df
-
-    def _aggregate_ab_qc(self, full_df):
-        """Aggregate data for Alberta and Quebec."""
-        ab_qc = full_df[full_df['region'].isin(['AB', 'QC'])].copy()
-        ab_qc = ab_qc.groupby(['scenario', 'variable', 'time', 'unit']).sum(numeric_only=True).reset_index()
-        ab_qc['region'] = 'AB+QC'
-
-        # Concatenate the AB+QC data with the full dataframe
-        full_df = pd.concat([full_df, ab_qc], ignore_index=True)
-        full_df = full_df[full_df['region'].isin(['CAN', 'unit'])]
-        return full_df.groupby(['scenario', 'variable', 'time', 'region', 'unit']).sum(numeric_only=True).reset_index()
 
     def _create_dispatch_stat(self, day_data, variable_name, year):
         """Helper function to create a dispatch statistic entry."""

@@ -15,7 +15,7 @@ def check(df):
     """
     #print("Checking for capacity_transmission in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             if df.variable.str.startswith("Total transmission capacity|").any():
                 test = df.copy()
                 test = test[test.variable.str.startswith("Total transmission capacity|")]

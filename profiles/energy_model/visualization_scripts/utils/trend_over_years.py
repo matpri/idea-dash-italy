@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.energy_model import utils
 
 
-def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None):
+def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, report_type='Total'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -17,6 +17,26 @@ def plot(df, scenario, region, aggregate, title, x_axis_label, y_axis_label, too
     try:
         df_scen = subset(df, region, scenario, aggregate, season)
         techs = df_scen.variable.unique().tolist()
+
+        if report_type == 'Relative Change':
+            for tech in techs:
+                tech_data = df_scen[df_scen["variable"] == tech].sort_values(by=['time'])
+                if not tech_data.empty:
+                    base_value = tech_data.iloc[0]['value']
+                    base_value = tech_data.iloc[0]['value']
+                    idx = 0
+                    while idx < len(tech_data) and base_value == 0:
+                        base_value = tech_data.iloc[idx]['value']
+                        idx += 1
+                    if base_value != 0:
+                        df_scen.loc[df_scen["variable"] == tech, 'value'] = (tech_data['value'] / base_value)
+                    else:
+                        df_scen.loc[df_scen["variable"] == tech, 'value'] = 0
+            y_axis_label += ' (%)'
+        elif report_type == 'Relative Makeup':
+            total_per_year = df_scen.groupby('time')['value'].transform('sum')
+            df_scen['value'] = (df_scen['value'] / total_per_year)
+            y_axis_label += ' (%)'
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]

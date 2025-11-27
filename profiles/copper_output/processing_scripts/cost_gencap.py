@@ -105,4 +105,5 @@ def process(data):
     full_df = pd.concat(dfs)
     full_df['unit'] = '$ Billions'
     full_df['value'] = full_df['value'].div(1e9)
+    full_df['region'] = full_df['region'].apply(lambda x: x.split('.')[0])
     return full_df

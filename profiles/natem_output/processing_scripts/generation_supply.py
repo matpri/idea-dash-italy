@@ -18,9 +18,9 @@ def check(df):
     """
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'NATEM_Canad').any():
+        if (df.model == 'NATEM_Canada').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Generation').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Dispatch').any() or (classes == 'Transmission Flow').any():
                 return True
         return False
     except Exception as e:
@@ -45,7 +45,7 @@ def aggregate_db(db, scenario):
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
-    supply_df = db[classes == 'Generation']
+    supply_df = db[classes == 'Dispatch']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
     # supply_df['time'] = pd.to_datetime(supply_df['time'])
@@ -57,17 +57,17 @@ def aggregate_db(db, scenario):
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
     # aggregate the dim_name based on the tech_agg_NATEM Canada dictionary
     # change value from MWh to TWh
-    supply_df['value'] = supply_df['value'] / 1000000
+    supply_df['value'] = supply_df['value'] / 3.6
     # expand value to an entire year by multiplying by 365/12
     supply_df['value'] = supply_df['value']
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Transmission flow']
-    transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
+    transmission_df = db[classes == 'Transmission Flow']
+    transmission_df['variable'] = transmission_df['variable'].apply(lambda x: x.split("|")[1])
     # replace to with ''
-    transmission_df['variable'] = transmission_df['variable'].str.replace('To ', '')
+    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split("-")[1])
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
@@ -113,7 +113,7 @@ def aggregate_db(db, scenario):
     transmission_df['variable'] = dim_names
     transmission_df = transmission_df.groupby(['period', 'region', 'variable']).sum().reset_index()
     # change value from MWh to TWh
-    transmission_df['value'] = transmission_df['value'] / 1000000
+    transmission_df['value'] = transmission_df['value'] / 3.6
 
 
     # only keep the periods that are in the supply_df
@@ -129,12 +129,17 @@ def aggregate_db(db, scenario):
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 
     df['scenario'] = scenario
-    can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
-    # can_df remove all variables that start with Import or Export
-    can_df = can_df[~can_df.variable.str.startswith('Imports from')]
-    can_df = can_df[~can_df.variable.str.startswith('Exports to')]
-    can_df['region'] = 'CAN'
-    df = pd.concat([df, can_df], ignore_index=True)
+    # can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
+    # # can_df remove all variables that start with Import or Export
+    # can_df = can_df[~can_df.variable.str.startswith('Imports from')]
+    # can_df = can_df[~can_df.variable.str.startswith('Exports to')]
+    # can_df['region'] = 'CAN'
+    # df = pd.concat([df, can_df], ignore_index=True)
+
+    # for CAN region remove any rows where variable starts with Imports or Exports
+    if 'CAN' in df['region'].values:
+        df = df[~((df['region'] == 'CAN') & (df['variable'].str.startswith('Imports from')))]
+        df = df[~((df['region'] == 'CAN') & (df['variable'].str.startswith('Exports to')))]
 
     # sort by dim_name and period
     df = df.sort_values(by=['variable', 'period'])

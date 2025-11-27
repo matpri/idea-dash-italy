@@ -73,6 +73,7 @@ def process(selected):
             df['region'] = 'N/A'  # No region info in this format
             df['scenario'] = scenario
             df_processed = df[['time', 'variable', 'value', 'region', 'scenario']]
+            df_processed['variable'] = 'OPF_VRE_Curtailment|' + df_processed['variable']
 
         dfs.append(df_processed)
 

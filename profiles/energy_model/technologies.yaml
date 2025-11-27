@@ -948,6 +948,16 @@ Electricity|Wind|Onshore:
   group: Wind
   group_color: '#b2df8a'
   name: Electricity|Wind|Onshore
+Electricity|Wind|Offshore|Refurbished:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Refurbished
+Electricity|Wind|Onshore|Refurbished:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Onshore|Refurbished
 Electricity|Solar:
   color: '#000000'
   group: Solar
@@ -958,6 +968,11 @@ Electricity|Solar|PV|Open Land:
   group: Solar
   group_color: '#ffff99'
   name: Electricity|Solar|PV|Open Land
+Electricity|Solar|PV|Open Land|Refurbished:
+  color: '#000000'
+  group: Solar
+  group_color: '#ffff99'
+  name: Electricity|Solar|PV|Open Land|Refurbished
 Electricity|Geothermal:
   color: '#000000'
   group: Geothermal
@@ -1058,6 +1073,11 @@ Electricity|Gas|SC|Backup|w/ CCS:
   group: Fossil fuel gas
   group_color: '#ff6b6b'
   name: Electricity|Gas|SC|Backup|w/ CCS
+Electricity|Storage|Battery:
+  color: '#000000'
+  group: Storage
+  group_color: '#6a3d9a'
+  name: Electricity|Storage|Battery
 Electricity|Storage|Battery|Lithium:
   color: '#000000'
   group: Storage
@@ -1078,6 +1098,11 @@ Electricity|Biomass:
   group: Biomass
   group_color: '#33a02c'
   name: Electricity|Biomass
+Electricity|Coal:
+  color: '#000000'
+  group: Fossil fuel solid
+  group_color: '#b15928'
+  name: Electricity|Coal
 Electricity|Coal|IGCC:
   color: '#000000'
   group: Fossil fuel solid
@@ -1093,6 +1118,11 @@ Electricity|Gas|CC:
   group: Fossil fuel gas
   group_color: '#ff6b6b'
   name: Electricity|Gas|CC
+Electricity|Gas|Steam|Industrial|w/o CCS:
+  color: '#000000'
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+  name: Electricity|Gas|Steam|Industrial|w/o CCS
 Electricity|Gas|CG:
   color: '#000000'
   group: Fossil fuel gas
@@ -1248,7 +1278,7 @@ Electricity|Storage|Flywheel:
   group: Storage
   group_color: '#6a3d9a'
   name: Electricity|Storage|Flywheel
-Electricity|Wind||Onshore|Centralized:
+Electricity|Wind|Onshore|Centralized:
   color: '#000000'
   group: Wind
   group_color: '#b2df8a'
@@ -1263,6 +1293,16 @@ Electricity|Wind|Offshore|Centralized:
   group: Wind
   group_color: '#b2df8a'
   name: Electricity|Wind|Offshore|Centralized
+Electricity|Wind|Offshore|Floating:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Floating
+Electricity|Wind|Offshore|Fixed:
+  color: '#000000'
+  group: Wind
+  group_color: '#b2df8a'
+  name: Electricity|Wind|Offshore|Fixed
 Electricity|Wind|Offshore|Decentralized:
   color: '#000000'
   group: Wind
@@ -1764,146 +1804,146 @@ Electricity|Steam|Industrial:
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas'
 
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/ CCS|Fuel: Renewable Natural Gas - Offset'
 
@@ -2071,42 +2111,42 @@ coal_2010to2024:
 
 coal_ccs_pre2010.coal_underlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_ccs_pre2010.coal_underlim
 coal_ccs_2010to2024.coal_underlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_ccs_2010to2024.coal_underlim
 coal_pre2010.coal_underlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_pre2010.coal_underlim
 coal_2010to2024.coal_underlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_2010to2024
 coal_ccs_pre2010.coal_overlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal - Offset'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_ccs_pre2010.coal_overlim
 coal_ccs_2010to2024.coal_overlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal - Offset'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_ccs_2010to2024.coal_overlim
 coal_pre2010.coal_overlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal - Offset'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_pre2010.coal_overlim
 coal_2010to2024.coal_overlim:
   color: '#000000'
-  group: 'Fossil fuel solid|Fuel: Coal - Offset'
+  group: 'Fossil fuel solid'
   group_color: '#b15928'
   name: coal_2010to2024.coal_overlim
 
@@ -2143,113 +2183,113 @@ diesel_under25_post2025:
 
 diesel_pre2010.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_pre2010.diesel_underlim
 diesel_2010to2024.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_2010to2024.diesel_underlim
 diesel_under25_pre2010.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_pre2010.diesel_underlim
 diesel_under25_2010to2024.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_2010to2024.diesel_underlim
 diesel_post2025.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_post2025.diesel_underlim
 diesel_under25_post2025.diesel_underlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_post2025.diesel_underlim
 diesel_pre2010.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_pre2010.diesel_overlim
 diesel_2010to2024.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_2010to2024.diesel_overlim
 diesel_under25_pre2010.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_pre2010.diesel_overlim
 diesel_under25_2010to2024.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_2010to2024.diesel_overlim
 diesel_post2025.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_post2025.diesel_overlim
 diesel_under25_post2025.diesel_overlim:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_post2025.diesel_overlim
 diesel_pre2010.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_pre2010.biodiesel
 diesel_2010to2024.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_2010to2024.biodiesel
 diesel_under25_pre2010.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_pre2010.biodiesel
 diesel_under25_2010to2024.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_2010to2024.biodiesel
 diesel_post2025.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_post2025.biodiesel
 diesel_under25_post2025.biodiesel:
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Biodiesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: diesel_under25_post2025.biodiesel
 
 h2blue_ct.h2_blue_underlim:
   color: '#000000'
-  group: 'Hydrogen|Blue|Fuel: Hydrogen Blue'
+  group: 'Hydrogen|Blue'
   group_color: '#1f78b4'
   name: h2blue_ct.h2_blue_underlim
 h2blue_ct.h2_blue_overlim:
   color: '#000000'
-  group: 'Hydrogen|Blue|Fuel: Hydrogen Blue - Offset'
+  group: 'Hydrogen|Blue'
   group_color: '#1f78b4'
   name: h2blue_ct.h2_blue_overlim
 'Electricity|Hydrogen|Blue|Fuel: Hydrogen Blue':
     color: '#000000'
-    group: 'Hydrogen|Blue|Fuel: Hydrogen Blue'
+    group: 'Hydrogen|Blue'
     group_color: '#1f78b4'
     name: 'Electricity|Hydrogen|Blue|Fuel: Hydrogen Blue'
 'Electricity|Hydrogen|Blue|Fuel: Hydrogen Blue - Offset':
     color: '#000000'
-    group: 'Hydrogen|Blue|Fuel: Hydrogen Blue - Offset'
+    group: 'Hydrogen|Blue'
     group_color: '#1f78b4'
     name: 'Electricity|Hydrogen|Blue|Fuel: Hydrogen Blue - Offset'
 
@@ -2411,565 +2451,565 @@ gasCG_ccs_post2025:
 
 gasSC_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_pre2010.gas_underlim
 gasSC_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_2010to2024.gas_underlim
 gasSC_under25_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_pre2010.gas_underlim
 gasSC_under25_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_2010to2024.gas_underlim
 gasSC_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_post2025.gas_underlim
 gasSC_under25_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_post2025.gas_underlim
 gasSC_ccs_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_pre2010.gas_underlim
 gasSC_ccs_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_2010to2024.gas_underlim
 gasSC_ccs_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_post2025.gas_underlim
 gasSC_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_pre2010.gas_overlim
 gasSC_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_2010to2024.gas_overlim
 gasSC_under25_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_pre2010.gas_overlim
 gasSC_under25_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_2010to2024.gas_overlim
 gasSC_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_post2025.gas_overlim
 gasSC_under25_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_post2025.gas_overlim
 gasSC_ccs_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_pre2010.gas_overlim
 gasSC_ccs_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_2010to2024.gas_overlim
 gasSC_ccs_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasSC_ccs_post2025.gas_overlim
 gasSC_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_pre2010.renewable_gas_underlim
 gasSC_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_2010to2024.renewable_gas_underlim
 gasSC_under25_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_pre2010.renewable_gas_underlim
 gasSC_under25_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_2010to2024.renewable_gas_underlim
 gasSC_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_post2025.renewable_gas_underlim
 gasSC_under25_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_post2025.renewable_gas_underlim
 gasSC_ccs_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_pre2010.renewable_gas_underlim
 gasSC_ccs_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_2010to2024.renewable_gas_underlim
 gasSC_ccs_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_post2025.renewable_gas_underlim
 gasSC_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_pre2010.renewable_gas_overlim
 gasSC_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_2010to2024.renewable_gas_overlim
 gasSC_under25_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_pre2010.renewable_gas_overlim
 gasSC_under25_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_2010to2024.renewable_gas_overlim
 gasSC_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_post2025.renewable_gas_overlim
 gasSC_under25_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasSC_under25_post2025.renewable_gas_overlim
 gasSC_ccs_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_pre2010.renewable_gas_overlim
 gasSC_ccs_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_2010to2024.renewable_gas_overlim
 gasSC_ccs_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasSC_ccs_post2025.renewable_gas_overlim
 
 gasCC_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_pre2010.gas_underlim
 gasCC_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_2010to2024.gas_underlim
 gasCC_under25_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_pre2010.gas_underlim
 gasCC_under25_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_2010to2024.gas_underlim
 gasCC_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_post2025.gas_underlim
 gasCC_under25_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_post2025.gas_underlim
 gasCC_ccs_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_pre2010.gas_underlim
 gasCC_ccs_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_2010to2024.gas_underlim
 gasCC_ccs_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_post2025.gas_underlim
 gasCC_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_pre2010.gas_overlim
 gasCC_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_2010to2024.gas_overlim
 gasCC_under25_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_pre2010.gas_overlim
 gasCC_under25_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_2010to2024.gas_overlim
 gasCC_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_post2025.gas_overlim
 gasCC_under25_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_post2025.gas_overlim
 gasCC_ccs_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_pre2010.gas_overlim
 gasCC_ccs_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_2010to2024.gas_overlim
 gasCC_ccs_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCC_ccs_post2025.gas_overlim
 gasCC_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_pre2010.renewable_gas_underlim
 gasCC_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_2010to2024.renewable_gas_underlim
 gasCC_under25_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_pre2010.renewable_gas_underlim
 gasCC_under25_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_2010to2024.renewable_gas_underlim
 gasCC_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_post2025.renewable_gas_underlim
 gasCC_under25_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_post2025.renewable_gas_underlim
 gasCC_ccs_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_pre2010.renewable_gas_underlim
 gasCC_ccs_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_2010to2024.renewable_gas_underlim
 gasCC_ccs_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_post2025.renewable_gas_underlim
 gasCC_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_pre2010.renewable_gas_overlim
 gasCC_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_2010to2024.renewable_gas_overlim
 gasCC_under25_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_pre2010.renewable_gas_overlim
 gasCC_under25_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_2010to2024.renewable_gas_overlim
 gasCC_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_post2025.renewable_gas_overlim
 gasCC_under25_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCC_under25_post2025.renewable_gas_overlim
 gasCC_ccs_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_pre2010.renewable_gas_overlim
 gasCC_ccs_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_2010to2024.renewable_gas_overlim
 gasCC_ccs_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCC_ccs_post2025.renewable_gas_overlim
 
 gasCG_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_pre2010.gas_underlim
 gasCG_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_2010to2024.gas_underlim
 gasCG_under25_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_pre2010.gas_underlim
 gasCG_under25_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_2010to2024.gas_underlim
 gasCG_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_post2025.gas_underlim
 gasCG_under25_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_post2025.gas_underlim
 gasCG_ccs_pre2010.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_pre2010.gas_underlim
 gasCG_ccs_2010to2024.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_2010to2024.gas_underlim
 gasCG_ccs_post2025.gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_post2025.gas_underlim
 gasCG_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_pre2010.gas_overlim
 gasCG_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_2010to2024.gas_overlim
 gasCG_under25_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_pre2010.gas_overlim
 gasCG_under25_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_2010to2024.gas_overlim
 gasCG_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_post2025.gas_overlim
 gasCG_under25_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_post2025.gas_overlim
 gasCG_ccs_pre2010.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_pre2010.gas_overlim
 gasCG_ccs_2010to2024.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_2010to2024.gas_overlim
 gasCG_ccs_post2025.gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: gasCG_ccs_post2025.gas_overlim
 gasCG_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_pre2010.renewable_gas_underlim
 gasCG_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_2010to2024.renewable_gas_underlim
 gasCG_under25_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_pre2010.renewable_gas_underlim
 gasCG_under25_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_2010to2024.renewable_gas_underlim
 gasCG_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_post2025.renewable_gas_underlim
 gasCG_under25_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_post2025.renewable_gas_underlim
 gasCG_ccs_pre2010.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_pre2010.renewable_gas_underlim
 gasCG_ccs_2010to2024.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_2010to2024.renewable_gas_underlim
 gasCG_ccs_post2025.renewable_gas_underlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_post2025.renewable_gas_underlim
 gasCG_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_pre2010.renewable_gas_overlim
 gasCG_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_2010to2024.renewable_gas_overlim
 gasCG_under25_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_pre2010.renewable_gas_overlim
 gasCG_under25_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_2010to2024.renewable_gas_overlim
 gasCG_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_post2025.renewable_gas_overlim
 gasCG_under25_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: gasCG_under25_post2025.renewable_gas_overlim
 gasCG_ccs_pre2010.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_pre2010.renewable_gas_overlim
 gasCG_ccs_2010to2024.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_2010to2024.renewable_gas_overlim
 gasCG_ccs_post2025.renewable_gas_overlim:
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: gasCG_ccs_post2025.renewable_gas_overlim
 
 'Electricity|Coal|w/ CCS|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Fuel: Coal'
 'Electricity|Coal|w/o CCS|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Fuel: Coal'
 'Electricity|Coal|w/ CCS|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Fuel: Coal - Offset'
 'Electricity|Coal|w/o CCS|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Fuel: Coal - Offset'
 
@@ -2985,22 +3025,22 @@ Electricity|Coal|w/o CCS|CER Exempt:
     name: Electricity|Coal|w/o CCS|CER Exempt
 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal'
 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal'
 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|CER Exempt|Fuel: Coal - Offset'
 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|CER Exempt|Fuel: Coal - Offset'
 
@@ -3037,169 +3077,179 @@ Electricity|Gas|SC|w/ CCS|CER Exempt:
 
 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas'
+'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas'
+'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas - Offset':
+  color: '#000000'
+  group: 'Fossil fuel gas'
+  group_color: '#ff6b6b'
+  name: 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|CC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|SC|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|CG|w/o CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|CC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|SC|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|CG|w/ CCS|CER Exempt|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas - Offset'
 
 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas - Offset'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas - Offset'
 
 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ff95b7'
   name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|CC|w/ CCS|Retrofit|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas with CCS|Fuel: Natural Gas'
+  group: 'Fossil fuel gas with CCS'
   group_color: '#ffaaa3'
   name: 'Electricity|Gas|SC|w/ CCS|Retrofit|Fuel: Natural Gas'
 
 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Renewable Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff4786'
   name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Renewable Natural Gas'
 
 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|CC|w/o CCS|Refurbished|Fuel: Natural Gas'
 
 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas':
   color: '#000000'
-  group: 'Fossil fuel gas|Fuel: Natural Gas'
+  group: 'Fossil fuel gas'
   group_color: '#ff6b6b'
   name: 'Electricity|Gas|SC|w/o CCS|Refurbished|Fuel: Natural Gas'
 
@@ -3227,22 +3277,22 @@ Electricity|Gas|CC|w/o CCS|Refurbished:
 
 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal'
 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal'
 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/ CCS|Retrofit|Fuel: Coal - Offset'
 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset':
     color: '#000000'
-    group: 'Fossil fuel solid|Fuel: Coal - Offset'
+    group: 'Fossil fuel solid'
     group_color: '#b15928'
     name: 'Electricity|Coal|w/o CCS|Refurbished|Fuel: Coal - Offset'
 
@@ -3270,31 +3320,293 @@ Electricity|Diesel|w/o CCS|CER Exempt:
 
 'Electricity|Diesel|w/o CCS|Fuel: Diesel':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|Fuel: Diesel'
 'Electricity|Diesel|w/o CCS|Fuel: Diesel - Offset':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|Fuel: Diesel - Offset'
 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel'
 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel'
 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel - Offset':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel - Offset'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Diesel - Offset'
 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel':
   color: '#000000'
-  group: 'Fossil fuel liquid|Fuel: Diesel'
+  group: 'Fossil fuel liquid'
   group_color: '#ffaa33'
   name: 'Electricity|Diesel|w/o CCS|CER Exempt|Fuel: Biodiesel'
+'Energy production|Secondary production|Electricity production|Other renewables|Geothermal|Electricity|Centralized electricity':
+  group: Geothermal
+  group_color: '#e31a1c'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/ CCS|Electricity|Centralized electricity':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+'Energy production|Secondary production|Electricity production|Wind|Off-shore wind|Electricity|Centralized electricity':
+  group: Wind
+  group_color: '#b2df8a'
+'Energy production|Secondary production|Electricity production|Nuclear|Nuclear Conventional|Electricity|Centralized electricity':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Energy production|Secondary production|Electricity production|Coal|Coal w/ CCS|Electricity|Centralized electricity':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Other renewables|Hydrogen|Electricity|Centralized electricity':
+  group: HydrogenGreen
+  group_color: '#1f78b4'
+'Energy production|Secondary production|Electricity production|Nuclear|Small modular reactor|Electricity|Centralized electricity':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Energy production|Secondary production|Electricity production|Coal|Coal w/out CCS|Electricity|Centralized electricity':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP|Electricity|Centralized electricity':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Hydro|Run-of-river|Electricity|Centralized electricity':
+  group: Hydro
+  group_color: '#a6cee3'
+'Energy production|Secondary production|Electricity production|Oil|Heavy fuel oil|Electricity|Centralized electricity':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Biomass|Wood biomass w/ out CCS|Electricity|Centralized electricity':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Biomass|Biogas|Electricity|Centralized electricity':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Oil|Light fuel oil|Electricity|Centralized electricity':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Steam|Steam|Electricity|Centralized electricity':
+  group: Steam
+  group_color: '#937de6'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS|Electricity|Centralized electricity':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Solar|Centralized PV|Electricity|Centralized electricity':
+  group: Solar
+  group_color: '#ffff99'
+'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas|Electricity|Centralized electricity':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Hydro|Dam|Electricity|Centralized electricity':
+  group: Hydro
+  group_color: '#a6cee3'
+'Energy production|Secondary production|Electricity production|Wind|On-shore wind|Electricity|Centralized electricity':
+  group: Wind
+  group_color: '#b2df8a'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP|Electricity|Decentralized electricity - Industrial':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP|Heat|Heat':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS|Electricity|Decentralized electricity - Industrial':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS|Heat|Heat':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS|Heat|Steam':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP|Heat|Steam':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Solar|Decentralized PV|Electricity|Decentralized electricity - Residential':
+  group: Solar
+  group_color: '#ffff99'
+'Energy production|Secondary production|Electricity production|Solar|Decentralized PV|Electricity|Decentralized electricity - Commercial':
+  group: Solar
+  group_color: '#ffff99'
+'Energy production|Secondary production|Electricity production|Oil|Light fuel oil':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Solar|Decentralized PV':
+  group: Solar
+  group_color: '#ffff99'
+'Energy production|Secondary production|Electricity production|Storage|Other storage':
+  group: Storage
+  group_color: '#6a3d9a'
+'Energy production|Secondary production|Electricity production|Solar|Centralized PV':
+  group: Solar
+  group_color: '#ffff99'
+'Energy production|Secondary production|Electricity production|Hydro|Dam':
+  group: Hydro
+  group_color: '#a6cee3'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Wind|On-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+'Energy production|Secondary production|Electricity production|Steam|Steam':
+  group: Steam
+  group_color: '#937de6'
+'Energy production|Secondary production|Electricity production|Oil|Heavy fuel oil':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Energy production|Secondary production|Electricity production|Biomass|Wood biomass w/ out CCS':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Biomass|Biogas':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Hydro|Run-of-river':
+  group: Hydro
+  group_color: '#a6cee3'
+'Energy production|Secondary production|Electricity production|Coal|Coal w/out CCS':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Storage|Battery':
+  group: Storage
+  group_color: '#6a3d9a'
+'Energy production|Secondary production|Electricity production|Storage|Pumped hydro':
+  group: Storage
+  group_color: '#6a3d9a'
+'Energy production|Secondary production|Electricity production|Wind|Off-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+'Energy production|Secondary production|Electricity production|Nuclear|Nuclear Conventional':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Energy production|Secondary production|Electricity production|Coal|Coal w/ CCS':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Other renewables|Geothermal':
+  group: Geothermal
+  group_color: '#e31a1c'
+'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/ CCS':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+'Energy production|Secondary production|Electricity production|Nuclear|Small modular reactor':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Energy production|Secondary production|Electricity production|Other renewables|Hydrogen':
+  group: HydrogenGreen
+  group_color: '#1f78b4'
+'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Biomass':
+  group: Biomass
+  group_color: '#33a02c'
+'Energy production|Secondary production|Electricity production|Coal':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Energy production|Secondary production|Electricity production|Natural gas':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Energy production|Secondary production|Electricity production|Oil':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Wind|On-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+'Solar|Centralized PV':
+  group: Solar
+  group_color: '#ffff99'
+'Storage|Battery':
+  group: Storage
+  group_color: '#6a3d9a'
+'Hydro|Dam':
+  group: Hydro
+  group_color: '#a6cee3'
+'Other renewables|Hydrogen':
+  group: HydrogenGreen
+  group_color: '#1f78b4'
+'Solar|Decentralized PV':
+  group: Solar
+  group_color: '#ffff99'
+'Storage|Other storage':
+  group: Storage
+  group_color: '#6a3d9a'
+'Nuclear|Small modular reactor':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Biomass|Biogas':
+  group: Biomass
+  group_color: '#33a02c'
+'Oil|Heavy fuel oil':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Wind|Off-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+'Wind|Decentralized wind':
+  group: Wind
+  group_color: '#b2df8a'
+'Other renewables|Tidal':
+  group: Other renewables
+  group_color: '#000000'
+'Biomass|Wood biomass w/ out CCS':
+  group: Biomass
+  group_color: '#33a02c'
+'Other renewables|Ocean thermal':
+  group: Other renewables
+  group_color: '#000000'
+'Biomass|Wood pellet':
+  group: Biomass
+  group_color: '#33a02c'
+'Storage|Pumped hydro':
+  group: Storage
+  group_color: '#6a3d9a'
+'Biomass|Waste water biogas':
+  group: Biomass
+  group_color: '#33a02c'
+'Biomass|Wood biomass w/ CCS':
+  group: Biomass
+  group_color: '#33a02c'
+'Oil|Light fuel oil':
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+'Natural gas|Natural Gas w/ CCS':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+'Natural gas|Natural Gas w/out CCS':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Coal|Coal w/ CCS':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Coal|Coal w/out CCS':
+  group: Fossil fuel solid
+  group_color: '#b15928'
+'Hydro|Run-of-river':
+  group: Hydro
+  group_color: '#a6cee3'
+'Nuclear|Nuclear Conventional':
+  group: Nuclear
+  group_color: '#ff7f00'
+'Natural gas|Natural Gas w/out CCS - CHP':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+'Natural gas|Natural Gas w/ CCS - Combine Heat and power':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+'Other renewables|Geothermal':
+  group: Geothermal
+  group_color: '#e31a1c'
+'Other renewables|Wave':
+  group: Other renewables
+  group_color: '#000000'
+'Steam|Steam':
+  group: Steam
+  group_color: '#937de6'
+

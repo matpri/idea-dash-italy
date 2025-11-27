@@ -79,15 +79,25 @@ def get_version_pattern(model):
         version_patterns[model] = patterns[len(version_patterns) % len(patterns)]
     return version_patterns[model]
 
-def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, can=True, fill=True):
+def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, fill=True, relative=False):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
 
-    if can:
-        df = df[df.region == 'CAN']
-    else:
-        df = df[df.region == 'AB+QC']
+    df = df[df.region == 'CAN']
+
+    # remove 2021 data
+    df = df[df['time'] != 2021]
+
+    if relative:
+        scenarios = df['scenario'].unique().tolist()
+        for scenario in scenarios:
+            data = df[df.scenario == scenario]
+            base_value = data[data.time == data.time.min()]['value'].values
+            if len(base_value) > 0 and base_value[0] != 0:
+                df.loc[df.scenario == scenario, 'value'] = data['value'] / base_value[0]
+            else:
+                df.loc[df.scenario == scenario, 'value'] = 0
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']
@@ -214,6 +224,7 @@ def plot(df, window_id):
     classes = df['variable'].unique().tolist()
 
     scenarios = df['scenario'].unique().tolist()
+    versions = sorted({s.split('|')[2] for s in scenarios if len(s.split('|')) > 2})
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
     base_scenarios = ['ALL'] + base_scenarios
@@ -226,6 +237,14 @@ def plot(df, window_id):
             id={
                 'type': 'energy_model-overview-plot-select',
                 'index': window_id
+            },
+        ),
+        dmc.Switch(
+            label='Relative Values',
+            checked=False,
+            id={
+                'type': 'energy_model-overview-relative',
+                'index': window_id,
             },
         ),
         dmc.Select(
@@ -252,17 +271,15 @@ def plot(df, window_id):
             },
             style={'display': 'block'}
         ),
-        dmc.Select(
-            label='Region',
-            value='CAN',
-            data=[
-                {'label': 'CAN', 'value': 'CAN'},
-                {'label': 'AB+QC', 'value': 'AB+QC'},
-            ],
+        dmc.MultiSelect(
+            label='Version',
+            data=[{'label': version, 'value': version} for version in versions],
+            value=[],
             id={
-                'type': 'energy_model-overview-region-toggle',
+                'type': 'energy_model-overview-version-select',
                 'index': window_id,
             },
+            style={'display': 'block'}
         ),
         dmc.Switch(
             label='Fill Area',
@@ -281,7 +298,7 @@ def plot(df, window_id):
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot(classes[0], df, True, False, False),
+        figure=render_plot(classes[0], df, True, False, False, False),
         id={
             'type': ids.FIGURE,
             'index': window_id,

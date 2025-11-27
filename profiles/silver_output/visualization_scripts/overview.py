@@ -7,10 +7,6 @@ def render_plot(type, df, can=True):
     from profiles.silver_output.utils import plot_settings
     #print('rendering plot', type)
     df = df[df.variable == type].copy()
-    # if can:
-    #     df = df[df.region == 'CAN']
-    # else:
-    #     df = df[df.region == 'AB+QC']
 
     plot_info = plot_settings['Overview'][type]
     name = plot_info['name']

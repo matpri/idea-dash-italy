@@ -21,7 +21,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        print("stock check", e)
         return False
 
 

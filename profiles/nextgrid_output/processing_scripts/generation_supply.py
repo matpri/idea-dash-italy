@@ -129,8 +129,8 @@ def aggregate_db(db, scenario):
     df['scenario'] = scenario
     can_df = df.groupby(['variable', 'period', 'scenario','end_node']).sum(numeric_only=True).reset_index()
     # can_df remove all variables that start with Import or Export
-    can_df = can_df[~can_df.variable.str.startswith('Imports')]
-    can_df = can_df[~can_df.variable.str.startswith('Exports')]
+    can_df = can_df[~can_df.variable.str.contains('Imports')]
+    can_df = can_df[~can_df.variable.str.contains('Exports')]
     can_df['region'] = 'CAN'
 
     df = pd.concat([df, can_df], ignore_index=True)
@@ -164,4 +164,5 @@ def process(selected):
     full_data = pd.concat(dfs)
 
     full_data['time'] = full_data['time'].astype(int)
+    full_data['value'] = full_data['value'].astype(float) / 1000000
     return full_data
