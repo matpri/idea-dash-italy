@@ -209,7 +209,7 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
             if model in list(constants.model_mapping.keys()):
                 mapped_model = [m for m in model_mapping[model] if m != 'Power System Models'][0]
             else:
-                for profile in data_handler.profiles:
+                for profile in data_handler.profiles.values():
                     if model == profile.name:
                         mapped_model = profile.display_name
                         break
@@ -274,3 +274,5 @@ def view_modal(n_click, n_submit, n_cancel, is_open, values, scenario_names, dat
         data_handler.to_delete = []
         return not is_open, dash.no_update, data
     return is_open, dash.no_update, data
+
+
