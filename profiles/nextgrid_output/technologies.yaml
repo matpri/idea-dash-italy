@@ -1873,3 +1873,15 @@ Fixed O&M:
     group: Fossil fuel gas
     group_color: '#ff6b6b'
     name: Gas|Specified|w/o CCS
+
+"Electricity|Capacity Imports":
+  color: '#000000'
+  group: Firm capacity transfers
+  group_color: '#000000'
+  name: Electricity|Capacity Imports
+
+"Electricity|Capacity Exports":
+  color: '#000000'
+  group: Firm capacity transfers
+  group_color: '#000000'
+  name: Electricity|Capacity Exports
