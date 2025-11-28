@@ -15,8 +15,8 @@ def check(df):
     """
     #print("Checking for transmission in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
-            if df.variable.str.startswith("Total transmission flow|").any():
+        if (df.model == 'PITHOS').any():
+            if df.variable.str.startswith("Transmission flow|").any():
                 return True
         return False
     except Exception as e:
@@ -156,7 +156,7 @@ def process(selected):
     transmissions = []
     for scenario_name, df in selected.items():
         trs = df.copy()
-        trs = trs[trs.variable.str.startswith("Total transmission flow|")]
+        trs = trs[trs.variable.str.startswith("Transmission flow|")]
         trs = trs.dropna(axis=1, how='all')
         trs["variable"] = trs["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
         trs["variable"] = trs.variable.apply(lambda x: x.split(".")[0])

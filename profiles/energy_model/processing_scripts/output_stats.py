@@ -28,9 +28,9 @@ def check(df):
             return copper_output_stats.check(df)
         elif df.model.unique()[0] == "ECCC-NextGrid":
             return nextgrid_output_stats.check(df)
-        elif df.model.unique()[0] == "NATEM_Canad":
+        elif df.model.unique()[0] == "NATEM_Canada":
             return natem_output_stats.check(df)
-        elif df.model.unique()[0] == "HEC-PITHOS":
+        elif df.model.unique()[0] == "PITHOS":
             return pithos_output_stats.check(df)
         elif df.model.unique()[0] == "NRCan-PyPsa":
             return pypsa_output_stats.check(df)
@@ -58,13 +58,13 @@ def process(selected: dict):
             df = nextgrid_output_stats.process({scenario_name: db})
             df.model = "ECCC-NextGrid"
             dfs.append(df)
-        elif db.model.unique()[0] == "NATEM_Canad":
+        elif db.model.unique()[0] == "NATEM_Canada":
             df = natem_output_stats.process({scenario_name: db})
-            df.model = "NATEM_Canad"
+            df.model = "NATEM_Canada"
             dfs.append(df)
-        elif db.model.unique()[0] == "HEC-PITHOS":
+        elif db.model.unique()[0] == "PITHOS":
             df = pithos_output_stats.process({scenario_name: db})
-            df.model = "HEC-PITHOS"
+            df.model = "PITHOS"
             dfs.append(df)
         elif db.model.unique()[0] == "NRCan-PyPsa":
             df = pypsa_output_stats.process({scenario_name: db})

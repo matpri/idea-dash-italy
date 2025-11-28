@@ -64,12 +64,12 @@ def data_processing_task(profile_name, viz, data, processing_func):
     return profile_name, viz, data_out
 
 class PyPsaOutput(BaseProfile):
-    display_name ='HEC-PITHOS'
-    name = 'HEC-PITHOS'
+    display_name ='PITHOS'
+    name = 'PITHOS'
     db_name = 'pithos'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (HEC-PITHOS) framework is an electricity system planning model. \n'
+        'The Canadian Opportunities for Planning and Production of Electricity Resources (PITHOS) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
@@ -87,7 +87,7 @@ class PyPsaOutput(BaseProfile):
         'Capacity Cost',
         'FOM Cost',
         'VOM Cost',
-        'Dispatch'
+        # 'Dispatch'
     ]
     viz_options = {
         'Overview':
@@ -222,16 +222,16 @@ class PyPsaOutput(BaseProfile):
                 'description': 'Variable operating and maintenance costs of energy production and transmission in the model.'
 
             },
-        'Dispatch':
-            {
-                'check': dispatch_processing.check,
-                'db_check': dispatch_processing.check,
-                'process': dispatch_processing.process,
-                'db_process': dispatch_processing.process,
-                'viz': dispatch_viz.plot,
-                'callback': dispatch_callbacks.link,
-                'description': 'Dispatch of each technology in the model.'
-            },
+        # 'Dispatch':
+        #     {
+        #         'check': dispatch_processing.check,
+        #         'db_check': dispatch_processing.check,
+        #         'process': dispatch_processing.process,
+        #         'db_process': dispatch_processing.process,
+        #         'viz': dispatch_viz.plot,
+        #         'callback': dispatch_callbacks.link,
+        #         'description': 'Dispatch of each technology in the model.'
+        #     },
         'Output Stats':
             {
                 'check': overview_processing.check,
@@ -298,10 +298,11 @@ class PyPsaOutput(BaseProfile):
                 dfs.append(filtered_data)
 
             # Combine all dataframes into a single dataframe
-            full_df = pd.concat(dfs, ignore_index=True)
 
-            # Aggregate data for Alberta and Quebec
-            full_df = self._aggregate_ab_qc(full_df)
+            full_df = pd.concat(dfs, ignore_index=True)
+            full_df = full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
+
+            
 
             # Append overview data to processed data
             overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
@@ -347,16 +348,6 @@ class PyPsaOutput(BaseProfile):
         df['variable'] = viz_option
         return df
 
-    def _aggregate_ab_qc(self, full_df):
-        """Aggregate data for Alberta and Quebec."""
-        ab_qc = full_df[full_df['region'].isin(['AB', 'QC'])].copy()
-        ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-        ab_qc['region'] = 'AB+QC'
-
-        # Concatenate the AB+QC data with the full dataframe
-        full_df = pd.concat([full_df, ab_qc], ignore_index=True)
-        full_df = full_df[full_df['region'].isin(['CAN', 'AB+QC'])]
-        return full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
     def _create_dispatch_stat(self, day_data, variable_name, year):
         """Helper function to create a dispatch statistic entry."""

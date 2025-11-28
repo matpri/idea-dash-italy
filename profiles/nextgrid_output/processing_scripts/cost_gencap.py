@@ -19,8 +19,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'ECCC-NextGrid').any():
-            if df.variable.str.startswith("Capital|Capital costs|").any():
-                return df[df.variable.str.startswith("Capital|Capital costs|")]['value'].sum() != 0
+            if df.variable.str.startswith("Capital costs|").any():
+                return df[df.variable.str.startswith("Capital costs|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -74,14 +74,15 @@ def calculate_fom(fom_df):
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
-    # Aggregate data over all regions by variable, time, and scenario and sum the values
-    can_fom_df = fom_df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
+    if 'CAN' not in fom_df['region'].unique():
+        # Aggregate data over all regions by variable, time, and scenario and sum the values
+        can_fom_df = fom_df.groupby(["variable", "time", "scenario"], as_index=False).sum(numeric_only=True)
 
-    # Add a row with "Region" as "CAN"
-    can_fom_df = can_fom_df.assign(region='CAN')
+        # Add a row with "Region" as "CAN"
+        can_fom_df = can_fom_df.assign(region='CAN')
 
-    # Concatenate the original DataFrame and the aggregated DataFrame
-    fom_df = pd.concat([fom_df, can_fom_df], ignore_index=True)
+        # Concatenate the original DataFrame and the aggregated DataFrame
+        fom_df = pd.concat([fom_df, can_fom_df], ignore_index=True)
     return fom_df
 
 
@@ -99,8 +100,8 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Capital|Capital costs|")]
-        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+        df = df[df.variable.str.startswith("Capital costs|")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)
         df['scenario'] = scenario_name

@@ -28,6 +28,14 @@ def create_generic_profile(df, model):
 
     :return: The generated generic profile.
     """
+    print('Creating generic profile for', model)
+
+    # drop rows where variable is None
+    df = df[df['variable'].notna()]
+
+    # if any variable has no pipe add a pipe at the end of the variable
+    df['variable'] = df['variable'].apply(lambda x : x + '|' if '|' not in x else x)
+
     classes = df.variable.str.split('|').str[0].unique().tolist()
     variables = df.variable.apply(lambda x: '|'.join(x.split('|')[1:])).unique().tolist()
     profile = GenericProfile(model, classes, variables)
@@ -168,8 +176,8 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
-                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+    profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''

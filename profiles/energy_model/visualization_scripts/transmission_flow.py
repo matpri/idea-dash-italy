@@ -7,9 +7,8 @@ import plotly.express as px
 import numpy as np
 import geojson
 
+from profiles.energy_model.visualization_scripts.utils import bar_over_regions, bar_over_years
 from profiles.energy_model import utils
-from profiles.energy_model.visualization_scripts.utils import bar_over_regions, bar_over_years, trend_over_years
-
 
 def aggregate_lines(df):
     sum_values = df.groupby(['line', 'start', 'end'])["value"].sum().reset_index()
@@ -48,8 +47,8 @@ def aggregate_lines(df):
 
 
 def year_subset(Line_Flow, Year, Scenario):
-    Line_Flow = Line_Flow[Line_Flow['period'] == Year]
     Line_Flow = Line_Flow[Line_Flow['scenario'] == Scenario]
+    Line_Flow = Line_Flow[Line_Flow['period'] == Year]
 
     # Line_Flow = aggregate_lines(Line_Flow)
     Line_Flow = Line_Flow[Line_Flow['value'] != 0]
@@ -142,17 +141,14 @@ def to_color_plotly(min_value):
     return func
 
 def transmission_plot(df, scenario, year, title):
-    df = df[df['scenario'] == scenario]
-    max_value = df['value'].max()
+    df = df[df['short_region'] != df['short_variable']]
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
-    df['norm_value'] = df['value'] / max_value
-    df['norm_value'] = df['norm_value'].fillna(0)
-
-    colorfunc = to_color_plotly(df['norm_value'].min())
 
     min_value = df['value'].min()
     max_value = df['value'].max()
     df = year_subset(df, year, scenario)
+
+    # round value, total, cumsum to 2 decimal places
     df['value'] = df['value'].round(2)
 
     if df.empty:
@@ -176,22 +172,13 @@ def transmission_plot(df, scenario, year, title):
         fig.layout.autosize = True
         return fig
 
-    with open('./profiles/energy_model/visualization_scripts/utils/canada.geojson') as f:
+
+    with open('profiles/energy_model/visualization_scripts/utils/canada.geojson') as f:
         canada = geojson.load(f)
-    with open('./profiles/energy_model/visualization_scripts/utils/arrows.geojson') as f:
+    with open('profiles/energy_model/visualization_scripts/utils/arrows.geojson') as f:
         arrow = geojson.load(f)
 
-    line_colors = {}
-    for i, row in df.iterrows():
-        line_colors[f'{row.short_region} -> {row.short_variable}'] = colorfunc(row['norm_value'])
-
-    # create data frame with columns line and color
-    line_colors_df = pd.DataFrame(list(line_colors.items()), columns=['line', 'color'])
-
     regions = list(set(df['region'].unique().tolist() + df['variable'].unique().tolist()))
-    # ['British Columbia', 'Alberta', 'Saskatchewan', 'Manitoba', 'Ontario', 'Quebec', 'New Brunswick',
-    #        'Nova Scotia', 'Prince Edward Island', 'Newfoundland and Labrador', 'Yukon', 'Northwest Territories',
-    #        'Nunavut']
 
     fig_base = px.choropleth(
         geojson=canada, locations=regions, featureidkey="properties.name", color=regions,
@@ -205,23 +192,21 @@ def transmission_plot(df, scenario, year, title):
     )
     for area in fig_base.data:
         area.showlegend = False  # turn off legend
-        # df_region = df[df['region'] == area.name]
-        # df_region = df_region[df_region['value'] != 0]
+        df_region = df[df['region'] == area.name]
+        df_region = df_region[df_region['value'] != 0]
         template = f'{area.name}<extra></extra>'
-        # for index, row in df_region.iterrows():
-        #     template += f'{row["short_region"]} -> {row["short_variable"]}: {row["total"]} GWh <br>'
-        # template += '<extra></extra>'
         area.update(hovertemplate=template)
     fig_base.update_layout(margin=dict(l=0, r=0, t=0, b=0))
 
-    fig = go.Figure(data=fig_base.data,
-                    layout=go.Layout(
-                        title=go.layout.Title(text=title),
-                    )
-                    )
-
+    fig = go.Figure(
+        data=fig_base.data,
+        layout=go.Layout(
+        )
+    )
     df['text'] = f'Year: {year} <br> Line: ' + df.line.astype(str) + '<br>' + 'Scenario: ' + df.scenario.astype(
-        str) + '<br>' + 'Flow: ' + df['value'].astype(str) + ' GWh'
+        str) + '<br>' + 'Total Flow: ' + df['value'].astype(str) + ' GW <br>' #+ \
+        #          'New Flow: ' + df['value'].astype(str) + ' GW <br>' + 'Total Flow: ' + df['total'].astype(
+        # str) + " GW"
 
     fig_overlay = go.Figure(
         data=go.Choropleth(
@@ -233,25 +218,20 @@ def transmission_plot(df, scenario, year, title):
             zmin=min_value,
             zmax=max_value,
             text=df['text'],
-
         )
     )
-
     fig_overlay.update_traces(coloraxis="coloraxis2")
     fig_overlay.update_layout(margin=dict(l=0, r=0, t=0, b=0))
-
     fig.add_traces(fig_overlay.data)
 
-    fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.7),
+    fig.update_layout(coloraxis2=dict(cmin=min_value, cmax=max_value, colorbar=dict(x=0.9),
                                       # set colorscale
-                                      colorscale='GnBu', colorbar_title='Transmission Flow (GWh)'))
+                                      colorscale='GnBu', colorbar_title='Transmission Flow (GW)'))
     fig.update_geos(showcountries=False, showcoastlines=False, showland=False, fitbounds="locations", showlakes=False,
                     showrivers=False,
                     subunitcolor='white')
 
-    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0}, )
-    #print(f"The title is: {title}")
-    fig.update_layout(title=title)
+    fig.update_layout(margin={"r": 0, "t": 0, "l": 0, "b": 0})
     fig.update_geos(projection_type="orthographic")
     # remove box around plot
     fig.update_layout(showlegend=False)
@@ -263,6 +243,12 @@ def render_plot(type, df, scenarios, year, line):
     from profiles.energy_model.utils import plot_settings
     name = plot_settings['Transmission Flow']['name']
     unit = plot_settings['Transmission Flow']['unit']
+    df = df.copy()
+    df['short_region'] = df['short_region'].apply(lambda x: x.split('.')[0])
+    df['short_variable'] = df['short_variable'].apply(lambda x: x.split('.')[0])
+    df['region'] = df['region'].apply(lambda x: x.split('.')[0])
+    df['variable'] = df['variable'].apply(lambda x: x.split('.')[0])
+    df['line'] = df['short_region'] + ' -> ' + df['short_variable']
     print('scenarios', scenarios)
     if type == 'Map Plot':
         plot_info = plot_settings['Transmission Flow']['Map Plot']
@@ -273,14 +259,16 @@ def render_plot(type, df, scenarios, year, line):
         df['region'] = df['short_region'] + '<br>-><br>' + df['short_variable']
         df['variable'] = 'Flow'
         df = df.rename(columns={'period': 'time'})
-        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'],
+                                     plot_info['y_label'], name, unit)
     if type == 'Per Year Bar Plot':
         plot_info = plot_settings['Transmission Flow']['Year Plot']
         df = df.copy()
         df['region'] = df['short_region'] + ' -> ' + df['short_variable']
         df['variable'] = 'Flow'
         df = df.rename(columns={'period': 'time'})
-        return bar_over_years.plot(df, scenarios, line, False, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
+        return bar_over_years.plot(df, scenarios, line, False, plot_info['title'], plot_info['x_label'],
+                                   plot_info['y_label'], name, unit)
     if type == 'Trends Over Years':
         plot_info = plot_settings['Transmission Flow']['Year Plot']
 
@@ -311,11 +299,11 @@ def render_plot(type, df, scenarios, year, line):
                 color = utils.get_color(tech)
 
                 fig.add_scatter(x=data["time"], y=data["value"], name=tech, mode='lines+markers', marker_color=color,
-                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Scenario: {scenarios}<br>'  + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
+                                hovertemplate=f'<b>{tech}</b><br><br>' + 'Year: %{x}<br>' + f'Scenario: {scenarios}<br>' + f'{name}' + ': %{y:.2f} ' + f'{unit}' + '<br><extra></extra>')
 
             fig.update_yaxes(showgrid=True)
             if df_scen.empty:
-                #print("No data available, since the results are all zero.")
+                # print("No data available, since the results are all zero.")
                 fig.add_annotation(
                     x=0.5,
                     y=0.5,
@@ -336,8 +324,6 @@ def render_plot(type, df, scenarios, year, line):
         return fig
 
 
-
-
 def plot(df, window_id):
     '''
 
@@ -345,16 +331,15 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
-
     scenarios = df['scenario'].unique().tolist()
-
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['ALL'] + base_scenarios
+    base_scenarios = ['', 'ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
-    lines = (df['short_region'] + ' -> ' + df['short_variable']).unique().tolist()
-    # make all years int
     years.sort()
+
+    lines = (df['short_region'] + ' -> ' + df['short_variable']).unique().tolist()
+
 
     widget_layout = html.Div([
         dmc.Select(
@@ -384,7 +369,7 @@ def plot(df, window_id):
                 'type': 'energy_model-transmissionflow-scenario-multi-select',
                 'index': window_id,
             },
-            style={'display': 'none'}
+            style={'display': 'none'},
         ),
         dmc.Select(
             label='Scenario Group',
@@ -392,6 +377,16 @@ def plot(df, window_id):
             value=[base_scenarios[0]],
             id={
                 'type': 'energy_model-transmissionflow-scenario-group-select',
+                'index': window_id,
+            },
+            style={'display': 'none'}
+        ),
+        dmc.MultiSelect(
+            label='Version',
+            data=[],
+            value=[],
+            id={
+                'type': 'energy_model-transmissionflow-version-select',
                 'index': window_id,
             },
             style={'display': 'none'}
@@ -404,7 +399,6 @@ def plot(df, window_id):
                 'type': 'energy_model-transmissionflow-year-select',
                 'index': window_id
             },
-            style={'display': 'block'}
         ),
         dmc.Select(
             label='Line',
@@ -416,13 +410,11 @@ def plot(df, window_id):
             },
             style={'display': 'none'}
         ),
-
         dmc.Button('Download Data', id={'type': 'energy_model-transmissionflow-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
         dcc.Download(id={'type': 'energy_model-transmissionflow-download', 'index': window_id}),
-
     ])
 
     plot_layout = dcc.Graph(

@@ -15,11 +15,11 @@ def check(df):
     """
     #print("Checking for transmission in variable column")
     try:
-        if (df.model == 'NRCan-PyPsa').any():
-            if df.variable.str.startswith("Transmission flow|").any():
-                test_df = df.copy()
+        if (df.model == 'NATEM_Canada').any():
+            if df.variable.str.startswith("Transmission Flow|").any():
+                test_df = df[df.variable.str.startswith("Transmission Flow|")].copy()
                 test_df['variable'] = test_df['variable'].apply(lambda x: x.split("|")[1])
-                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("To ")[1])
+                test_df['variable'] = test_df['variable'].apply(lambda x: x.split("-")[1])
                 test_df = test_df[test_df.region != test_df.variable]
                 return test_df.value.sum() != 0
         return False
@@ -158,23 +158,19 @@ def process(selected):
     transmissions = []
     for scenario_name, df in selected.items():
         trs = df.copy()
-        trs = trs[trs.variable.str.startswith("Transmission flow|")]
+        trs = trs[trs.variable.str.startswith("Transmission Flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
-        trs['time'] = pd.to_datetime(trs['time'])
         # all times - 1 hour delta
-        trs['period'] = trs['time'].dt.year
-        sub_transmission = trs[trs['period'] == trs['period'].min()]
-        unique_dates = sub_transmission['time'].dt.date.unique()
+        trs['period'] = trs['time'].astype(int)
 
-        trs['value'] = trs['value'] / 1000
-        trs['value'] = trs['value'] * 365 / len(unique_dates)
+        trs['value'] = trs['value']/ 3.6
         # drop time
         trs = trs.drop(columns=['time'])
         # group by region, variable, period
         trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
-        trs["variable"] = trs.variable.apply(lambda x: x.split("To ")[1])
+        trs["variable"] = trs.variable.apply(lambda x: x.split("-")[1])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
         trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()

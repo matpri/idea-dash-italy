@@ -60,6 +60,7 @@ def process(selected):
         prov_df = df[df.variable.str.startswith("New generation capacity|")]
 
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        prov_df['value'] = prov_df['value'].astype(float) / 1000  # Convert MW to GW
         canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
         canada_df['region'] = 'CAN'
         new_cap = process_newcap(prov_df, canada_df, scenario_name)

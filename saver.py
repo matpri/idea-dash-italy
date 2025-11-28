@@ -4,11 +4,12 @@ import argparse  # Import argparse for CLI argument parsing
 from utils.data_handler import DataHandler
 
 # Set up argument parser
-parser = argparse.ArgumentParser(description='Save files from data into IDEA pkl at this path.')
-parser.add_argument('autosave', type=str, help='Path to save the datahandler to.', default='datahandler.pkl')
+# parser = argparse.ArgumentParser(description='Save files from data into IDEA pkl at this path.')
+# parser.add_argument('autosave', type=str, help='Path to save the datahandler to.', default='datahandler.pkl')
 
-args = parser.parse_args()  # Parse the arguments
-autosave = args.autosave
+# args = parser.parse_args()  # Parse the arguments
+# autosave = args.autosave
+autosave ='datahandler.pkl'
 
 # get all files in data folder that end either with csv or xlsx
 data_files = [f for f in os.listdir('data') if f.endswith('.csv') or f.endswith('.xlsx')]
