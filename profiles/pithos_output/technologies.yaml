@@ -1683,3 +1683,15 @@ Fixed O&M:
     group: DAC
     group_color: '#8c564b'
     name: Electricity|Direct Air Capture
+
+"Electricity|Demand Response|Load shedding":
+    color: '#000000'
+    group: Demand response
+    group_color: '#000000'
+    name: Electricity|Demand Response|Load shedding
+
+"Electricity|Demand Response|Load unserved":
+    color: '#000000'
+    group: Demand response
+    group_color: '#000000'
+    name: Electricity|Demand Response|Load unserved

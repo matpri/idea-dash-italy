@@ -1624,7 +1624,7 @@ Electricity|Hydro|Storage:
 
 Electricity|Load Shedding:
   color: '#000000'
-  group: Load Shedding
+  group: Demand response
   group_color: '#000000'
   name: Electricity|Load Shedding
 
