@@ -266,11 +266,11 @@ def create_link(sector):
             _pattern_style = dash.no_update
             _text_style = dash.no_update
             _v_style = {'display': 'none'} if plot_type == 'Energy Demand' else {'display': 'block'}
-
-            _rep_options = [{'label': plot, 'value': plot} for plot in ['Sankey', 'Trend Over Years']] if rep_switch_label == 'By Service' else [{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']]
+            #Sanke
+            _rep_options = [{'label': plot, 'value': plot} for plot in ['Trend Over Years']] if rep_switch_label == 'By Service' else [{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']]
 
             if trigger_id['type'] == f'cims-{lower_sector}-plot-select' or trigger_id['type'] == f'cims-{lower_sector}-energy-rep-select' or trigger_id['type'] == f'cims-{lower_sector}-emissions-rep-select':
-                plot = 'Sankey' if rep_switch_label == 'By Service' else 'By Year'
+                plot = 'Trend Over Years' if rep_switch_label == 'By Service' else 'By Year'
     
             _rep_switch_style = {'display': 'none'} if plot_type in ('Energy Demand', 'Emissions', 'Technology Stocks') else {'display': 'block'}
             _energy_rep_style = {'display': 'block'} if plot_type == 'Energy Demand' else {'display': 'none'}
