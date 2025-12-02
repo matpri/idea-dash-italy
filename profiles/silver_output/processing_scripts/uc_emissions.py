@@ -61,6 +61,7 @@ def process(selected):
             df['region'] = 'N/A'  # No region info in this format
             df['scenario'] = scenario
             df_processed = df[['time', 'variable', 'value', 'region', 'scenario']]
+            df_processed['variable'] = 'UC Emissions|' + df_processed['variable']
         dfs.append(df_processed)
 
     return pd.concat(dfs)

@@ -88,7 +88,7 @@ def get_version_pattern(model):
     return version_patterns[model]
 
 
-def render_plot(p_type, df, group_by_model, group_by_scenario, group_by_version, unit, fill=True):
+def render_plot(p_type, df, group_by_model, group_by_scenario, group_by_version, unit, fill=True, report_type='Total'):
     from profiles.energy_model.utils import plot_settings
     # # print('rendering plot', p_type)
     df = df[
@@ -98,16 +98,20 @@ def render_plot(p_type, df, group_by_model, group_by_scenario, group_by_version,
 
     return plot_overview(df, group_by_model, group_by_scenario, group_by_version, p_type,
                          p_type,
-                         'Year', p_type, unit, fill)
+                         'Year', p_type, unit, fill, report_type=report_type)
 
 
 def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title, x_label, y_label, name, unit,
-                  fill=True):
+                  fill=True, report_type='Total'):
     fig = go.Figure()
+
+    # Initial y-axis label
+    y_axis_label = y_label + f' ({unit})' if unit != 'NA' else y_label
+
     fig.update_layout(
         title_text=f'Overview of {title}',
         xaxis_title=x_label,
-        yaxis_title=y_label + f' ({unit})' if unit != 'NA' else y_label,
+        yaxis_title=y_axis_label,
         template="simple_white",
     )
 
@@ -116,6 +120,27 @@ def plot_overview(df, group_by_model, group_by_scenario, group_by_version, title
         # make time int
         df.time = df.time.astype(int)
         df = df.sort_values(by=['time'])
+
+        # Apply report type transformations
+        if report_type == 'Relative Change':
+            # Reset index to avoid duplicate label issues
+            df = df.reset_index(drop=True)
+            scenarios = df['scenario'].unique()
+            for scenario in scenarios:
+                mask = df['scenario'] == scenario
+                scenario_data = df[mask].sort_values(by=['time']).copy()
+                if not scenario_data.empty:
+                    base_value = scenario_data.iloc[0]['value']
+                    idx = 0
+                    while idx < len(scenario_data) and base_value == 0:
+                        base_value = scenario_data.iloc[idx]['value']
+                        idx += 1
+                    if base_value != 0:
+                        df.loc[mask, 'value'] = (df.loc[mask, 'value'] / base_value) * 100
+                    else:
+                        df.loc[mask, 'value'] = 0
+            y_axis_label = 'Relative Change (%)' if unit == 'NA' else f'Relative Change (%, base: {unit})'
+            fig.update_layout(yaxis_title=y_axis_label)
 
         if group_by_model:
             df[['model', 'scenario']] = df['scenario'].apply(
@@ -285,6 +310,16 @@ def create_overview_plot(model, is_comparison=False):
                 value=classes[0],
                 id={
                     'type': 'plot-select',
+                    'model': model,
+                    'index': window_id,
+                    'viz': 'overview'
+                },
+            ),
+            dmc.Switch(
+                label='Relative Values',
+                checked=False,
+                id={
+                    'type': 'report-type-switch',
                     'model': model,
                     'index': window_id,
                     'viz': 'overview'

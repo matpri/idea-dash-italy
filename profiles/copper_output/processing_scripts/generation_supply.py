@@ -46,6 +46,9 @@ def aggregate_db(db, scenario):
 
     classes = db["variable"].apply(lambda x: x.split("|")[0])
 
+
+
+
     db["region"] = db.region.apply(lambda x: x.split(".")[0])
     supply_df = db[classes == 'Generation']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
@@ -57,6 +60,10 @@ def aggregate_db(db, scenario):
     supply_df['period'] = supply_df['time'].dt.year
     sub_supply = supply_df[supply_df['period'] == supply_df['period'].min()]
     unique_dates = sub_supply['time'].dt.date.unique()
+    if 'Simulation Setting|Representative Day Scaling Factor' in db["variable"].unique():
+        scaler = db[db.variable == 'Simulation Setting|Representative Day Scaling Factor']['value'].iloc[0]
+    else:
+        scaler = 365 / len(unique_dates)
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
@@ -64,7 +71,8 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    supply_df['value'] = supply_df['value'] * 365 / len(unique_dates)
+
+    supply_df['value'] = supply_df['value'] * scaler
     # make period an int
     supply_df['period'] = supply_df['period'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
@@ -107,8 +115,13 @@ def aggregate_db(db, scenario):
 
     transmission_df = pd.concat([transmission_df, transmission_df_swap], ignore_index=True)
     transmission_df["region"] = transmission_df.region.apply(lambda x: x.split(".")[0])
+    transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
     # rename region entries based on utils.province_short
     transmission_df['region'] = transmission_df['region'].map(utils.province_short).fillna(transmission_df['region'])
+    transmission_df['variable'] = transmission_df['variable'].map(utils.province_short).fillna(transmission_df['variable'])
+
+    # drop where region == variable again
+    transmission_df = transmission_df[transmission_df.region != transmission_df.variable]
     dim_names = []
     for index, row in transmission_df.iterrows():
         if row['value'] < 0:
@@ -121,7 +134,7 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
+    transmission_df['value'] = transmission_df['value'] * scaler
 
     out_df = db[classes == 'Storage Out']
     out_df["variable"] = out_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
@@ -138,7 +151,7 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     out_df['value'] = out_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    out_df['value'] = out_df['value'] * 365 / len(unique_dates)
+    out_df['value'] = out_df['value'] * scaler
 
     df = pd.concat([supply_df, transmission_df, out_df])
     # fill na values with 0

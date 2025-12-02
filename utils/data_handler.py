@@ -28,6 +28,14 @@ def create_generic_profile(df, model):
 
     :return: The generated generic profile.
     """
+    print('Creating generic profile for', model)
+
+    # drop rows where variable is None
+    df = df[df['variable'].notna()]
+
+    # if any variable has no pipe add a pipe at the end of the variable
+    df['variable'] = df['variable'].apply(lambda x : x + '|' if '|' not in x else x)
+
     classes = df.variable.str.split('|').str[0].unique().tolist()
     variables = df.variable.apply(lambda x: '|'.join(x.split('|')[1:])).unique().tolist()
     profile = GenericProfile(model, classes, variables)
@@ -168,8 +176,8 @@ class DataHandler:
     """
 
     """
-    profile_order = ['Summary', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
-                     'NATEM Canada', 'HEC-PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
+    profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
+                     'NATEM Canada', 'PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
                      'Sutubra-TEMOA']
     def __init__(self):
         self.api_key = ''
@@ -611,7 +619,7 @@ class DataHandler:
                         dfs.append(df)
                     df = pd.concat(dfs, ignore_index=True)
 
-                elif extension == 'xlsx':
+                elif extension == '.xlsx':
                     xls = pd.ExcelFile(io.BytesIO(decoded))
                     # Get all sheet names
                     sheet_names = xls.sheet_names
@@ -625,7 +633,7 @@ class DataHandler:
                         df_list.append(_df)
                     # Combine all DataFrames into one
                     df = pd.concat(df_list, ignore_index=True)
-                elif extension == 'json':
+                elif extension == '.json':
                     with io.StringIO(decoded.decode('utf-8')) as f:
                         df = json.load(f)
                 else:
@@ -644,7 +652,7 @@ class DataHandler:
         else:
             df = content
 
-        if not extension == 'json':
+        if not extension == '.json':
             # remove all rows with all nan values
             df = df.dropna(how='all')
 

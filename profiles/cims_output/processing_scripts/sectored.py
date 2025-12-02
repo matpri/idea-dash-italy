@@ -35,7 +35,7 @@ def create_check(sector):
                         return True
             return False
         except Exception as e:
-            print("Emission check", e)
+            print("sectored check", e)
             return False
 
     return check

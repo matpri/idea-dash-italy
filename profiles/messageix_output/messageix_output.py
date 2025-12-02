@@ -335,11 +335,8 @@ class messageixOutput(BaseProfile):
             # Prepare dataframes for overview
             dfs = self._prepare_overview_data(processed_data)
 
-            # Create aggregated data for Alberta and Quebec
-            ab_qc = self._aggregate_ab_qc_data(dfs)
-
-            # Combine full data with AB+QC data
-            full_df = pd.concat([dfs, ab_qc], ignore_index=True)
+            full_df = pd.concat(dfs, ignore_index=True)
+            full_df = full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
             # Filter and group the final dataframe
             full_df = self._filter_and_group_full_df(full_df)
@@ -371,17 +368,11 @@ class messageixOutput(BaseProfile):
             dfs.append(df)
         return pd.concat(dfs)
 
-    def _aggregate_ab_qc_data(self, full_df):
-        """Aggregate data for Alberta and Quebec."""
-        ab_qc = full_df[full_df['region'].isin(['AB', 'QC'])].copy()
-        ab_qc = ab_qc[['scenario', 'variable', 'time', 'value', 'region']]
-        ab_qc = ab_qc.groupby(['scenario', 'variable', 'time']).sum(numeric_only=True).reset_index()
-        ab_qc['region'] = 'AB+QC'
-        return ab_qc
+  
 
     def _filter_and_group_full_df(self, full_df):
         """Filter and group the full dataframe for final output."""
-        full_df = full_df[full_df['region'].isin(['Canada', 'AB+QC'])]
+        full_df = full_df[full_df['region'].isin(['Canada'])]
         return full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
 
     def render_settings(self):

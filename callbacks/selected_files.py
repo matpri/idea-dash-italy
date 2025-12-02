@@ -113,3 +113,4 @@ def update_chips(_contents, n_clicks, _update_chips,  filenames, selected_runs, 
                 ) for message in messages
             ]
         return views, dash.no_update, 'local', list(data_handler.data.keys()), dash.no_update
+

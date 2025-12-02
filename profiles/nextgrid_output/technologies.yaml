@@ -1807,3 +1807,69 @@ Fixed O&M:
   group: 'VO&M costs + Fuel costs'
   group_color: '#9d2ed1'
   name: 'VO&M costs + Fuel costs'
+
+"Electricity|Storage|Battery":
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Electricity|Storage|Battery
+
+"Electricity|Gas|Steam|Industrial|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Electricity|Gas|Steam|Industrial|w/o CCS
+
+"Electricity|Hydro|ROR":
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|ROR
+
+"Electricity|Diesel|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Diesel|w/o CCS
+
+"Wind|Onshore":
+    color: '#000000'
+    group: Wind
+    group_color: '#b2df8a'
+    name: Wind|Onshore
+
+"Storage|Battery":
+    color: '#000000'
+    group: Storage
+    group_color: '#6a3d9a'
+    name: Storage|Battery
+
+"Solar|PV":
+    color: '#000000'
+    group: Solar
+    group_color: '#ffff99'
+    name: Solar|PV
+
+"Nuclear|SMR":
+    color: '#000000'
+    group: Nuclear
+    group_color: '#ff7f00'
+    name: Nuclear|SMR
+
+"Gas|CC|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Gas|CC|w/o CCS
+
+"Gas|Unspecified|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Gas|Unspecified|w/o CCS
+
+"Gas|Specified|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel gas
+    group_color: '#ff6b6b'
+    name: Gas|Specified|w/o CCS

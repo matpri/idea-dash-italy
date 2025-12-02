@@ -18,10 +18,10 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     print('rendering plot', type)
-    if type == 'Sankey':
-        df = df[(df['sector'] == sector)].copy()
-    else:
-        df = process_represenation(df, representation, sector, service, fuel)
+    # if type == 'Sankey':
+    #     df = df[(df['sector'] == sector)].copy()
+    # else:
+    df = process_represenation(df, representation, sector, service, fuel)
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
@@ -38,59 +38,59 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
         return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
                               plot_info['y_label'],
                               )
-    elif type == 'Sankey':
-        by_fuel = df[(df['year'] == year) & (df['region'] == region)].copy()
-        # drop where context == Total
-        by_fuel = by_fuel[by_fuel['context'] != 'Total']
-
-        # drop where short_path is None
-        by_fuel = by_fuel[by_fuel['short_path'].notna()]
-
-        # Find rows where value_num, context, and service are the same
-        duplicates = by_fuel[by_fuel.duplicated(subset=['value_num', 'context', 'service'], keep=False)]
-        overlapping_propagating = by_fuel[by_fuel.service.isin(duplicates.parent_service.unique())]
-        for i, row in overlapping_propagating.iterrows():
-            by_fuel.loc[(by_fuel['parent_service'] == row['service']) & (
-                    by_fuel['context'] == row['context']), 'value_num'] = row['value_num']
-        # only keep one where parent_service, service, context, and value_num are the same
-        by_fuel = by_fuel.drop_duplicates(subset=['parent_service', 'service', 'context', 'value_num'],
-                                          keep='first')
-        nodes = []
-        for i, row in by_fuel.iterrows():
-            if row['service'] not in nodes:
-                nodes.append(row['service'])
-            if row['parent_service'] not in nodes:
-                nodes.append(row['parent_service'])
-        by_fuel['source_int'] = by_fuel['service'].apply(lambda x: nodes.index(x))
-        by_fuel['target_int'] = by_fuel['parent_service'].apply(lambda x: nodes.index(x))
-
-        colors = [get_color(context) for context in by_fuel['context'].unique().tolist()]
-        context_colors = dict(zip(by_fuel['context'].unique().tolist(), colors))
-        contexts = by_fuel['context'].unique().tolist()
-
-        fig = go.Figure(data=[go.Sankey(
-            arrangement='perpendicular',
-            node=dict(
-                pad=15,
-                thickness=20,
-                line=dict(color="black", width=0.5),
-                label=nodes
-
-            ),
-            link=dict(
-                source=by_fuel['source_int'].tolist(),
-                target=by_fuel['target_int'].tolist(),
-                value=by_fuel['value_num'].tolist(),
-                color=by_fuel['context'].apply(lambda x: context_colors[x]).tolist(),
-            )
-        )])
-
-        for context in contexts:
-            fig.add_scatter(x=[0], y=[0], mode='markers', marker=dict(color=context_colors[context], size=10),
-                            showlegend=True, name=context)
-
-        fig.update_layout(title_text="Sankey Diagram for Fuel Flow", font_size=10)
-        return fig
+    # elif type == 'Sankey':
+    #     by_fuel = df[(df['year'] == year) & (df['region'] == region)].copy()
+    #     # drop where context == Total
+    #     by_fuel = by_fuel[by_fuel['context'] != 'Total']
+    #
+    #     # drop where short_path is None
+    #     by_fuel = by_fuel[by_fuel['short_path'].notna()]
+    #
+    #     # Find rows where value_num, context, and service are the same
+    #     duplicates = by_fuel[by_fuel.duplicated(subset=['value_num', 'context', 'service'], keep=False)]
+    #     overlapping_propagating = by_fuel[by_fuel.service.isin(duplicates.parent_service.unique())]
+    #     for i, row in overlapping_propagating.iterrows():
+    #         by_fuel.loc[(by_fuel['parent_service'] == row['service']) & (
+    #                 by_fuel['context'] == row['context']), 'value_num'] = row['value_num']
+    #     # only keep one where parent_service, service, context, and value_num are the same
+    #     by_fuel = by_fuel.drop_duplicates(subset=['parent_service', 'service', 'context', 'value_num'],
+    #                                       keep='first')
+    #     nodes = []
+    #     for i, row in by_fuel.iterrows():
+    #         if row['service'] not in nodes:
+    #             nodes.append(row['service'])
+    #         if row['parent_service'] not in nodes:
+    #             nodes.append(row['parent_service'])
+    #     by_fuel['source_int'] = by_fuel['service'].apply(lambda x: nodes.index(x))
+    #     by_fuel['target_int'] = by_fuel['parent_service'].apply(lambda x: nodes.index(x))
+    #
+    #     colors = [get_color(context) for context in by_fuel['context'].unique().tolist()]
+    #     context_colors = dict(zip(by_fuel['context'].unique().tolist(), colors))
+    #     contexts = by_fuel['context'].unique().tolist()
+    #
+    #     fig = go.Figure(data=[go.Sankey(
+    #         arrangement='perpendicular',
+    #         node=dict(
+    #             pad=15,
+    #             thickness=20,
+    #             line=dict(color="black", width=0.5),
+    #             label=nodes
+    #
+    #         ),
+    #         link=dict(
+    #             source=by_fuel['source_int'].tolist(),
+    #             target=by_fuel['target_int'].tolist(),
+    #             value=by_fuel['value_num'].tolist(),
+    #             color=by_fuel['context'].apply(lambda x: context_colors[x]).tolist(),
+    #         )
+    #     )])
+    #
+    #     for context in contexts:
+    #         fig.add_scatter(x=[0], y=[0], mode='markers', marker=dict(color=context_colors[context], size=10),
+    #                         showlegend=True, name=context)
+    #
+    #     fig.update_layout(title_text="Sankey Diagram for Fuel Flow", font_size=10)
+    #     return fig
 
     else:
         plot_info = plot_settings[plot_name]['By Region']
@@ -119,7 +119,7 @@ def process_represenation(df, representation, sector, service, fuel):
         if fuel != 'All':
             df = df[(df['context'] == fuel) & (df['sector'] != fuel)]
         filtered_df = df[(df['technology'].isna()) & ~df.sector.isna() & (
-                (df.short_path == df.sector )& (df.parent_service==''))]
+                (df.short_path == df.sector ))]
         filtered_df = filtered_df.groupby(
             ['region', 'sector', 'year', 'scenario']).sum(numeric_only=True).reset_index()
 
@@ -276,7 +276,7 @@ def widgets(df, window_id):
         dmc.Select(
             label='Plot Options',
             data=[{'label': plot, 'value': plot} for plot in
-                  ['Sankey', 'By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
+                  ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']], # Sankey
             value='By Year',
             id={
                 'type': 'cims-requested_quantities-plot-select',

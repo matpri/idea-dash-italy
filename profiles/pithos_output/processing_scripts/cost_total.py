@@ -15,7 +15,7 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             if df.variable.str.contains("Carbon price").any() or df.variable.str.contains(
                     "Capital costs").any() or df.variable.str.contains(
                 "Fixed O&M costs").any() or df.variable.str.contains(

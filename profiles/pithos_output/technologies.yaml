@@ -1665,3 +1665,21 @@ Fixed O&M:
   group: 'VO&M costs + Fuel costs'
   group_color: '#9d2ed1'
   name: 'VO&M costs + Fuel costs'
+
+"Electricity|Hydro|ROR":
+    color: '#000000'
+    group: Hydro
+    group_color: '#a6cee3'
+    name: Electricity|Hydro|ROR
+
+"Electricity|Biogas|w/o CCS":
+    color: '#000000'
+    group: Biogas
+    group_color: '#5d7aff'
+    name: Electricity|Biogas|w/o CCS
+
+"Electricity|Direct Air Capture":
+    color: '#000000'
+    group: DAC
+    group_color: '#8c564b'
+    name: Electricity|Direct Air Capture

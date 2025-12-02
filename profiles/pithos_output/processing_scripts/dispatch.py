@@ -19,7 +19,7 @@ def check(df):
     # check if emissions in variable column which has strings like transmission|AB -> BC, emissions|coal etc.
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'HEC-PITHOS').any():
+        if (df.model == 'PITHOS').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
             if (classes == 'Dispatch').any() or (classes == 'Transmission flow').any():
                 return True
@@ -56,7 +56,7 @@ def aggregate_db(db, scenario):
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
-    # aggregate the dim_name based on the tech_agg_HEC-PITHOS dictionary
+    # aggregate the dim_name based on the tech_agg_PITHOS dictionary
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12

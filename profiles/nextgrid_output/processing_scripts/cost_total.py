@@ -16,8 +16,8 @@ def check(df):
     #print("Checking for cost in variable column")
     try:
         if (df.model == 'ECCC-NextGrid').any():
-            if df.variable.str.contains("Operational|").any() or df.variable.str.contains("Capital|").any():
-                return df[df.variable.str.contains("Operational|")]['value'].sum() != 0 or df[df.variable.str.contains("Capital|")]['value'].sum() != 0
+            if df.variable.str.contains("costs").any():
+                return df[df.variable.str.contains("costs")]['value'].sum() != 0 or df[df.variable.str.contains("Capital|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -50,7 +50,7 @@ def calculate_generation_capacity(df):
 
     """
     # Extract generation capacity data from df
-    gen_cap_df = df[df.variable.str.startswith("Capital|Capital costs|")].copy()
+    gen_cap_df = df[df.variable.str.startswith("Capital costs|")].copy()
     gen_cap_df['variable'] = gen_cap_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     # Rename entries based on gen_cap_names_dict
     gen_cap_df = gen_cap_df.groupby(["variable", "region", "time", "scenario"], as_index=False).sum(numeric_only=True)
@@ -81,7 +81,7 @@ def calculate_fom(df):
 
     """
 
-    fom_df = df[df.variable.str.startswith("Capital|FO&M costs|")].copy()
+    fom_df = df[df.variable.str.startswith("FO&M costs|")].copy()
     fom_df['variable'] = fom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     fom_df.sort_values(by=["region", "time", 'variable'])
     fom_df = fom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
@@ -111,7 +111,7 @@ def calculate_vom(df):
         DataFrame: Calculated VOM cost data.
 
     """
-    vom_df = df[df.variable.str.startswith("Capital|VO&M costs|")].copy()
+    vom_df = df[df.variable.str.startswith("VO&M costs|")].copy()
     vom_df['variable'] = vom_df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
     vom_df = vom_df.groupby(["variable", "region", "time", "scenario"]).sum(numeric_only=False).reset_index()
 
@@ -150,7 +150,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
 
     # Carbon cost == where variable is "Carbon Cost" in formatted df and then add row for Canada as sum of all regions
 
-    carbon_cost = formatted_cost[formatted_cost.variable.str.startswith("Operational|Carbon price|")].copy()
+    carbon_cost = formatted_cost[formatted_cost.variable.str.startswith("Carbon price|")].copy()
     can_carbon_cost = carbon_cost.groupby(["time", "scenario"], as_index=False)["value"].sum(numeric_only=True)
     can_carbon_cost = can_carbon_cost.assign(region='CAN', variable='Carbon Cost')
     carbon_cost = pd.concat([carbon_cost, can_carbon_cost], ignore_index=True)
@@ -167,7 +167,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     variable_om_cost_weighted = variable_om_cost_weighted.assign(variable='variable_om_cost_weighted')
 
     # Fuel cost weighted == where variable is "Supply" in formatted df and then add row for Canada as sum of all regions
-    fuel_cost_weighted = formatted_cost[formatted_cost.variable.str.startswith("Operational|Fuel costs|")].copy()
+    fuel_cost_weighted = formatted_cost[formatted_cost.variable.str.startswith("Fuel costs|")].copy()
     can_fuel_cost_weighted = fuel_cost_weighted.groupby(["time", "scenario"], as_index=False)["value"].sum(
         numeric_only=True)
     can_fuel_cost_weighted = can_fuel_cost_weighted.assign(region='CAN')
@@ -198,12 +198,16 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.contains("Operational|") | df.variable.str.contains("Capital|")]
-        formatted_df = format_df(df)
-        gen_cap = calculate_generation_capacity(formatted_df)
-        fom = calculate_fom(formatted_df)
-        vom = calculate_vom(formatted_df)
-        total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
+        df = df[df.variable.str.contains("Total costs")]
+        df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
+        can_df = df.groupby(["region", "scenario", "variable", 'time'], as_index=False).sum()
+        can_df['region'] = 'CAN'
+        total_cost = pd.concat([df, can_df], ignore_index=True)
+        # formatted_df = format_df(df)
+        # gen_cap = calculate_generation_capacity(formatted_df)
+        # fom = calculate_fom(formatted_df)
+        # vom = calculate_vom(formatted_df)
+        # total_cost = calculate_total_cost(formatted_df, gen_cap, fom, vom)
         total_cost['scenario'] = scenario_name
         dfs.append(total_cost)
     full_df = pd.concat(dfs)

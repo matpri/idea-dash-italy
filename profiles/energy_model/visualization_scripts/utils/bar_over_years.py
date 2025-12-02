@@ -5,7 +5,7 @@ from dash import dcc
 from profiles.energy_model import utils
 
 
-def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False):
+def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, tooltip_name, unit, season=None, pattern_active=True, text_active=False, report_type='Total'):
     fig = go.Figure()
     fig.update_layout(
         title_text=title,
@@ -18,8 +18,36 @@ def plot(df, scenarios, region, aggregate, title, x_axis_label, y_axis_label, to
         df_scen = subset(df, region, scenarios, aggregate, season)
         scenarios.sort()
         techs = df_scen.variable.unique().tolist()
+
+
+        # remove 2021 data
+        df_scen = df_scen[df_scen['time'] != 2021]
+
         num_years = df_scen.time.nunique()
         scen_patterns = [utils.pattern_from_key(scen) for scen in scenarios] * num_years
+
+        if report_type == 'Relative Change':
+            for tech in techs:
+                tech_data = df_scen[df_scen["variable"] == tech]
+                for scen in scenarios:
+                    tech_data_scen = tech_data[tech_data['scenario'] == scen].sort_values(by=['time'])
+                    if not tech_data_scen.empty:
+                        base_value = tech_data_scen.iloc[0]['value']
+                        idx = 0
+                        while idx < len(tech_data_scen) and base_value == 0:
+                            base_value = tech_data_scen.iloc[idx]['value']
+                            idx += 1
+                        if base_value != 0:
+                            df_scen.loc[(df_scen["variable"] == tech) & (df_scen['scenario'] == scen), 'value'] = (tech_data_scen['value'] / base_value)
+                        else:
+                            df_scen.loc[(df_scen["variable"] == tech) & (df_scen['scenario'] == scen), 'value'] = 0
+            y_axis_label += ' (%)'
+        elif report_type == 'Relative Makeup':
+            for scen in scenarios:
+                scen_data = df_scen[df_scen['scenario'] == scen]
+                total_per_year = scen_data.groupby('time')['value'].transform('sum')
+                df_scen.loc[df_scen['scenario'] == scen, 'value'] = (scen_data['value'] / total_per_year)
+            y_axis_label += ' (%)'
 
         for i, tech in enumerate(techs):
             data = df_scen[df_scen["variable"] == tech]

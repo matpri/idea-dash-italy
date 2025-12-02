@@ -16,7 +16,7 @@ def check(df):
     """
     #print("Checking for net new cap in variable column")
     try:
-        if (df.model == 'NATEM_Canad').any():
+        if (df.model == 'NATEM_Canada').any():
             if df.variable.str.startswith("Total generation capacity").any():
                 return df[df.variable.str.startswith("Total generation capacity")].time.unique().size > 1
         return False
@@ -116,11 +116,15 @@ def process(dbs: dict):
         df = db.copy()
         prov_df = df[df.variable.str.startswith("Total generation capacity|")]
         prov_df['value'] = prov_df['value'].astype(float)
-        canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
-        canada_df['region'] = 'CAN'
+        if 'CAN' not in prov_df['region'].values:
+            canada_df = prov_df.groupby(['time', 'scenario', 'variable']).sum(numeric_only=True).reset_index()
+            canada_df['region'] = 'CAN'
         prov_df['variable'] = prov_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
-        gen_cap = process_gencap(prov_df, canada_df, scenario_name)
+        if 'CAN' not in prov_df['region'].values:
+            canada_df['variable'] = canada_df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+            gen_cap = process_gencap(prov_df, canada_df, scenario_name)
+        else:
+            gen_cap = process_gencap(prov_df, pd.DataFrame(), scenario_name)
 
         net_new_cap = process_net_new_cap(gen_cap)
 

@@ -348,8 +348,6 @@ def plot(df, window_id):
 
     scenarios = df['scenario'].unique().tolist()
 
-    base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
     lines = (df['short_region'] + ' -> ' + df['short_variable']).unique().tolist()
@@ -388,8 +386,8 @@ def plot(df, window_id):
         ),
         dmc.Select(
             label='Scenario Group',
-            data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value=[base_scenarios[0]],
+            data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
+            value=[scenarios[0]],
             id={
                 'type': 'pypsa-transmissioncapacity-scenario-group-select',
                 'index': window_id,

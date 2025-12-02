@@ -9,7 +9,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'HEC-PITHOS',
+            'profile': 'PITHOS',
             'viz': 'Output Stats'
         }, 'figure'),
 
@@ -32,7 +32,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'HEC-PITHOS',
+            'profile': 'PITHOS',
             'viz': 'Output Stats'
         }, 'figure'),
 
@@ -56,7 +56,7 @@ def link(app):
                         (id['id']['type'] == 'pithos_output-output_stats-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['HEC-PITHOS']['Output Stats'].to_csv,
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['PITHOS']['Output Stats'].to_csv,
                                              "output_stats.csv")
             return _canvas, _data
 
@@ -67,7 +67,7 @@ def link(app):
                 idx = i
                 break
 
-        df = data_handler.processed_data['HEC-PITHOS']['Output Stats']
+        df = data_handler.processed_data['PITHOS']['Output Stats']
         _canvas[idx] = render_plot(df, _years[idx], _scenarios[idx])
 
 
