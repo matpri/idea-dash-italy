@@ -4,11 +4,11 @@ import os
 from profiles.cims_output.processing_scripts.utils import requested_quantities, ghg, stock_lcc
 
 emissions_mapping = {
-    'Net Emissions': ['total_cumul_net_emissions'],
-    'Avoided Emissions': ['total_cumul_avoided_emissions'],
-    'Negative Emissions': ['total_cumul_negative_emissions'],
-    'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions'],
-    'Emissions Costs': ['total_cumul_emissions_cost']}
+    'Net Emissions': ['total_cumul_net_emissions', 'emissions_total_cumul_net'],
+    'Avoided Emissions': ['total_cumul_avoided_emissions', 'emissions_total_cumul_avoided'],
+    'Negative Emissions': ['total_cumul_negative_emissions', 'emissions_total_cumul_negative'],
+    'Emitted Emissions': ['total_cumul_net_emissions', 'total_cumul_bio_emissions', 'emissions_total_cumul_bio', 'emissions_total_cumul_net'],
+    'Emissions Costs': ['total_cumul_emissions_cost', 'emissions_total_cumul_cost']}
 
 
 def create_check(sector):
