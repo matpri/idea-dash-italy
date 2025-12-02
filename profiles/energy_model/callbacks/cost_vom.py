@@ -1,4 +1,5 @@
 import dash
+import pandas as pd
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.cost_vom import render_plot
@@ -70,6 +71,12 @@ def link(app):
             'type': 'energy_model-vom_cost-plot-select',
             'index': ALL
         }, 'value'),
+        Input(
+            {
+                'type': 'energy_model-vom_cost-compare-reference',
+                'index': ALL,
+            }, 'checked'
+        ),
         Input({
             'type': 'energy_model-vom_cost-aggregate-switch',
             'index': ALL
@@ -174,7 +181,7 @@ def link(app):
         }, 'style'),
         prevent_initial_call=True
     )
-    def update_vom_cost(_p_type, _aggregates, _scenarios, _scenario_group, _scenario_version, _scenario, _regions, _report_type, _years, _pattern, _text,
+    def update_vom_cost(_p_type, _compare2ref, _aggregates, _scenarios, _scenario_group, _scenario_version, _scenario, _regions, _report_type, _years, _pattern, _text,
                          _download,_r_style, _y_style, _canvas, _data, _s_style, _m_style, _g_style, _v_style, _pattern_style, _text_style, _report_type_style):
         #print('updating vom_cost plot')
         from utils.data_state import data_handler
@@ -253,6 +260,20 @@ def link(app):
                 scenarios = [scenario for scenario in scenarios if
                              scenario.split('|')[2] in v_values[idx]]
             scens += scenarios
+
+        if _compare2ref[idx]:
+            df[['model', 'base_scenario', 'version']] = df['scenario'].apply(lambda x: pd.Series(
+                [x.split('|')[0], '|'.join(x.split('|')[1:-1]) if len(x.split('|')) > 2 else x.split('|')[1],
+                 x.split('|')[-1] if len(x.split('|')) > 2 else '']))
+            reference_data = df[df['base_scenario'].str.contains('Reference')]
+            if reference_data.empty:
+                print("No Reference scenario found for comparison.")
+            else:
+                merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
+                                  suffixes=('', '_ref'))
+                merged['value_ref'] = merged['value_ref'].fillna(0)
+                merged['value'] = merged['value'] - merged['value_ref']
+                df = merged[['scenario', 'time', 'variable', 'region', 'value']]
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
