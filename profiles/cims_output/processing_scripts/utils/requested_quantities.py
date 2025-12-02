@@ -73,7 +73,7 @@ def process(selected: dict):
         v1 = True
         if requested_services.empty:
             v1 = False
-            requested_services = f[(df['parameter'] == 'service_requested')|(df['parameter'] == 'service requested')].copy().copy()
+            requested_services = df[(df['parameter'] == 'service_requested')|(df['parameter'] == 'service requested')].copy().copy()
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
         sectors = requested_services['sector'].unique()
