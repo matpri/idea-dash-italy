@@ -79,11 +79,11 @@ def get_version_pattern(model):
         version_patterns[model] = patterns[len(version_patterns) % len(patterns)]
     return version_patterns[model]
 
-def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, fill=True, relative=False):
+def render_plot(p_type, df, group_by_model, group_by_scenario, group_by_version, fill=True, relative=False):
     from profiles.energy_model.utils import plot_settings
     #print('rendering plot', type)
-    df = df[df.variable == type].copy()
 
+    df = df[df.variable == p_type].copy()
     df = df[df.region == 'CAN']
 
     # remove 2021 data
@@ -99,7 +99,7 @@ def render_plot(type, df, group_by_model, group_by_scenario, group_by_version, f
             else:
                 df.loc[df.scenario == scenario, 'value'] = 0
 
-    plot_info = plot_settings['Overview'][type]
+    plot_info = plot_settings['Overview'][p_type]
     name = plot_info['name']
     unit = plot_info['unit']
     return plot_overview(df, group_by_model, group_by_scenario, group_by_version, plot_info['title'], plot_info['x_label'],
@@ -229,6 +229,8 @@ def plot(df, window_id):
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
     base_scenarios = ['ALL'] + base_scenarios
 
+    has_reference = 'Reference' in base_scenarios
+
     widget_layout = html.Div([
         dmc.Select(
             label='Plot Options',
@@ -246,6 +248,15 @@ def plot(df, window_id):
                 'type': 'energy_model-overview-relative',
                 'index': window_id,
             },
+        ),
+        dmc.Switch(
+            label='Compare to Reference',
+            checked=False,
+            id={
+                'type': 'energy_model-overview-compare-reference',
+                'index': window_id,
+            },
+            style={'display': 'block' if has_reference else 'none'}
         ),
         dmc.Select(
             label='Group By',

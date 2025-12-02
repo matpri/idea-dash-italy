@@ -1,4 +1,5 @@
 import dash
+import pandas as pd
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.overview import render_plot
@@ -40,6 +41,12 @@ def link(app):
         Input(
             {
                 'type': 'energy_model-overview-relative',
+                'index': ALL,
+            }, 'checked'
+        ),
+        Input(
+            {
+                'type': 'energy_model-overview-compare-reference',
                 'index': ALL,
             }, 'checked'
         ),
@@ -88,7 +95,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _relative, _groupby, _fill, _scenarios, _version_values, _fill_checked, _canvas, _data, _fillswitch, _v_style):
+    def update_overview(_p_type, _relative, _compare2ref, _groupby, _fill, _scenarios, _version_values, _fill_checked, _canvas, _data, _fillswitch, _v_style):
         #print('updating overview plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -149,6 +156,23 @@ def link(app):
                 v_data[idx] = []
 
         df = data_handler.processed_data['Power System Models']['Overview']
+
+        df = df[df.variable == _p_type[idx]].copy()
+
+        if _compare2ref[idx]:
+            df[['model', 'base_scenario', 'version']] = df['scenario'].apply(lambda x: pd.Series(
+                [x.split('|')[0], '|'.join(x.split('|')[1:-1]) if len(x.split('|')) > 2 else x.split('|')[1],
+                 x.split('|')[-1] if len(x.split('|')) > 2 else '']))
+            reference_data = df[df['base_scenario'].str.contains('Reference')]
+            if reference_data.empty:
+                print("No Reference scenario found for comparison.")
+            else:
+                merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
+                                  suffixes=('', '_ref'))
+                merged['value_ref'] = merged['value_ref'].fillna(0)
+                merged['value'] = merged['value'] - merged['value_ref']
+                df = merged[['scenario', 'time', 'variable', 'region', 'value']]
+
         # filter by scenario group if not ALL
         if _scenarios[idx] != 'ALL':
             df = df[df['scenario'].str.contains(_scenarios[idx])]
