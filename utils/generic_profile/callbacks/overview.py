@@ -139,8 +139,8 @@ def link(app):
         _groupby_version = False
         _f = False
 
-
-        if _compare_scenario[idx] is not None:
+        if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and \
+                _compare_scenario[idx] != 'None':
             if model == 'Generic Comparison':
 
                 df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])

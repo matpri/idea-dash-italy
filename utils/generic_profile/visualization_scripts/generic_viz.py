@@ -46,14 +46,17 @@ def create_generic_plots(model, name, profile, is_comparison=False):
             unique_dates = dates.dt.year.unique()
             trend_one_year = False
             for year in unique_dates:
-                if len(dates[dates.dt.year == year].dt.dayofyear.unique()) > 1:
+                subset = dates[dates.dt.year == year]
+                if subset.dt.dayofyear.nunique() > 1:
                     trend_one_year = True
                     break
 
+        compare_scenarios = df['scenario'].unique().tolist()
         comparison_widgets = []
         if is_comparison:
             base_scenarios = df['base_scenario'].unique().tolist()
             base_scenarios = ['ALL'] + base_scenarios
+            compare_scenarios =  df['base_scenario'].unique().tolist()
 
             comparison_widgets = [
                 dmc.Select(
@@ -179,6 +182,18 @@ def create_generic_plots(model, name, profile, is_comparison=False):
             ))(),
             pattern_toggle,
             text_toggle,
+
+            dmc.Select(
+                label='Compare to Scenario',
+                data=[{'label': scenario, 'value': scenario} for scenario in ['None'] + compare_scenarios],
+                value='None',
+                id={
+                    'type': 'generic-compare-scenario-select',
+                    'name': name,
+                    'model': model,
+                    'index': window_id
+                },
+            ),
 
             *comparison_widgets,
 
