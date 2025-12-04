@@ -18,9 +18,9 @@ def check(df):
     """
     #print("Checking for dispatch, *out and transmission in variable column")
     try:
-        if (df.model == 'Sutubra-TEMOA').any():
+        if (df.model == 'Sutubra').any():
             classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Total generation').any() or (classes == 'Transmission flow').any():
+            if (classes == 'Total generation').any() or (classes == 'Inter-provincial flow').any() or (classes == 'International trade').any():
                 return True
         return False
     except Exception as e:
@@ -48,41 +48,31 @@ def aggregate_db(db, scenario):
     supply_df = db[classes == 'Total generation']
     supply_df["variable"] = supply_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
-    supply_df['time'] = pd.to_datetime(supply_df['time'])
-
-    # all times - 1 hour delta
-    supply_df['period'] = supply_df['time'].dt.year
 
     # rename region entries based on utils.province_short
     supply_df['region'] = supply_df['region'].map(utils.province_short).fillna(supply_df['region'])
-    # aggregate the dim_name based on the tech_agg_Sutubra-TEMOA dictionary
+    # aggregate the dim_name based on the tech_agg_Sutubra dictionary
     # change value from MWh to TWh
     supply_df['value'] = supply_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
     # make period an int
-    supply_df['period'] = supply_df['period'].astype(int)
+    supply_df['period'] = supply_df['time'].astype(int)
     supply_df.drop(columns=['time'], inplace=True)
 
-    transmission_df = db[classes == 'Transmission flow']
+    transmission_df = db[classes == 'Inter-provincial flow']
     transmission_df["variable"] = transmission_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
     # replace to with ''
     transmission_df['variable'] = transmission_df['variable'].str.replace('to ', '')
     transmission_df["variable"] = transmission_df.variable.apply(lambda x: x.split(".")[0])
 
     # time to datetime object
-    transmission_df['time'] = pd.to_datetime(transmission_df['time'])
-    transmission_df['time'] = transmission_df['time'] - pd.Timedelta(hours=1)
-    transmission_df['period'] = transmission_df['time'].dt.year
+    transmission_df['period'] = transmission_df['time']
     # make period an int
     transmission_df['period'] = transmission_df['period'].astype(int)
-    sub_transmission_df = transmission_df[transmission_df['period'] == transmission_df['period'].min()]
-    unique_dates = sub_transmission_df['time'].dt.date.unique()
-
     transmission_df.drop(columns=['time'], inplace=True)
 
-    # drop all the 0 values
-    # transmission_df = transmission_df[transmission_df.value != 0]
-    transmission_df['value'] = transmission_df['value'] * -1
+    transmission_df['value'] = -1 * transmission_df['value'].astype(float)
+
 
     # aggregate df values by region, variable, time, hour
     transmission_df = transmission_df.groupby(["region", "variable", "period"]).sum().reset_index()
@@ -116,8 +106,6 @@ def aggregate_db(db, scenario):
     # change value from MWh to TWh
     transmission_df['value'] = transmission_df['value'] / 1000000
     # expand value to an entire year by multiplying by 365/12
-    transmission_df['value'] = transmission_df['value'] * 365 / len(unique_dates)
-
 
     # only keep the periods that are in the supply_df
     transmission_df = transmission_df[transmission_df.period.isin(supply_df.period.unique())]
@@ -125,9 +113,19 @@ def aggregate_db(db, scenario):
     #only keep the regions that are in the supply_df
     transmission_df = transmission_df[transmission_df.region.isin(supply_df.region.unique())]
 
+    international_df = db[classes == 'International trade']
+    international_df["variable"] = international_df["variable"].apply(lambda x: '|'.join(x.split("|")[1:]))
 
+    # make Exports negative values
+    international_df.loc[international_df['variable'].str.contains('Exports'), 'value'] = -1 * international_df.loc[international_df['variable'].str.contains('Exports'), 'value']
+    international_df['period'] = international_df['time'].astype(int)
+    international_df.drop(columns=['time'], inplace=True)
+    international_df['region'] = international_df['region'].map(utils.province_short).fillna(international_df['region'])
+    international_df['value'] = international_df['value'] / 1000000
+    international_df = international_df[international_df.period.isin(supply_df.period.unique())]
+    international_df = international_df[international_df.region.isin(supply_df.region.unique())]
 
-    df = pd.concat([supply_df, transmission_df])
+    df = pd.concat([supply_df, transmission_df, international_df], ignore_index=True)
     # df = df[df.value != 0]
     df = df.groupby(['period', 'region', 'variable']).sum().reset_index()
 

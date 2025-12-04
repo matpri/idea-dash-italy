@@ -88,7 +88,7 @@ def plot(df, window_id):
         id={
             'type': ids.FIGURE,
             'index': window_id,
-            'profile': 'Sutubra-TEMOA',
+            'profile': 'Sutubra',
             'viz': 'Overview'
         },
         style={

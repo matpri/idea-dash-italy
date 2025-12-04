@@ -1661,8 +1661,8 @@ Fixed O&M:
   name: 'FO&M costs'
 
 
-"variable_om_cost+Fuel Cost":
+"variable_om_cost":
   color: '#000000'
-  group: 'VO&M costs + Fuel costs'
-  group_color: '#9d2ed1'
-  name: 'VO&M costs + Fuel costs'
+  group: 'VO&M costs s'
+  group_color: '#D35FB7'
+  name: 'VO&M costs'

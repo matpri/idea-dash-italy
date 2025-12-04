@@ -65,7 +65,7 @@ from profiles.energy_model.visualization_scripts import (
 )
 
 power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
-                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra', 'Canada Energy Futures', 'PaCES']
 
 technologies_paths = [
     './profiles/copper_output/technologies.yaml',
