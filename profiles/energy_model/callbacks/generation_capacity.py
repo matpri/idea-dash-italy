@@ -270,7 +270,7 @@ def link(app):
                 print("No Reference scenario found for comparison.")
             else:
                 merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
-                                  suffixes=('', '_ref'))
+                                  suffixes=('', '_ref'), how='outer')
                 merged['value_ref'] = merged['value_ref'].fillna(0)
                 merged['value'] = merged['value'] - merged['value_ref']
                 df = merged[['scenario', 'time', 'variable', 'region', 'value']]
