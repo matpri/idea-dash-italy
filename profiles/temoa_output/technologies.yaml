@@ -1666,3 +1666,39 @@ Fixed O&M:
   group: 'VO&M costs s'
   group_color: '#D35FB7'
   name: 'VO&M costs'
+
+Electricity|Coal|CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|CCS
+
+Electricity|Gasoline|CT|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Gasoline|CT|w/o CCS
+
+"CER Offsets|Electricity|Gas|CC|CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CC|CCS"
+
+"CER Offsets|Electricity|Gas|CC|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CC|w/o CCS"
+
+"CER Offsets|Electricity|Gas|CT|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CT|w/o CCS"
+
+"CER Offsets|Electricity|Gas|CG|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CG|w/o CCS"
