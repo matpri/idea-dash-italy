@@ -350,5 +350,3 @@ def link(app):
                                            pattern_active=_pattern[idx], text_active=_text[idx], report_type=_report_type[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _g_style, v_style, v_values, v_data, _pattern_style, _text_style, _report_type_style
-
-
