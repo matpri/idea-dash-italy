@@ -429,6 +429,7 @@ class DataHandler:
 
         results = []
         for profile in data_collection.keys():
+            print('Processing profile', profile)
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
         if process_power_system:
