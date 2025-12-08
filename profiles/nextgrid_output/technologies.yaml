@@ -1885,3 +1885,55 @@ Fixed O&M:
   group: Firm capacity transfers
   group_color: '#000000'
   name: Electricity|Capacity Exports
+
+unserved_energy_violation_cost:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+spinning_reserves_penality:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+regulation_up_penality:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+lf_reserves_up_penality:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+VRE integration:
+  group: FO&M costs
+  group_color: '#E69F00'
+
+VOM:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+Startup/shutdown:
+  group: VO&M costs
+  group_color: '#D35FB7'
+
+Offset:
+  group: Carbon price
+  group_color: '#DC267F'
+
+Generation CAPEX:
+  group: Capacity
+  group_color: '#785EF0'
+
+Transmission CAPEX:
+  group: Capacity
+  group_color: '#785EF0'
+
+FOM:
+  group: FO&M costs
+  group_color: '#E69F00'
+
+Capacity trade:
+  group: Capacity
+  group_color: '#785EF0'
+
+Energy trade:
+  group: VO&M costs
+  group_color: '#D35FB7'

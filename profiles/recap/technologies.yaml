@@ -1716,8 +1716,8 @@ BaseHydro:
 
 Electricity|Biogas|w/o CCS:
   color: '#000000'
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
   name: Electricity|Biogas|w/o CCS
 
 Electricity|Hydro|ROR:
