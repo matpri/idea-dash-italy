@@ -464,7 +464,7 @@ class DataHandler:
                         df['time'] = df['period']
                         df = df.drop(columns=['period'])
                     variables += df.variable.unique().tolist()
-                    df['variable'] = viz + '|' + df['variable']
+                    # df['variable'] = viz + '|' + df['variable']
                     df['scenario'] = model + '|' + df['scenario']
                     df['base_scenario'] = df['scenario'].apply(lambda x: x.split('|')[1])
                     if 'unit' not in df.columns:

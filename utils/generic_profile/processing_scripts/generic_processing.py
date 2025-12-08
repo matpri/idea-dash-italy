@@ -132,6 +132,8 @@ def create_process(name):
             df['variable'] = df['variable'].apply(lambda x: x + '|' if '|' not in x else x)
             df = df[df.variable.str.startswith(f"{name}|")]
             df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+            # set empty string variables to name
+            df['variable'] = df['variable'].apply(lambda x: name if x == '' else x)
             if 'time' in df.columns and df['time'].dtype == object:
                 df['time'] = pd.to_datetime(df['time'], errors='coerce')
 
