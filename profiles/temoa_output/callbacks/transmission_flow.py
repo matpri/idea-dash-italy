@@ -9,7 +9,7 @@ def link(app):
         Output({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'Sutubra-TEMOA',
+            'profile': 'Sutubra',
             'viz': 'Transmission Flow'
         }, 'figure'),
         Output({
@@ -68,7 +68,7 @@ def link(app):
         State({
             'type': ids.FIGURE,
             'index': ALL,
-            'profile': 'Sutubra-TEMOA',
+            'profile': 'Sutubra',
             'viz': 'Transmission Flow'
         }, 'figure'),
         State({
@@ -110,7 +110,7 @@ def link(app):
                         (id['id']['type'] == 'temoa-transmissionflow-download-button')):
                     idx = i
                     break
-            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'].to_csv, "transmissionflow.csv")
+            _data[idx] = dcc.send_data_frame(data_handler.processed_data['Sutubra']['Transmission Flow'].to_csv, "transmissionflow.csv")
             return _canvas, _s_style, _m_style, _g_style, _y_style, _l_style, _data
 
         idx = 0
@@ -125,13 +125,13 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Map Plot',
-                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra']['Transmission Flow'],
                                        _scenario[idx],
                                        _years[idx],
                                         _lines[idx]
                                        )
         elif _p_type[idx] == 'Per Line Bar Plot':
-            df = data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow']
+            df = data_handler.processed_data['Sutubra']['Transmission Flow']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':
@@ -145,13 +145,13 @@ def link(app):
             _y_style[idx] = {'display': 'block'}
             _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Per Line Bar Plot',
-                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra']['Transmission Flow'],
                                        scens,
                                        _years[idx],
                                         _lines[idx]
                                        )
         elif _p_type[idx] == 'Per Year Bar Plot':
-            df = data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow']
+            df = data_handler.processed_data['Sutubra']['Transmission Flow']
             unique_scenarios = df['scenario'].unique().tolist()
             scens = _scenarios[idx]
             if _scenario_group[idx] != 'ALL':
@@ -164,7 +164,7 @@ def link(app):
             _y_style[idx] = {'display': 'none'}
             _l_style[idx] = {'display': 'block'}
             _canvas[idx] = render_plot('Per Year Bar Plot',
-                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra']['Transmission Flow'],
                                        scens,
                                        _years[idx],
                                         _lines[idx]
@@ -176,7 +176,7 @@ def link(app):
             _y_style[idx] = {'display': 'none'}
             _l_style[idx] = {'display': 'none'}
             _canvas[idx] = render_plot('Trends Over Years',
-                                       data_handler.processed_data['Sutubra-TEMOA']['Transmission Flow'],
+                                       data_handler.processed_data['Sutubra']['Transmission Flow'],
                                        _scenario[idx],
                                        _years[idx],
                                         _lines[idx]

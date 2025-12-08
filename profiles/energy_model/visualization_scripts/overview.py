@@ -272,10 +272,10 @@ def plot(df, window_id):
                 'index': window_id,
             },
         ),
-        dmc.Select(
+        dmc.MultiSelect(
             label='Scenario Group',
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value='ALL',
+            value=['ALL'],
             id={
                 'type': 'energy_model-overview-scenario-group-select',
                 'index': window_id,

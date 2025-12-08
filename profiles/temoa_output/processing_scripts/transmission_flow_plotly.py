@@ -15,8 +15,8 @@ def check(df):
     """
     #print("Checking for transmission in variable column")
     try:
-        if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("Transmission flow|").any():
+        if (df.model == 'Sutubra').any():
+            if df.variable.str.startswith("Inter-provincial flow|").any():
                 return True
         return False
     except Exception as e:
@@ -154,26 +154,20 @@ def process(selected):
     transmissions = []
     for scenario_name, df in selected.items():
         trs = df.copy()
-        trs = trs[trs.variable.str.startswith("Transmission flow|")]
+        trs = trs[trs.variable.str.startswith("Inter-provincial flow|")]
         trs['variable'] = trs['variable'].apply(lambda x: x.split("|")[1])
-        trs['time'] = pd.to_datetime(trs['time'])
-        # all times - 1 hour delta
-        trs['period'] = trs['time'].dt.year
-        sub_transmission = trs[trs['period'] == trs['period'].min()]
-        unique_dates = sub_transmission['time'].dt.date.unique()
+
+
 
         trs['value'] = trs['value'] / 1000
-        trs['value'] = trs['value'] * 365 / len(unique_dates)
-        # drop time
-        trs = trs.drop(columns=['time'])
         # group by region, variable, period
-        trs = trs.groupby(["region", "variable", "period"]).sum(numeric_only=True).reset_index()
+        trs = trs.groupby(["region", "variable", "time"]).sum(numeric_only=True).reset_index()
         trs['scenario'] = scenario_name
         trs["region"] = trs.region.apply(lambda x: x.split(".")[0])
         trs["variable"] = trs.variable.apply(lambda x: x.split("to ")[1])
         # remove where variable == region
         trs = trs[trs.region != trs.variable]
-        trs = trs.groupby(["region", "variable", "period", 'scenario']).sum(numeric_only=True).reset_index()
+        trs = trs.groupby(["region", "variable", "time", 'scenario']).sum(numeric_only=True).reset_index()
         transmissions.append(trs)
     full_t = pd.concat(transmissions)
     prov_cord = pd.read_csv('./profiles/natem_output/visualization_scripts/utils/arrow_coords.csv')
@@ -186,4 +180,5 @@ def process(selected):
                       right_on=['region', 'variable'])
     full_t['from_lat'] = full_t['from_lat'].astype(float)
     full_t['from_lon'] = full_t['from_lon'].astype(float)
+    full_t['period'] = full_t['time'].astype(int)
     return full_t

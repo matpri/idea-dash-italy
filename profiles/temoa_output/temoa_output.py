@@ -63,12 +63,12 @@ def data_processing_task(profile_name, viz, data, processing_func):
     return profile_name, viz, data_out
 
 class PypsaOutput(BaseProfile):
-    display_name = 'Sutubra-TEMOA'
-    name = 'Sutubra-TEMOA'
+    display_name = 'Sutubra'
+    name = 'Sutubra'
     db_name = 'temoa'
     color = 'yellow 8'
     description = (
-        'The Canadian Opportunities for Planning and Production of Electricity Resources (Sutubra-TEMOA) framework is an electricity system planning model. \n'
+        'The Canadian Opportunities for Planning and Production of Electricity Resources (Sutubra) framework is an electricity system planning model. \n'
         'It minimizes total system costs (including investment, operation and maintenance costs) over an extended planning period.')
 
     plot_order = [
@@ -150,15 +150,15 @@ class PypsaOutput(BaseProfile):
                 'description': 'Capacity that qualifies for the capacity market.'
             },
         'Supply':
-            {
-                'check': generation_supply_processing.check,
-                'db_check': generation_supply_processing.check,
-                'process': generation_supply_processing.process,
-                'db_process': generation_supply_processing.process,
-                'viz': generation_supply_viz.plot,
-                'callback': generation_supply_callbacks.link,
-                'description': 'Generation supply of each technology in the model.'
-            },
+                    {
+                        'check': generation_supply_processing.check,
+                        'db_check': generation_supply_processing.check,
+                        'process': generation_supply_processing.process,
+                        'db_process': generation_supply_processing.process,
+                        'viz': generation_supply_viz.plot,
+                        'callback': generation_supply_callbacks.link,
+                        'description': 'Generation supply of each technology in the model.'
+                    },
         'Transmission Capacity':
             {
                 'check': transmission_capacity_processing.check,
@@ -264,58 +264,54 @@ class PypsaOutput(BaseProfile):
         wants_overview = 'Overview' in data_collection
         wants_output_stats = 'Output Stats' in data_collection
 
-        # Prepare arguments for processing, excluding overview and output stats
         processing_args = [
             (self.display_name, viz_option, data, self.viz_options[viz_option]['process'])
             for viz_option, data in data_collection.items()
             if viz_option not in ['Overview', 'Output Stats']
         ]
 
-        # Process the data using the defined processing function
         processed_data = [data_processing_task(*arg) for arg in processing_args]
         output_stats_data = []
 
-        # Process overview and output statistics if requested
         if wants_overview or wants_output_stats:
             overview_scenarios = set(data_collection.get('Overview', {}).keys())
             output_stats_scenarios = set(data_collection.get('Output Stats', {}).keys())
 
             dfs = []
             for _, viz_option, data in processed_data:
+                print(f"Processing viz option: {viz_option}")
                 if viz_option in {'Dispatch', 'Transmission Flow', 'Transmission Capacity'}:
                     if wants_output_stats and viz_option == 'Dispatch':
-                        # Process dispatch data for output statistics
                         dispatch_data = self._prepare_dispatch_data(data)
-
-                        # Collect min and max dispatch values for each year and scenario
                         output_stats_data.extend(self._collect_dispatch_min_max(dispatch_data))
-
                     continue
 
-                # Filter out imports and exports from the data
-                filtered_data = self._filter_import_export(data, viz_option)
-                dfs.append(filtered_data)
+                # Ensure data is a DataFrame and has a clean index
+                if isinstance(data, pd.DataFrame):
+                    filtered_data = self._filter_import_export(data.copy(), viz_option)
+                    if not filtered_data.empty:
+                        dfs.append(filtered_data)
 
-            # Combine all dataframes into a single dataframe
+            if dfs:
+                # Explicitly reset index on each DataFrame before concatenation
+                dfs_clean = [df.reset_index(drop=True) for df in dfs]
+                full_df = pd.concat(dfs_clean, ignore_index=True)
+                full_df = full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(
+                    numeric_only=True).reset_index()
 
-            full_df = pd.concat(dfs, ignore_index=True)
-            full_df = full_df.groupby(['scenario', 'variable', 'time', 'region']).sum(numeric_only=True).reset_index()
+                overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
+                processed_data.append(
+                    (self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region']]))
 
-
-            # Append overview data to processed data
-            overview_df = full_df[full_df['scenario'].isin(overview_scenarios)]
-            processed_data.append(
-                (self.display_name, 'Overview', overview_df[['scenario', 'variable', 'time', 'value', 'region']]))
-
-            # If output statistics are requested, append them as well
-            if wants_output_stats:
-                if output_stats_data:
-                    stats_df = pd.concat(output_stats_data + [full_df], ignore_index=True)
-                else:
-                    stats_df = full_df
-                stats_df['time'] = stats_df['time'].astype(int)
-                output_stats_df = stats_df[stats_df['scenario'].isin(output_stats_scenarios)]
-                processed_data.append((self.display_name, 'Output Stats', output_stats_df))
+                if wants_output_stats:
+                    if output_stats_data:
+                        output_stats_clean = [df.reset_index(drop=True) for df in output_stats_data]
+                        stats_df = pd.concat(output_stats_clean + [full_df], ignore_index=True)
+                    else:
+                        stats_df = full_df
+                    stats_df['time'] = stats_df['time'].astype(int)
+                    output_stats_df = stats_df[stats_df['scenario'].isin(output_stats_scenarios)]
+                    processed_data.append((self.display_name, 'Output Stats', output_stats_df))
 
         return processed_data
 
@@ -345,7 +341,7 @@ class PypsaOutput(BaseProfile):
         """Filter out imports and exports from the data."""
         df = data[~data.variable.str.contains('Import|Export')]
         df['variable'] = viz_option
-        return df
+        return df.reset_index(drop=True)
 
 
     def _create_dispatch_stat(self, day_data, variable_name, year):

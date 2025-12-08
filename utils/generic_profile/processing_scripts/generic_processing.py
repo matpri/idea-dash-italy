@@ -98,10 +98,16 @@ def filter_variables(df):
         for year in df['time'].unique():
             for region in df['region'].unique():
                 sub_df = df[(df['scenario'] == scenario) & (df['time'] == year) & (df['region'] == region)]
-                variables = sub_df['variable'].tolist()
+                variables = sub_df['variable'].unique().tolist()
                 for var in variables:
+                    var_parts = var.split('|')
                     for other_var in variables:
-                        if var != other_var and var in other_var:
+                        if var == other_var or var.count('|') >= other_var.count('|'):
+                            continue
+                        other_parts = other_var.split('|')
+                        # remove `var` only if `other_var` has more pipe-separated parts
+                        # and `var` is a strict prefix of `other_var` (same first n parts)
+                        if len(other_parts) > len(var_parts) and other_parts[:len(var_parts)] == var_parts:
                             to_remove.add((scenario, year, region, var))
     mask = df.apply(lambda row: (row['scenario'], row['time'], row['region'], row['variable']) not in to_remove, axis=1)
     return df[mask]

@@ -178,7 +178,7 @@ class DataHandler:
     """
     profile_order = ['Power System Models', 'CIMS', 'COPPER', 'Canada Energy Futures', 'ECCC-NextGrid',
                      'NATEM Canada', 'PITHOS', 'NRCan-PyPsa', 'PyPSA_CAN',
-                     'Sutubra-TEMOA']
+                     'Sutubra']
     def __init__(self):
         self.api_key = ''
         self.profiles = self.load_profiles()
@@ -429,6 +429,7 @@ class DataHandler:
 
         results = []
         for profile in data_collection.keys():
+            print('Processing profile', profile)
             results.extend(self.profiles[profile].process_data(data_collection[profile]))
 
         if process_power_system:

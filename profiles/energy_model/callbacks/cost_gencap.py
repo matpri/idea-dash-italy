@@ -270,7 +270,7 @@ def link(app):
                 print("No Reference scenario found for comparison.")
             else:
                 merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
-                                  suffixes=('', '_ref'))
+                                  suffixes=('', '_ref'), how='outer')
                 merged['value_ref'] = merged['value_ref'].fillna(0)
                 merged['value'] = merged['value'] - merged['value_ref']
                 df = merged[['scenario', 'time', 'variable', 'region', 'value']]
@@ -350,5 +350,3 @@ def link(app):
                                            pattern_active=_pattern[idx], text_active=_text[idx], report_type=_report_type[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _g_style, v_style, v_values, v_data, _pattern_style, _text_style, _report_type_style
-
-

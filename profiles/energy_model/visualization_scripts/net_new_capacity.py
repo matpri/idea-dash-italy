@@ -27,7 +27,7 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['', 'ALL'] + base_scenarios
+    base_scenarios = ['ALL'] + base_scenarios
 
     has_reference = 'Reference' in base_scenarios
 
@@ -126,10 +126,10 @@ def plot(df, window_id):
             style={'display': 'block'}
         ),
 
-        dmc.Select(
+        dmc.MultiSelect(
             label='Scenario Group',
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value=[base_scenarios[0]],
+            value=[],
             id={
                 'type': 'energy_model-netnew_capacity-scenario-group-select',
                 'index': window_id,

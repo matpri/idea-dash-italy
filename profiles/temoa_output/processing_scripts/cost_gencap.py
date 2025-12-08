@@ -18,9 +18,9 @@ def check(df):
     """
     #print("Checking for cost in variable column")
     try:
-        if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("Capital|Capital costs|").any():
-                return df[df.variable.str.startswith("Capital|Capital costs|")]['value'].sum() != 0
+        if (df.model == 'Sutubra').any():
+            if df.variable.str.startswith("Capital|Capital costs (nom_undisc)|").any():
+                return df[df.variable.str.startswith("Capital|Capital costs (nom_undisc)|")]['value'].sum() != 0
         return False
     except Exception as e:
         print("cost check", e)
@@ -100,7 +100,7 @@ def process(data):
     dfs = []
     for scenario_name, db in data.items():
         df = db.copy()
-        df = df[df.variable.str.startswith("Capital|Capital costs|")]
+        df = df[df.variable.str.startswith("Capital|Capital costs (nom_undisc)|")]
         df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[2:]))
         formatted_df = format_df(df)
         df = calculate_fom(formatted_df)

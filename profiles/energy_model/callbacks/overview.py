@@ -141,10 +141,10 @@ def link(app):
             unique_scenarios = df_all['scenario'].unique().tolist()
             group = _scenarios[idx]
             # collect versions for the selected group; if group == 'ALL' collect all versions
-            if group == 'ALL':
+            if 'ALL' in group:
                 versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2})
             else:
-                versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] == group})
+                versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] in group})
 
             if versions:
                 v_style[idx] = {'display': 'block'}
@@ -168,14 +168,15 @@ def link(app):
                 print("No Reference scenario found for comparison.")
             else:
                 merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
-                                  suffixes=('', '_ref'))
+                                  suffixes=('', '_ref'), how='outer')
                 merged['value_ref'] = merged['value_ref'].fillna(0)
                 merged['value'] = merged['value'] - merged['value_ref']
                 df = merged[['scenario', 'time', 'variable', 'region', 'value']]
 
         # filter by scenario group if not ALL
-        if _scenarios[idx] != 'ALL':
-            df = df[df['scenario'].str.contains(_scenarios[idx])]
+        if not 'ALL' in _scenarios[idx]:
+            scenarios_to_keep = [scen for scen in df['scenario'].unique() if any(g in scen for g in _scenarios[idx])]
+            df = df[df['scenario'].isin(scenarios_to_keep)]
         # additionally filter by selected versions (works also when scenario group == 'ALL')
         if v_values and v_values[idx]:
             sel = set(v_values[idx])

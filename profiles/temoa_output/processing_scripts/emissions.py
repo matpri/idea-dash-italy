@@ -16,8 +16,8 @@ def check(df):
     """
     #print("Checking for emissions in variable column")
     try:
-        if (df.model == 'Sutubra-TEMOA').any():
-            if df.variable.str.startswith("Emissions|").any():
+        if (df.model == 'Sutubra').any():
+            if df.variable.str.startswith("Emissions|").any() or df.variable.str.startswith("CER Offsets|").any():
                 return True
         return False
     except Exception as e:
@@ -62,7 +62,10 @@ def process(selected: dict):
         df = db.copy()
         # filter where 'Results_summary_carbon_AP_tech|' in variable column entry and remove the prefix
         df = df[df.variable.str.startswith("Emissions|")]
+        offsets = db[db.variable.str.startswith("CER Offsets|")].copy()
+        offsets['value'] = -offsets['value']
         df['variable'] = df['variable'].apply(lambda x: '|'.join(x.split("|")[1:]))
+        df = pd.concat([df, offsets])
         formatted_df = format_df(df)
         # formatted_df = aggregate_technologies(formatted_df)
         canadian_total = calc_canadian(formatted_df)

@@ -212,39 +212,33 @@ def link(app):
         v_style = list(_v_style)
         v_values = _scenario_version
         v_data = [dash.no_update for _ in v_style]
-        scens = _scenarios[idx]
-        if _scenario_group[idx] != '':
-            if _scenario_group[idx] == 'ALL':
+        scens = list(_scenarios[idx]) if _scenarios and _scenarios[idx] is not None else []
+        # handle scenario_group being a list (MultiSelect)
+        selected_groups = _scenario_group[idx] if isinstance(_scenario_group, list) or hasattr(_scenario_group, '__len__') else [_scenario_group]
+        if selected_groups and len(selected_groups) > 0 and not (len(selected_groups) == 1 and selected_groups[0] == ''):
+            # if 'ALL' is selected include all unique scenarios
+            if 'ALL' in selected_groups:
                 scenarios = unique_scenarios
             else:
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
+                scenarios = [scenario for scenario in unique_scenarios if scenario.split('|')[1] in selected_groups]
 
-            # if _scenario_group changed update scenario_version style, data and value
-            scenario_group_changed = False
-
+            # if scenario_group changed update scenario_version style, data and value
             if trigger_id['type'] == 'energy_model-supply-scenario-group-select':
-                scenario_group_changed = True
                 # find which index triggered
                 idx = 0
                 for i, id in enumerate(ctx.inputs_list[0]):
-                    if ((id['id']['index'] == trigger_id['index']) and
-                            (id['id']['type'] == 'energy_model-supply-scenario-group-select')):
+                    if ((id['id']['index'] == trigger_id['index']) and (id['id']['type'] == 'energy_model-supply-scenario-group-select')):
                         idx = i
                         break
 
-
-
-                # collect versions for the selected group
-                group = _scenario_group[idx]
+                # collect versions for the selected groups
+                groups = _scenario_group[idx] if _scenario_group[idx] is not None else []
                 versions = []
-                if group != '':
-                    if group == 'ALL':
-                        versions = sorted({s.split('|')[2] for s in unique_scenarios if
-                                           len(s.split('|')) > 2})
+                if groups:
+                    if 'ALL' in groups:
+                        versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2})
                     else:
-                        versions = sorted({s.split('|')[2] for s in unique_scenarios if
-                                           len(s.split('|')) > 2 and s.split('|')[1] == group})
+                        versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] in groups})
 
                 if versions:
                     v_style[idx] = {'display': 'block'}
@@ -255,11 +249,11 @@ def link(app):
                     v_values[idx] = []
                     v_data[idx] = []
 
-            if len(v_values[idx]) > 0:
+            if v_values and v_values[idx]:
                 # filter scenarios by version
-                scenarios = [scenario for scenario in scenarios if
-                             scenario.split('|')[2] in v_values[idx]]
-            scens += scenarios
+                scenarios = [scenario for scenario in scenarios if scenario.split('|')[2] in v_values[idx]]
+
+            scens = list(set(scens + scenarios))
 
         if _compare2ref[idx]:
             df[['model', 'base_scenario', 'version']] = df['scenario'].apply(lambda x: pd.Series(
@@ -270,7 +264,7 @@ def link(app):
                 print("No Reference scenario found for comparison.")
             else:
                 merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
-                                  suffixes=('', '_ref'))
+                                  suffixes=('', '_ref'), how='outer')
                 merged['value_ref'] = merged['value_ref'].fillna(0)
                 merged['value'] = merged['value'] - merged['value_ref']
                 df = merged[['scenario', 'time', 'variable', 'region', 'value']]
@@ -350,5 +344,3 @@ def link(app):
                                            pattern_active=_pattern[idx], text_active=_text[idx], report_type=_report_type[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in _data], _s_style, _m_style, _g_style, v_style, v_values, v_data, _pattern_style, _text_style, _report_type_style
-
-
