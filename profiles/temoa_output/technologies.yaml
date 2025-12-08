@@ -1583,7 +1583,7 @@ Carbon_Tax:
   name: Carbon Tax
 Fixed_OM:
   color: '#000000'
-  group: Fixed O&M
+  group: FO&M costs
   group_color: '#E69F00'
   name: Fixed O&M
 Variable_OM:
@@ -1610,7 +1610,7 @@ Variable O&M costs:
   name: Variable O&M
 Fixed O&M costs:
   color: '#000000'
-  group: Fixed O&M
+  group: FO&M costs
   group_color: '#E69F00'
   name: Fixed O&M
   
@@ -1663,7 +1663,7 @@ Fixed O&M:
 
 "variable_om_cost":
   color: '#000000'
-  group: 'VO&M costs s'
+  group: 'VO&M costs'
   group_color: '#D35FB7'
   name: 'VO&M costs'
 

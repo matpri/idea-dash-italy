@@ -281,6 +281,14 @@ class energy_modelsOutput(BaseProfile):
         for path in technologies_paths:
             techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
             all_techs.update(techs)
+        
+        try:
+            for k, v in all_techs.items():
+                if 'Fuel' in v['group']:
+                    v['group'] = v['group'].split('|')[0]
+                    all_techs[k] = v
+        except:
+            pass
 
         all_techs['Electricity|Offset Emissions'] =  {
                 'name': 'Electricity Offset Emissions',

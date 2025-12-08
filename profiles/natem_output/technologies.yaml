@@ -35,8 +35,8 @@
   group: Biomass
   group_color: '#33a02c'
 'Energy production|Secondary production|Electricity production|Biomass|Biogas|Electricity|Centralized electricity':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Oil|Light fuel oil|Electricity|Centralized electricity':
   group: Fossil fuel liquid
   group_color: '#ffaa33'
@@ -50,8 +50,8 @@
   group: Solar
   group_color: '#ffff99'
 'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas|Electricity|Centralized electricity':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Hydro|Dam|Electricity|Centralized electricity':
   group: Hydro
   group_color: '#a6cee3'
@@ -113,8 +113,8 @@
   group: Biomass
   group_color: '#33a02c'
 'Energy production|Secondary production|Electricity production|Biomass|Biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP':
   group: Fossil fuel gas
   group_color: '#ff6b6b'
@@ -152,8 +152,8 @@
   group: Hydrogen
   group_color: '#1f78b4'
 'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Biomass':
   group: Biomass
   group_color: '#33a02c'
@@ -209,8 +209,8 @@
   group: Nuclear
   group_color: '#ff7f00'
 'Biomass|Biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Oil|Heavy fuel oil':
   group: Fossil fuel liquid
   group_color: '#ffaa33'
@@ -236,8 +236,8 @@
   group: Storage
   group_color: '#6a3d9a'
 'Biomass|Waste water biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Biomass|Wood biomass w/ CCS':
   group: Biomass
   group_color: '#33a02c'
@@ -280,3 +280,103 @@
 'Fossil fuel gas with CCS':
     group: Fossil fuel gas
     group_color: '#ffaaa3'
+
+'Wood pellet':
+  group: Biomass
+  group_color: '#33a02c'
+
+'Wood biomass w/ out CCS':
+  group: Biomass
+  group_color: '#33a02c'
+
+'Wood biomass w/ CCS':
+  group: Biomass
+  group_color: '#33a02c'
+
+'Waste water biogas':
+  group: Biogas
+  group_color: '#5d7aff'
+
+'Tidal':
+  group: Hydro
+  group_color: '#a6cee3'
+
+'Small modular reactor':
+  group: Nuclear
+  group_color: '#ff7f00'
+
+'Run-of-river':
+  group: Hydro
+  group_color: '#a6cee3'
+
+'Pumped hydro':
+  group: Storage
+  group_color: '#6a3d9a'
+
+'Other storage':
+  group: Storage
+  group_color: '#6a3d9a'
+
+'On-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+
+'Off-shore wind':
+  group: Wind
+  group_color: '#b2df8a'
+
+'Ocean thermal':
+  group: Hydro
+  group_color: '#a6cee3'
+
+'Nuclear Conventional':
+  group: Nuclear
+  group_color: '#ff7f00'
+
+'Dam':
+  group: Hydro
+  group_color: '#a6cee3'
+
+'Battery':
+  group: Storage
+  group_color: '#6a3d9a'
+
+'Natural Gas w/ CCS':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+
+'Natural Gas w/ CCS - Combine Heat and power':
+  group: Fossil fuel gas with CCS
+  group_color: '#ffaaa3'
+
+'Natural Gas w/out CCS - CHP':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+
+'Natural Gas w/out CCS':
+  group: Fossil fuel gas
+  group_color: '#ff6b6b'
+
+Decentralized PV:
+  group: Solar
+  group_color: '#ffff99'
+
+Centralized PV:
+  group: Solar
+  group_color: '#ffff99'
+
+Coal w/out CCS:
+  group: Fossil fuel solid
+  group_color: '#b15928'
+
+Coal w/ CCS:
+  group: Fossil fuel solid
+  group_color: '#b15928'
+
+Heavy fuel oil:
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
+
+Light fuel oil:
+  group: Fossil fuel liquid
+  group_color: '#ffaa33'
