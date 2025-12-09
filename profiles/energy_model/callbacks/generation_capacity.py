@@ -188,6 +188,10 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+        v_style = list(_v_style)
+        v_values = _scenario_version
+        v_data = [dash.no_update for _ in v_style]
+
         if 'energy_model-gencap-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
@@ -196,7 +200,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Capacity'].to_csv, "gencap.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, dash.no_update, dash.no_update, dash.no_update, _pattern_style, _text_style, _report_type_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style]
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):

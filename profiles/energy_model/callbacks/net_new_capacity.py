@@ -188,6 +188,10 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+        v_style = list(_v_style)
+        v_values = _scenario_version
+        v_data = [dash.no_update for _ in v_style]
+
         if 'energy_model-netnew_capacity-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
@@ -196,7 +200,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Net New Capacity'].to_csv, "netnew_capacity.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, dash.no_update, dash.no_update, dash.no_update, _pattern_style, _text_style, _report_type_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style]
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -209,9 +213,6 @@ def link(app):
         df = data_handler.processed_data['Power System Models']['Net New Capacity']
         unique_scenarios = df['scenario'].unique().tolist()
 
-        v_style = list(_v_style)
-        v_values = _scenario_version
-        v_data = [dash.no_update for _ in v_style]
         scens = list(_scenarios[idx]) if _scenarios and _scenarios[idx] is not None else []
         selected_groups = _scenario_group[idx] if isinstance(_scenario_group, list) or hasattr(_scenario_group, '__len__') else [_scenario_group]
         if selected_groups and len(selected_groups) > 0 and not (len(selected_groups) == 1 and selected_groups[0] == ''):
