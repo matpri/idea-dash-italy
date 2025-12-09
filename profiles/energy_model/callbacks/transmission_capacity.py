@@ -134,7 +134,7 @@ def link(app):
                     idx = i
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Transmission Capacity'].to_csv, "transmissioncapacity.csv")
-            return _canvas, _s_style, _m_style, _g_style,  v_style, v_values, v_data, _y_style, _l_style, _data
+            return [dash.no_update for _ in _canvas], [dash.no_update for _ in _s_style], [dash.no_update for _ in _m_style], [dash.no_update for _ in _g_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_values], [dash.no_update for _ in v_data], [dash.no_update for _ in _y_style], [dash.no_update for _ in _l_style], _data
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
