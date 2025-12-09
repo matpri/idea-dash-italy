@@ -181,4 +181,5 @@ def process(selected):
     full_t['from_lat'] = full_t['from_lat'].astype(float)
     full_t['from_lon'] = full_t['from_lon'].astype(float)
     full_t['period'] = full_t['time'].astype(int)
+    full_t.drop(columns=['time'], inplace=True)
     return full_t
