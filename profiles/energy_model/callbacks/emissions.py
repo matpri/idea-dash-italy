@@ -258,15 +258,40 @@ def link(app):
             df[['model', 'base_scenario', 'version']] = df['scenario'].apply(lambda x: pd.Series(
                 [x.split('|')[0], '|'.join(x.split('|')[1:-1]) if len(x.split('|')) > 2 else x.split('|')[1],
                  x.split('|')[-1] if len(x.split('|')) > 2 else '']))
-            reference_data = df[df['base_scenario'].str.contains('Reference')]
+
+            reference_data = df[df['base_scenario'].str.contains('Reference')].copy()
+
             if reference_data.empty:
                 print("No Reference scenario found for comparison.")
             else:
-                merged = df.merge(reference_data, on=['model', 'version', 'time', 'variable', 'region'],
-                                  suffixes=('', '_ref'), how='outer')
-                merged['value_ref'] = merged['value_ref'].fillna(0)
-                merged['value'] = merged['value'] - merged['value_ref']
-                df = merged[['scenario', 'time', 'variable', 'region', 'value']]
+                results = []
+
+                for scenario in df['scenario'].unique():
+                    scenario_df = df[df['scenario'] == scenario].copy()
+
+                    # Get model and version for this scenario
+                    model = scenario_df['model'].iloc[0]
+                    version = scenario_df['version'].iloc[0]
+
+                    # Filter reference data to matching model/version
+                    ref_subset = reference_data[(reference_data['model'] == model) &
+                                                (reference_data['version'] == version)]
+
+                    merged = scenario_df.merge(ref_subset,
+                                               on=['model', 'version', 'time', 'variable', 'region'],
+                                               suffixes=('', '_ref'),
+                                               how='outer')
+
+                    merged['value_ref'] = merged['value_ref'].fillna(0)
+                    merged['value'] = merged['value'].fillna(0)
+                    merged['value'] = merged['value'] - merged['value_ref']
+
+                    # Preserve scenario for reference-only rows
+                    merged['scenario'] = scenario
+
+                    results.append(merged[['scenario', 'time', 'variable', 'region', 'value']])
+
+                df = pd.concat(results, ignore_index=True)
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
