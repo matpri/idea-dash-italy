@@ -305,6 +305,52 @@ def link(app):
                 group_cols = ["variable", "region", "fuel", "time", 'scenario', 'unit']
             return df_to_reduce.groupby(group_cols).sum(numeric_only=True).reset_index()
 
+        def _apply_compare_scenario(df, compare_val, model):
+            """
+            Apply scenario comparison logic with proper handling of missing values.
+            Uses outer merge and fillna(0) to handle cases where values exist in one scenario but not the other.
+            This implements the bug fix from generation_capacity.py.
+            """
+            if model == 'Generic Comparison':
+                df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
+                to_compare = df[df['base_scenario'] == compare_val].copy()
+
+                # Build merge columns - include fuel if present
+                merge_cols = ['region', 'time', 'variable', 'unit', 'model']
+                if 'fuel' in df.columns:
+                    merge_cols.append('fuel')
+
+                # Use outer merge to preserve rows that exist in either scenario
+                df = df.merge(to_compare, on=merge_cols, suffixes=('', '_compare'), how='outer')
+
+                # Drop duplicate scenario columns
+                drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
+                if drop_cols:
+                    df = df.drop(columns=drop_cols)
+            else:
+                to_compare = df[df['scenario'] == compare_val].copy()
+
+                # Build merge columns - include fuel if present
+                merge_cols = ['region', 'time', 'variable', 'unit']
+                if 'fuel' in df.columns:
+                    merge_cols.append('fuel')
+
+                # Use outer merge to preserve rows that exist in either scenario
+                df = df.merge(to_compare, on=merge_cols, suffixes=('', '_compare'), how='outer')
+
+                if 'scenario_compare' in df.columns:
+                    df = df.drop(columns=['scenario_compare'])
+
+            # Handle missing values: fillna(0) for both value columns before subtraction
+            if 'value_compare' in df.columns:
+                df['value'] = df['value'].fillna(0)
+                df['value_compare'] = df['value_compare'].fillna(0)
+                df['value'] = df['value'] - df['value_compare']
+
+            # Clean up comparison columns
+            df = df[[col for col in df.columns if not col.endswith('_compare')]]
+            return df
+
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
             _r_style[idx] = {'display': 'block'}
@@ -325,23 +371,7 @@ def link(app):
 
             # Apply compare-to-scenario if selected
             if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and _compare_scenario[idx] != 'None':
-                compare_val = _compare_scenario[idx]
-                if model == 'Generic Comparison':
-                    df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
-                    to_compare = df[df['base_scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'], suffixes=('', '_compare'))
-                    drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
-                    if drop_cols:
-                        df = df.drop(columns=drop_cols)
-                else:
-                    to_compare = df[df['scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'], suffixes=('', '_compare'))
-                    if 'scenario_compare' in df.columns:
-                        df = df.drop(columns=['scenario_compare'])
-
-                if 'value_compare' in df.columns:
-                    df['value'] = df['value'] - df['value_compare']
-                df = df[[col for col in df.columns if not col.endswith('_compare')]]
+                df = _apply_compare_scenario(df, _compare_scenario[idx], model)
 
             # Preprocess dataframe according to selected detail level (truncate variable by '|' segments)
             df_work = df.copy()
@@ -390,23 +420,7 @@ def link(app):
             df = data_handler.processed_data[model][name].copy()
             # Apply compare-to-scenario if selected
             if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and _compare_scenario[idx] != 'None':
-                compare_val = _compare_scenario[idx]
-                if model == 'Generic Comparison':
-                    df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
-                    to_compare = df[df['base_scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'], suffixes=('', '_compare'))
-                    drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
-                    if drop_cols:
-                        df = df.drop(columns=drop_cols)
-                else:
-                    to_compare = df[df['scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'], suffixes=('', '_compare'))
-                    if 'scenario_compare' in df.columns:
-                        df = df.drop(columns=['scenario_compare'])
-
-                if 'value_compare' in df.columns:
-                    df['value'] = df['value'] - df['value_compare']
-                df = df[[col for col in df.columns if not col.endswith('_compare')]]
+                df = _apply_compare_scenario(df, _compare_scenario[idx], model)
 
             df_work = df.copy()
             try:
@@ -441,23 +455,7 @@ def link(app):
             df = data_handler.processed_data[model][name].copy()
             # Apply compare-to-scenario if selected
             if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and _compare_scenario[idx] != 'None':
-                compare_val = _compare_scenario[idx]
-                if model == 'Generic Comparison':
-                    df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
-                    to_compare = df[df['base_scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'], suffixes=('', '_compare'))
-                    drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
-                    if drop_cols:
-                        df = df.drop(columns=drop_cols)
-                else:
-                    to_compare = df[df['scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'], suffixes=('', '_compare'))
-                    if 'scenario_compare' in df.columns:
-                        df = df.drop(columns=['scenario_compare'])
-
-                if 'value_compare' in df.columns:
-                    df['value'] = df['value'] - df['value_compare']
-                df = df[[col for col in df.columns if not col.endswith('_compare')]]
+                df = _apply_compare_scenario(df, _compare_scenario[idx], model)
 
             df_work = df.copy()
             try:
@@ -491,23 +489,7 @@ def link(app):
             df = data_handler.processed_data[model][name].copy()
             # Apply compare-to-scenario if selected
             if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and _compare_scenario[idx] != 'None':
-                compare_val = _compare_scenario[idx]
-                if model == 'Generic Comparison':
-                    df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
-                    to_compare = df[df['base_scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'], suffixes=('', '_compare'))
-                    drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
-                    if drop_cols:
-                        df = df.drop(columns=drop_cols)
-                else:
-                    to_compare = df[df['scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'], suffixes=('', '_compare'))
-                    if 'scenario_compare' in df.columns:
-                        df = df.drop(columns=['scenario_compare'])
-
-                if 'value_compare' in df.columns:
-                    df['value'] = df['value'] - df['value_compare']
-                df = df[[col for col in df.columns if not col.endswith('_compare')]]
+                df = _apply_compare_scenario(df, _compare_scenario[idx], model)
 
             df_work = df.copy()
             try:
@@ -546,23 +528,7 @@ def link(app):
                     _scenarios[idx] = list(set(_scenarios[idx]))
             # Apply compare-to-scenario if selected
             if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and _compare_scenario[idx] != 'None':
-                compare_val = _compare_scenario[idx]
-                if model == 'Generic Comparison':
-                    df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
-                    to_compare = df[df['base_scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'], suffixes=('', '_compare'))
-                    drop_cols = [c for c in ['base_scenario_compare', 'scenario_compare'] if c in df.columns]
-                    if drop_cols:
-                        df = df.drop(columns=drop_cols)
-                else:
-                    to_compare = df[df['scenario'] == compare_val]
-                    df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'], suffixes=('', '_compare'))
-                    if 'scenario_compare' in df.columns:
-                        df = df.drop(columns=['scenario_compare'])
-
-                if 'value_compare' in df.columns:
-                    df['value'] = df['value'] - df['value_compare']
-                df = df[[col for col in df.columns if not col.endswith('_compare')]]
+                df = _apply_compare_scenario(df, _compare_scenario[idx], model)
 
             df_work = df.copy()
             try:

@@ -82,7 +82,7 @@ def create_generic_plots(model, name, profile, is_comparison=False):
         by_year_widgets = dmc.Select(
             label='Region',
             data=[{'label': region, 'value': region} for region in regions],
-            value='CAN' if 'CAN' in regions else regions[0],
+            value='Canada' if 'Canada' in regions else regions[0],
             id={
                 'type': 'generic-region-select',
                 'name': name,
