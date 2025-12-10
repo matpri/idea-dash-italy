@@ -142,6 +142,15 @@ def link(app):
         }, 'value'),
         Input(
             {
+                'type': 'generic-byFuel-switch',
+                'index': ALL,
+                'model': MATCH,
+                'name': MATCH
+            },
+            'checked'
+        ),
+        Input(
+            {
                 'type': 'generic-pattern-switch',
                 'index': ALL,
                 'model': MATCH,
@@ -250,7 +259,7 @@ def link(app):
         ),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _report_type, _detail_levels, _group_scen, _scenarios, _scenario, _regions, _years, _units, _pattern, _text,
+    def update_gencap_cost(_p_type, _report_type, _detail_levels, _group_scen, _scenarios, _scenario, _regions, _years, _units, _byFuel, _pattern, _text,
                            _compare_scenario, _download, _r_style, _y_style, _canvas, _data, _s_style, _m_style, _u_style, _pattern_style,
                            _text_style, _group_style, _report_style):
         from utils.data_state import data_handler
@@ -283,7 +292,18 @@ def link(app):
         patterns = [profile.pattern_from_key(key) for key in _scenarios[idx]]
         # print('patterns:', patterns)
 
-
+        # helper to reduce/detail-aggregate while preserving 'fuel' if present
+        def _group_reduce(df_to_reduce):
+            """
+            Group-reduce numeric columns while preserving non-numeric grouping keys.
+            Includes 'fuel' in the group keys when the column exists to avoid dropping it.
+            """
+            # base grouping order matches previous behaviour
+            group_cols = ["variable", "region", "time", 'scenario', 'unit']
+            if 'fuel' in df_to_reduce.columns:
+                # insert fuel after region for readability (order doesn't change semantics)
+                group_cols = ["variable", "region", "fuel", "time", 'scenario', 'unit']
+            return df_to_reduce.groupby(group_cols).sum(numeric_only=True).reset_index()
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}
@@ -339,9 +359,8 @@ def link(app):
                     return '|'.join(parts[:level])
 
                 df_work['variable'] = df_work['variable'].astype(str).apply(truncate_var)
-                group_cols = ["variable", "region", "time", 'scenario', 'unit']
-                df_work = df_work.groupby(group_cols).sum(numeric_only=True).reset_index()
-                # mark that this df is detail-reduced so plot helpers can skip remapping
+                df_work = _group_reduce(df_work)
+                 # mark that this df is detail-reduced so plot helpers can skip remapping
                 df_work['_detail_reduced'] = True
 
             # Always render using the (possibly reduced) dataframe; aggregation is disabled
@@ -354,7 +373,7 @@ def link(app):
                                        _units[idx],
                                        _years[idx], scenario=_scenario[idx],
                                        pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns,
-                                       report_type=_report_type[idx])
+                                       report_type=_report_type[idx], use_fuel=_byFuel[idx])
 
         elif _p_type[idx] == 'Trend Over Years':
             _m_style[idx] = {'display': 'none'}
@@ -396,7 +415,7 @@ def link(app):
                 level = None
             if level is not None:
                 df_work['variable'] = df_work['variable'].astype(str).apply(lambda v: '|'.join(str(v).split('|')[:level]) if v is not None else '')
-                df_work = df_work.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+                df_work = _group_reduce(df_work)
                 df_work['_detail_reduced'] = True
 
             _canvas[idx] = render_plot('Trend Over Years',
@@ -407,7 +426,7 @@ def link(app):
                                        _regions[idx],
                                        _units[idx],
                                        _years[idx], scenario=_scenario[idx], pattern_list=patterns,
-                                       report_type=_report_type[idx])
+                                       report_type=_report_type[idx], use_fuel=_byFuel[idx])
         elif _p_type[idx] == 'Trend in one Year':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
@@ -447,7 +466,7 @@ def link(app):
                 level = None
             if level is not None:
                 df_work['variable'] = df_work['variable'].astype(str).apply(lambda v: '|'.join(str(v).split('|')[:level]) if v is not None else '')
-                df_work = df_work.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+                df_work = _group_reduce(df_work)
                 df_work['_detail_reduced'] = True
 
             _canvas[idx] = render_plot('Trend in one Year',
@@ -457,7 +476,7 @@ def link(app):
                                        _scenarios[idx],
                                        _regions[idx],
                                        _units[idx],
-                                       _years[idx], scenario=_scenario[idx], pattern_list=patterns)
+                                       _years[idx], scenario=_scenario[idx], pattern_list=patterns, use_fuel=_byFuel[idx])
         elif _p_type[idx] == 'Pie Chart':
             _m_style[idx] = {'display': 'none'}
             _r_style[idx] = {'display': 'block'}
@@ -497,7 +516,7 @@ def link(app):
                 level = None
             if level is not None:
                 df_work['variable'] = df_work['variable'].astype(str).apply(lambda v: '|'.join(str(v).split('|')[:level]) if v is not None else '')
-                df_work = df_work.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+                df_work = _group_reduce(df_work)
                 df_work['_detail_reduced'] = True
 
             _canvas[idx] = render_plot('Pie Chart',
@@ -507,7 +526,7 @@ def link(app):
                                        _scenarios[idx],
                                        _regions[idx],
                                        _units[idx],
-                                       _years[idx], scenario=_scenario[idx], pattern_list=patterns)
+                                       _years[idx], scenario=_scenario[idx], pattern_list=patterns, use_fuel=_byFuel[idx])
         else:
             _m_style[idx] = {'display': 'block'}
             _y_style[idx] = {'display': 'block'}
@@ -552,7 +571,7 @@ def link(app):
                 level = None
             if level is not None:
                 df_work['variable'] = df_work['variable'].astype(str).apply(lambda v: '|'.join(str(v).split('|')[:level]) if v is not None else '')
-                df_work = df_work.groupby(["variable", "region", "time", 'scenario', 'unit']).sum(numeric_only=True).reset_index()
+                df_work = _group_reduce(df_work)
                 df_work['_detail_reduced'] = True
 
             _canvas[idx] = render_plot('By Region',
@@ -564,7 +583,7 @@ def link(app):
                                        _units[idx],
                                        _years[idx], scenario=_scenario[idx],
                                        pattern_active=_pattern[idx], text_active=_text[idx], pattern_list=patterns,
-                                       report_type=_report_type[idx])
+                                       report_type=_report_type[idx], use_fuel=_byFuel[idx])
 
         return _canvas, _r_style, _y_style, [dash.no_update for _ in
                                              _data], _s_style, _m_style, _u_style, _pattern_style, _text_style, _group_style, _report_style

@@ -1,5 +1,22 @@
 import pandas as pd
-
+fuels = [
+'Biogas',
+'Biomass Liquids',
+'Biomass Solids',
+'Coal',
+'Electricity',
+'Gas',
+'Geothermal',
+'Heat',
+'Hydrogen',
+'Hydrogen|Direct use',
+'Oil',
+'Oil|Diesel',
+'Oil|Gasoline',
+'Oil|Jet Fuel',
+'Synthetic Gas',
+'Synthetic Liquids',
+]
 
 def create_check(name, model):
     def check(df):
@@ -136,6 +153,21 @@ def create_process(name):
             df['variable'] = df['variable'].apply(lambda x: name if x == '' else x)
             if 'time' in df.columns and df['time'].dtype == object:
                 df['time'] = pd.to_datetime(df['time'], errors='coerce')
+
+            if name == 'Use Final Sector':
+                # Extract fuel from variable suffix and create fuel column
+                def extract_fuel(variable):
+                    for fuel in fuels:
+                        if variable.endswith(f"|{fuel}"):
+                            return fuel
+                    return None
+
+                df['fuel'] = df['variable'].apply(extract_fuel)
+                # Remove fuel suffix from variable
+                df['variable'] = df.apply(
+                    lambda row: row['variable'].rsplit(f"|{row['fuel']}", 1)[0] if row['fuel'] else row['variable'],
+                    axis=1
+                )
 
 
             scenarios_in_df = df['scenario'].unique()

@@ -9,7 +9,11 @@ from utils.generic_profile.visualization_scripts.utils import bar_over_years, ba
 
 def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenario, pattern_active=True,
                 text_active=False,
-                pattern_list=None, report_type='Total'):
+                pattern_list=None, report_type='Total', use_fuel=False):
+    df = df.copy()
+    if use_fuel:
+        df['variable'] = df['fuel']
+
     if pattern_list is None:
         pattern_list = []
     # print('rendering plot', type)
@@ -32,6 +36,8 @@ def render_plot(type, name, df, aggregate, scenarios, region, unit, year, scenar
 
 def create_generic_plots(model, name, profile, is_comparison=False):
     def plot(df, window_id):
+        if name == 'Use Final Sector':
+            print(df.columns)
         scenarios = df['scenario'].unique().tolist()
         regions = df['region'].unique().tolist()
         units = df['unit'].unique().tolist()
@@ -125,6 +131,18 @@ def create_generic_plots(model, name, profile, is_comparison=False):
             style={'display': 'block'}
         )
 
+        use_final_switch = dmc.Switch(
+            label='By Sector/ By Fuel',
+            checked=False,
+            id={
+                'type': 'generic-byFuel-switch',
+                'name': name,
+                'model': model,
+                'index': window_id,
+            },
+            style={'display': 'block' if name == 'Use Final Sector' else 'none'}
+        )
+
         plot_options = ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']
         if trend_one_year:
             plot_options.append('Trend in one Year')
@@ -180,6 +198,8 @@ def create_generic_plots(model, name, profile, is_comparison=False):
                 ) if (df['variable'].astype(str).map(lambda s: s.count('|')).max() or 0) >= 1 else html.Div(
                     style={'display': 'none'})
             ))(),
+            use_final_switch,
+
             pattern_toggle,
             text_toggle,
 
@@ -251,7 +271,7 @@ def create_generic_plots(model, name, profile, is_comparison=False):
         plot_layout = dcc.Graph(
             # start with full-detail rendering (aggregate disabled)
             figure=render_plot('By Year', name, df, False, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
-                               units[0], years[0], scenarios[0], pattern_list=patterns, report_type='Total'),
+                               units[0], years[0], scenarios[0], pattern_list=patterns, report_type='Total', use_fuel=False),
             id={
                 'type': ids.FIGURE,
                 'index': window_id,
