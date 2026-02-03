@@ -58,7 +58,7 @@ class PypsaOutput(BaseProfile):
         'Metal Smelting',
         'Coal Mining',
         'Mining',
-        'Natural Gas Production',
+        'Natural Gas',
         'Petroleum Crude',
         'Petroleum Refining',
         'Pulp and Paper',
@@ -218,14 +218,14 @@ class PypsaOutput(BaseProfile):
                 'callback': sectored_callbacks.create_link('Coal Mining'),
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             },
-        'Natural Gas Production':
+        'Natural Gas':
             {
-                'check': sectored_processing.create_check('Natural Gas Production'),
-                'db_check': sectored_processing.create_check('Natural Gas Production'),
-                'process': sectored_processing.create_process('Natural Gas Production'),
-                'db_process': sectored_processing.create_process('Natural Gas Production'),
-                'viz': sectored_viz.create_plot('Natural Gas Production'),
-                'callback': sectored_callbacks.create_link('Natural Gas Production'),
+                'check': sectored_processing.create_check('Natural Gas'),
+                'db_check': sectored_processing.create_check('Natural Gas'),
+                'process': sectored_processing.create_process('Natural Gas'),
+                'db_process': sectored_processing.create_process('Natural Gas'),
+                'viz': sectored_viz.create_plot('Natural Gas'),
+                'callback': sectored_callbacks.create_link('Natural Gas'),
                 'description': 'The greenhouse gas emissions produced by the generation mix in the model.'
             },
         'Petroleum Crude':
