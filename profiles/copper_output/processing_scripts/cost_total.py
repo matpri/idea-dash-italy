@@ -163,6 +163,14 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     # Rename values in variable from "Carbon Cost" to carbon_tax_cost
     carbon_cost = carbon_cost.assign(variable='carbon_tax_cost')
 
+    # Reserves cost == where variable is "Reserves Cost" in formatted df and then add row for Canada as sum of all regions
+    reserves_cost = formatted_cost[formatted_cost.variable.str.startswith("Reserves Costs|")].copy()
+    cav_reserves_cost = reserves_cost.groupby(["time", "scenario", 'unit'], as_index=False)["value"].sum(numeric_only=True)
+    cav_reserves_cost = cav_reserves_cost.assign(region='CAN', variable='Reserves Costs')
+    reserves_cost = pd.concat([reserves_cost, cav_reserves_cost], ignore_index=True)
+    # Rename values in variable from "Reserves Costs" to reserves_cost
+    reserves_cost = reserves_cost.assign(variable='reserves_cost')
+
     # Carbon credit cost == where variable is "Carbon Credit Cost" in formatted df and then add row for Canada as sum of all regions
     carboncredit_cost = formatted_cost[formatted_cost.variable.str.startswith("Carbon Credit Costs|")].copy()
     can_carboncredit_cost = carboncredit_cost.groupby(["time", "scenario", 'unit'], as_index=False)["value"].sum(numeric_only=True)
@@ -190,7 +198,7 @@ def calculate_total_cost(formatted_cost, gen_capacity, fom, vom):
     fuel_cost_weighted = fuel_cost_weighted.assign(variable='fuel_cost_weighted')
 
     # Put all costs together in one DataFrame
-    total_costs_df = pd.concat([capacity_cost, carbon_cost, carboncredit_cost, fom_cost, 
+    total_costs_df = pd.concat([capacity_cost, carbon_cost, reserves_cost, carboncredit_cost, fom_cost, 
                                 fuel_cost_weighted, variable_om_cost_weighted], ignore_index=True)
     # Rearrange indexes to ["variable", "region", "time", "scenario", "value"]
     total_costs_df = total_costs_df[["variable", "region", "time", "scenario", "value", 'unit']]
@@ -214,6 +222,7 @@ def process(data):
     for scenario_name, db in data.items():
         df = db.copy()
         df = df[df.variable.str.startswith("Carbon Costs|") | df.variable.str.startswith(
+                "Reserves Costs|") | df.variable.str.startswith(
                 "Carbon Credit Costs|") | df.variable.str.startswith("Capital Costs|") | df.variable.str.startswith(
                 "Fixed O&M Costs|") | df.variable.str.startswith("Variable O&M Costs|") | df.variable.str.startswith(
                 "Fuel Costs|")]
@@ -234,10 +243,11 @@ def process(data):
         'Variable_OM': 'VO&M costs',
         'Variable O&M Costs': 'VO&M costs',
         'Fixed_OM': 'FO&M costs',
-        'Carbon_Tax': 'Carbon price',
+        'Carbon_Tax': 'Carbon costs',
         'Fixed O&M Costs': 'FO&M costs',
         'Fuel': 'Fuel costs',
-        'Carbon_Tax_Credit': 'Carbon credit'
+        'Carbon_Tax_Credit': 'Carbon credits',
+        'Reserves': 'Reserves costs'
     }).fillna(full_df['variable'])
 
     # replace any variable that starts with Fuel with Fuel Cost
