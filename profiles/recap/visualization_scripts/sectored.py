@@ -31,9 +31,9 @@ def render_plot(sector, df, p_type, r_type, by_rep, year, region, scenarios, sce
     elif r_type == 'Pie Chart':
         return pie_chart.plot(df_plt, scenario, region, year, f'{sector}: ' + variable, 'Year',
                                    variable)
-
-    elif r_type == 'Sankey':
-        return sankey.plot(df_plt, scenario, region, year, f'{sector}: ' + variable, variable)
+    #
+    # elif r_type == 'Sankey':
+    #     return sankey.plot(df_plt, scenario, region, year, f'{sector}: ' + variable, variable)
 
     else:
         return bar_over_regions.plot(df_plt, scenarios, year, f'{sector}: ' + variable, 'Year',
@@ -96,7 +96,7 @@ def process_represenation(p_type, by_rep, variable, df, service, tech_sector=Non
             filtered_df = df[
                 (df['technology'].isna())
             ]
-            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario', 'context', 'service', 'parent_service']]
+            filtered_df = filtered_df[['region', 'short_path', 'year', 'value_num', 'scenario', 'context']]
             filtered_df = filtered_df.rename(columns={'value_num': 'value', 'short_path': 'variable', 'year': 'time'})
     return filtered_df
 
@@ -293,8 +293,8 @@ def create_plot(sector):
 
             dmc.Select(
                 label='Representation Options',
-                data=[{'label': plot, 'value': plot} for plot in ['Sankey', 'Trend Over Years']],
-                value='Sankey',
+                data=[{'label': plot, 'value': plot} for plot in ['Trend Over Years']], #'Sankey',
+                value='Trend Over Years',
                 id={
                     'type': f'recap-{lower_sector}-rep-select',
                     'index': window_id
@@ -333,7 +333,7 @@ def create_plot(sector):
 
         plot_layout = dcc.Graph(
             figure=render_plot(sector,
-                df, plot_type, 'Sankey', False, years[0], regions[0], scenarios, scenarios[0], 
+                df, plot_type, 'Trend Over Years', False, years[0], regions[0], scenarios, scenarios[0],
                 variables[0] if variables else 'Energy Demand',
                 pattern_active=True, text_active=False, service=df['layer_0'].unique().tolist()[0],
                 tech_sector=sector,  

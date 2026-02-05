@@ -15,28 +15,25 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
     name = plot_settings[plot_name]['name']
     unit = plot_settings[plot_name]['unit']
     df = process_represenation(df, representation, sector, service, emissions_list)
-
     if type == 'By Year':
         plot_info = plot_settings[plot_name]['By Year']
-        # Note: ghg doesn't use aggregate parameter, so we pass False
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'],
-                                   name, unit, aggregate=False, pattern_active=pattern_active,
+                                   name, unit, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings[plot_name]['Trend Over Years']
-        # Note: ghg doesn't use aggregate parameter, so we pass False
-        return trend_over_years.plot(df, scenario, region, False, plot_info['title'], plot_info['x_label'],
+        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit)
     elif type == 'Pie Chart':
         plot_info = plot_settings[plot_name]['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, False, plot_info['title'], plot_info['x_label'],
-                              plot_info['y_label'])
-    else:  # By Region
+        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
+                              plot_info['y_label'],
+                              )
+    else:
         plot_info = plot_settings[plot_name]['By Region']
-        # Note: ghg doesn't use aggregate parameter, so we pass None or False
-        return bar_over_regions.plot(df, scenarios, False, year, plot_info['title'], plot_info['x_label'],
+        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
@@ -100,8 +97,8 @@ def widgets(df, window_id):
     services = df[(df['sector'] == sectors[0])]['short_path'].unique().tolist()
     emissions_list = df[df['parameter'].str.contains('emissions')]['parameter'].unique().tolist()
 
-    # plot_types = ['Net Emissions', 'Avoided Emissions', 'Negative Emissions', 'Emitted Emissions', 'Emissions Costs']
-    plot_types = ['Net Emissions']
+    plot_types = ['Net Emissions', 'Avoided Emissions', 'Negative Emissions', 'Emitted Emissions', 'Emissions Costs']
+
     by_year_widgets = dmc.Select(
         label='Region',
         data=[{'label': region, 'value': region} for region in regions],
@@ -153,7 +150,7 @@ def widgets(df, window_id):
             'index': window_id
         })
 
-    sectors = ['All']
+    sectors = ['All'] + sectors
     by_sector_widgets = dmc.Select(
         label='Sector',
         data=[{'label': sector, 'value': sector} for sector in sectors],
@@ -188,8 +185,8 @@ def widgets(df, window_id):
     widget_layout = [
         dmc.Select(
             label='Result Representation',
-            data=[{'label': plot, 'value': plot} for plot in ['By Sector']],
-            value='By Sector',
+            data=[{'label': plot, 'value': plot} for plot in ['By Emission','By Service', 'By Sector']],
+            value='By Emission',
             id={
                 'type': 'recap-ghg-representation-select',
                 'index': window_id
@@ -246,7 +243,7 @@ def widgets(df, window_id):
         dcc.Download(id={'type': 'recap-ghg-download', 'index': window_id}),
     ]
 
-    return widget_layout, render_plot('By Sector', 'By Year', df, [scenarios[0]],
+    return widget_layout, render_plot('By Emission', 'By Year', df, [scenarios[0]],
                                       'CAN' if 'CAN' in regions else regions[0],
                                       years[0], scenarios[0], sector=sectors[0], service=services[0],
                                       emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],

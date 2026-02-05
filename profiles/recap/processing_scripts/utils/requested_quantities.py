@@ -17,11 +17,11 @@ def check(df):
     #print("Checking for emissions in variable column")
     try:
         if (df.model == 'CIM2').any():
-            if (df.parameter == 'requested_quantities').any():
+            if (df.parameter == 'quantity_requested').any() or (df.parameter == 'requested_quantities').any():
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        print("requested_quantities check", e)
         return False
 
 
@@ -69,19 +69,22 @@ def process(selected: dict):
     for scenario_name, db in selected.items():
         df = db.copy()
 
-        requested_services = df[(df['parameter'] == 'service requested')].copy()
-
+        requested_services = df[(df['parameter'] == 'service_request')].copy()
+        v1 = True
+        if requested_services.empty:
+            v1 = False
+            requested_services = df[(df['parameter'] == 'service_requested')|(df['parameter'] == 'service requested')].copy().copy()
         # remove nan sectors
         requested_services = requested_services[requested_services['sector'].notna()]
         sectors = requested_services['sector'].unique()
         parents = []
-        for sector in sectors:
-            requested_service = requested_services[(requested_services['sector'] == sector)]
-            start_service = requested_service[requested_services['short_path'] == sector]['full_path'].values[0]
-            tree = {start_service: recursive_search(requested_service, start_service)}
-            parents.append(dict_to_df(tree))
-
-        parent_services = pd.concat(parents)
+        # for sector in sectors:
+        #     requested_service = requested_services[(requested_services['sector'] == sector)]
+        #     start_service = requested_service[requested_services['short_path'] == sector]['full_path'].values[0]
+        #     tree = {start_service: recursive_search(requested_service, start_service)}
+        #     parents.append(dict_to_df(tree))
+        #
+        # parent_services = pd.concat(parents)
 
 
         elec_mask = df['target'].str.endswith('Electricity', na=False)
@@ -90,24 +93,38 @@ def process(selected: dict):
 
         df['__key'] = df[id_cols].astype(str).agg('|'.join, axis=1)
 
+        if v1:
+            ds_lookup = (
+                df[elec_mask & (df['parameter'] == 'quantity_distributed')]
+                .set_index('__key')['value_num'].astype(float)
+                .fillna(0)  # treat NaN as 0
+            )
 
-        ds_lookup = (
-            df[elec_mask & (df['parameter'] == 'distributed_supply')]
-            .set_index('__key')['value_num']
-            .fillna(0)  # treat NaN as 0
-        )
+            mask_rq = elec_mask & (df['parameter'] == 'quantity_requested')
+            df.loc[mask_rq, 'value_num'] = (
+                df.loc[mask_rq, 'value_num'].astype(float).fillna(0) -
+                df.loc[mask_rq, '__key'].map(ds_lookup).astype(float).fillna(0)
+            )
 
-        mask_rq = elec_mask & (df['parameter'] == 'requested_quantities')
-        df.loc[mask_rq, 'value_num'] = (
-            df.loc[mask_rq, 'value_num'].fillna(0) -
-            df.loc[mask_rq, '__key'].map(ds_lookup).fillna(0)
-        )
+            df.drop(columns='__key', inplace=True)
+            df = df[(df['parameter'] == 'quantity_requested') & (df['technology'].isna())]
+        else:
+            ds_lookup = (
+                df[elec_mask & (df['parameter'] == 'distributed_supply')]
+                .set_index('__key')['value_num']
+                .fillna(0)  # treat NaN as 0
+            )
 
-        df.drop(columns='__key', inplace=True)
-        df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
+            mask_rq = elec_mask & (df['parameter'] == 'requested_quantities')
+            df.loc[mask_rq, 'value_num'] = (
+                    df.loc[mask_rq, 'value_num'].fillna(0) -
+                    df.loc[mask_rq, '__key'].map(ds_lookup).fillna(0)
+            )
 
+            df.drop(columns='__key', inplace=True)
+            df = df[(df['parameter'] == 'requested_quantities') & (df['technology'].isna())]
 
-        df = df[~df['region'].str.contains('CAN')]
+            df = df[~df['region'].str.contains('CAN')]
         df['short_path'] = df['short_path'].fillna('')
         layers = df['short_path'].apply(lambda x: len(x.split('.'))).max()
 
@@ -116,18 +133,19 @@ def process(selected: dict):
             df[f'layer_{i}'] = df['short_path'].apply(
                 lambda x: x.split('.')[i] if len(x.split('.')) > i else '')
         df['scenario'] = scenario_name
-        df = df.merge(parent_services, left_on='full_path', right_on='service', how='left')
+        # df = df.merge(parent_services, left_on='full_path', right_on='service', how='left')
 
         # for each entry find the difference between full_path and short_path and remove the prefix from service and parent_service
         # make service and parent_service columns strings if nan and fill with ''
-        df['service'] = df['service'].fillna('')
-        df['parent_service'] = df['parent_service'].fillna('')
-        df['service'] = df['service'].astype(str)
-        df['parent_service'] = df['parent_service'].astype(str)
-        for i, row in df.iterrows():
-            prefix = row['full_path'].replace(row['short_path'], '')
-            df.at[i, 'service'] = row['service'].replace(prefix, '')
-            df.at[i, 'parent_service'] = row['parent_service'].replace(prefix, '')
+        # df['service'] = df['service'].fillna('')
+        # df['parent_service'] = df['parent_service'].fillna('')
+        # df['service'] = df['service'].astype(str)
+        # df['parent_service'] = df['parent_service'].astype(str)
+        # for i, row in df.iterrows():
+        #     prefix = row['full_path'].replace(row['short_path'], '')
+        #     df.at[i, 'service'] = row['service'].replace(prefix, '')
+        #     df.at[i, 'parent_service'] = row['parent_service'].replace(prefix, '')
         dfs.append(df)
     full_df = pd.concat(dfs)
+    full_df['value_num'] = full_df['value_num'].astype(float)
     return full_df

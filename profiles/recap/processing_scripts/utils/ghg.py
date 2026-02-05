@@ -21,7 +21,7 @@ def check(df):
                 return True
         return False
     except Exception as e:
-        print("Emission check", e)
+        print("ghg check", e)
         return False
 
 def process(selected: dict):
@@ -35,4 +35,5 @@ def process(selected: dict):
         df['scenario'] = scenario_name
         dfs.append(df)
     full_df = pd.concat(dfs)
+    full_df['value_num'] = full_df['value_num'].astype(float)
     return full_df
