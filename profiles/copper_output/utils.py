@@ -227,7 +227,8 @@ cost_type = {
     "Transmission_capacity_cost": "Transmission",
     "transmission_capacity_cost": "Transmission",
     "variable_om_cost_weighted": "Variable_OM",
-    "VRE integration cost": "VRE_Integration"
+    "VRE integration cost": "VRE_Integration",
+    "reserves_cost": "Reserves"
 }
 
 
