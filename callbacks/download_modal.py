@@ -3,7 +3,6 @@ from dash import Output, Input, State, ALL, html
 import pandas as pd
 import io
 import base64
-import zipfile
 from concurrent.futures import ThreadPoolExecutor, as_completed
 
 def link(app):
@@ -15,7 +14,12 @@ def link(app):
 
     app.callback(
         Output('download-data', 'data'),
-        Output('download-selected-button', 'loading'),
+        Output('download-files-store', 'data'),
+        Output('download-state-store', 'data'),
+        Output('download-interval', 'disabled'),
+        Output('download-loading-overlay', 'visible'),
+        Output('download-modal', 'closeOnClickOutside'),
+        Output('download-modal', 'withCloseButton'),
         Input('download-selected-button', 'n_clicks'),
         State({'type': 'download-chip-group', 'profile': ALL, 'scenario': ALL}, 'value'),
         State({'type': 'download-chip-group', 'profile': ALL, 'scenario': ALL}, 'id'),
@@ -28,6 +32,32 @@ def link(app):
         Input('download-scenario-select', 'value'),
         prevent_initial_call=False,
     )(update_button_state)
+
+    # Callback for sequential downloads triggered by Interval
+    app.callback(
+        Output('download-data', 'data', allow_duplicate=True),
+        Output('download-files-store', 'data', allow_duplicate=True),
+        Output('download-state-store', 'data', allow_duplicate=True),
+        Output('download-interval', 'disabled', allow_duplicate=True),
+        Output('download-loading-overlay', 'visible', allow_duplicate=True),
+        Output('download-modal', 'closeOnClickOutside', allow_duplicate=True),
+        Output('download-modal', 'withCloseButton', allow_duplicate=True),
+        Input('download-interval', 'n_intervals'),
+        State('download-files-store', 'data'),
+        State('download-state-store', 'data'),
+        prevent_initial_call=True,
+    )(handle_sequential_download)
+
+    # Callback to re-enable modal and hide spinner when downloads complete
+    app.callback(
+        Output('download-loading-overlay', 'visible', allow_duplicate=True),
+        Output('download-modal', 'closeOnClickOutside', allow_duplicate=True),
+        Output('download-modal', 'withCloseButton', allow_duplicate=True),
+        Input('download-interval', 'disabled'),
+        Input('download-state-store', 'data'),
+        State('download-files-store', 'data'),
+        prevent_initial_call=True,
+    )(update_modal_state)
 
 def create_excel_for_scenario(scenario, selected_data, scenario_filtered_data):
     """Create Excel file for a single scenario in parallel"""
@@ -54,9 +84,13 @@ def create_excel_for_scenario(scenario, selected_data, scenario_filtered_data):
     return scenario, output.getvalue()
 
 def download_selected_data(n_clicks, chip_values, chip_ids, scenarios):
+    """
+    Create all Excel files and prepare them for sequential download.
+    Returns the first file to download immediately and stores the rest.
+    """
     print('Download clicked', n_clicks, chip_values, chip_ids, scenarios)
     if n_clicks == 0 or not scenarios:
-        return None, False
+        return None, [], {'current_index': 0, 'total_files': 0}, True, False, True, True
 
     from utils.data_state import data_handler
     processed_data = data_handler.processed_data
@@ -98,47 +132,67 @@ def download_selected_data(n_clicks, chip_values, chip_ids, scenarios):
                           if not viz_data.empty)
         print(f"Scenario {scenario} has {total_sheets} sheets to write")
 
-    # Create Excel files in parallel
-    zip_buffer = io.BytesIO()
-    with zipfile.ZipFile(zip_buffer, 'w', zipfile.ZIP_DEFLATED, compresslevel=6) as zipf:
-        # Use ThreadPoolExecutor for parallel Excel creation
-        with ThreadPoolExecutor(max_workers=min(4, len(scenarios))) as executor:
-            # Submit all scenarios for parallel processing
-            future_to_scenario = {
-                executor.submit(create_excel_for_scenario, scenario, selected_data, all_scenario_data[scenario]): scenario
-                for scenario in scenarios if scenario in selected_data
-            }
+    # Create Excel files in parallel and store them as list of dicts
+    files_list = []
+    with ThreadPoolExecutor(max_workers=min(4, len(scenarios))) as executor:
+        # Submit all scenarios for parallel processing
+        future_to_scenario = {
+            executor.submit(create_excel_for_scenario, scenario, selected_data, all_scenario_data[scenario]): scenario
+            for scenario in scenarios if scenario in selected_data
+        }
 
-            # Collect results as they complete
-            files_created = 0
-            for future in as_completed(future_to_scenario):
-                scenario = future_to_scenario[future]
-                try:
-                    scenario_name, excel_data = future.result()
-                    if excel_data:  # Only add if there's actual data
-                        zipf.writestr(f"{scenario_name}_selected_data.xlsx", excel_data)
-                        files_created += 1
-                        print(f"Successfully created Excel file for scenario: {scenario_name}")
-                    else:
-                        print(f"No data to write for scenario: {scenario_name}")
-                except Exception as exc:
-                    print(f'Scenario {scenario} generated an exception: {exc}')
-                    import traceback
-                    traceback.print_exc()
+        # Collect results as they complete
+        for future in as_completed(future_to_scenario):
+            scenario = future_to_scenario[future]
+            try:
+                scenario_name, excel_data = future.result()
+                if excel_data:  # Only add if there's actual data
+                    # Encode Excel data as base64
+                    encoded = base64.b64encode(excel_data).decode()
+                    files_list.append({
+                        'filename': f"{scenario_name}_selected_data.xlsx",
+                        'data': encoded
+                    })
+                    print(f"Successfully created Excel file for scenario: {scenario_name}")
+                else:
+                    print(f"No data to write for scenario: {scenario_name}")
+            except Exception as exc:
+                print(f'Scenario {scenario} generated an exception: {exc}')
+                import traceback
+                traceback.print_exc()
 
-    print(f"Total files created in zip: {files_created}")
-    zip_buffer.seek(0)
+    print(f"Total files created: {len(files_list)}")
 
-    if files_created == 0:
-        print("Warning: No files were created - zip will be empty")
-        return None, False
+    if len(files_list) == 0:
+        print("Warning: No files were created")
+        return None, [], {'current_index': 0, 'total_files': 0}, True, False, True, True
 
-    encoded = base64.b64encode(zip_buffer.read()).decode()
-    return dict(
-        content=encoded,
-        filename="selected_data.zip",
+    # Return first file to download immediately, store the rest for sequential downloads
+    first_file = files_list[0]
+    remaining_files = files_list[1:] if len(files_list) > 1 else []
+    
+    # Initialize download state (current_index=0 means first file is being downloaded)
+    download_state = {
+        'current_index': 0,
+        'total_files': len(files_list)
+    }
+    
+    # Enable interval if there are more files, show loading spinner
+    interval_disabled = len(remaining_files) == 0
+    loading_visible = True  # Show spinner during downloads
+    
+    # Disable modal during download (prevent closing)
+    modal_close_on_click = False
+    modal_with_close_button = False
+    
+    # Return first file data for immediate download
+    first_file_data = dict(
+        content=first_file['data'],
+        filename=first_file['filename'],
         base64=True
-    ), False
+    ) if first_file else None
+
+    return first_file_data, remaining_files, download_state, interval_disabled, loading_visible, modal_close_on_click, modal_with_close_button
 
 def toggle_selection(scenarios):
     print('SCENARIOS', scenarios)
@@ -234,3 +288,77 @@ def toggle_selection(scenarios):
 
 def update_button_state(scenarios):
     return not scenarios
+
+def update_modal_state(interval_disabled, download_state, files_store):
+    """
+    Hide spinner and re-enable modal when downloads are complete.
+    """
+    # If no download state or no downloads initiated, hide spinner and keep modal enabled
+    if not download_state or download_state.get('total_files', 0) == 0:
+        return False, True, True
+    
+    current_index = download_state.get('current_index', 0)
+    total_files = download_state.get('total_files', 0)
+    
+    # Check if all downloads are complete
+    # Downloads are complete when:
+    # 1. We've processed all files (current_index >= total_files - 1)
+    # 2. No files remaining in queue (files_store is empty)
+    # 3. Interval is disabled (no more downloads pending)
+    is_complete = (
+        current_index >= total_files - 1 and
+        (not files_store or len(files_store) == 0) and
+        interval_disabled
+    )
+    
+    if is_complete:
+        return False, True, True  # Hide spinner and re-enable modal
+    
+    # Keep spinner visible and modal disabled during active downloads
+    return True, False, False
+
+def handle_sequential_download(n_intervals, files_store, download_state):
+    """
+    Handle sequential downloads triggered by Interval component.
+    Downloads the next file in the queue and updates state.
+    """
+    # If no files remaining or invalid state, disable interval and re-enable modal
+    if not files_store or not download_state or len(files_store) == 0:
+        return None, [], {'current_index': 0, 'total_files': 0}, True, False, True, True
+    
+    current_index = download_state.get('current_index', 0)
+    total_files = download_state.get('total_files', 0)
+    
+    # Check if we've downloaded all files - hide spinner and re-enable modal
+    if current_index >= total_files - 1:
+        return None, [], download_state, True, False, True, True
+    
+    # Get next file to download
+    next_file = files_store[0]
+    remaining_files = files_store[1:] if len(files_store) > 1 else []
+    
+    # Update download state (increment index for next file)
+    new_state = {
+        'current_index': current_index + 1,
+        'total_files': total_files
+    }
+    
+    # Prepare file data for download
+    file_data = dict(
+        content=next_file['data'],
+        filename=next_file['filename'],
+        base64=True
+    )
+    
+    # Disable interval if this is the last file, otherwise keep modal disabled
+    interval_disabled = len(remaining_files) == 0
+    # Keep spinner visible and modal disabled during download
+    loading_visible = True
+    # Re-enable modal when downloads complete
+    modal_close_on_click = interval_disabled
+    modal_with_close_button = interval_disabled
+    
+    print(f"Downloading file {current_index + 2} of {total_files}: {next_file['filename']}")
+    
+    return file_data, remaining_files, new_state, interval_disabled, loading_visible, modal_close_on_click, modal_with_close_button
+

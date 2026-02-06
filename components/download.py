@@ -23,6 +23,8 @@ def render():
         opened=False,
         id='download-modal',
         size='70%',
+        closeOnClickOutside=True,
+        withCloseButton=True,
         children=html.Div(
             dmc.LoadingOverlay(
                 [
@@ -43,7 +45,17 @@ def render():
                             disabled=True,  # Initially disabled until scenario is selected
                             style={'marginTop': '10px'}
                         ),
-                        dcc.Download(id='download-data')  # Add download component
+                        dcc.Download(id='download-data'),  # Download component for triggering downloads
+                        # Store components for file data and download state
+                        dcc.Store(id='download-files-store', data=[]),  # Stores list of files ready for download (remaining files)
+                        dcc.Store(id='download-state-store', data={'current_index': 0, 'total_files': 0}),  # Tracks download progress
+                        # Interval component for sequential downloads (disabled by default)
+                        dcc.Interval(
+                            id='download-interval',
+                            interval=500,  # 500ms between downloads
+                            disabled=True,  # Disabled until download starts
+                            n_intervals=0
+                        )
                     ],
                         style={'marginTop': '10px', 'marginBottom': '10px', 'display': 'flex',
                                'flexDirection': 'column',
@@ -52,7 +64,9 @@ def render():
                     dmc.Divider(),
                     html.Div(id='scenario-download-container', children=[
                     ])
-                ]
+                ],
+                id='download-loading-overlay',
+                loaderProps={'variant': 'dots', 'size': 'lg', 'color': 'blue'}
             )
         )
     )
