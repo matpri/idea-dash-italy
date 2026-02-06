@@ -7,7 +7,7 @@
 #     'PITHOS': ['PITHOS', 'Power System Models'],
 #     'NRCan-PyPsa': ['NRCan-PyPsa', 'Power System Models'],
 #     'PyPSA_CAN': ['PyPSA_CAN', 'Power System Models'],
-#     'Sutubra-TEMOA': ['Sutubra-TEMOA', 'Power System Models'],
+#     'Sutubra': ['Sutubra', 'Power System Models'],
 #     'CIMS': ['CIMS'],
 #     'CIM2': ['Summary']
 # }
@@ -21,11 +21,11 @@ model_mapping = {
     'PITHOS': ['PITHOS','Power System Models'],
     'NRCan-PyPsa': ['NRCan-PyPsa','Power System Models'],
     'PyPSA_CAN': ['PyPSA_CAN','Power System Models'],
-    'Sutubra-TEMOA': ['Sutubra-TEMOA','Power System Models'],
+    'Sutubra': ['Sutubra','Power System Models'],
     'PaCES': ['PaCES','Power System Models'],
     'CIMS': ['CIMS'],
     'CIM2': ['Summary']
 }
 
 exclude_from_comparison = ['Power System Models', 'LabourABM', 'CIMS', 'CODERS Input', 'Macromodel', 'ECCC-NextGrid',
-                           'COPPER', 'PITHOS', 'PaCES', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra-TEMOA', 'Summary']
+                           'COPPER', 'PITHOS', 'PaCES', 'NRCan-PyPsa', 'NATEM Canada', 'SILVER', 'Sutubra', 'Summary']

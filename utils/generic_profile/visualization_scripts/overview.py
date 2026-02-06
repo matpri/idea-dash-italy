@@ -257,6 +257,8 @@ def create_overview_plot(model, is_comparison=False):
 
         units = df[df['variable'] == classes[0]]['unit'].unique().tolist()
 
+        scenarios = df['base_scenario'].unique().tolist() if is_comparison else df['scenario'].unique().tolist()
+
         comparison_widgets = []
         if is_comparison:
             base_scenarios = df['base_scenario'].unique().tolist()
@@ -320,6 +322,17 @@ def create_overview_plot(model, is_comparison=False):
                 checked=False,
                 id={
                     'type': 'report-type-switch',
+                    'model': model,
+                    'index': window_id,
+                    'viz': 'overview'
+                },
+            ),
+            dmc.Select(
+                label='Compare to Scenario',
+                data=[{'label': scenario, 'value': scenario} for scenario in ['None'] + scenarios],
+                value='None',
+                id={
+                    'type': 'compare-scenario-select',
                     'model': model,
                     'index': window_id,
                     'viz': 'overview'

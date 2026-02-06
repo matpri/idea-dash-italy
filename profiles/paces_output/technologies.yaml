@@ -1683,3 +1683,9 @@ Fixed O&M:
     group: Biogas
     group_color: '#5d7aff'
     name: Electricity|Biogas|w/o CCS
+
+"Electricity|Oil|w/o CCS":
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Oil|w/o CCS

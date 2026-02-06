@@ -36,7 +36,7 @@ def check(df):
             return pypsa_matrix.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_matrix.check(df)
-        elif df.model.unique()[0] == "Sutubra-TEMOA":
+        elif df.model.unique()[0] == "Sutubra":
             return temoa_matrix.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_matrix.check(df)
@@ -68,7 +68,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_matrix.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "Sutubra-TEMOA":
+        elif db.model.unique()[0] == "Sutubra":
             df = temoa_matrix.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "cef":

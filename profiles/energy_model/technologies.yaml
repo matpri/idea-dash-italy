@@ -1756,8 +1756,8 @@ BaseHydro:
 
 Electricity|Biogas|w/o CCS:
   color: '#000000'
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
   name: Electricity|Biogas|w/o CCS
 
 Electricity|Hydro|ROR:
@@ -1774,7 +1774,7 @@ Electricity|Hydro|Storage:
 
 Electricity|Load Shedding:
   color: '#000000'
-  group: Load Shedding
+  group: Demand response
   group_color: '#000000'
   name: Electricity|Load Shedding
 
@@ -3385,8 +3385,8 @@ Electricity|Diesel|w/o CCS|CER Exempt:
   group: Biomass
   group_color: '#33a02c'
 'Energy production|Secondary production|Electricity production|Biomass|Biogas|Electricity|Centralized electricity':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Oil|Light fuel oil|Electricity|Centralized electricity':
   group: Fossil fuel liquid
   group_color: '#ffaa33'
@@ -3463,8 +3463,8 @@ Electricity|Diesel|w/o CCS|CER Exempt:
   group: Biomass
   group_color: '#33a02c'
 'Energy production|Secondary production|Electricity production|Biomass|Biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Natural gas|Natural Gas w/out CCS - CHP':
   group: Fossil fuel gas
   group_color: '#ff6b6b'
@@ -3502,8 +3502,8 @@ Electricity|Diesel|w/o CCS|CER Exempt:
   group: HydrogenGreen
   group_color: '#1f78b4'
 'Energy production|Secondary production|Electricity production|Biomass|Waste water biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Energy production|Secondary production|Electricity production|Biomass':
   group: Biomass
   group_color: '#33a02c'
@@ -3541,8 +3541,8 @@ Electricity|Diesel|w/o CCS|CER Exempt:
   group: Nuclear
   group_color: '#ff7f00'
 'Biomass|Biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Oil|Heavy fuel oil':
   group: Fossil fuel liquid
   group_color: '#ffaa33'
@@ -3568,8 +3568,8 @@ Electricity|Diesel|w/o CCS|CER Exempt:
   group: Storage
   group_color: '#6a3d9a'
 'Biomass|Waste water biogas':
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
 'Biomass|Wood biomass w/ CCS':
   group: Biomass
   group_color: '#33a02c'

@@ -65,7 +65,7 @@ from profiles.energy_model.visualization_scripts import (
 )
 
 power_system_models = ['COPPER', 'ECCC-NextGrid', 'NATEM Canada', 'PITHOS',
-                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra-TEMOA', 'Canada Energy Futures', 'PaCES']
+                       'NRCan-PyPsa', 'PyPSA_CAN', 'Sutubra', 'Canada Energy Futures', 'PaCES']
 
 technologies_paths = [
     './profiles/copper_output/technologies.yaml',
@@ -281,6 +281,14 @@ class energy_modelsOutput(BaseProfile):
         for path in technologies_paths:
             techs = yaml.load(open(path, 'r'), Loader=yaml.FullLoader)
             all_techs.update(techs)
+        
+        try:
+            for k, v in all_techs.items():
+                if 'Fuel' in v['group']:
+                    v['group'] = v['group'].split('|')[0]
+                    all_techs[k] = v
+        except:
+            pass
 
         all_techs['Electricity|Offset Emissions'] =  {
                 'name': 'Electricity Offset Emissions',

@@ -1606,8 +1606,8 @@ Electricity|Coal|Pulverized|w/o CCS:
 
 Electricity|Biogas|w/o CCS:
   color: '#000000'
-  group: Biomass
-  group_color: '#33a02c'
+  group: Biogas
+  group_color: '#5d7aff'
   name: Electricity|Biogas|w/o CCS
 
 Electricity|Hydro|ROR:
@@ -1624,7 +1624,7 @@ Electricity|Hydro|Storage:
 
 Electricity|Load Shedding:
   color: '#000000'
-  group: Load Shedding
+  group: Demand response
   group_color: '#000000'
   name: Electricity|Load Shedding
 

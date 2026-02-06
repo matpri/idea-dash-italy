@@ -36,7 +36,7 @@ def check(df):
             return pypsa_generation_supply.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_generation_supply.check(df)
-        elif df.model.unique()[0] == "Sutubra-TEMOA":
+        elif df.model.unique()[0] == "Sutubra":
             return temoa_generation_supply.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_generation_supply.check(df)
@@ -68,7 +68,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_generation_supply.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "Sutubra-TEMOA":
+        elif db.model.unique()[0] == "Sutubra":
             df = temoa_generation_supply.process({scenario_name: db})
             dfs.append(df)
         elif db.model.unique()[0] == "cef":

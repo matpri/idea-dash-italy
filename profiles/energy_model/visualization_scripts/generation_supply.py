@@ -33,7 +33,9 @@ def plot(df, window_id):
     scenarios = df['scenario'].unique().tolist()
 
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['', 'ALL'] + base_scenarios
+    base_scenarios = ['ALL'] + base_scenarios
+
+    has_reference = 'Reference' in base_scenarios
 
     regions = df['region'].unique().tolist()
     years = df['time'].unique().tolist()
@@ -92,6 +94,15 @@ def plot(df, window_id):
                 'index': window_id
             },
         ),
+        dmc.Switch(
+            label='Compare to Reference',
+            checked=False,
+            id={
+                'type': 'energy_model-supply-compare-reference',
+                'index': window_id,
+            },
+            style={'display': 'block' if has_reference else 'none'}
+        ),
         dmc.Select(
             label='Report Type',
             data=[{'label': report_type, 'value': report_type} for report_type in ['Total', 'Relative Change', 'Relative Makeup']],
@@ -120,10 +131,10 @@ def plot(df, window_id):
             style={'display': 'block'}
         ),
 
-        dmc.Select(
+        dmc.MultiSelect(
             label='Scenario Group',
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value=[base_scenarios[0]],
+            value=[],
             id={
                 'type': 'energy_model-supply-scenario-group-select',
                 'index': window_id,

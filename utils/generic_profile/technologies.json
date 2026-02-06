@@ -1,0 +1,752 @@
+{
+  "Electricity": {
+    "color": "#888888",
+    "group": "Electricity",
+    "group_color": "#888888",
+    "name": "Electricity"
+  },
+  "Electricity|Biomass": {
+    "color": "#6b8e23",
+    "group": "Biomass electricity",
+    "group_color": "#88aa44",
+    "name": "Electricity|Biomass"
+  },
+  "Electricity|Biomass|CCS": {
+    "color": "#33cccc",
+    "group": "Biomass electricity with CCS",
+    "group_color": "#66dddd",
+    "name": "Electricity|Biomass|CCS"
+  },
+  "Electricity|Biomass|no CCS": {
+    "color": "#556b2f",
+    "group": "Biomass electricity",
+    "group_color": "#88aa44",
+    "name": "Electricity|Biomass|no CCS"
+  },
+  "Electricity|Coal": {
+    "color": "#333333",
+    "group": "Coal electricity",
+    "group_color": "#555555",
+    "name": "Electricity|Coal"
+  },
+  "Electricity|Coal|CCS": {
+    "color": "#0099aa",
+    "group": "Coal electricity with CCS",
+    "group_color": "#33bbcc",
+    "name": "Electricity|Coal|CCS"
+  },
+  "Electricity|Coal|no CCS": {
+    "color": "#1f1f1f",
+    "group": "Coal electricity",
+    "group_color": "#555555",
+    "name": "Electricity|Coal|no CCS"
+  },
+  "Electricity|Gas": {
+    "color": "#1f77b4",
+    "group": "Fossil fuel gas electricity",
+    "group_color": "#3399ff",
+    "name": "Electricity|Gas"
+  },
+  "Electricity|Gas|CCS": {
+    "color": "#00bcd4",
+    "group": "Fossil fuel gas with CCS",
+    "group_color": "#66d9ef",
+    "name": "Electricity|Gas|CCS"
+  },
+  "Electricity|Gas|no CCS": {
+    "color": "#005f99",
+    "group": "Fossil fuel gas electricity",
+    "group_color": "#3399ff",
+    "name": "Electricity|Gas|no CCS"
+  },
+  "Electricity|Geothermal": {
+    "color": "#e67300",
+    "group": "Geothermal electricity",
+    "group_color": "#ff9933",
+    "name": "Electricity|Geothermal"
+  },
+  "Electricity|Hydro": {
+    "color": "#2ca02c",
+    "group": "Hydro electricity",
+    "group_color": "#4daf4a",
+    "name": "Electricity|Hydro"
+  },
+  "Electricity|Hydrogen": {
+    "color": "#66c2ff",
+    "group": "Hydrogen electricity",
+    "group_color": "#99ddff",
+    "name": "Electricity|Hydrogen"
+  },
+  "Electricity|Nuclear": {
+    "color": "#9467bd",
+    "group": "Nuclear electricity",
+    "group_color": "#b28cd9",
+    "name": "Electricity|Nuclear"
+  },
+  "Electricity|Ocean": {
+    "color": "#1f9e89",
+    "group": "Ocean electricity",
+    "group_color": "#3fbfb0",
+    "name": "Electricity|Ocean"
+  },
+  "Electricity|Oil": {
+    "color": "#8c564b",
+    "group": "Oil electricity",
+    "group_color": "#a86a5c",
+    "name": "Electricity|Oil"
+  },
+  "Electricity|Oil|CCS": {
+    "color": "#00a6a6",
+    "group": "Oil electricity with CCS",
+    "group_color": "#33c4c4",
+    "name": "Electricity|Oil|CCS"
+  },
+  "Electricity|Oil|no CCS": {
+    "color": "#5d3a33",
+    "group": "Oil electricity",
+    "group_color": "#a86a5c",
+    "name": "Electricity|Oil|no CCS"
+  },
+  "Electricity|Other": {
+    "color": "#7f7f7f",
+    "group": "Other electricity",
+    "group_color": "#b0b0b0",
+    "name": "Electricity|Other"
+  },
+  "Electricity|Solar": {
+    "color": "#ffdd33",
+    "group": "Solar electricity",
+    "group_color": "#ffcc00",
+    "name": "Electricity|Solar"
+  },
+  "Electricity|Storage Capacity": {
+    "color": "#17becf",
+    "group": "Electricity storage",
+    "group_color": "#17becf",
+    "name": "Electricity|Storage Capacity"
+  },
+  "Electricity|Storage Energy": {
+    "color": "#0f9bbf",
+    "group": "Electricity storage",
+    "group_color": "#17becf",
+    "name": "Electricity|Storage Energy"
+  },
+  "Electricity|Wind": {
+    "color": "#aec7e8",
+    "group": "Wind electricity",
+    "group_color": "#9ecae1",
+    "name": "Electricity|Wind"
+  },
+  "Electricity|Wind|Offshore": {
+    "color": "#5dade2",
+    "group": "Offshore wind electricity",
+    "group_color": "#7fb3d5",
+    "name": "Electricity|Wind|Offshore"
+  },
+  "Electricity|Wind|Onshore": {
+    "color": "#2874a6",
+    "group": "Onshore wind electricity",
+    "group_color": "#7fb3d5",
+    "name": "Electricity|Wind|Onshore"
+  },
+  "CCS": {
+    "color": "#00bcd4",
+    "group": "Carbon capture and storage",
+    "group_color": "#00bcd4",
+    "name": "CCS"
+  },
+  "Direct Air Capture|Net": {
+    "color": "#4db6ac",
+    "group": "Direct air capture",
+    "group_color": "#26a69a",
+    "name": "Direct Air Capture|Net"
+  },
+  "Direct Air Capture|Total": {
+    "color": "#26a69a",
+    "group": "Direct air capture",
+    "group_color": "#26a69a",
+    "name": "Direct Air Capture|Total"
+  },
+  "LULUCF": {
+    "color": "#2e8b57",
+    "group": "Land use, land-use change and forestry",
+    "group_color": "#3cb371",
+    "name": "LULUCF"
+  },
+  "CO2": {
+    "color": "#d62728",
+    "group": "CO2 emissions",
+    "group_color": "#d62728",
+    "name": "CO2"
+  },
+  "CO2|Combustion": {
+    "color": "#b22222",
+    "group": "CO2 combustion emissions",
+    "group_color": "#d62728",
+    "name": "CO2|Combustion"
+  },
+  "CO2|Combustion|Energy|Coal": {
+    "color": "#4d4d4d",
+    "group": "CO2 from coal combustion",
+    "group_color": "#555555",
+    "name": "CO2|Combustion|Energy|Coal"
+  },
+  "CO2|Combustion|Energy|Gas": {
+    "color": "#1f77b4",
+    "group": "CO2 from gas combustion",
+    "group_color": "#3399ff",
+    "name": "CO2|Combustion|Energy|Gas"
+  },
+  "CO2|Combustion|Energy|Oil": {
+    "color": "#8c564b",
+    "group": "CO2 from oil combustion",
+    "group_color": "#a86a5c",
+    "name": "CO2|Combustion|Energy|Oil"
+  },
+  "CO2|Combustion|Sector|Biogas": {
+    "color": "#8fbc8f",
+    "group": "CO2 from biogas combustion",
+    "group_color": "#98fb98",
+    "name": "CO2|Combustion|Sector|Biogas"
+  },
+  "CO2|Combustion|Sector|Biomass Liquids": {
+    "color": "#9acd32",
+    "group": "CO2 from biomass liquids combustion",
+    "group_color": "#adff2f",
+    "name": "CO2|Combustion|Sector|Biomass Liquids"
+  },
+  "CO2|Combustion|Sector|Buildings": {
+    "color": "#ff7f0e",
+    "group": "CO2 from buildings combustion",
+    "group_color": "#ff9d4a",
+    "name": "CO2|Combustion|Sector|Buildings"
+  },
+  "CO2|Combustion|Sector|Electricity": {
+    "color": "#9467bd",
+    "group": "CO2 from electricity combustion",
+    "group_color": "#b28cd9",
+    "name": "CO2|Combustion|Sector|Electricity"
+  },
+  "CO2|Combustion|Sector|Heat": {
+    "color": "#ffbb78",
+    "group": "CO2 from heat combustion",
+    "group_color": "#ffbb78",
+    "name": "CO2|Combustion|Sector|Heat"
+  },
+  "CO2|Combustion|Sector|Hydrogen": {
+    "color": "#00ced1",
+    "group": "CO2 from hydrogen combustion",
+    "group_color": "#40e0d0",
+    "name": "CO2|Combustion|Sector|Hydrogen"
+  },
+  "CO2|Combustion|Sector|Industry": {
+    "color": "#7f7f7f",
+    "group": "CO2 from industry combustion",
+    "group_color": "#a9a9a9",
+    "name": "CO2|Combustion|Sector|Industry"
+  },
+  "CO2|Combustion|Sector|Industry|Non Mfg|Petroleum Refining": {
+    "color": "#a0522d",
+    "group": "CO2 from petroleum refining combustion",
+    "group_color": "#cd853f",
+    "name": "CO2|Combustion|Sector|Industry|Non Mfg|Petroleum Refining"
+  },
+  "CO2|Combustion|Sector|Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "CO2 from synthetic gas combustion",
+    "group_color": "#1e90ff",
+    "name": "CO2|Combustion|Sector|Synthetic Gas"
+  },
+  "CO2|Combustion|Sector|Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "CO2 from synthetic liquids combustion",
+    "group_color": "#ffa54f",
+    "name": "CO2|Combustion|Sector|Synthetic Liquids"
+  },
+  "CO2|Combustion|Sector|Transportation": {
+    "color": "#d62728",
+    "group": "CO2 from transportation combustion",
+    "group_color": "#ff4c4c",
+    "name": "CO2|Combustion|Sector|Transportation"
+  },
+  "CO2|Industrial Process": {
+    "color": "#696969",
+    "group": "CO2 industrial process",
+    "group_color": "#808080",
+    "name": "CO2|Industrial Process"
+  },
+  "CO2|Other": {
+    "color": "#b22222",
+    "group": "Other CO2 emissions",
+    "group_color": "#b22222",
+    "name": "CO2|Other"
+  },
+  "GHG Total": {
+    "color": "#8b0000",
+    "group": "Total GHG emissions",
+    "group_color": "#8b0000",
+    "name": "GHG Total"
+  },
+  "GHG Total|Combustion": {
+    "color": "#b22222",
+    "group": "Total GHG combustion",
+    "group_color": "#b22222",
+    "name": "GHG Total|Combustion"
+  },
+  "GHG Total|Combustion|Energy|Coal": {
+    "color": "#4d4d4d",
+    "group": "GHG from coal combustion",
+    "group_color": "#555555",
+    "name": "GHG Total|Combustion|Energy|Coal"
+  },
+  "GHG Total|Combustion|Energy|Gas": {
+    "color": "#1f77b4",
+    "group": "GHG from gas combustion",
+    "group_color": "#3399ff",
+    "name": "GHG Total|Combustion|Energy|Gas"
+  },
+  "GHG Total|Combustion|Energy|Oil": {
+    "color": "#8c564b",
+    "group": "GHG from oil combustion",
+    "group_color": "#a86a5c",
+    "name": "GHG Total|Combustion|Energy|Oil"
+  },
+  "GHG Total|Combustion|Sector|Biogas": {
+    "color": "#8fbc8f",
+    "group": "GHG from biogas combustion",
+    "group_color": "#98fb98",
+    "name": "GHG Total|Combustion|Sector|Biogas"
+  },
+  "GHG Total|Combustion|Sector|Biomass Liquids": {
+    "color": "#9acd32",
+    "group": "GHG from biomass liquids combustion",
+    "group_color": "#adff2f",
+    "name": "GHG Total|Combustion|Sector|Biomass Liquids"
+  },
+  "GHG Total|Combustion|Sector|Buildings": {
+    "color": "#ff7f0e",
+    "group": "GHG from buildings combustion",
+    "group_color": "#ff9d4a",
+    "name": "GHG Total|Combustion|Sector|Buildings"
+  },
+  "GHG Total|Combustion|Sector|Electricity": {
+    "color": "#9467bd",
+    "group": "GHG from electricity combustion",
+    "group_color": "#b28cd9",
+    "name": "GHG Total|Combustion|Sector|Electricity"
+  },
+  "GHG Total|Combustion|Sector|Heat": {
+    "color": "#ffbb78",
+    "group": "GHG from heat combustion",
+    "group_color": "#ffbb78",
+    "name": "GHG Total|Combustion|Sector|Heat"
+  },
+  "GHG Total|Combustion|Sector|Hydrogen": {
+    "color": "#00ced1",
+    "group": "GHG from hydrogen combustion",
+    "group_color": "#40e0d0",
+    "name": "GHG Total|Combustion|Sector|Hydrogen"
+  },
+  "GHG Total|Combustion|Sector|Industry": {
+    "color": "#7f7f7f",
+    "group": "GHG from industry combustion",
+    "group_color": "#a9a9a9",
+    "name": "GHG Total|Combustion|Sector|Industry"
+  },
+  "GHG Total|Combustion|Sector|Industry|Non Mfg|Petroleum Refining": {
+    "color": "#a0522d",
+    "group": "GHG from petroleum refining combustion",
+    "group_color": "#cd853f",
+    "name": "GHG Total|Combustion|Sector|Industry|Non Mfg|Petroleum Refining"
+  },
+  "GHG Total|Combustion|Sector|Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "GHG from synthetic gas combustion",
+    "group_color": "#1e90ff",
+    "name": "GHG Total|Combustion|Sector|Synthetic Gas"
+  },
+  "GHG Total|Combustion|Sector|Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "GHG from synthetic liquids combustion",
+    "group_color": "#ffa54f",
+    "name": "GHG Total|Combustion|Sector|Synthetic Liquids"
+  },
+  "GHG Total|Combustion|Sector|Transportation": {
+    "color": "#d62728",
+    "group": "GHG from transportation combustion",
+    "group_color": "#ff4c4c",
+    "name": "GHG Total|Combustion|Sector|Transportation"
+  },
+  "GHG Total|Fugitive": {
+    "color": "#ff1493",
+    "group": "Fugitive GHG emissions",
+    "group_color": "#ff69b4",
+    "name": "GHG Total|Fugitive"
+  },
+  "GHG Total|Fugitive|Buildings": {
+    "color": "#ff69b4",
+    "group": "Fugitive emissions from buildings",
+    "group_color": "#ff69b4",
+    "name": "GHG Total|Fugitive|Buildings"
+  },
+  "GHG Total|Fugitive|Industry|Non Mfg|Petroleum Refining": {
+    "color": "#db7093",
+    "group": "Fugitive emissions from petroleum refining",
+    "group_color": "#db7093",
+    "name": "GHG Total|Fugitive|Industry|Non Mfg|Petroleum Refining"
+  },
+  "GHG Total|Industrial Process": {
+    "color": "#696969",
+    "group": "GHG industrial process",
+    "group_color": "#808080",
+    "name": "GHG Total|Industrial Process"
+  },
+  "GHG Total|Other": {
+    "color": "#a52a2a",
+    "group": "Other GHG emissions",
+    "group_color": "#a52a2a",
+    "name": "GHG Total|Other"
+  },
+  "MER": {
+    "color": "#4682b4",
+    "group": "Market emissions rate / energy ratio",
+    "group_color": "#5f9ea0",
+    "name": "MER"
+  },
+  "Industry|Value": {
+    "color": "#4169e1",
+    "group": "Industry economic value",
+    "group_color": "#4169e1",
+    "name": "Industry|Value"
+  },
+  "Industry|Volume": {
+    "color": "#6495ed",
+    "group": "Industry volume",
+    "group_color": "#6495ed",
+    "name": "Industry|Volume"
+  },
+  "Carbon": {
+    "color": "#000000",
+    "group": "Carbon content or stock",
+    "group_color": "#000000",
+    "name": "Carbon"
+  },
+  "Use Final|Biogas": {
+    "color": "#8fbc8f",
+    "group": "Final energy use biogas",
+    "group_color": "#98fb98",
+    "name": "Use Final|Biogas"
+  },
+  "Use Final|Biomass Liquids": {
+    "color": "#9acd32",
+    "group": "Final energy use biomass liquids",
+    "group_color": "#adff2f",
+    "name": "Use Final|Biomass Liquids"
+  },
+  "Use Final|Biomass Solids": {
+    "color": "#6b8e23",
+    "group": "Final energy use biomass solids",
+    "group_color": "#88aa44",
+    "name": "Use Final|Biomass Solids"
+  },
+  "Use Final|Electricity": {
+    "color": "#888888",
+    "group": "Final energy use electricity",
+    "group_color": "#888888",
+    "name": "Use Final|Electricity"
+  },
+  "Use Final|Gas": {
+    "color": "#1f77b4",
+    "group": "Final energy use gas",
+    "group_color": "#3399ff",
+    "name": "Use Final|Gas"
+  },
+  "Use Final|Gas-Hydrogen blend": {
+    "color": "#40e0d0",
+    "group": "Final energy use gas-hydrogen blend",
+    "group_color": "#40e0d0",
+    "name": "Use Final|Gas-Hydrogen blend"
+  },
+  "Use Final|Hydrogen": {
+    "color": "#66c2ff",
+    "group": "Final energy use hydrogen",
+    "group_color": "#99ddff",
+    "name": "Use Final|Hydrogen"
+  },
+  "Use Final|Oil": {
+    "color": "#8c564b",
+    "group": "Final energy use oil",
+    "group_color": "#a86a5c",
+    "name": "Use Final|Oil"
+  },
+  "Use Final|Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "Final energy use synthetic gas",
+    "group_color": "#1e90ff",
+    "name": "Use Final|Synthetic Gas"
+  },
+  "Use Final|Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "Final energy use synthetic liquids",
+    "group_color": "#ffa54f",
+    "name": "Use Final|Synthetic Liquids"
+  },
+  "Use Primary|Biomass": {
+    "color": "#6b8e23",
+    "group": "Primary biomass use",
+    "group_color": "#88aa44",
+    "name": "Use Primary|Biomass"
+  },
+  "Use Primary|Coal": {
+    "color": "#333333",
+    "group": "Primary coal use",
+    "group_color": "#555555",
+    "name": "Use Primary|Coal"
+  },
+  "Use Primary|Gas": {
+    "color": "#1f77b4",
+    "group": "Primary gas use",
+    "group_color": "#3399ff",
+    "name": "Use Primary|Gas"
+  },
+  "Use Primary|Oil": {
+    "color": "#8c564b",
+    "group": "Primary oil use",
+    "group_color": "#a86a5c",
+    "name": "Use Primary|Oil"
+  },
+  "Coal": {
+    "color": "#333333",
+    "group": "Coal",
+    "group_color": "#555555",
+    "name": "Coal"
+  },
+  "Gas": {
+    "color": "#1f77b4",
+    "group": "Gas",
+    "group_color": "#3399ff",
+    "name": "Gas"
+  },
+  "Oil": {
+    "color": "#8c564b",
+    "group": "Oil",
+    "group_color": "#a86a5c",
+    "name": "Oil"
+  },
+  "Biogas": {
+    "color": "#8fbc8f",
+    "group": "Biogas",
+    "group_color": "#98fb98",
+    "name": "Biogas"
+  },
+  "Biomass Liquids": {
+    "color": "#9acd32",
+    "group": "Biomass liquids",
+    "group_color": "#adff2f",
+    "name": "Biomass Liquids"
+  },
+  "Electricity|DER": {
+    "color": "#20b2aa",
+    "group": "Distributed electricity resources",
+    "group_color": "#20b2aa",
+    "name": "Electricity|DER"
+  },
+  "Electricity|DER|no CHP": {
+    "color": "#00ced1",
+    "group": "Distributed electricity resources",
+    "group_color": "#20b2aa",
+    "name": "Electricity|DER|no CHP"
+  },
+  "Electricity|DER|CHP": {
+    "color": "#008b8b",
+    "group": "Distributed CHP electricity",
+    "group_color": "#20b2aa",
+    "name": "Electricity|DER|CHP"
+  },
+  "Electricity|Solar|CSP": {
+    "color": "#ffcc00",
+    "group": "Solar CSP electricity",
+    "group_color": "#ffcc00",
+    "name": "Electricity|Solar|CSP"
+  },
+  "Electricity|Storage": {
+    "color": "#17becf",
+    "group": "Electricity storage",
+    "group_color": "#17becf",
+    "name": "Electricity|Storage"
+  },
+  "Electricity|Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "Electricity from synthetic gas",
+    "group_color": "#1e90ff",
+    "name": "Electricity|Synthetic Gas"
+  },
+  "Electricity|Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "Electricity from synthetic liquids",
+    "group_color": "#ffa54f",
+    "name": "Electricity|Synthetic Liquids"
+  },
+  "Hydrogen": {
+    "color": "#66c2ff",
+    "group": "Hydrogen",
+    "group_color": "#99ddff",
+    "name": "Hydrogen"
+  },
+  "Refined Petroleum Products": {
+    "color": "#a0522d",
+    "group": "Refined petroleum products",
+    "group_color": "#cd853f",
+    "name": "Refined Petroleum Products"
+  },
+  "Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "Synthetic gas",
+    "group_color": "#1e90ff",
+    "name": "Synthetic Gas"
+  },
+  "Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "Synthetic liquids",
+    "group_color": "#ffa54f",
+    "name": "Synthetic Liquids"
+  },
+  "Energy|Biogas": {
+    "color": "#8fbc8f",
+    "group": "Biogas energy",
+    "group_color": "#98fb98",
+    "name": "Energy|Biogas"
+  },
+  "Energy|Biomass Liquids": {
+    "color": "#9acd32",
+    "group": "Biomass liquids energy",
+    "group_color": "#adff2f",
+    "name": "Energy|Biomass Liquids"
+  },
+  "Energy|Biomass Solids": {
+    "color": "#6b8e23",
+    "group": "Biomass solids energy",
+    "group_color": "#88aa44",
+    "name": "Energy|Biomass Solids"
+  },
+  "Energy|Coal": {
+    "color": "#333333",
+    "group": "Coal energy",
+    "group_color": "#555555",
+    "name": "Energy|Coal"
+  },
+  "Energy|Electricity": {
+    "color": "#888888",
+    "group": "Electricity energy",
+    "group_color": "#888888",
+    "name": "Energy|Electricity"
+  },
+  "Energy|Gas": {
+    "color": "#1f77b4",
+    "group": "Gas energy",
+    "group_color": "#3399ff",
+    "name": "Energy|Gas"
+  },
+  "Energy|Geothermal": {
+    "color": "#e67300",
+    "group": "Geothermal energy",
+    "group_color": "#ff9933",
+    "name": "Energy|Geothermal"
+  },
+  "Energy|Heat": {
+    "color": "#ffbb78",
+    "group": "Heat energy",
+    "group_color": "#ffbb78",
+    "name": "Energy|Heat"
+  },
+  "Energy|Hydrogen": {
+    "color": "#66c2ff",
+    "group": "Hydrogen energy",
+    "group_color": "#99ddff",
+    "name": "Energy|Hydrogen"
+  },
+  "Energy|Oil": {
+    "color": "#8c564b",
+    "group": "Oil energy",
+    "group_color": "#a86a5c",
+    "name": "Energy|Oil"
+  },
+  "Energy|Synthetic Gas": {
+    "color": "#00bfff",
+    "group": "Synthetic gas energy",
+    "group_color": "#1e90ff",
+    "name": "Energy|Synthetic Gas"
+  },
+  "Energy|Synthetic Liquids": {
+    "color": "#ff8c00",
+    "group": "Synthetic liquids energy",
+    "group_color": "#ffa54f",
+    "name": "Energy|Synthetic Liquids"
+  },
+  "Sector|Buildings": {
+    "color": "#ff7f0e",
+    "group": "Buildings sector",
+    "group_color": "#ff9d4a",
+    "name": "Sector|Buildings"
+  },
+  "Sector|Direct Air Capture": {
+    "color": "#26a69a",
+    "group": "Direct air capture sector",
+    "group_color": "#26a69a",
+    "name": "Sector|Direct Air Capture"
+  },
+  "Sector|Industry": {
+    "color": "#7f7f7f",
+    "group": "Industry sector",
+    "group_color": "#a9a9a9",
+    "name": "Sector|Industry"
+  },
+  "Sector|Transportation": {
+    "color": "#d62728",
+    "group": "Transportation sector",
+    "group_color": "#ff4c4c",
+    "name": "Sector|Transportation"
+  },
+  "Energy|Biomass": {
+    "color": "#6b8e23",
+    "group": "Biomass energy",
+    "group_color": "#88aa44",
+    "name": "Energy|Biomass"
+  },
+  "Energy|Hydro": {
+    "color": "#2ca02c",
+    "group": "Hydro energy",
+    "group_color": "#4daf4a",
+    "name": "Energy|Hydro"
+  },
+  "Energy|Nuclear": {
+    "color": "#9467bd",
+    "group": "Nuclear energy",
+    "group_color": "#b28cd9",
+    "name": "Energy|Nuclear"
+  },
+  "Energy|Ocean": {
+    "color": "#1f9e89",
+    "group": "Ocean energy",
+    "group_color": "#3fbfb0",
+    "name": "Energy|Ocean"
+  },
+  "Energy|Other": {
+    "color": "#7f7f7f",
+    "group": "Other energy",
+    "group_color": "#b0b0b0",
+    "name": "Energy|Other"
+  },
+  "Energy|Solar": {
+    "color": "#ffdd33",
+    "group": "Solar energy",
+    "group_color": "#ffcc00",
+    "name": "Energy|Solar"
+  },
+  "Energy|Wind": {
+    "color": "#aec7e8",
+    "group": "Wind energy",
+    "group_color": "#9ecae1",
+    "name": "Energy|Wind"
+  }
+}

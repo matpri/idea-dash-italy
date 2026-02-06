@@ -184,6 +184,10 @@ def link(app):
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
 
+        v_style = list(_v_style)
+        v_values = _scenario_version
+        v_data = [dash.no_update for _ in v_style]
+
         if 'energy_model-qualifying-capacity-download-button' in trigger_id['type']:
             idx = 0
             for i, id in enumerate(ctx.inputs_list[0]):
@@ -193,7 +197,7 @@ def link(app):
                     break
             _data[idx] = dcc.send_data_frame(data_handler.processed_data['Power System Models']['Capacity'].to_csv,
                                              "qualifying-capacity.csv")
-            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, dash.no_update, dash.no_update, dash.no_update, _pattern_style, _text_style, _report_type_style
+            return _canvas, _r_style, _y_style, _data, _s_style, _m_style, _g_style, [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style], [dash.no_update for _ in v_style]
 
         idx = 0
         for i, id in enumerate(ctx.inputs_list[0]):
@@ -209,23 +213,15 @@ def link(app):
         df = data_handler.processed_data['Power System Models']['Qualifying Capacity']
         unique_scenarios = df['scenario'].unique().tolist()
 
-        v_style = list(_v_style)
-        v_values = _scenario_version
-        v_data = [dash.no_update for _ in v_style]
-        scens = _scenarios[idx]
-        if _scenario_group[idx] != '':
-            if _scenario_group[idx] == 'ALL':
+        scens = list(_scenarios[idx]) if _scenarios and _scenarios[idx] is not None else []
+        selected_groups = _scenario_group[idx] if isinstance(_scenario_group, list) or hasattr(_scenario_group, '__len__') else [_scenario_group]
+        if selected_groups and len(selected_groups) > 0 and not (len(selected_groups) == 1 and selected_groups[0] == ''):
+            if 'ALL' in selected_groups:
                 scenarios = unique_scenarios
             else:
-                scenarios = [scenario for scenario in unique_scenarios if
-                             scenario.split('|')[1] == _scenario_group[idx]]
-
-            # if _scenario_group changed update scenario_version style, data and value
-            scenario_group_changed = False
+                scenarios = [scenario for scenario in unique_scenarios if scenario.split('|')[1] in selected_groups]
 
             if trigger_id['type'] == 'energy_model-qualifying-capacity-scenario-group-select':
-                scenario_group_changed = True
-                # find which index triggered
                 idx = 0
                 for i, id in enumerate(ctx.inputs_list[0]):
                     if ((id['id']['index'] == trigger_id['index']) and
@@ -233,16 +229,13 @@ def link(app):
                         idx = i
                         break
 
-                # collect versions for the selected group
-                group = _scenario_group[idx]
+                groups = _scenario_group[idx] if _scenario_group[idx] is not None else []
                 versions = []
-                if group != '':
-                    if group == 'ALL':
-                        versions = sorted({s.split('|')[2] for s in unique_scenarios if
-                                           len(s.split('|')) > 2})
+                if groups:
+                    if 'ALL' in groups:
+                        versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2})
                     else:
-                        versions = sorted({s.split('|')[2] for s in unique_scenarios if
-                                           len(s.split('|')) > 2 and s.split('|')[1] == group})
+                        versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] in groups})
 
                 if versions:
                     v_style[idx] = {'display': 'block'}
@@ -253,11 +246,10 @@ def link(app):
                     v_values[idx] = []
                     v_data[idx] = []
 
-            if len(v_values[idx]) > 0:
-                # filter scenarios by version
-                scenarios = [scenario for scenario in scenarios if
-                             scenario.split('|')[2] in v_values[idx]]
-            scens += scenarios
+            if v_values and v_values[idx]:
+                scenarios = [scenario for scenario in scenarios if scenario.split('|')[2] in v_values[idx]]
+
+            scens = list(set(scens + scenarios))
 
         if _p_type[idx] == 'By Year':
             _m_style[idx] = {'display': 'block'}

@@ -38,7 +38,7 @@ def check(df):
             return pypsa_can_overview.check(df)
         elif df.model.unique()[0] == "cef":
             return cef_overview.check(df)
-        elif df.model.unique()[0] == "Sutubra-TEMOA":
+        elif df.model.unique()[0] == "Sutubra":
             return temoa_overview.check(df)
         else:
             return False
@@ -74,9 +74,9 @@ def process(selected: dict):
             df = pypsa_can_overview.process({scenario_name: db})
             df.model = "PyPSA_CAN"
             dfs.append(df)
-        elif db.model.unique()[0] == "Sutubra-TEMOA":
+        elif db.model.unique()[0] == "Sutubra":
             df = temoa_overview.process({scenario_name: db})
-            df.model = "Sutubra-TEMOA"
+            df.model = "Sutubra"
             dfs.append(df)
         elif db.model.unique()[0] == "cef":
             df = cef_overview.process({scenario_name: db})

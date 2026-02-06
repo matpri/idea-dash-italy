@@ -241,6 +241,7 @@ def transmission_plot(df, scenario, year, title):
 
 def render_plot(type, df, scenarios, year, line):
     from profiles.energy_model.utils import plot_settings
+
     name = plot_settings['Transmission Capacity']['name']
     unit = plot_settings['Transmission Capacity']['unit']
     df = df.copy()
@@ -248,6 +249,7 @@ def render_plot(type, df, scenarios, year, line):
     df['short_variable'] = df['short_variable'].apply(lambda x: x.split('.')[0])
     df['region'] = df['region'].apply(lambda x: x.split('.')[0])
     df['variable'] = df['variable'].apply(lambda x: x.split('.')[0])
+    df = df[df['short_region'] != df['short_variable']]
     df['line'] = df['short_region'] + ' -> ' + df['short_variable']
     print('scenarios', scenarios)
     if type == 'Map Plot':
@@ -331,9 +333,12 @@ def plot(df, window_id):
     :param window_id: window id to use when registering components to dash
     :return: html.Div([widgets]), dcc.Graph(plot)
     '''
+    df['short_region'] = df['short_region'].str.split('.').str[0]
+    df['short_variable'] = df['short_variable'].str.split('.').str[0]
+    df = df[df['short_region'] != df['short_variable']]
     scenarios = df['scenario'].unique().tolist()
     base_scenarios = list(set([scenario.split('|')[1] for scenario in scenarios]))
-    base_scenarios = ['', 'ALL'] + base_scenarios
+    base_scenarios = ['ALL'] + base_scenarios
     # years where region is not CAN
     years = df['period'].unique().tolist()
     years.sort()
@@ -371,10 +376,10 @@ def plot(df, window_id):
             },
             style={'display': 'none'},
         ),
-        dmc.Select(
+        dmc.MultiSelect(
             label='Scenario Group',
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
-            value=[base_scenarios[0]],
+            value=[],
             id={
                 'type': 'energy_model-transmissioncapacity-scenario-group-select',
                 'index': window_id,

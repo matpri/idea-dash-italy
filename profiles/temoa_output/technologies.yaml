@@ -1583,7 +1583,7 @@ Carbon_Tax:
   name: Carbon Tax
 Fixed_OM:
   color: '#000000'
-  group: Fixed O&M
+  group: FO&M costs
   group_color: '#E69F00'
   name: Fixed O&M
 Variable_OM:
@@ -1610,7 +1610,7 @@ Variable O&M costs:
   name: Variable O&M
 Fixed O&M costs:
   color: '#000000'
-  group: Fixed O&M
+  group: FO&M costs
   group_color: '#E69F00'
   name: Fixed O&M
   
@@ -1661,8 +1661,44 @@ Fixed O&M:
   name: 'FO&M costs'
 
 
-"variable_om_cost+Fuel Cost":
+"variable_om_cost":
   color: '#000000'
-  group: 'VO&M costs + Fuel costs'
-  group_color: '#9d2ed1'
-  name: 'VO&M costs + Fuel costs'
+  group: 'VO&M costs'
+  group_color: '#D35FB7'
+  name: 'VO&M costs'
+
+Electricity|Coal|CCS:
+    color: '#000000'
+    group: Fossil fuel solid
+    group_color: '#b15928'
+    name: Electricity|Coal|CCS
+
+Electricity|Gasoline|CT|w/o CCS:
+    color: '#000000'
+    group: Fossil fuel liquid
+    group_color: '#ffaa33'
+    name: Electricity|Gasoline|CT|w/o CCS
+
+"CER Offsets|Electricity|Gas|CC|CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CC|CCS"
+
+"CER Offsets|Electricity|Gas|CC|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CC|w/o CCS"
+
+"CER Offsets|Electricity|Gas|CT|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CT|w/o CCS"
+
+"CER Offsets|Electricity|Gas|CG|w/o CCS":
+    color: '#000000'
+    group: 'Offset emissions'
+    group_color: '#00B159'
+    name: "CER Offsets|Electricity|Gas|CG|w/o CCS"

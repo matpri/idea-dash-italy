@@ -64,6 +64,12 @@ def link(app):
             'viz': 'overview'
         }, 'checked'),
         Input({
+            'type': 'compare-scenario-select',
+            'index': ALL,
+            'model': MATCH,
+            'viz': 'overview'
+        }, 'value'),
+        Input({
             'type': 'unit-select',
             'index': ALL,
             'model': MATCH,
@@ -95,7 +101,8 @@ def link(app):
         }, 'data'),
         prevent_initial_call=True
     )
-    def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _report_type, _unit, _download, _canvas, _u_data, _data):
+    def update_gencap_cost(_p_type, _scenarios, _grouping, _fill, _report_type, _compare_scenario, _unit, _download,
+                           _canvas, _u_data, _data):
         from utils.data_state import data_handler
         ctx = dash.callback_context
         trigger_id = eval(ctx.triggered[0]['prop_id'].split('.')[0])
@@ -131,6 +138,24 @@ def link(app):
         _groupby_scenario = False
         _groupby_version = False
         _f = False
+
+        if _compare_scenario is not None and len(_compare_scenario) > idx and _compare_scenario[idx] is not None and \
+                _compare_scenario[idx] != 'None':
+            if model == 'Generic Comparison':
+
+                df['model'] = df['scenario'].apply(lambda x: x.split('|')[0])
+                to_compare = df[df['base_scenario'] == _compare_scenario[idx]]
+                df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit', 'model'],
+                              suffixes=('', '_compare'))
+                df = df.drop(columns=['base_scenario_compare', 'scenario_compare'])
+            else:
+                to_compare = df[df['scenario'] == _compare_scenario[idx]]
+                df = df.merge(to_compare, on=['region', 'time', 'variable', 'unit'],
+                              suffixes=('', '_compare'))
+                df = df.drop(columns=['scenario_compare'])
+
+            df ['value'] = df['value'] - df['value_compare']
+            df = df[[col for col in df.columns if not col.endswith('_compare')]]
 
         if _scenarios is not None and _scenarios != []:
             if _scenarios[idx] != 'ALL':

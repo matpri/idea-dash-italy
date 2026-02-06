@@ -34,7 +34,7 @@ def check(df):
             return pypsa_net_new_capacity.check(df)
         elif df.model.unique()[0] == "PyPSA_CAN":
             return pypsa_can_net_new_capacity.check(df)
-        elif df.model.unique()[0] == "Sutubra-TEMOA":
+        elif df.model.unique()[0] == "Sutubra":
             return temoa_net_new_capacity.check(df)
         else:
             return False
@@ -64,7 +64,7 @@ def process(selected: dict):
         elif db.model.unique()[0] == "PyPSA_CAN":
             df = pypsa_can_net_new_capacity.process({scenario_name: db})
             dfs.append(df)
-        elif db.model.unique()[0] == "Sutubra-TEMOA":
+        elif db.model.unique()[0] == "Sutubra":
             df = temoa_net_new_capacity.process({scenario_name: db})
             dfs.append(df)
         else:

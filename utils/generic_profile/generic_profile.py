@@ -1,3 +1,4 @@
+import json
 import os
 from random import randint
 
@@ -35,15 +36,18 @@ class GenericProfile:
             self.technologies = yaml.load(open(os.path.join('technologies', f'{name}.yaml'), 'r'),
                                           Loader=yaml.FullLoader)
         else:
-            self.technologies = {}
+            # load 'technologies.json'
+            print('Loading default technologies.json', os.path.abspath(os.curdir), os.path.abspath(os.getcwd()))
+            self.technologies = json.load(open('./utils/generic_profile/technologies.json', 'r'))
 
             for variable in variables:
-                self.technologies[variable] = {
-                    'color': '#000000',
-                    'group': variable,
-                    'group_color': '#000000',
-                    'name': variable,
-                }
+                if variable not in self.technologies:
+                    self.technologies[variable] = {
+                        'color': '#000000',
+                        'group': variable,
+                        'group_color': '#000000',
+                        'name': variable,
+                    }
         self.update_utils()
         self.settings = self.render_settings()
 

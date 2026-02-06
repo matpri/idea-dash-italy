@@ -1,4 +1,5 @@
 import dash
+import pandas as pd
 from dash import Output, Input, State, ALL, dcc
 
 from profiles.energy_model.visualization_scripts.overview import render_plot
@@ -40,6 +41,12 @@ def link(app):
         Input(
             {
                 'type': 'energy_model-overview-relative',
+                'index': ALL,
+            }, 'checked'
+        ),
+        Input(
+            {
+                'type': 'energy_model-overview-compare-reference',
                 'index': ALL,
             }, 'checked'
         ),
@@ -88,7 +95,7 @@ def link(app):
 
         prevent_initial_call=True
     )
-    def update_overview(_p_type, _relative, _groupby, _fill, _scenarios, _version_values, _fill_checked, _canvas, _data, _fillswitch, _v_style):
+    def update_overview(_p_type, _relative, _compare2ref, _groupby, _fill, _scenarios, _version_values, _fill_checked, _canvas, _data, _fillswitch, _v_style):
         #print('updating overview plot')
         from utils.data_state import data_handler
         ctx = dash.callback_context
@@ -134,10 +141,10 @@ def link(app):
             unique_scenarios = df_all['scenario'].unique().tolist()
             group = _scenarios[idx]
             # collect versions for the selected group; if group == 'ALL' collect all versions
-            if group == 'ALL':
+            if 'ALL' in group:
                 versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2})
             else:
-                versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] == group})
+                versions = sorted({s.split('|')[2] for s in unique_scenarios if len(s.split('|')) > 2 and s.split('|')[1] in group})
 
             if versions:
                 v_style[idx] = {'display': 'block'}
@@ -149,9 +156,52 @@ def link(app):
                 v_data[idx] = []
 
         df = data_handler.processed_data['Power System Models']['Overview']
+
+        df = df[df.variable == _p_type[idx]].copy()
+
+        if _compare2ref[idx]:
+            df[['model', 'base_scenario', 'version']] = df['scenario'].apply(lambda x: pd.Series(
+                [x.split('|')[0], '|'.join(x.split('|')[1:-1]) if len(x.split('|')) > 2 else x.split('|')[1],
+                 x.split('|')[-1] if len(x.split('|')) > 2 else '']))
+
+            reference_data = df[df['base_scenario'].str.contains('Reference')].copy()
+
+            if reference_data.empty:
+                print("No Reference scenario found for comparison.")
+            else:
+                results = []
+
+                for scenario in df['scenario'].unique():
+                    scenario_df = df[df['scenario'] == scenario].copy()
+
+                    # Get model and version for this scenario
+                    model = scenario_df['model'].iloc[0]
+                    version = scenario_df['version'].iloc[0]
+
+                    # Filter reference data to matching model/version
+                    ref_subset = reference_data[(reference_data['model'] == model) &
+                                                (reference_data['version'] == version)]
+
+                    merged = scenario_df.merge(ref_subset,
+                                               on=['model', 'version', 'time', 'variable', 'region'],
+                                               suffixes=('', '_ref'),
+                                               how='outer')
+
+                    merged['value_ref'] = merged['value_ref'].fillna(0)
+                    merged['value'] = merged['value'].fillna(0)
+                    merged['value'] = merged['value'] - merged['value_ref']
+
+                    # Preserve scenario for reference-only rows
+                    merged['scenario'] = scenario
+
+                    results.append(merged[['scenario', 'time', 'variable', 'region', 'value']])
+
+                df = pd.concat(results, ignore_index=True)
+
         # filter by scenario group if not ALL
-        if _scenarios[idx] != 'ALL':
-            df = df[df['scenario'].str.contains(_scenarios[idx])]
+        if not 'ALL' in _scenarios[idx]:
+            scenarios_to_keep = [scen for scen in df['scenario'].unique() if any(g in scen for g in _scenarios[idx])]
+            df = df[df['scenario'].isin(scenarios_to_keep)]
         # additionally filter by selected versions (works also when scenario group == 'ALL')
         if v_values and v_values[idx]:
             sel = set(v_values[idx])
