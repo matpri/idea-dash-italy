@@ -16,7 +16,7 @@ def pattern_from_key(key):
     return pattern_dict[key]
 
 
-custom_order = ['Hydro', 'Fossil fuel gas', 'Fossil fuel liquid', 'Fossil fuel solid', 'nuclear', 'wind', 'solar', 'BC',
+custom_order = ['Hydro', 'Fossil fuel gas', 'Fossil fuel gas w/ CCS', 'Fossil fuel liquid', 'Fossil fuel solid', 'nuclear', 'wind', 'solar', 'BC',
                 'AB', 'SK', 'MB', 'ON', 'QC', 'NB', 'NS', 'PE', 'NL']
 
 

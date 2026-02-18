@@ -1358,11 +1358,11 @@ Uranium:
   group: Nuclear
   group_color: '#ff7f00'
   name: Uranium
-Natural Gas:
-  color: '#000000'
-  group: Fossil fuel gas
-  group_color: '#ff6b6b'
-  name: Natural Gas
+# Natural Gas:
+#   color: '#000000'
+#   group: Fossil fuel gas
+#   group_color: '#ff6b6b'
+#   name: Natural Gas
 Hydro / Wave / Tidal:
   color: '#000000'
   group: Hydro

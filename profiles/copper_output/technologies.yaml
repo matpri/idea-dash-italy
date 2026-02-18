@@ -1129,13 +1129,13 @@ Electricity|Diesel|w/o CCS|CER Exempt:
 
 Electricity|Gas|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|w/ CCS
 Electricity|Gas|CC|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|CC|w/ CCS
 Electricity|Gas|CC|w/o CCS:
     color: '#000000'
@@ -1149,8 +1149,8 @@ Electricity|Gas|CC|w/o CCS|CER Exempt:
     name: Electricity|Gas|CC|w/o CCS|CER Exempt
 Electricity|Gas|CC|w/ CCS|Retrofit:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|CC|w/ CCS|Retrofit
 Electricity|Gas|CC|w/o CCS|Refurbished:
     color: '#000000'
@@ -1159,8 +1159,8 @@ Electricity|Gas|CC|w/o CCS|Refurbished:
     name: Electricity|Gas|CC|w/o CCS|Refurbished
 Electricity|Gas|CG|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|CG|w/ CCS
 Electricity|Gas|CG|w/o CCS:
     color: '#000000'
@@ -1169,8 +1169,8 @@ Electricity|Gas|CG|w/o CCS:
     name: Electricity|Gas|CG|w/o CCS
 Electricity|Gas|CC|w/ CCS|CER Exempt:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|CC|w/ CCS|CER Exempt
 Electricity|Gas|CC|w/o CCS|CER Exempt:
     color: '#000000'
@@ -1179,8 +1179,8 @@ Electricity|Gas|CC|w/o CCS|CER Exempt:
     name: Electricity|Gas|CC|w/o CCS|CER Exempt
 Electricity|Gas|CG|w/ CCS|CER Exempt:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|CG|w/ CCS|CER Exempt
 Electricity|Gas|CG|w/o CCS|CER Exempt:
     color: '#000000'
@@ -1204,8 +1204,8 @@ Electricity|Gas|SC|w/o CCS:
     name: Electricity|Gas|SC|w/o CCS
 Electricity|Gas|SC|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|SC|w/ CCS
 Electricity|Gas|SC|w/o CCS|CER Exempt:
     color: '#000000'
@@ -1214,8 +1214,8 @@ Electricity|Gas|SC|w/o CCS|CER Exempt:
     name: Electricity|Gas|SC|w/o CCS|CER Exempt
 Electricity|Gas|SC|w/ CCS|CER Exempt:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|SC|w/ CCS|CER Exempt
 Electricity|Gas|SC|RNG|w/o CCS:
     color: '#000000'
@@ -1224,8 +1224,8 @@ Electricity|Gas|SC|RNG|w/o CCS:
     name: Electricity|Gas|SC|RNG|w/o CCS
 Electricity|Gas|SC|RNG|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|SC|RNG|w/ CCS
 Electricity|Gas|SC|Backup|w/o CCS:
     color: '#000000'
@@ -1234,13 +1234,13 @@ Electricity|Gas|SC|Backup|w/o CCS:
     name: Electricity|Gas|SC|Backup|w/o CCS
 Electricity|Gas|SC|Backup|w/ CCS:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|SC|Backup|w/ CCS
 Electricity|Gas|SC|w/ CCS|Retrofit:
     color: '#000000'
-    group: Fossil fuel gas
-    group_color: '#ff6b6b'
+    group: Fossil fuel gas w/ CCS
+    group_color: '#ffaaa3'
     name: Electricity|Gas|SC|w/ CCS|Retrofit
 Electricity|Gas|SC|w/o CCS|Refurbished:
     color: '#000000'
