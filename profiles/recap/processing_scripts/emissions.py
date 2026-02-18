@@ -21,61 +21,67 @@ def check(df):
     Returns:
         bool: True if the specified prefix is found, False otherwise.
     """
-    #print("Checking for emissions in variable column")
     try:
-        if df.model.unique()[0] == "copper":
+        if (df.model == "copper").any():
             return copper_emissions.check(df)
-        elif df.model.unique()[0] == "ECCC-NextGrid":
+        elif (df.model == "ECCC-NextGrid").any():
             return nextgrid_emissions.check(df)
-        elif df.model.unique()[0] == "NATEM_Canada":
+        elif (df.model == "NATEM_Canada").any():
             return natem_emissions.check(df)
-        elif df.model.unique()[0] == "PITHOS":
+        elif (df.model == "PITHOS").any():
             return pithos_emissions.check(df)
-        elif df.model.unique()[0] == "NRCan-PyPsa":
+        elif (df.model == "NRCan-PyPsa").any():
             return pypsa_emissions.check(df)
-        elif df.model.unique()[0] == "PyPSA_CAN":
+        elif (df.model == "PyPSA_CAN").any():
             return pypsa_can_emissions.check(df)
-        elif df.model.unique()[0] == "Sutubra":
+        elif (df.model == "Sutubra").any():
             return temoa_emissions.check(df)
-        elif df.model.unique()[0] == "cef":
+        elif (df.model == "cef").any():
             return cef_emissions.check(df)
         else:
             return False
     except Exception as e:
-        print("Emission check", e)
+        print(f"ERROR in emissions.check: {e}")
         return False
 
 
 def process(selected: dict):
     dfs = []
     for scenario_name, db in selected.items():
-        if db.model.unique()[0] == "copper":
-            df = copper_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "ECCC-NextGrid":
-            df = nextgrid_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "NATEM_Canada":
-            df = natem_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "PITHOS":
-            df = pithos_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "NRCan-PyPsa":
-            df = pypsa_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "PyPSA_CAN":
-            df = pypsa_can_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "Sutubra":
-            df = temoa_emissions.process({scenario_name: db})
-            dfs.append(df)
-        elif db.model.unique()[0] == "cef":
-            df = cef_emissions.process({scenario_name: db})
-            df['scenario'] = 'CEF|' + df['scenario']
-            dfs.append(df)
-        else:
-            print("Model not implemented")
-    return pd.concat(dfs)
+        try:
+            if (db.model == "copper").any():
+                df = copper_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "ECCC-NextGrid").any():
+                df = nextgrid_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "NATEM_Canada").any():
+                df = natem_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "PITHOS").any():
+                df = pithos_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "NRCan-PyPsa").any():
+                df = pypsa_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "PyPSA_CAN").any():
+                df = pypsa_can_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "Sutubra").any():
+                df = temoa_emissions.process({scenario_name: db})
+                dfs.append(df)
+            elif (db.model == "cef").any():
+                df = cef_emissions.process({scenario_name: db})
+                df['scenario'] = 'CEF|' + df['scenario']
+                dfs.append(df)
+            else:
+                print(f"Model not implemented for {scenario_name}")
+        except Exception as e:
+            print(f"Error processing {scenario_name}: {e}")
+
+    if dfs:
+        return pd.concat(dfs)
+    else:
+        return pd.DataFrame()
 
 

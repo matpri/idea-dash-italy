@@ -14,7 +14,7 @@
 
 model_mapping = {
     'silver' : ['SILVER'],
-    'copper': ['COPPER' , 'Power System Models'],
+    'copper': ['COPPER', 'Power System Models', 'Summary'],
     'cef': ['Canada Energy Futures', 'Power System Models'],
     'ECCC-NextGrid': ['ECCC-NextGrid', 'Power System Models'],
     'NATEM_Canada': ['NATEM Canada','Power System Models' ],

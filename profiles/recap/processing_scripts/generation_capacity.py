@@ -13,14 +13,13 @@ def check(df):
     Returns:
         bool: True if the specified strings are found, False otherwise.
     """
-    #print("Checking for gen cap in variable column")
     try:
         if (df.model == 'copper').any():
-            if df.variable.str.startswith("Total Capacity").any():
+            if 'variable' in df.columns and df.variable.str.startswith("Total Capacity").any():
                 return True
         return False
     except Exception as e:
-        print("gen cap  check", e)
+        print(f"ERROR in generation_capacity.check: {e}")
         return False
 
 def process_gencap(prov_df, canada_df, scenario_name):

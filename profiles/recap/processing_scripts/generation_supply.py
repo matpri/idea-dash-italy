@@ -16,15 +16,15 @@ def check(df):
     Returns:
         bool: True if the specified strings are found, False otherwise.
     """
-    #print("Checking for dispatch, *out and transmission in variable column")
     try:
         if (df.model == 'copper').any():
-            classes = df["variable"].apply(lambda x: x.split("|")[0])
-            if (classes == 'Generation').any() or (classes == 'Flow').any() or (classes == 'Storage Out').any():
-                return True
+            if 'variable' in df.columns:
+                classes = df["variable"].apply(lambda x: x.split("|")[0])
+                if (classes == 'Generation').any() or (classes == 'Flow').any() or (classes == 'Storage Out').any():
+                    return True
         return False
     except Exception as e:
-        print("dispatch check", e)
+        print(f"ERROR in generation_supply.check: {e}")
         return False
 
 
