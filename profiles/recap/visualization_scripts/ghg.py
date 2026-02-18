@@ -8,7 +8,7 @@ from profiles.recap.visualization_scripts.utils import bar_over_years, bar_over_
 
 
 def render_plot(representation, type, df, scenarios, region, year, scenario, pattern_active=True, text_active=False,
-                sector=None, service=None, emissions_list=None, plot_name='Net Emissions'):
+                sector=None, service=None, emissions_list=None, plot_name='Net Emissions', aggregate=True):
     print('rendering plot', type)
     from profiles.recap.utils import plot_settings
     # print('rendering plot', type)
@@ -19,21 +19,20 @@ def render_plot(representation, type, df, scenarios, region, year, scenario, pat
         plot_info = plot_settings[plot_name]['By Year']
         return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'],
                                    plot_info['y_label'],
-                                   name, unit, pattern_active=pattern_active,
+                                   name, unit, aggregate=aggregate, pattern_active=pattern_active,
                                    text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings[plot_name]['Trend Over Years']
-        return trend_over_years.plot(df, scenario, region, plot_info['title'], plot_info['x_label'],
+        return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit)
     elif type == 'Pie Chart':
         plot_info = plot_settings[plot_name]['Pie Chart']
-        return pie_chart.plot(df, scenario, region, year, plot_info['title'], plot_info['x_label'],
-                              plot_info['y_label'],
-                              )
+        return pie_chart.plot(df, scenario, region, year, aggregate, plot_info['title'], plot_info['x_label'],
+                              plot_info['y_label'])
     else:
         plot_info = plot_settings[plot_name]['By Region']
-        return bar_over_regions.plot(df, scenarios, year, plot_info['title'], plot_info['x_label'],
+        return bar_over_regions.plot(df, scenarios, aggregate, year, plot_info['title'], plot_info['x_label'],
                                      plot_info['y_label'],
                                      name, unit, pattern_active=pattern_active,
                                      text_active=text_active)
@@ -247,4 +246,4 @@ def widgets(df, window_id):
                                       'CAN' if 'CAN' in regions else regions[0],
                                       years[0], scenarios[0], sector=sectors[0], service=services[0],
                                       emissions_list=[e_type for e_type in emissions_list if not 'cost' in e_type],
-                                      plot_name='Net Emissions')
+                                      plot_name='Net Emissions', aggregate=True)

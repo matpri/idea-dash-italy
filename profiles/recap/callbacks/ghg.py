@@ -227,7 +227,7 @@ def link(app):
                                   _regions,
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
-                                  emissions_list=emissions_list, plot_name=_emission)
+                                  emissions_list=emissions_list, plot_name=_emission, aggregate=True)
 
         elif _p_type == 'Trend Over Years':
             _m_style = {'display': 'none'}
@@ -241,7 +241,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
-                                  emissions_list=emissions_list, plot_name=_emission)
+                                  emissions_list=emissions_list, plot_name=_emission, aggregate=True)
 
         elif _p_type == 'Pie Chart':
             _m_style = {'display': 'none'}
@@ -253,7 +253,7 @@ def link(app):
                                   _scenarios,
                                   _regions,
                                   _years, scenario=_scenario, sector=_sector if _representation == 'By Emission' else _service_sector, service=_service,
-                                  emissions_list=emissions_list, plot_name=_emission)
+                                  emissions_list=emissions_list, plot_name=_emission, aggregate=True)
 
         else:
             _m_style = {'display': 'block'}
@@ -268,6 +268,6 @@ def link(app):
                                   _years, scenario=_scenario,
                                   pattern_active=_pattern, text_active=_text, sector=_sector if _representation == 'By Emission' else _service_sector,
                                   service=_service,
-                                  emissions_list=emissions_list, plot_name=_emission)
+                                  emissions_list=emissions_list, plot_name=_emission, aggregate=True)
 
         return _canvas, _r_style, _y_style, _service_style,services, _service, dash.no_update, _s_style, _m_style, _pattern_style, _text_style, _sector_style

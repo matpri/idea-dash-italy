@@ -17,6 +17,25 @@ Emissions:
     title: Emissions by Region
     x_label: Region
     y_label: Emissions (MtCO2eq)
+Electricity System Emissions:
+  name: Emissions
+  unit: MtCO2eq
+  By Year:
+    title: Electricity System Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Trend Over Years:
+    title: Electricity System Emissions by Year
+    x_label: Year
+    y_label: Emissions (MtCO2eq)
+  Pie Chart:
+    title: Electricity System Emissions
+    x_label:
+    y_label:
+  By Region:
+    title: Electricity System Emissions by Region
+    x_label: Region
+    y_label: Emissions (MtCO2eq)
 Capacity:
   name: Capacity
   unit: GW

@@ -29,7 +29,8 @@ from profiles.recap.callbacks import (
     cost_total as copper_cost_total_callbacks,
     emissions as copper_emissions_callbacks,
     generation_capacity as generation_capacity_callbacks,
-    settings as settings_callbacks
+    settings as settings_callbacks,
+    electricity_system_emissions as electricity_system_emissions_callbacks
 )
 from profiles.recap.callbacks import (requested_quantities as requested_quantities_callbacks,
                                             ghg as ghg_callbacks,
@@ -81,6 +82,7 @@ class RecapOutput(BaseProfile):
 
     plot_order = [
         'Economy-wide Emissions',
+        'Electricity System Emissions',
         'Electricity Demand',
         'Electricity Prices',
         'Electricity Capacity',
@@ -116,6 +118,15 @@ class RecapOutput(BaseProfile):
             'viz': generation_supply_viz.plot,
             'callback': generation_supply_callbacks.link,
             'description': 'Generation supply of each technology in the model.'
+        },
+        'Electricity System Emissions': {
+            'check': copper_emissions_processing.check,
+            'db_check': copper_emissions_processing.check,
+            'process': copper_emissions_processing.process,
+            'db_process': copper_emissions_processing.process,
+            'viz': copper_emissions_viz.plot,
+            'callback': electricity_system_emissions_callbacks.link,
+            'description': 'Greenhouse gas emissions from the electricity system by technology from COPPER model.'
         },
         'Economy-wide Carbon Credits': {  
             'check': credits_processing.check,
