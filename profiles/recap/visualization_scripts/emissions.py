@@ -11,7 +11,7 @@ def render_plot(type, df, aggregate, scenarios, region, year, scenario, pattern_
     unit = plot_settings['Emissions']['unit']
     if type == 'By Year':
         plot_info = plot_settings['Emissions']['By Year']
-        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, aggregate, pattern_active=pattern_active, text_active=text_active)
+        return bar_over_years.plot(df, scenarios, region, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit, aggregate=aggregate, pattern_active=pattern_active, text_active=text_active)
     elif type == 'Trend Over Years':
         plot_info = plot_settings['Emissions']['Trend Over Years']
         return trend_over_years.plot(df, scenario, region, aggregate, plot_info['title'], plot_info['x_label'], plot_info['y_label'], name, unit)
@@ -45,7 +45,7 @@ def plot(df, window_id):
         data=[{'label': region, 'value': region} for region in regions],
         value= 'CAN' if 'CAN' in regions else regions[0],
         id={
-            'type': 'recap-emissions-region-select',
+            'type': 'recap-elec-emissions-region-select',
             'index': window_id
         },
         style={'display': 'block'}
@@ -57,7 +57,7 @@ def plot(df, window_id):
         data=[{'label': year, 'value': year} for year in years],
         value=years[0],
         id={
-            'type': 'recap-emissions-year-select',
+            'type': 'recap-elec-emissions-year-select',
             'index': window_id
         },
 
@@ -68,7 +68,7 @@ def plot(df, window_id):
         label='Pattern',
         checked=True,
         id={
-            'type': 'recap-emissions-pattern-switch',
+            'type': 'recap-elec-emissions-pattern-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -78,7 +78,7 @@ def plot(df, window_id):
         label='Text',
         checked=False,
         id={
-            'type': 'recap-emissions-text-switch',
+            'type': 'recap-elec-emissions-text-switch',
             'index': window_id,
         },
         style={'display': 'block'}
@@ -90,14 +90,14 @@ def plot(df, window_id):
             data=[{'label': plot, 'value': plot} for plot in ['By Year', 'By Region', 'Trend Over Years', 'Pie Chart']],
             value='By Year',
             id={
-                'type': 'recap-emissions-plot-select',
+                'type': 'recap-elec-emissions-plot-select',
                 'index': window_id
             },
         ),
         dmc.Switch('Aggregate',
-                   checked=True,
+                   checked=False,
                    id={
-                       'type': 'recap-emissions-aggregate-switch',
+                       'type': 'recap-elec-emissions-aggregate-switch',
                        'index': window_id}),
         pattern_toggle,
         text_toggle,
@@ -106,7 +106,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=[scenarios[0]],
             id={
-                'type': 'recap-emissions-scenario-multi-select',
+                'type': 'recap-elec-emissions-scenario-multi-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -117,7 +117,7 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in base_scenarios],
             value=[base_scenarios[0]],
             id={
-                'type': 'recap-emissions-scenario-group-select',
+                'type': 'recap-elec-emissions-scenario-group-select',
                 'index': window_id,
             },
             style={'display': 'block'}
@@ -127,28 +127,28 @@ def plot(df, window_id):
             data=[{'label': scenario, 'value': scenario} for scenario in scenarios],
             value=scenarios[0],
             id={
-                'type': 'recap-emissions-scenario-select',
+                'type': 'recap-elec-emissions-scenario-select',
                 'index': window_id,
             },
             style={'display': 'none'}
         ),
         by_year_widgets,
         by_region_widgets,
-        dmc.Button('Download Data', id={'type': 'recap-emissions-download-button', 'index': window_id},
+        dmc.Button('Download Data', id={'type': 'recap-elec-emissions-download-button', 'index': window_id},
                    variant='light',
                    # center the button
                      style={'display': 'flex', 'justify-content': 'center', 'margin-top': '4px'}),
-        dcc.Download(id={'type': 'recap-emissions-download', 'index': window_id}),
+        dcc.Download(id={'type': 'recap-elec-emissions-download', 'index': window_id}),
     ])
 
     plot_layout = dcc.Graph(
-        figure=render_plot('By Year', df, True, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
+        figure=render_plot('By Year', df, False, [scenarios[0]], 'CAN' if 'CAN' in regions else regions[0],
                            years[0],scenarios[0]),
         id={
             'type': ids.FIGURE,
             'index': window_id,
             'profile': 'Summary',
-            'viz': 'Emissions'
+            'viz': 'Electricity System Emissions'
         },
         style={
             'width': '100%',
