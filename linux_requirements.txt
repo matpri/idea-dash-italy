@@ -16,3 +16,4 @@ openpyxl
 matplotlib
 chardet
 kaleido==0.1.*
+xlsxwriter
