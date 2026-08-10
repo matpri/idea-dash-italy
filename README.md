@@ -1,4 +1,16 @@
+---
+title: IDEA Dash Italy
+emoji: 🔌
+colorFrom: blue
+colorTo: green
+sdk: docker
+app_port: 7860
+pinned: false
+---
+
 # IDEA (Integrated Dashboard for Energy Transition Analysis)
+
+> Personal fork for comparing energy system modeling scenarios, deployed via [Hugging Face Spaces](https://huggingface.co/spaces). Based on [sesit/idea-dash](https://gitlab.com/sesit/idea-dash) (MIT License).
 
 ## Overview
 

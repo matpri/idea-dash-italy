@@ -151,7 +151,9 @@ if __name__ == '__main__':
     port = int(args.port)  # or simply open on the default `8050` port
     fig = go.Figure()  # Initialize plotly figure to avoid error when exporting figures
     pio.to_image(fig, format="png", engine='kaleido')
-    Timer(1, open_browser, args=[port]).start()
+    if host in ('127.0.0.1', 'localhost'):
+        # Only auto-open a browser for local runs; skip it in containers/cloud deployments
+        Timer(1, open_browser, args=[port]).start()
       # Initialize orca to avoid error when exporting figures
 
     app.layout = define_layout
